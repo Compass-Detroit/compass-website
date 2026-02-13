@@ -51,6 +51,7 @@ const SessionsSection = ({
   speakersData,
   year = new Date().getFullYear(),
   tracks = [],
+  maps = [],
   defaultExpanded = false,
 }) => {
   const [activeTab, setActiveTab] = useState(0)
@@ -60,6 +61,19 @@ const SessionsSection = ({
   )
   const navRef = useRef(null)
   const buttonRefs = useRef([])
+  const [mapTooltip, setMapTooltip] = useState(null)
+
+  const isMapDisabled = !maps || maps.length === 0
+
+  const showMapTooltip = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    setMapTooltip({
+      top: rect.bottom + 10,
+      left: rect.left + rect.width / 2,
+    })
+  }
+
+  const hideMapTooltip = () => setMapTooltip(null)
 
   const tabs = [...tracks]
   const currentSession = tabs[activeTab]
@@ -234,17 +248,45 @@ const SessionsSection = ({
                   role="tab"
                   aria-selected={activeTab === index}
                   aria-controls={`session-panel-${index}`}
+                  aria-disabled={
+                    tab === 'Map' && isMapDisabled ? 'true' : undefined
+                  }
                   id={`session-tab-${index}`}
                   tabIndex={activeTab === index ? 0 : -1}
-                  className={`relative shrink-0 whitespace-nowrap rounded-md p-2 text-sm font-black uppercase !leading-5 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-black md:min-w-20 md:px-3 md:py-2 lg:min-w-36 lg:px-4 lg:text-lg ${
+                  className={`group relative shrink-0 whitespace-nowrap rounded-md p-2 text-sm font-black uppercase !leading-5 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 focus:ring-offset-black md:min-w-20 md:px-3 md:py-2 lg:min-w-36 lg:px-4 lg:text-lg ${
                     index === 0 ? 'md:ml-14' : ''
                   } ${
-                    activeTab === index
-                      ? 'bg-primary-400 text-black after:absolute after:-bottom-3 after:left-1/2 after:block after:size-0 after:-translate-x-1/2 after:border-x-[12px] after:border-t-[12px] after:border-primary-400 after:border-x-transparent'
-                      : 'bg-gray-900 text-white hover:bg-gray-800'
+                    tab === 'Map' && isMapDisabled
+                      ? 'cursor-not-allowed bg-gray-800 text-gray-500 opacity-60'
+                      : activeTab === index
+                        ? 'bg-primary-400 text-black after:absolute after:-bottom-3 after:left-1/2 after:block after:size-0 after:-translate-x-1/2 after:border-x-[12px] after:border-t-[12px] after:border-primary-400 after:border-x-transparent'
+                        : 'bg-gray-900 text-white hover:bg-gray-800'
                   }`}
-                  onClick={() => setActiveTab(index)}
-                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  onClick={() => {
+                    if (tab === 'Map' && isMapDisabled) return
+                    setActiveTab(index)
+                  }}
+                  onKeyDown={(e) => {
+                    if (tab === 'Map' && isMapDisabled) {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        return
+                      }
+                    }
+                    handleKeyDown(e, index)
+                  }}
+                  onMouseEnter={
+                    tab === 'Map' && isMapDisabled ? showMapTooltip : undefined
+                  }
+                  onMouseLeave={
+                    tab === 'Map' && isMapDisabled ? hideMapTooltip : undefined
+                  }
+                  onFocus={
+                    tab === 'Map' && isMapDisabled ? showMapTooltip : undefined
+                  }
+                  onBlur={
+                    tab === 'Map' && isMapDisabled ? hideMapTooltip : undefined
+                  }
                 >
                   {tab === 'Miscellaneous' ? (
                     <>
@@ -274,6 +316,28 @@ const SessionsSection = ({
           </div>
         </nav>
 
+        {mapTooltip && isMapDisabled && (
+          <div
+            className="pointer-events-none fixed z-50"
+            style={{
+              top: mapTooltip.top,
+              left: mapTooltip.left,
+              transform: 'translateX(-50%)',
+            }}
+            role="tooltip"
+          >
+            <div className="relative rounded-lg bg-gray-800 px-4 py-3 text-center shadow-xl">
+              <div className="absolute -top-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 bg-gray-800" />
+              <p className="text-sm font-semibold text-white">
+                Venue Map Coming Soon
+              </p>
+              <p className="mt-1 text-xs text-gray-300">
+                We&apos;ll share maps closer to the event.
+              </p>
+            </div>
+          </div>
+        )}
+
         <div
           id={`session-panel-${activeTab}`}
           role="tabpanel"
@@ -289,7 +353,7 @@ const SessionsSection = ({
           {currentSession === 'Schedule' ? (
             <Schedule />
           ) : currentSession === 'Map' ? (
-            <VenueMaps />
+            <VenueMaps maps={maps} />
           ) : currentTrackSessions.length > 0 ? (
             <>
               {currentSession === 'Hackathon' && <HackathonSessionHeader />}
@@ -345,6 +409,14 @@ SessionsSection.propTypes = {
   ).isRequired,
   year: PropTypes.number,
   tracks: PropTypes.arrayOf(PropTypes.string),
+  maps: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string.isRequired,
+      alt: PropTypes.string.isRequired,
+      venueTitle: PropTypes.string,
+      description: PropTypes.string,
+    })
+  ),
   defaultExpanded: PropTypes.bool,
 }
 
