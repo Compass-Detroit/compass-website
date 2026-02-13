@@ -1,22 +1,26 @@
 import PropTypes from 'prop-types'
 
+function NoVenueMapsAvailable() {
+  return (
+    <section className="w-full py-8" aria-labelledby="venue-maps-heading">
+      <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-12 text-center">
+        <h3
+          id="venue-maps-heading"
+          className="mb-2 text-lg font-semibold text-gray-700"
+        >
+          Venue Map Coming Soon
+        </h3>
+        <p className="text-sm text-gray-500">
+          We&apos;ll share detailed venue maps closer to the event date.
+        </p>
+      </div>
+    </section>
+  )
+}
+
 function VenueMaps({ maps = [] }) {
   if (!maps || maps.length === 0) {
-    return (
-      <section className="w-full py-8" aria-labelledby="venue-maps-heading">
-        <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-12 text-center">
-          <h3
-            id="venue-maps-heading"
-            className="mb-2 text-lg font-semibold text-gray-700"
-          >
-            Venue Map Coming Soon
-          </h3>
-          <p className="text-sm text-gray-500">
-            We&apos;ll share detailed venue maps closer to the event date.
-          </p>
-        </div>
-      </section>
-    )
+    return <NoVenueMapsAvailable />
   }
 
   return (
