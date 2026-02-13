@@ -39,6 +39,7 @@ function VenueMaps({ maps = [] }) {
               <div
                 className="rounded-2xl border-4 border-blue-500 bg-white p-1"
                 role="region"
+                aria-label={map.alt}
               >
                 <img
                   src={map.src}
