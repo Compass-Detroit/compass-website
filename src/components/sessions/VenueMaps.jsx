@@ -35,7 +35,10 @@ function VenueMaps({ maps = [] }) {
         )}
         <div className="flex flex-col gap-4 sm:flex-row">
           {maps.map((map, index) => (
-            <figure key={index} className="overflow-hidden rounded-lg">
+            <figure
+              key={`${map.src}-${index}`}
+              className="overflow-hidden rounded-lg"
+            >
               <div
                 className="rounded-2xl border-4 border-blue-500 bg-white p-1"
                 role="region"
