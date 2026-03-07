@@ -8,6 +8,15 @@ import PreviousEvents from '@/pages/PreviousEvents'
 import PreviousEvent from '@/pages/PreviousEvent'
 import NotFound from '@/pages/NotFound'
 
+// Redesign pages
+import HomePage from '@/pages/HomePage'
+import AboutPage from '@/pages/AboutPage'
+import ProgramsPage from '@/pages/ProgramsPage'
+import CommunityPage from '@/pages/CommunityPage'
+import EventsPage from '@/pages/EventsPage'
+import GetInvolvedPage from '@/pages/GetInvolvedPage'
+import ResourcesPage from '@/pages/ResourcesPage'
+
 function App() {
   return (
     <Router>
@@ -20,7 +29,17 @@ function App() {
           Skip to main content
         </a>
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* New redesign routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/programs" element={<ProgramsPage />} />
+          <Route path="/community" element={<CommunityPage />} />
+          <Route path="/events" element={<EventsPage />} />
+          <Route path="/get-involved" element={<GetInvolvedPage />} />
+          <Route path="/resources" element={<ResourcesPage />} />
+
+          {/* Legacy routes (existing pages still accessible) */}
+          <Route path="/legacy" element={<Home />} />
           <Route path="/careers-hub" element={<CareersHub />} />
           <Route path="/connections" element={<ConnectionsPage />} />
           <Route path="/media" element={<MediaPage />} />

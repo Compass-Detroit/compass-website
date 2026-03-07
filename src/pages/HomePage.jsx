@@ -1,0 +1,756 @@
+import { Link } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
+import SiteLayout from '@/layouts/SiteLayout'
+
+// Partner & sponsor logos — Row 1
+import GoogleLogo from '@/assets/images/sponsors/Google_logo.webp'
+import IBMLogo from '@/assets/images/sponsors/spo-ibm-logo.webp'
+import DTELogo from '@/assets/images/sponsors/spo-dte-logo.webp'
+import LittleCaesarsLogo from '@/assets/images/sponsors/Little_Caesars.webp'
+import MongoDBLogo from '@/assets/images/sponsors/MongoDB.webp'
+import JetBrainsLogo from '@/assets/images/sponsors/Jet_Brains.webp'
+import GrandCircusLogo from '@/assets/images/sponsors/Grand_Circus.webp'
+import CCSLogo from '@/assets/images/sponsors/CCS_logo.webp'
+import AXIOMLogo from '@/assets/images/sponsors/AXIOM.webp'
+import AkkodisLogo from '@/assets/images/sponsors/Akkodis.webp'
+// Partner & sponsor logos — Row 2
+import NSBELogo from '@/assets/images/organizations/org-nsbe-logo.webp'
+import SHPELogo from '@/assets/images/organizations/org-shpe-logo.webp'
+import GDGDetroitLogo from '@/assets/images/organizations/org-gdg-detroit.webp'
+import WTMLogo from '@/assets/images/organizations/org-wtm-logo.webp'
+import WayneStateLogo from '@/assets/images/organizations/Wayne_State_University_seal.webp'
+import CompassDetroitLogo from '@/assets/images/sponsors/Compass_Detroit_logo.webp'
+import SpinDanceLogo from '@/assets/images/sponsors/SpinDance.webp'
+import RIISLogo from '@/assets/images/sponsors/RIIS.webp'
+import ComposablesLogo from '@/assets/images/sponsors/Composables.webp'
+import RebusLogo from '@/assets/images/sponsors/rebus_blue70_on_blue20-260h.webp'
+
+const stats = [
+  {
+    value: 2203,
+    suffix: '',
+    display: '2,203',
+    label: 'Community Members',
+    sub: '234% growth over 3 years',
+  },
+  {
+    value: 52,
+    suffix: '%',
+    display: '52%',
+    label: 'Black / African-American',
+    sub: 'Underrepresented talent',
+  },
+  {
+    value: 75,
+    suffix: '%',
+    display: '75%',
+    label: 'Women',
+    sub: 'Leading our community',
+  },
+  {
+    value: 51,
+    suffix: '%',
+    display: '51%',
+    label: 'Actively Job-Seeking',
+    sub: 'Pathways, not more training',
+  },
+]
+
+const row1Logos = [
+  { name: 'Google', logo: GoogleLogo },
+  { name: 'IBM', logo: IBMLogo },
+  { name: 'DTE Energy', logo: DTELogo },
+  { name: 'Little Caesars', logo: LittleCaesarsLogo },
+  { name: 'MongoDB', logo: MongoDBLogo },
+  { name: 'JetBrains', logo: JetBrainsLogo },
+  { name: 'Grand Circus', logo: GrandCircusLogo },
+  { name: 'CCS', logo: CCSLogo },
+  { name: 'AXIOM', logo: AXIOMLogo },
+  { name: 'Akkodis', logo: AkkodisLogo },
+]
+
+const row2Logos = [
+  { name: 'NSBE Detroit', logo: NSBELogo },
+  { name: 'SHPE Detroit', logo: SHPELogo },
+  { name: 'GDG Detroit', logo: GDGDetroitLogo },
+  { name: 'Women Techmakers', logo: WTMLogo },
+  { name: 'Wayne State University', logo: WayneStateLogo },
+  { name: 'Compass Detroit', logo: CompassDetroitLogo },
+  { name: 'SpinDance', logo: SpinDanceLogo },
+  { name: 'RIIS', logo: RIISLogo },
+  { name: 'Composables', logo: ComposablesLogo },
+  { name: 'Rebus', logo: RebusLogo },
+]
+
+function MarqueeRow({ logos, direction = 'left' }) {
+  // Duplicate the logo array so the strip is seamless
+  const doubled = [...logos, ...logos]
+  return (
+    <div className="marquee-track relative overflow-hidden">
+      {/* Fade edges */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[#0a0a0a] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[#0a0a0a] to-transparent" />
+      <div
+        className={
+          direction === 'left'
+            ? 'marquee-left flex w-max items-center gap-16 py-6'
+            : 'marquee-right flex w-max items-center gap-16 py-6'
+        }
+      >
+        {doubled.map((p, i) => (
+          <div
+            key={`${p.name}-${i}`}
+            className="marquee-logo-wrap flex shrink-0 items-center justify-center rounded-xl bg-white/[0.06] px-6 py-4"
+          >
+            <img
+              src={p.logo}
+              alt={p.name}
+              className="marquee-logo h-12 w-auto object-contain md:h-14"
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+MarqueeRow.propTypes = {
+  logos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  direction: PropTypes.string,
+}
+
+const upcomingEvents = [
+  {
+    name: 'Black History Month Innovation Summit',
+    date: 'February 2026',
+    location: 'Detroit, MI',
+    type: 'Innovation Summit',
+  },
+  {
+    name: "International Women's Day Innovation Summit",
+    date: 'March 2026',
+    location: 'Detroit, MI',
+    type: 'Innovation Summit',
+  },
+  {
+    name: 'Hispanic Heritage Month Innovation Summit',
+    date: 'September 2026',
+    location: 'Detroit, MI',
+    type: 'Innovation Summit',
+  },
+]
+
+// Reusable icons
+function ArrowRight() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  )
+}
+
+function CalendarIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
+    </svg>
+  )
+}
+
+function MapPinIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  )
+}
+
+// Animated stat counter using intersection observer
+function AnimatedStat({ stat }) {
+  const [count, setCount] = useState(0)
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true)
+          const target = stat.value
+          const duration = 1600
+          const startTime = performance.now()
+          const animate = (now) => {
+            const elapsed = now - startTime
+            const progress = Math.min(elapsed / duration, 1)
+            const eased = 1 - Math.pow(1 - progress, 3)
+            setCount(Math.floor(eased * target))
+            if (progress < 1) requestAnimationFrame(animate)
+          }
+          requestAnimationFrame(animate)
+        }
+      },
+      { threshold: 0.3 }
+    )
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [hasAnimated, stat.value])
+
+  const formatted =
+    stat.value >= 1000
+      ? count.toLocaleString() + stat.suffix
+      : count + stat.suffix
+
+  return (
+    <div
+      ref={ref}
+      className="rounded-xl border border-surface bg-surface-card p-6 text-center"
+    >
+      <div className="mb-2 text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
+        {formatted}
+      </div>
+      <div className="mb-1 text-sm font-semibold text-white">{stat.label}</div>
+      <div className="text-xs text-gray-600">{stat.sub}</div>
+    </div>
+  )
+}
+
+AnimatedStat.propTypes = {
+  stat: PropTypes.shape({
+    value: PropTypes.number.isRequired,
+    suffix: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    sub: PropTypes.string.isRequired,
+  }).isRequired,
+}
+
+// Brain drain visualization bar chart
+function TalentGapViz() {
+  const [visible, setVisible] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true)
+      },
+      { threshold: 0.2 }
+    )
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [])
+
+  const bars = [
+    { label: 'STEM grads produced', pct: 100, color: 'bg-primary' },
+    { label: 'Leave MI in 2 years', pct: 45, color: 'bg-red-500/80' },
+    { label: 'Land local tech jobs', pct: 28, color: 'bg-emerald-500/80' },
+  ]
+
+  return (
+    <div
+      ref={ref}
+      className="rounded-xl border border-surface bg-surface-card p-6"
+    >
+      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+        Michigan Talent Pipeline
+      </p>
+      <p className="mb-5 text-sm font-semibold text-white">
+        The gap isn&apos;t skills — it&apos;s infrastructure
+      </p>
+      <div className="flex flex-col gap-4">
+        {bars.map((bar) => (
+          <div key={bar.label}>
+            <div className="mb-1.5 flex items-center justify-between text-xs">
+              <span className="text-gray-400">{bar.label}</span>
+              <span className="font-semibold text-gray-300">{bar.pct}%</span>
+            </div>
+            <div className="h-3 overflow-hidden rounded-full bg-white/5">
+              <div
+                className={`h-full rounded-full ${bar.color} transition-all duration-1000 ease-out`}
+                style={{ width: visible ? `${bar.pct}%` : '0%' }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// Pipeline funnel visualization
+function PipelineViz() {
+  return (
+    <div className="rounded-xl border border-surface bg-surface-card p-6">
+      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+        The COMPASS Model
+      </p>
+      <p className="mb-5 text-sm font-semibold text-white">
+        From community to career
+      </p>
+      <div className="flex flex-col gap-2">
+        {[
+          {
+            step: 'Engage',
+            desc: 'Innovation Summits & events',
+            width: 'w-full',
+            opacity: 'opacity-100',
+          },
+          {
+            step: 'Build',
+            desc: 'Skills, confidence & network',
+            width: 'w-[85%]',
+            opacity: 'opacity-90',
+          },
+          {
+            step: 'Connect',
+            desc: 'Employers meet Navigators',
+            width: 'w-[70%]',
+            opacity: 'opacity-80',
+          },
+          {
+            step: 'Hire',
+            desc: 'Co-ops, roles & careers',
+            width: 'w-[55%]',
+            opacity: 'opacity-100',
+          },
+        ].map((item) => (
+          <div key={item.step} className={`${item.width} mx-auto`}>
+            <div
+              className={`${item.opacity} rounded-lg border border-primary/20 bg-primary/[0.08] px-4 py-2.5`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-primary">
+                  {item.step}
+                </span>
+                <span className="text-xs text-gray-500">{item.desc}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// Retention radial gauge
+function RetentionGauge() {
+  const [visible, setVisible] = useState(false)
+  const ref = useRef(null)
+  const pct = 78
+  const r = 52
+  const circ = 2 * Math.PI * r
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true)
+      },
+      { threshold: 0.3 }
+    )
+    if (ref.current) observer.observe(ref.current)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div
+      ref={ref}
+      className="rounded-xl border border-surface bg-surface-card p-6"
+    >
+      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+        Navigator Retention
+      </p>
+      <p className="mb-5 text-sm font-semibold text-white">
+        Return rate across events
+      </p>
+      <div className="flex items-center gap-6">
+        <svg
+          width="130"
+          height="130"
+          viewBox="0 0 130 130"
+          className="shrink-0 -rotate-90"
+          aria-hidden="true"
+        >
+          <circle
+            cx="65"
+            cy="65"
+            r={r}
+            fill="none"
+            stroke="#1a1a1a"
+            strokeWidth="10"
+          />
+          <circle
+            cx="65"
+            cy="65"
+            r={r}
+            fill="none"
+            stroke="#D4A017"
+            strokeWidth="10"
+            strokeLinecap="round"
+            strokeDasharray={circ}
+            strokeDashoffset={visible ? circ - (pct / 100) * circ : circ}
+            style={{ transition: 'stroke-dashoffset 1.4s ease-out 0.2s' }}
+          />
+          <text
+            x="65"
+            y="65"
+            textAnchor="middle"
+            dominantBaseline="central"
+            fill="white"
+            fontSize="22"
+            fontWeight="800"
+            transform="rotate(90 65 65)"
+          >
+            {visible ? `${pct}%` : '0%'}
+          </text>
+        </svg>
+        <div className="flex flex-col gap-2">
+          {[
+            { label: 'Attended 2+ events', value: '78%' },
+            { label: 'Referred a peer', value: '41%' },
+            { label: 'Joined coalition org', value: '23%' },
+          ].map((item) => (
+            <div key={item.label} className="flex items-center gap-2 text-xs">
+              <div className="size-1.5 rounded-full bg-primary/60" />
+              <span className="text-gray-500">{item.label}</span>
+              <span className="ml-auto font-bold text-gray-300">
+                {item.value}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <SiteLayout>
+      {/* Hero — with subtle gradient accent */}
+      <section className="relative overflow-hidden">
+        <div className="absolute -right-40 -top-40 size-[500px] rounded-full bg-primary/[0.04] blur-3xl" />
+        <div className="absolute -bottom-20 -left-20 size-[300px] rounded-full bg-primary/[0.03] blur-3xl" />
+        <div className="relative mx-auto max-w-[1200px] px-6 pb-20 pt-24 md:pt-28">
+          <div className="max-w-[800px]">
+            <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Detroit&apos;s Career Infrastructure for Tech Talent
+            </p>
+            <h1 className="mb-6 text-4xl font-extrabold leading-[1.08] tracking-tight md:text-5xl lg:text-[52px]">
+              Training programs create talent.{' '}
+              <span className="text-primary">COMPASS creates pathways.</span>
+            </h1>
+            <p className="mb-10 max-w-screen-sm text-lg leading-relaxed text-gray-500 md:text-xl">
+              We build the career infrastructure that connects prepared,
+              underrepresented tech talent in Michigan to technology careers —
+              creating confidence, belonging, and economic mobility.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link
+                to="/get-involved"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-3.5 text-[15px] font-semibold text-black transition-colors hover:bg-primary-400"
+              >
+                Join the Community <ArrowRight />
+              </Link>
+              <Link
+                to="/get-involved"
+                className="inline-flex items-center rounded-lg border border-surface px-7 py-3.5 text-[15px] font-semibold text-white transition-colors hover:border-gray-500"
+              >
+                Partner with Us
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trusted By — infinite double marquee */}
+      <section className="border-y border-surface bg-white/[0.01]">
+        <div className="py-10">
+          <p className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-gray-600">
+            Trusted by leading organizations
+          </p>
+          <div className="flex flex-col gap-2">
+            <MarqueeRow logos={row1Logos} direction="left" />
+            <MarqueeRow logos={row2Logos} direction="right" />
+          </div>
+        </div>
+      </section>
+
+      {/* Stats — animated counters */}
+      <section className="mx-auto max-w-[1200px] px-6 py-20">
+        <div className="mb-12 text-center">
+          <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+            Our Impact
+          </p>
+          <h2 className="text-3xl font-bold tracking-tight">
+            The numbers tell the story
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {stats.map((stat) => (
+            <AnimatedStat key={stat.label} stat={stat} />
+          ))}
+        </div>
+      </section>
+
+      {/* Mission — with visualizations */}
+      <section className="border-y border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="grid gap-12 lg:grid-cols-2">
+            <div>
+              <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+                Our Mission
+              </p>
+              <h2 className="mb-5 text-3xl font-bold leading-tight tracking-tight">
+                Building the pathways that don&apos;t exist yet.
+              </h2>
+              <p className="mb-6 leading-relaxed text-gray-500">
+                Detroit is producing tech talent — but losing it. Despite
+                historic investments in training programs, 45% of Michigan STEM
+                graduates leave the state within two years.
+              </p>
+
+              {/* Inline viz: the talent gap */}
+              <TalentGapViz />
+
+              <p className="mt-6 leading-relaxed text-gray-500">
+                The gap isn&apos;t skills. It&apos;s infrastructure. COMPASS is
+                a 501(c)(3) nonprofit closing this gap through a collective of
+                organizations: NSBE, SHPE, SWE, MCWT, Out in Tech, and more.
+              </p>
+              <Link
+                to="/about"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-400"
+              >
+                Learn more about our mission <ArrowRight />
+              </Link>
+            </div>
+            <div className="flex flex-col gap-6">
+              {/* Pipeline visualization */}
+              <PipelineViz />
+
+              {/* Retention gauge */}
+              <RetentionGauge />
+
+              {/* What we do checklist */}
+              <div>
+                <p className="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+                  What We Do
+                </p>
+                <div className="flex flex-col gap-2">
+                  {[
+                    'Recruit and prepare talent',
+                    'Build confidence and belonging',
+                    'Connect Navigators to opportunities',
+                    'Provide wraparound support',
+                    'Partner with employers for career exposure',
+                  ].map((item) => (
+                    <div
+                      key={item}
+                      className="flex items-center gap-3 rounded-lg border border-primary/15 bg-primary/[0.06] px-4 py-2.5"
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#D4A017"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      <span className="text-sm text-gray-300">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Events Preview */}
+      <section>
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-10 flex items-end justify-between">
+            <div>
+              <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+                2026 Programming
+              </p>
+              <h2 className="text-3xl font-bold tracking-tight">
+                Upcoming Events
+              </h2>
+            </div>
+            <Link
+              to="/events"
+              className="hidden items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-400 sm:inline-flex"
+            >
+              View all events <ArrowRight />
+            </Link>
+          </div>
+          <div className="flex flex-col gap-2">
+            {upcomingEvents.map((ev) => (
+              <div
+                key={ev.name}
+                className="group flex flex-col gap-3 rounded-xl border border-surface bg-surface-card p-5 transition-colors hover:border-primary/40 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div className="flex items-center gap-5">
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/[0.08] text-primary">
+                    <CalendarIcon />
+                  </div>
+                  <div>
+                    <div className="text-[15px] font-semibold">{ev.name}</div>
+                    <div className="mt-1 flex gap-4">
+                      <span className="text-[13px] text-gray-600">
+                        {ev.date}
+                      </span>
+                      <span className="flex items-center gap-1 text-[13px] text-gray-600">
+                        <MapPinIcon /> {ev.location}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span className="w-fit whitespace-nowrap rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                  {ev.type}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 sm:hidden">
+            <Link
+              to="/events"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-primary"
+            >
+              View all events <ArrowRight />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Traction — compact proof points */}
+      <section className="border-y border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-12 text-center">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Proof of Impact
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight">
+              Navigators hired through COMPASS events
+            </h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              {
+                company: 'DTE Energy',
+                role: 'Co-Op (2+ semesters)',
+                type: 'Corporate Partner',
+              },
+              {
+                company: 'Little Caesars',
+                role: 'Software Engineer',
+                type: 'Corporate Partner',
+              },
+              {
+                company: 'IBM',
+                role: 'Product Manager',
+                type: 'Technology Partner',
+              },
+            ].map((t) => (
+              <div
+                key={t.company}
+                className="rounded-xl border border-surface bg-surface-card p-6"
+              >
+                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                  {t.type}
+                </span>
+                <p className="mt-2 text-xl font-bold text-primary">
+                  {t.company}
+                </p>
+                <p className="mt-1 text-sm text-gray-400">{t.role}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-center text-sm text-gray-500">
+            Three Navigators. Three offers. Partners came to our events looking
+            for talent — and found it.
+          </p>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section>
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent" />
+          <div className="relative">
+            <h2 className="mb-4 text-3xl font-extrabold tracking-tight md:text-4xl">
+              Let&apos;s build Detroit&apos;s pathways{' '}
+              <span className="text-primary">together.</span>
+            </h2>
+            <p className="mx-auto mb-10 max-w-[540px] text-lg leading-relaxed text-gray-500">
+              Whether you&apos;re a tech professional, a student, an employer,
+              or a community organization — there&apos;s a place for you at
+              COMPASS.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/get-involved"
+                className="rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-colors hover:bg-primary-400"
+              >
+                Become a Navigator
+              </Link>
+              <Link
+                to="/get-involved"
+                className="rounded-lg border border-surface px-8 py-4 text-base font-semibold text-white transition-colors hover:border-gray-500"
+              >
+                Partner with COMPASS
+              </Link>
+              <Link
+                to="/get-involved"
+                className="rounded-lg border border-surface px-8 py-4 text-base font-semibold text-white transition-colors hover:border-gray-500"
+              >
+                Sponsor an Event
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </SiteLayout>
+  )
+}

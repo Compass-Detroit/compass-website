@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,6 +39,53 @@
 @layer components {
   /* Add your custom component classes here */
   /* Example: .custom-button { ... } */
+}
+
+/* Infinite Marquee — seamless loop */
+@keyframes marquee-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes marquee-right {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.marquee-left {
+  animation: marquee-left 40s linear infinite;
+  will-change: transform;
+}
+.marquee-right {
+  animation: marquee-right 40s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover .marquee-left,
+.marquee-track:hover .marquee-right {
+  animation-play-state: paused;
+}
+/* Marquee logo cards */
+.marquee-logo-wrap {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.marquee-logo-wrap:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 24px rgba(212, 160, 23, 0.18);
+  transform: scale(1.06);
+}
+.marquee-logo {
+  transition: filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: grayscale(80%) brightness(0.85);
+}
+.marquee-logo-wrap:hover .marquee-logo {
+  filter: grayscale(0%) brightness(1.1)
+    drop-shadow(0 0 8px rgba(212, 160, 23, 0.3));
 }
 
 /* Yoda 404 Animations */

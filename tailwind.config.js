@@ -112,6 +112,22 @@ export default {
         ],
         montserrat: ['Montserrat', 'sans-serif'],
         biorhyme: ['BioRhyme', 'serif'],
+        inter: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+      },
+      // Dark surface palette from redesign
+      backgroundColor: {
+        surface: {
+          DEFAULT: '#0a0a0a',
+          card: '#141414',
+          elevated: '#1a1a1a',
+          footer: '#050505',
+        },
+      },
+      borderColor: {
+        surface: {
+          DEFAULT: '#222',
+          light: '#333',
+        },
       },
     },
   },
