@@ -1,22 +1,6 @@
 import SiteLayout from '@/layouts/SiteLayout'
-
-function ArrowRight() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  )
-}
+import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
+import CheckIcon from '@/components/ui/CheckIcon'
 
 const pathways = [
   {
@@ -128,20 +112,7 @@ export default function GetInvolvedPage() {
                           key={action}
                           className="flex items-start gap-2.5 text-sm"
                         >
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#D4A017"
-                            strokeWidth="3"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            aria-hidden="true"
-                            className="mt-0.5 shrink-0"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
+                          <CheckIcon className="mt-0.5 shrink-0" />
                           <span className="text-gray-400">{action}</span>
                         </li>
                       ))}
@@ -150,7 +121,7 @@ export default function GetInvolvedPage() {
                       href={pw.ctaHref}
                       className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-black transition-colors hover:bg-primary-400"
                     >
-                      {pw.cta} <ArrowRight />
+                      {pw.cta} <ArrowRightIcon />
                     </a>
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
+import CheckIcon from '@/components/ui/CheckIcon'
 
 const programs = [
   {
@@ -113,20 +114,7 @@ export default function ProgramsPage() {
                           key={detail}
                           className="flex items-start gap-2.5 text-sm"
                         >
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#D4A017"
-                            strokeWidth="3"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            aria-hidden="true"
-                            className="mt-0.5 shrink-0"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
+                          <CheckIcon className="mt-0.5 shrink-0" />
                           <span className="text-gray-400">{detail}</span>
                         </li>
                       ))}

@@ -82,7 +82,7 @@ function BuildingIcon() {
   )
 }
 
-function MegaphoneIcon() {
+function BellIcon() {
   return (
     <svg
       width="40"
@@ -177,7 +177,7 @@ export default function ResourcesPage() {
         <div className="mx-auto max-w-[1200px] px-6 py-12">
           <div className="rounded-xl border border-primary/25 bg-primary/[0.04] p-8 text-center md:p-10">
             <div className="mb-4 flex justify-center" aria-hidden="true">
-              <MegaphoneIcon />
+              <BellIcon />
             </div>
             <h2 className="mb-3 text-2xl font-bold tracking-tight">
               We want to hear from you

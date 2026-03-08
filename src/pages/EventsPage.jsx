@@ -1,24 +1,7 @@
 import SiteLayout from '@/layouts/SiteLayout'
 import { Link } from 'react-router-dom'
-
-function MapPinIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-      <circle cx="12" cy="10" r="3" />
-    </svg>
-  )
-}
+import MapPinIcon from '@/components/ui/MapPinIcon'
+import CheckIcon from '@/components/ui/CheckIcon'
 
 const typeColors = {
   'Innovation Summit': 'bg-primary/10 text-primary border-primary/20',
@@ -57,7 +40,17 @@ const journeyStages = [
   },
 ]
 
-const events = [
+function isUpcoming(dateStr) {
+  // Handle year-only format like "2026"
+  if (/^\d{4}$/.test(dateStr)) return true
+  const parsed = new Date(`1 ${dateStr}`)
+  if (isNaN(parsed)) return true
+  const now = new Date()
+  parsed.setMonth(parsed.getMonth() + 1, 0)
+  return parsed >= now
+}
+
+const allEvents = [
   {
     name: 'Black History Month Innovation Summit',
     date: 'February 2026',
@@ -104,6 +97,9 @@ const events = [
     desc: 'A flagship technology conference featuring sessions on cloud, AI, mobile, web, and career development — co-produced with GDG Detroit.',
   },
 ]
+
+const pastEvents = allEvents.filter((ev) => !isUpcoming(ev.date))
+const events = allEvents.filter((ev) => isUpcoming(ev.date))
 
 const programs = [
   {
@@ -311,6 +307,52 @@ export default function EventsPage() {
         </div>
       </section>
 
+      {/* Past Events */}
+      {pastEvents.length > 0 && (
+        <section className="border-y border-surface">
+          <div className="mx-auto max-w-[1200px] px-6 py-16">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-gray-600">
+              Past Events
+            </p>
+            <h2 className="mb-8 text-2xl font-bold tracking-tight text-gray-400">
+              Earlier this year
+            </h2>
+            <div className="flex flex-col gap-3">
+              {pastEvents.map((ev) => (
+                <div
+                  key={ev.name}
+                  className="flex flex-col gap-3 rounded-xl border border-surface bg-surface-card/50 p-5 opacity-70 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04]">
+                      <span className="text-[10px] font-bold text-gray-500">
+                        {ev.month}
+                      </span>
+                    </div>
+                    <div>
+                      <div className="text-[15px] font-semibold text-gray-400">
+                        {ev.name}
+                      </div>
+                      <div className="mt-1 flex gap-4">
+                        <span className="text-[13px] text-gray-600">
+                          {ev.date}
+                        </span>
+                        <span className="flex items-center gap-1 text-[13px] text-gray-600">
+                          <MapPinIcon /> {ev.location}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="w-fit whitespace-nowrap rounded-full bg-white/[0.04] px-3 py-1 text-xs font-semibold text-gray-500">
+                    Completed
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Programs Detail */}
       <section>
         <div className="mx-auto max-w-[1200px] px-6 py-20">
@@ -339,20 +381,7 @@ export default function EventsPage() {
                 <ul className="flex flex-col gap-2">
                   {program.highlights.map((h) => (
                     <li key={h} className="flex items-start gap-2.5 text-sm">
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#D4A017"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        aria-hidden="true"
-                        className="mt-0.5 shrink-0"
-                      >
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
+                      <CheckIcon className="mt-0.5 shrink-0" />
                       <span className="text-gray-400">{h}</span>
                     </li>
                   ))}

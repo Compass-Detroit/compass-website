@@ -317,7 +317,7 @@ export default function AboutPage() {
             <GrowthRing label="Black / African-American" pct={52} delay={0} />
             <GrowthRing label="Women" pct={75} delay={0.15} />
             <GrowthRing label="Actively Job-Seeking" pct={51} delay={0.3} />
-            <GrowthRing label="3-Yr Growth" pct={100} delay={0.45} />
+            <GrowthRing label="3-Yr Growth (234%)" pct={100} delay={0.45} />
           </div>
           <p className="mx-auto mt-8 max-w-lg text-center text-sm text-gray-600">
             234% member growth over 3 years — driven by word-of-mouth and

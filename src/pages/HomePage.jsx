@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import SiteLayout from '@/layouts/SiteLayout'
+import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
+import MapPinIcon from '@/components/ui/MapPinIcon'
+import CheckIcon from '@/components/ui/CheckIcon'
 
 // Partner & sponsor logos — Row 1
 import GoogleLogo from '@/assets/images/sponsors/Google_logo.webp'
@@ -30,28 +33,24 @@ const stats = [
   {
     value: 2203,
     suffix: '',
-    display: '2,203',
     label: 'Community Members',
     sub: '234% growth over 3 years',
   },
   {
     value: 52,
     suffix: '%',
-    display: '52%',
     label: 'Black / African-American',
     sub: 'Underrepresented talent',
   },
   {
     value: 75,
     suffix: '%',
-    display: '75%',
     label: 'Women',
     sub: 'Leading our community',
   },
   {
     value: 51,
     suffix: '%',
-    display: '51%',
     label: 'Actively Job-Seeking',
     sub: 'Pathways, not more training',
   },
@@ -121,7 +120,7 @@ MarqueeRow.propTypes = {
   direction: PropTypes.string,
 }
 
-const upcomingEvents = [
+const allEvents = [
   {
     name: 'Black History Month Innovation Summit',
     date: 'February 2026',
@@ -142,24 +141,15 @@ const upcomingEvents = [
   },
 ]
 
-// Reusable icons
-function ArrowRight() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  )
+function isUpcoming(dateStr) {
+  const parsed = new Date(`1 ${dateStr}`)
+  const now = new Date()
+  // Compare by month: event is upcoming if its month-end hasn't passed
+  parsed.setMonth(parsed.getMonth() + 1, 0) // last day of event month
+  return parsed >= now
 }
+
+const upcomingEvents = allEvents.filter((ev) => isUpcoming(ev.date))
 
 function CalendarIcon() {
   return (
@@ -178,25 +168,6 @@ function CalendarIcon() {
       <line x1="16" y1="2" x2="16" y2="6" />
       <line x1="8" y1="2" x2="8" y2="6" />
       <line x1="3" y1="10" x2="21" y2="10" />
-    </svg>
-  )
-}
-
-function MapPinIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-      <circle cx="12" cy="10" r="3" />
     </svg>
   )
 }
@@ -484,7 +455,7 @@ export default function HomePage() {
                 to="/get-involved"
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-3.5 text-[15px] font-semibold text-black transition-colors hover:bg-primary-400"
               >
-                Join the Community <ArrowRight />
+                Join the Community <ArrowRightIcon />
               </Link>
               <Link
                 to="/get-involved"
@@ -556,7 +527,7 @@ export default function HomePage() {
                 to="/about"
                 className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-400"
               >
-                Learn more about our mission <ArrowRight />
+                Learn more about our mission <ArrowRightIcon />
               </Link>
             </div>
             <div className="flex flex-col gap-6">
@@ -583,19 +554,7 @@ export default function HomePage() {
                       key={item}
                       className="flex items-center gap-3 rounded-lg border border-primary/15 bg-primary/[0.06] px-4 py-2.5"
                     >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#D4A017"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        aria-hidden="true"
-                      >
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
+                      <CheckIcon />
                       <span className="text-sm text-gray-300">{item}</span>
                     </div>
                   ))}
@@ -622,7 +581,7 @@ export default function HomePage() {
               to="/events"
               className="hidden items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-400 sm:inline-flex"
             >
-              View all events <ArrowRight />
+              View all events <ArrowRightIcon />
             </Link>
           </div>
           <div className="flex flex-col gap-2">
@@ -658,7 +617,7 @@ export default function HomePage() {
               to="/events"
               className="inline-flex items-center gap-2 text-sm font-semibold text-primary"
             >
-              View all events <ArrowRight />
+              View all events <ArrowRightIcon />
             </Link>
           </div>
         </div>
