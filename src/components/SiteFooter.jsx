@@ -17,7 +17,10 @@ const footerCommunity = [
 
 export default function SiteFooter() {
   return (
-    <footer role="contentinfo" className="border-t border-surface bg-[#050505]">
+    <footer
+      role="contentinfo"
+      className="border-t border-[var(--border)] bg-[var(--surface-footer)]"
+    >
       <div className="mx-auto max-w-[1200px] px-6 py-16">
         {/* Logo */}
         <div className="mb-12">

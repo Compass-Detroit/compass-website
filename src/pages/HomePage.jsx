@@ -5,6 +5,7 @@ import SiteLayout from '@/layouts/SiteLayout'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import MapPinIcon from '@/components/ui/MapPinIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
+import PlaceholderImage from '@/components/ui/PlaceholderImage'
 
 // Partner & sponsor logos — Row 1
 import GoogleLogo from '@/assets/images/sponsors/Google_logo.webp'
@@ -88,8 +89,8 @@ function MarqueeRow({ logos, direction = 'left' }) {
   return (
     <div className="marquee-track relative overflow-hidden">
       {/* Fade edges */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[#0a0a0a] to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[#0a0a0a] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[var(--marquee-fade)] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[var(--marquee-fade)] to-transparent" />
       <div
         className={
           direction === 'left'
@@ -429,40 +430,235 @@ function RetentionGauge() {
   )
 }
 
+// Animated compass constellation for hero section
+function HeroVisual() {
+  return (
+    <div className="relative flex items-center justify-center">
+      {/* Outer glow ring */}
+      <div className="hero-spin-slow absolute size-[420px] rounded-full border border-primary/10" />
+      <div className="hero-spin-reverse absolute size-[340px] rounded-full border border-dashed border-primary/15" />
+      <div className="absolute size-[260px] rounded-full border border-primary/20" />
+
+      {/* Floating nodes */}
+      {[
+        { x: '10%', y: '15%', size: 'size-3', delay: '0s', label: 'Engage' },
+        { x: '85%', y: '20%', size: 'size-2.5', delay: '0.5s', label: 'Build' },
+        { x: '75%', y: '80%', size: 'size-3', delay: '1s', label: 'Connect' },
+        { x: '15%', y: '75%', size: 'size-2', delay: '1.5s', label: 'Hire' },
+      ].map((node) => (
+        <div
+          key={node.label}
+          className="hero-float absolute flex flex-col items-center gap-1.5"
+          style={{
+            left: node.x,
+            top: node.y,
+            animationDelay: node.delay,
+          }}
+        >
+          <div
+            className={`${node.size} rounded-full bg-primary shadow-lg shadow-primary/30`}
+          />
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+            {node.label}
+          </span>
+        </div>
+      ))}
+
+      {/* Center compass element */}
+      <div className="relative flex size-[160px] items-center justify-center rounded-full border border-primary/30 bg-gradient-to-br from-primary/[0.08] to-transparent backdrop-blur-sm">
+        <div className="flex size-[100px] items-center justify-center rounded-full border border-primary/20 bg-[var(--surface-card)]">
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 48 48"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle
+              cx="24"
+              cy="24"
+              r="22"
+              stroke="#D4A017"
+              strokeWidth="1"
+              opacity="0.3"
+            />
+            <circle cx="24" cy="24" r="4" fill="#D4A017" opacity="0.8" />
+            <path
+              d="M24 2 L27 14 L24 10 L21 14 Z"
+              fill="#D4A017"
+              opacity="0.9"
+            />
+            <path
+              d="M24 46 L27 34 L24 38 L21 34 Z"
+              fill="#D4A017"
+              opacity="0.4"
+            />
+            <path
+              d="M46 24 L34 21 L38 24 L34 27 Z"
+              fill="#D4A017"
+              opacity="0.4"
+            />
+            <path
+              d="M2 24 L14 21 L10 24 L14 27 Z"
+              fill="#D4A017"
+              opacity="0.4"
+            />
+          </svg>
+        </div>
+      </div>
+
+      {/* Connecting lines */}
+      <svg
+        className="absolute inset-0 size-full"
+        viewBox="0 0 420 420"
+        fill="none"
+        aria-hidden="true"
+      >
+        <line
+          x1="42"
+          y1="63"
+          x2="170"
+          y2="170"
+          stroke="#D4A017"
+          strokeWidth="0.5"
+          opacity="0.2"
+        />
+        <line
+          x1="357"
+          y1="84"
+          x2="250"
+          y2="170"
+          stroke="#D4A017"
+          strokeWidth="0.5"
+          opacity="0.2"
+        />
+        <line
+          x1="315"
+          y1="336"
+          x2="250"
+          y2="250"
+          stroke="#D4A017"
+          strokeWidth="0.5"
+          opacity="0.2"
+        />
+        <line
+          x1="63"
+          y1="315"
+          x2="170"
+          y2="250"
+          stroke="#D4A017"
+          strokeWidth="0.5"
+          opacity="0.2"
+        />
+      </svg>
+
+      {/* Floating stat cards */}
+      <div
+        className="hero-float absolute -right-4 top-[15%] rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 py-2 shadow-lg"
+        style={{ animationDelay: '0.3s' }}
+      >
+        <div className="text-lg font-extrabold text-primary">52%</div>
+        <div className="text-[9px] text-gray-500">Black / African-American</div>
+      </div>
+      <div
+        className="hero-float absolute -left-4 bottom-[20%] rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 py-2 shadow-lg"
+        style={{ animationDelay: '0.8s' }}
+      >
+        <div className="text-lg font-extrabold text-primary">75%</div>
+        <div className="text-[9px] text-gray-500">Women Leaders</div>
+      </div>
+    </div>
+  )
+}
+
 export default function HomePage() {
   return (
     <SiteLayout>
-      {/* Hero — with subtle gradient accent */}
+      {/* Hero — immersive with animated abstract visual */}
       <section className="relative overflow-hidden">
-        <div className="absolute -right-40 -top-40 size-[500px] rounded-full bg-primary/[0.04] blur-3xl" />
-        <div className="absolute -bottom-20 -left-20 size-[300px] rounded-full bg-primary/[0.03] blur-3xl" />
-        <div className="relative mx-auto max-w-[1200px] px-6 pb-20 pt-24 md:pt-28">
-          <div className="max-w-[800px]">
-            <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
-              Detroit&apos;s Career Infrastructure for Tech Talent
-            </p>
-            <h1 className="mb-6 text-4xl font-extrabold leading-[1.08] tracking-tight md:text-5xl lg:text-[52px]">
-              Training programs create talent.{' '}
-              <span className="text-primary">COMPASS creates pathways.</span>
-            </h1>
-            <p className="mb-10 max-w-screen-sm text-lg leading-relaxed text-gray-500 md:text-xl">
-              We build the career infrastructure that connects prepared,
-              underrepresented tech talent in Michigan to technology careers —
-              creating confidence, belonging, and economic mobility.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link
-                to="/get-involved"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-3.5 text-[15px] font-semibold text-black transition-colors hover:bg-primary-400"
-              >
-                Join the Community <ArrowRightIcon />
-              </Link>
-              <Link
-                to="/get-involved"
-                className="inline-flex items-center rounded-lg border border-surface px-7 py-3.5 text-[15px] font-semibold text-white transition-colors hover:border-gray-500"
-              >
-                Partner with Us
-              </Link>
+        {/* Animated gradient orbs */}
+        <div className="hero-orb-1 absolute -right-24 -top-24 size-[600px] rounded-full bg-gradient-to-br from-primary/[0.08] via-primary/[0.03] to-transparent blur-3xl" />
+        <div className="hero-orb-2 absolute -bottom-32 -left-32 size-[500px] rounded-full bg-gradient-to-tr from-indigo-500/[0.06] via-primary/[0.02] to-transparent blur-3xl" />
+        <div className="hero-orb-3 absolute left-1/2 top-1/4 size-[400px] -translate-x-1/2 rounded-full bg-gradient-to-b from-emerald-500/[0.04] to-transparent blur-3xl" />
+
+        {/* Subtle grid pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              'linear-gradient(var(--text-primary) 1px, transparent 1px), linear-gradient(90deg, var(--text-primary) 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative mx-auto max-w-[1200px] px-6 pb-24 pt-20 md:pt-28 lg:pb-32">
+          <div className="grid items-center gap-16 lg:grid-cols-2">
+            {/* Text */}
+            <div>
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-4 py-1.5">
+                <span className="size-2 animate-pulse rounded-full bg-primary" />
+                <span className="text-xs font-semibold text-primary">
+                  2026 Programming Live
+                </span>
+              </div>
+              <h1 className="mb-6 text-4xl font-extrabold leading-[1.06] tracking-tight md:text-5xl lg:text-[56px]">
+                Training programs create talent.{' '}
+                <span className="bg-gradient-to-r from-primary via-primary-400 to-primary bg-clip-text text-transparent">
+                  COMPASS creates pathways.
+                </span>
+              </h1>
+              <p className="mb-10 max-w-[520px] text-lg leading-relaxed text-gray-500">
+                We build the career infrastructure that connects prepared,
+                underrepresented tech talent in Michigan to technology careers —
+                creating confidence, belonging, and economic mobility.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  to="/get-involved"
+                  className="group inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-3.5 text-[15px] font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
+                >
+                  Join the Community
+                  <span className="inline-block transition-transform group-hover:translate-x-0.5">
+                    <ArrowRightIcon />
+                  </span>
+                </Link>
+                <Link
+                  to="/get-involved"
+                  className="inline-flex items-center rounded-lg border border-[var(--border)] px-7 py-3.5 text-[15px] font-semibold transition-all hover:border-primary/40 hover:bg-primary/[0.04]"
+                >
+                  Partner with Us
+                </Link>
+              </div>
+              {/* Social proof strip */}
+              <div className="mt-12 flex items-center gap-6">
+                <div className="flex -space-x-2">
+                  {[
+                    'bg-primary',
+                    'bg-emerald-500',
+                    'bg-indigo-500',
+                    'bg-rose-400',
+                  ].map((bg, i) => (
+                    <div
+                      key={i}
+                      className={`flex size-8 items-center justify-center rounded-full border-2 border-[var(--surface)] text-[10px] font-bold text-white ${bg}`}
+                    >
+                      {['JR', 'MK', 'AS', 'TL'][i]}
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold">2,203+ Navigators</div>
+                  <div className="text-xs text-gray-500">
+                    and growing every month
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Abstract visual — compass constellation */}
+            <div className="relative hidden lg:block" aria-hidden="true">
+              <HeroVisual />
             </div>
           </div>
         </div>
@@ -501,6 +697,12 @@ export default function HomePage() {
       {/* Mission — with visualizations */}
       <section className="border-y border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
+          {/* Community image banner */}
+          <PlaceholderImage
+            preset="community"
+            aspectRatio="aspect-[3/1]"
+            className="mb-12"
+          />
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
               <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
@@ -634,6 +836,11 @@ export default function HomePage() {
               Navigators hired through COMPASS events
             </h2>
           </div>
+          <PlaceholderImage
+            preset="career"
+            aspectRatio="aspect-[16/5]"
+            className="mb-10"
+          />
           <div className="grid gap-4 md:grid-cols-3">
             {[
               {
@@ -675,12 +882,37 @@ export default function HomePage() {
 
       {/* CTA */}
       <section>
-        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent" />
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl px-6 py-24 text-center">
+          {/* Animated background layers */}
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.04]" />
+            <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+            <div className="absolute bottom-0 left-1/2 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+            <div className="absolute -right-20 -top-20 size-60 animate-[hero-orb-1_12s_ease-in-out_infinite] rounded-full bg-primary/[0.04] blur-3xl" />
+            <div className="absolute -bottom-20 -left-20 size-60 animate-[hero-orb-2_14s_ease-in-out_infinite] rounded-full bg-violet-500/[0.04] blur-3xl" />
+          </div>
           <div className="relative">
-            <h2 className="mb-4 text-3xl font-extrabold tracking-tight md:text-4xl">
+            <div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-2xl border border-primary/20 bg-primary/[0.08]">
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className="text-primary"
+                aria-hidden="true"
+              >
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5" />
+                <path d="M2 12l10 5 10-5" />
+              </svg>
+            </div>
+            <h2 className="mb-4 text-3xl font-extrabold tracking-tight md:text-4xl lg:text-5xl">
               Let&apos;s build Detroit&apos;s pathways{' '}
-              <span className="text-primary">together.</span>
+              <span className="bg-gradient-to-r from-primary via-primary to-amber-300 bg-clip-text text-transparent">
+                together.
+              </span>
             </h2>
             <p className="mx-auto mb-10 max-w-[540px] text-lg leading-relaxed text-gray-500">
               Whether you&apos;re a tech professional, a student, an employer,
@@ -690,19 +922,20 @@ export default function HomePage() {
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 to="/get-involved"
-                className="rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-colors hover:bg-primary-400"
+                className="group relative overflow-hidden rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
               >
-                Become a Navigator
+                <span className="relative z-10">Become a Navigator</span>
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
               </Link>
               <Link
                 to="/get-involved"
-                className="rounded-lg border border-surface px-8 py-4 text-base font-semibold text-white transition-colors hover:border-gray-500"
+                className="rounded-lg border border-surface px-8 py-4 text-base font-semibold transition-colors hover:border-primary/40 hover:text-primary"
               >
                 Partner with COMPASS
               </Link>
               <Link
                 to="/get-involved"
-                className="rounded-lg border border-surface px-8 py-4 text-base font-semibold text-white transition-colors hover:border-gray-500"
+                className="rounded-lg border border-surface px-8 py-4 text-base font-semibold transition-colors hover:border-primary/40 hover:text-primary"
               >
                 Sponsor an Event
               </Link>

@@ -149,14 +149,29 @@ export default function EventsPage() {
     <SiteLayout>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute -right-32 -top-32 size-[350px] rounded-full bg-primary/[0.04] blur-3xl" />
-        <div className="mx-auto max-w-[1200px] px-6 pb-16 pt-24">
-          <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
-            Events & Programs
-          </p>
+        <div className="hero-orb-1 absolute -right-32 -top-32 size-[350px] rounded-full bg-gradient-to-br from-primary/[0.06] to-transparent blur-3xl" />
+        <div className="hero-orb-2 absolute -bottom-20 left-1/3 size-[250px] rounded-full bg-gradient-to-tr from-emerald-500/[0.04] to-transparent blur-3xl" />
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage:
+              'linear-gradient(var(--text-primary) 1px, transparent 1px), linear-gradient(90deg, var(--text-primary) 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto max-w-[1200px] px-6 pb-16 pt-24">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1">
+            <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
+            <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+              5 Events Planned
+            </span>
+          </div>
           <h1 className="mb-6 max-w-[700px] text-4xl font-extrabold leading-[1.1] tracking-tight md:text-5xl">
             Where talent meets{' '}
-            <span className="text-primary">opportunity.</span>
+            <span className="bg-gradient-to-r from-primary to-primary-400 bg-clip-text text-transparent">
+              opportunity.
+            </span>
           </h1>
           <p className="max-w-screen-sm text-lg leading-relaxed text-gray-500">
             From Innovation Summits to hackathons to Michigan DevFest — every
@@ -321,7 +336,7 @@ export default function EventsPage() {
               {pastEvents.map((ev) => (
                 <div
                   key={ev.name}
-                  className="flex flex-col gap-3 rounded-xl border border-surface bg-surface-card/50 p-5 opacity-70 sm:flex-row sm:items-center sm:justify-between"
+                  className="bg-surface-card/50 flex flex-col gap-3 rounded-xl border border-surface p-5 opacity-70 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04]">

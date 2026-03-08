@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
 import CheckIcon from '@/components/ui/CheckIcon'
+import PlaceholderImage from '@/components/ui/PlaceholderImage'
 
 const programs = [
   {
@@ -62,14 +63,21 @@ export default function ProgramsPage() {
     <SiteLayout>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute -left-40 -top-40 size-[400px] rounded-full bg-primary/[0.04] blur-3xl" />
+        <div className="hero-orb-1 absolute -left-40 -top-40 size-[400px] rounded-full bg-gradient-to-br from-primary/[0.06] to-transparent blur-3xl" />
+        <div className="hero-orb-2 absolute -bottom-20 -right-20 size-[300px] rounded-full bg-gradient-to-tr from-emerald-500/[0.04] to-transparent blur-3xl" />
+        <div className="hero-grid-pattern pointer-events-none absolute inset-0" />
         <div className="mx-auto max-w-[1200px] px-6 pb-16 pt-24">
-          <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
-            Programs
-          </p>
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1">
+            <span className="size-1.5 rounded-full bg-primary" />
+            <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+              4 Programs
+            </span>
+          </div>
           <h1 className="mb-6 max-w-[700px] text-4xl font-extrabold leading-[1.1] tracking-tight md:text-5xl">
             Career infrastructure,{' '}
-            <span className="text-primary">not just events.</span>
+            <span className="bg-gradient-to-r from-primary via-primary to-amber-300 bg-clip-text text-transparent">
+              not just events.
+            </span>
           </h1>
           <p className="max-w-screen-sm text-lg leading-relaxed text-gray-500">
             Every COMPASS program serves a specific purpose in the Navigator
@@ -134,27 +142,42 @@ export default function ProgramsPage() {
 
       {/* CTA */}
       <section className="border-t border-surface">
-        <div className="mx-auto max-w-[1200px] px-6 py-24 text-center">
-          <h2 className="mb-4 text-3xl font-extrabold tracking-tight">
-            Ready to start your <span className="text-primary">journey?</span>
-          </h2>
-          <p className="mx-auto mb-10 max-w-[500px] leading-relaxed text-gray-500">
-            Join as a Navigator, partner as an employer, or sponsor a program —
-            every pathway starts here.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              to="/events"
-              className="rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-colors hover:bg-primary-400"
-            >
-              See Upcoming Events
-            </Link>
-            <Link
-              to="/get-involved"
-              className="rounded-lg border border-surface px-8 py-4 text-base font-semibold text-white transition-colors hover:border-gray-500"
-            >
-              Get Involved
-            </Link>
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-emerald-500/[0.04]" />
+            <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+          </div>
+          <div className="relative">
+            <PlaceholderImage
+              preset="tech"
+              aspectRatio="aspect-[16/5]"
+              className="mx-auto mb-10 max-w-[700px]"
+            />
+            <h2 className="mb-4 text-3xl font-extrabold tracking-tight">
+              Ready to start your{' '}
+              <span className="bg-gradient-to-r from-primary to-amber-300 bg-clip-text text-transparent">
+                journey?
+              </span>
+            </h2>
+            <p className="mx-auto mb-10 max-w-[500px] leading-relaxed text-gray-500">
+              Join as a Navigator, partner as an employer, or sponsor a program
+              — every pathway starts here.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                to="/events"
+                className="group relative overflow-hidden rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
+              >
+                <span className="relative z-10">See Upcoming Events</span>
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
+              </Link>
+              <Link
+                to="/get-involved"
+                className="rounded-lg border border-surface px-8 py-4 text-base font-semibold transition-colors hover:border-primary/40 hover:text-primary"
+              >
+                Get Involved
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
+import PlaceholderImage from '@/components/ui/PlaceholderImage'
 
 import NSBELogo from '@/assets/images/organizations/org-nsbe-logo.webp'
 import SHPELogo from '@/assets/images/organizations/org-shpe-logo.webp'
@@ -85,14 +86,21 @@ export default function CommunityPage() {
     <SiteLayout>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute -left-32 -top-32 size-[400px] rounded-full bg-primary/[0.04] blur-3xl" />
+        <div className="hero-orb-1 absolute -left-32 -top-32 size-[400px] rounded-full bg-gradient-to-br from-primary/[0.06] to-transparent blur-3xl" />
+        <div className="hero-orb-2 absolute -bottom-20 -right-20 size-[300px] rounded-full bg-gradient-to-tr from-pink-500/[0.04] to-transparent blur-3xl" />
+        <div className="hero-grid-pattern pointer-events-none absolute inset-0" />
         <div className="mx-auto max-w-[1200px] px-6 pb-16 pt-24">
-          <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
-            Community
-          </p>
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1">
+            <span className="size-1.5 rounded-full bg-primary" />
+            <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+              8 Organizations
+            </span>
+          </div>
           <h1 className="mb-6 max-w-[700px] text-4xl font-extrabold leading-[1.1] tracking-tight md:text-5xl">
             A collective built on{' '}
-            <span className="text-primary">belonging.</span>
+            <span className="bg-gradient-to-r from-primary via-primary to-amber-300 bg-clip-text text-transparent">
+              belonging.
+            </span>
           </h1>
           <p className="max-w-screen-sm text-lg leading-relaxed text-gray-500">
             COMPASS isn&apos;t a single organization — it&apos;s a coalition of
@@ -176,6 +184,11 @@ export default function CommunityPage() {
       {/* For Navigators / Employers — with accent borders */}
       <section className="border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <PlaceholderImage
+            preset="community"
+            aspectRatio="aspect-[3/1]"
+            className="mb-10"
+          />
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-xl border border-primary/20 bg-surface-card p-8">
               <p className="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">

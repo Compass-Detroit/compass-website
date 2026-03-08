@@ -69,18 +69,28 @@ export default function GetInvolvedPage() {
   return (
     <SiteLayout>
       {/* Hero */}
-      <section className="mx-auto max-w-[1200px] px-6 pb-16 pt-24">
-        <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
-          Get Involved
-        </p>
-        <h1 className="mb-6 max-w-[700px] text-4xl font-extrabold leading-[1.1] tracking-tight md:text-5xl">
-          There&apos;s a place for you at{' '}
-          <span className="text-primary">COMPASS.</span>
-        </h1>
-        <p className="max-w-screen-sm text-lg leading-relaxed text-gray-500">
-          Whether you&apos;re a tech professional, a student, an employer, or a
-          community organization — here&apos;s how to get started.
-        </p>
+      <section className="relative overflow-hidden">
+        <div className="hero-orb-1 absolute -right-40 -top-40 size-[400px] rounded-full bg-gradient-to-br from-primary/[0.06] to-transparent blur-3xl" />
+        <div className="hero-orb-2 absolute -bottom-20 -left-20 size-[300px] rounded-full bg-gradient-to-tr from-violet-500/[0.04] to-transparent blur-3xl" />
+        <div className="hero-grid-pattern pointer-events-none absolute inset-0" />
+        <div className="mx-auto max-w-[1200px] px-6 pb-16 pt-24">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1">
+            <span className="size-1.5 rounded-full bg-primary" />
+            <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+              4 Pathways
+            </span>
+          </div>
+          <h1 className="mb-6 max-w-[700px] text-4xl font-extrabold leading-[1.1] tracking-tight md:text-5xl">
+            There&apos;s a place for you at{' '}
+            <span className="bg-gradient-to-r from-primary via-primary to-amber-300 bg-clip-text text-transparent">
+              COMPASS.
+            </span>
+          </h1>
+          <p className="max-w-screen-sm text-lg leading-relaxed text-gray-500">
+            Whether you&apos;re a tech professional, a student, an employer, or
+            a community organization — here&apos;s how to get started.
+          </p>
+        </div>
       </section>
 
       {/* Pathways */}
@@ -133,22 +143,31 @@ export default function GetInvolvedPage() {
 
       {/* Contact CTA */}
       <section className="border-t border-surface">
-        <div className="mx-auto max-w-[1200px] px-6 py-24 text-center">
-          <h2 className="mb-4 text-3xl font-extrabold tracking-tight">
-            Not sure where you fit?
-          </h2>
-          <p className="mx-auto mb-8 max-w-[500px] leading-relaxed text-gray-500">
-            Reach out and we&apos;ll help you find the right way to engage with
-            COMPASS.
-          </p>
-          <div className="flex flex-col items-center gap-3">
-            <a
-              href="mailto:jritten@compass-detroit.com"
-              className="rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-colors hover:bg-primary-400"
-            >
-              jritten@compass-detroit.com
-            </a>
-            <span className="text-sm text-gray-600">810-441-3259</span>
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.04]" />
+            <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+          </div>
+          <div className="relative">
+            <h2 className="mb-4 text-3xl font-extrabold tracking-tight">
+              Not sure where you fit?
+            </h2>
+            <p className="mx-auto mb-8 max-w-[500px] leading-relaxed text-gray-500">
+              Reach out and we&apos;ll help you find the right way to engage
+              with COMPASS.
+            </p>
+            <div className="flex flex-col items-center gap-3">
+              <a
+                href="mailto:jritten@compass-detroit.com"
+                className="group relative overflow-hidden rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
+              >
+                <span className="relative z-10">
+                  jritten@compass-detroit.com
+                </span>
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
+              </a>
+              <span className="text-sm text-gray-600">810-441-3259</span>
+            </div>
           </div>
         </div>
       </section>

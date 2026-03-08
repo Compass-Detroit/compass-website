@@ -2,29 +2,13 @@ import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import SiteLayout from '@/layouts/SiteLayout'
+import CheckIcon from '@/components/ui/CheckIcon'
+import PlaceholderImage from '@/components/ui/PlaceholderImage'
 
 import NSBELogo from '@/assets/images/organizations/org-nsbe-logo.webp'
 import SHPELogo from '@/assets/images/organizations/org-shpe-logo.webp'
 import GDGDetroitLogo from '@/assets/images/organizations/org-gdg-detroit.webp'
 import WTMLogo from '@/assets/images/organizations/org-wtm-logo.webp'
-
-function CheckIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#D4A017"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <polyline points="20 6 9 17 4 12" />
-    </svg>
-  )
-}
 
 function XIcon() {
   return (
@@ -285,20 +269,58 @@ export default function AboutPage() {
     <SiteLayout>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute -right-40 -top-40 size-[400px] rounded-full bg-primary/[0.04] blur-3xl" />
+        <div className="hero-orb-1 absolute -right-40 -top-40 size-[400px] rounded-full bg-gradient-to-br from-primary/[0.06] to-transparent blur-3xl" />
+        <div className="hero-orb-2 absolute -bottom-20 -left-20 size-[300px] rounded-full bg-gradient-to-tr from-indigo-500/[0.04] to-transparent blur-3xl" />
         <div className="mx-auto max-w-[1200px] px-6 pb-16 pt-24">
-          <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
-            About COMPASS
-          </p>
-          <h1 className="mb-6 max-w-[700px] text-4xl font-extrabold leading-[1.1] tracking-tight md:text-5xl">
-            The career infrastructure Detroit&apos;s tech talent deserves.
-          </h1>
-          <p className="max-w-screen-sm text-lg leading-relaxed text-gray-500">
-            COMPASS — the Collective of Minority Professionals and STEAM
-            Societies — is a 501(c)(3) nonprofit building the pathways that
-            connect prepared, underrepresented tech talent in Michigan to
-            technology careers.
-          </p>
+          <div className="grid items-center gap-12 lg:grid-cols-5">
+            <div className="lg:col-span-3">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                  501(c)(3) Nonprofit
+                </span>
+              </div>
+              <h1 className="mb-6 text-4xl font-extrabold leading-[1.08] tracking-tight md:text-5xl">
+                The career infrastructure Detroit&apos;s tech talent{' '}
+                <span className="bg-gradient-to-r from-primary to-primary-400 bg-clip-text text-transparent">
+                  deserves.
+                </span>
+              </h1>
+              <p className="max-w-screen-sm text-lg leading-relaxed text-gray-500">
+                COMPASS — the Collective of Minority Professionals and STEAM
+                Societies — is a 501(c)(3) nonprofit building the pathways that
+                connect prepared, underrepresented tech talent in Michigan to
+                technology careers.
+              </p>
+            </div>
+            {/* Abstract visual — network nodes */}
+            <div
+              className="relative hidden lg:col-span-2 lg:flex lg:items-center lg:justify-center"
+              aria-hidden="true"
+            >
+              <div className="relative size-[280px]">
+                <div className="hero-spin-slow absolute inset-0 rounded-full border border-primary/10" />
+                <div className="hero-spin-reverse absolute inset-4 rounded-full border border-dashed border-primary/15" />
+                <div className="absolute inset-8 rounded-full border border-primary/20" />
+                <div className="absolute left-1/2 top-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-primary/30 bg-primary/[0.08]">
+                  <span className="text-xs font-extrabold text-primary">C</span>
+                </div>
+                {[
+                  'top-2 left-1/2 -translate-x-1/2',
+                  'bottom-2 left-1/2 -translate-x-1/2',
+                  'left-2 top-1/2 -translate-y-1/2',
+                  'right-2 top-1/2 -translate-y-1/2',
+                ].map((pos, i) => (
+                  <div
+                    key={i}
+                    className={`hero-float absolute ${pos}`}
+                    style={{ animationDelay: `${i * 0.4}s` }}
+                  >
+                    <div className="size-3 rounded-full bg-primary shadow-md shadow-primary/30" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -332,6 +354,11 @@ export default function AboutPage() {
       {/* Mission + Do/Don't */}
       <section>
         <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <PlaceholderImage
+            preset="community"
+            aspectRatio="aspect-[3/1]"
+            className="mb-12"
+          />
           <div className="grid gap-16 lg:grid-cols-2">
             <div>
               <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
@@ -534,12 +561,18 @@ export default function AboutPage() {
 
       {/* CTA */}
       <section>
-        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent" />
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl px-6 py-24 text-center">
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.04]" />
+            <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+            <div className="absolute bottom-0 left-1/2 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+          </div>
           <div className="relative">
             <h2 className="mb-4 text-3xl font-extrabold tracking-tight md:text-4xl">
               Ready to be part of the{' '}
-              <span className="text-primary">mission?</span>
+              <span className="bg-gradient-to-r from-primary to-amber-300 bg-clip-text text-transparent">
+                mission?
+              </span>
             </h2>
             <p className="mx-auto mb-10 max-w-[500px] text-lg leading-relaxed text-gray-500">
               Join the collective of organizations and individuals building
@@ -548,13 +581,14 @@ export default function AboutPage() {
             <div className="flex flex-wrap justify-center gap-4">
               <Link
                 to="/get-involved"
-                className="rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-colors hover:bg-primary-400"
+                className="group relative overflow-hidden rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
               >
-                Get Involved
+                <span className="relative z-10">Get Involved</span>
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
               </Link>
               <Link
                 to="/programs"
-                className="rounded-lg border border-surface px-8 py-4 text-base font-semibold text-white transition-colors hover:border-gray-500"
+                className="rounded-lg border border-surface px-8 py-4 text-base font-semibold transition-colors hover:border-primary/40 hover:text-primary"
               >
                 Explore Programs
               </Link>
