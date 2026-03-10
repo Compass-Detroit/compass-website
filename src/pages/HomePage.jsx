@@ -836,11 +836,10 @@ export default function HomePage() {
               Navigators hired through COMPASS events
             </h2>
           </div>
-          <PlaceholderImage
-            preset="career"
-            aspectRatio="aspect-[16/5]"
-            className="mb-10"
-          />
+          <div className="mb-10 grid gap-4 md:grid-cols-2">
+            <PlaceholderImage preset="impact" aspectRatio="aspect-[2/1]" />
+            <PlaceholderImage preset="career" aspectRatio="aspect-[2/1]" />
+          </div>
           <div className="grid gap-4 md:grid-cols-3">
             {[
               {

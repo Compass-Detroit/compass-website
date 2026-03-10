@@ -114,6 +114,7 @@ export default {
         montserrat: ['Montserrat', 'sans-serif'],
         biorhyme: ['BioRhyme', 'serif'],
         inter: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        heading: ['var(--heading-font)'],
       },
       // Dark surface palette from redesign (now driven by CSS vars)
       backgroundColor: {

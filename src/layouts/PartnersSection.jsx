@@ -24,7 +24,7 @@ const PartnersSection = ({ partnersData = {}, year }) => {
 
     return (
       <div className="mb-12">
-        <h3 className="mb-6 py-4 text-center font-biorhyme text-5xl text-black">
+        <h3 className="mb-6 py-4 text-center font-heading text-5xl text-black">
           {tierName}
         </h3>
         <div
@@ -79,7 +79,7 @@ const PartnersSection = ({ partnersData = {}, year }) => {
       className="flex flex-col justify-center bg-white p-8 sm:px-10 md:px-14 lg:px-16"
     >
       <div className="relative w-full pt-0">
-        <h2 className="w-full text-center font-biorhyme text-4xl text-black md:text-5xl lg:text-6xl">
+        <h2 className="w-full text-center font-heading text-4xl text-black md:text-5xl lg:text-6xl">
           {year ? `${year} ` : ''}Partners
         </h2>
         <img

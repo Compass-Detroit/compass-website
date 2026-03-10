@@ -26,7 +26,9 @@ const SpeakersContent = ({ year, defaultExpanded }) => {
     <div className="flex w-full justify-between pt-0">
       <button
         aria-label={
-          isExpanded ? `Collapse ${year} Compass Detroit Speakers` : `Expand ${year} Compass Detroit Speakers`
+          isExpanded
+            ? `Collapse ${year} Compass Detroit Speakers`
+            : `Expand ${year} Compass Detroit Speakers`
         }
         onClick={toggleExpanded}
         className="flex cursor-pointer items-center text-black transition-colors hover:text-gray-600"
@@ -37,7 +39,7 @@ const SpeakersContent = ({ year, defaultExpanded }) => {
           } transition-transform duration-100 ease-linear`}
         />
       </button>
-      <h2 className="w-full text-center font-biorhyme text-4xl text-black md:text-5xl lg:text-6xl">
+      <h2 className="w-full text-center font-heading text-4xl text-black md:text-5xl lg:text-6xl">
         {year} Speakers
       </h2>
       <img

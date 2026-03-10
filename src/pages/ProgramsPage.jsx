@@ -91,6 +91,11 @@ export default function ProgramsPage() {
       {/* Programs */}
       <section className="border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-12 grid gap-4 sm:grid-cols-3">
+            <PlaceholderImage preset="event" aspectRatio="aspect-[3/2]" />
+            <PlaceholderImage preset="hackathon" aspectRatio="aspect-[3/2]" />
+            <PlaceholderImage preset="impact" aspectRatio="aspect-[3/2]" />
+          </div>
           <div className="flex flex-col gap-8">
             {programs.map((program, i) => (
               <div

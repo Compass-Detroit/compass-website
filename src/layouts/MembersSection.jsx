@@ -10,7 +10,7 @@ const MembersSection = ({ year }) => {
       className="bg-primary-50 p-8 sm:px-10 md:px-14 lg:px-16"
     >
       <div className="flex w-full justify-center pt-0">
-        <h2 className="mb-4 w-full text-center font-biorhyme text-4xl text-black md:mb-6 md:text-5xl lg:text-6xl">
+        <h2 className="mb-4 w-full text-center font-heading text-4xl text-black md:mb-6 md:text-5xl lg:text-6xl">
           {year ? `${year} ` : ''}Membership
         </h2>
         <img
@@ -32,7 +32,7 @@ const MembersSection = ({ year }) => {
         <div className="mt-6 grid w-full grid-cols-1 gap-8 md:grid-cols-3">
           {/* Left column — 2/3 width on desktop: Why Join + bullet points */}
           <div className="min-w-0 md:col-span-2">
-            <h3 className="mb-4 font-biorhyme text-2xl text-gray-900">
+            <h3 className="mb-4 font-heading text-2xl text-gray-900">
               Why join?
             </h3>
             <ul className="list-inside list-disc space-y-2 text-base leading-relaxed text-gray-700">

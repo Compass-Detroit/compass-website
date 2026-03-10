@@ -1,8 +1,45 @@
-/* Self-hosted Inter variable font */
+/* Self-hosted fonts */
 @font-face {
   font-family: 'Inter';
   src: url('./assets/fonts/Inter-VariableFont.woff2') format('woff2');
   font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./assets/fonts/Montserrat-VariableFont_wght.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./assets/fonts/Montserrat-Italic-VariableFont_wght.woff2')
+    format('woff2');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Orbitron';
+  src: url('./assets/fonts/orbitron-variablefont_wght-webfont.woff2')
+    format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BioRhyme';
+  src: url('./assets/fonts/BioRhyme-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Asimovian';
+  src: url('./assets/fonts/asimovian-regular-webfont.woff2') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -68,17 +105,33 @@
 
 /* Hero animations */
 @keyframes hero-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
 }
 @keyframes hero-spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 @keyframes hero-orb {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(20px, -15px) scale(1.05); }
-  66% { transform: translate(-15px, 10px) scale(0.95); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(20px, -15px) scale(1.05);
+  }
+  66% {
+    transform: translate(-15px, 10px) scale(0.95);
+  }
 }
 .hero-float {
   animation: hero-float 4s ease-in-out infinite;
@@ -237,7 +290,9 @@ body {
   --marquee-fade: #0a0a0a;
   --card-hover-bg: rgba(255, 255, 255, 0.06);
 
-  font-family: Montserrat, 'Open Sans', Helvetica, Arial, sans-serif;
+  --site-font: Montserrat, 'Open Sans', Helvetica, Arial, sans-serif;
+  --heading-font: BioRhyme, serif;
+  font-family: var(--site-font);
   line-height: 1.5;
   font-weight: 500;
 
@@ -267,6 +322,38 @@ body {
 .light .text-white {
   color: var(--text-primary);
 }
+
+/* Light mode — accessible primary (gold) text contrast */
+/* #efb403 on white = ~1.7:1 ✗ → #8B5E00 on white = ~5.2:1 ✓ WCAG AA */
+.light .text-primary {
+  color: #8b5e00;
+}
+.light .text-primary-300 {
+  color: #7a5200;
+}
+.light .text-primary-400 {
+  color: #8b5e00;
+}
+.light .text-primary-500 {
+  color: #8b5e00;
+}
+.light .hover\:text-primary:hover {
+  color: #6d4900;
+}
+.light .hover\:text-primary-400:hover {
+  color: #7a5200;
+}
+/* Primary borders — darken for visibility on light surfaces */
+.light .border-primary {
+  border-color: #a87300;
+}
+.light .border-primary\/40 {
+  border-color: rgba(139, 94, 0, 0.4);
+}
+.light .hover\:border-primary\/40:hover {
+  border-color: rgba(139, 94, 0, 0.4);
+}
+
 .light .text-gray-300 {
   color: #374151;
 }
@@ -326,41 +413,4 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-}
-
-/* Orbitron Variable Font */
-@font-face {
-  font-family: 'Orbitron';
-  src: url('./assets/fonts/orbitron-variablefont_wght-webfont.woff2')
-    format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Asimovian Font */
-@font-face {
-  font-family: 'Asimovian';
-  src: url('./assets/fonts/asimovian-regular-webfont.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Montserrat Variable Font */
-@font-face {
-  font-family: 'Montserrat';
-  src: url('./assets/fonts/Montserrat-VariableFont_wght.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* BioRhyme Font */
-@font-face {
-  font-family: 'BioRhyme';
-  src: url('./assets/fonts/BioRhyme-ExtraBold.woff2') format('woff2');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
 }

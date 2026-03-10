@@ -456,6 +456,11 @@ export default function AboutPage() {
       {/* Navigator Journey — vertical timeline */}
       <section>
         <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <PlaceholderImage
+            preset="mentorship"
+            aspectRatio="aspect-[4/1]"
+            className="mb-12"
+          />
           <div className="mx-auto mb-16 max-w-[700px] text-center">
             <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
               The Navigator Journey

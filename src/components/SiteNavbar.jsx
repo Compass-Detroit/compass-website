@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { FaBars, FaXmark } from 'react-icons/fa6'
 import { ReactComponent as CompassLogo } from '@/assets/images/compass-logo.svg'
 import ThemeSwitcher from '@/components/ui/ThemeSwitcher'
+import FontSwitcher from '@/components/ui/FontSwitcher'
 
 const navLinks = [
   { to: '/about', label: 'About' },
@@ -51,11 +52,13 @@ export default function SiteNavbar() {
               {link.label}
             </Link>
           ))}
+          <FontSwitcher />
           <ThemeSwitcher />
         </div>
 
         {/* Mobile toggle */}
         <div className="flex items-center gap-3 md:hidden">
+          <FontSwitcher />
           <ThemeSwitcher />
           <button
             className="text-[var(--text-primary)]"

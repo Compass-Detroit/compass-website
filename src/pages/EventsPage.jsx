@@ -2,6 +2,7 @@ import SiteLayout from '@/layouts/SiteLayout'
 import { Link } from 'react-router-dom'
 import MapPinIcon from '@/components/ui/MapPinIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
+import PlaceholderImage from '@/components/ui/PlaceholderImage'
 
 const typeColors = {
   'Innovation Summit': 'bg-primary/10 text-primary border-primary/20',
@@ -184,6 +185,11 @@ export default function EventsPage() {
       {/* Navigator Journey Flow — how events connect */}
       <section className="border-y border-surface bg-white/[0.01]">
         <div className="mx-auto max-w-[1200px] px-6 py-16">
+          <PlaceholderImage
+            preset="event"
+            aspectRatio="aspect-[4/1]"
+            className="mb-10"
+          />
           <div className="mb-10 text-center">
             <p className="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
               The Navigator Journey

@@ -80,6 +80,87 @@ const presets = {
     ),
     label: 'Career',
   },
+  mentorship: {
+    gradient: 'from-violet-500/20 via-primary/10 to-rose-500/10',
+    icon: (
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        opacity="0.4"
+        aria-hidden="true"
+      >
+        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 00-3-3.87" />
+        <path d="M16 3.13a4 4 0 010 7.75" />
+        <path d="M20 8v6M23 11h-6" />
+      </svg>
+    ),
+    label: 'Mentorship',
+  },
+  workshop: {
+    gradient: 'from-amber-500/20 via-orange-500/10 to-primary/10',
+    icon: (
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        opacity="0.4"
+        aria-hidden="true"
+      >
+        <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
+        <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+      </svg>
+    ),
+    label: 'Workshop',
+  },
+  hackathon: {
+    gradient: 'from-cyan-500/20 via-blue-500/10 to-indigo-500/10',
+    icon: (
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        opacity="0.4"
+        aria-hidden="true"
+      >
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <line x1="8" y1="21" x2="16" y2="21" />
+        <line x1="12" y1="17" x2="12" y2="21" />
+        <polyline points="7 8 10 11 7 14" />
+        <line x1="12" y1="14" x2="17" y2="14" />
+      </svg>
+    ),
+    label: 'Hackathon',
+  },
+  impact: {
+    gradient: 'from-emerald-500/20 via-lime-500/10 to-primary/10',
+    icon: (
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        opacity="0.4"
+        aria-hidden="true"
+      >
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </svg>
+    ),
+    label: 'Impact',
+  },
 }
 
 export default function PlaceholderImage({
@@ -105,7 +186,16 @@ export default function PlaceholderImage({
 }
 
 PlaceholderImage.propTypes = {
-  preset: PropTypes.oneOf(['community', 'event', 'tech', 'career']),
+  preset: PropTypes.oneOf([
+    'community',
+    'event',
+    'tech',
+    'career',
+    'mentorship',
+    'workshop',
+    'hackathon',
+    'impact',
+  ]),
   aspectRatio: PropTypes.string,
   className: PropTypes.string,
 }

@@ -5,7 +5,7 @@ import ScrollProgressButton from '@/components/ui/ScrollProgressButton'
 
 export default function SiteLayout({ children }) {
   return (
-    <div className="min-h-screen bg-[var(--surface)] font-inter text-[var(--text-primary)] transition-colors duration-300">
+    <div className="min-h-screen bg-[var(--surface)] text-[var(--text-primary)] transition-colors duration-300">
       <SiteNavbar />
       <main id="main-content">{children}</main>
       <SiteFooter />

@@ -1,5 +1,6 @@
 import SiteLayout from '@/layouts/SiteLayout'
 import { Link } from 'react-router-dom'
+import PlaceholderImage from '@/components/ui/PlaceholderImage'
 
 function BriefcaseIcon() {
   return (
@@ -201,6 +202,10 @@ export default function ResourcesPage() {
       {/* Proposed topics grid */}
       <section>
         <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-12 grid gap-4 md:grid-cols-2">
+            <PlaceholderImage preset="workshop" aspectRatio="aspect-[2/1]" />
+            <PlaceholderImage preset="hackathon" aspectRatio="aspect-[2/1]" />
+          </div>
           <div className="mb-12 text-center">
             <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
               What We&apos;re Hearing
