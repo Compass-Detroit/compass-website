@@ -1,3 +1,49 @@
+/* Self-hosted fonts */
+@font-face {
+  font-family: 'Inter';
+  src: url('./assets/fonts/Inter-VariableFont.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./assets/fonts/Montserrat-VariableFont_wght.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./assets/fonts/Montserrat-Italic-VariableFont_wght.woff2')
+    format('woff2');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Orbitron';
+  src: url('./assets/fonts/orbitron-variablefont_wght-webfont.woff2')
+    format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BioRhyme';
+  src: url('./assets/fonts/BioRhyme-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Asimovian';
+  src: url('./assets/fonts/asimovian-regular-webfont.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,6 +83,124 @@
 @layer components {
   /* Add your custom component classes here */
   /* Example: .custom-button { ... } */
+}
+
+/* Infinite Marquee — seamless loop */
+@keyframes marquee-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes marquee-right {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Hero animations */
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes hero-spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes hero-orb {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(20px, -15px) scale(1.05);
+  }
+  66% {
+    transform: translate(-15px, 10px) scale(0.95);
+  }
+}
+.hero-float {
+  animation: hero-float 4s ease-in-out infinite;
+}
+.hero-spin-slow {
+  animation: hero-spin-slow 60s linear infinite;
+}
+.hero-spin-reverse {
+  animation: hero-spin-slow 45s linear infinite reverse;
+}
+.hero-orb-1 {
+  animation: hero-orb 12s ease-in-out infinite;
+}
+.hero-orb-2 {
+  animation: hero-orb 15s ease-in-out infinite 2s;
+}
+.hero-orb-3 {
+  animation: hero-orb 18s ease-in-out infinite 4s;
+}
+/* Grid pattern overlay for hero sections */
+.hero-grid-pattern {
+  background-image: linear-gradient(
+      rgba(212, 160, 23, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(212, 160, 23, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.marquee-left {
+  animation: marquee-left 40s linear infinite;
+  will-change: transform;
+}
+.marquee-right {
+  animation: marquee-right 40s linear infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-left,
+  .marquee-right,
+  .hero-float,
+  .hero-spin-slow,
+  .hero-spin-reverse,
+  .hero-orb-1,
+  .hero-orb-2,
+  .hero-orb-3 {
+    animation: none;
+  }
+}
+.marquee-track:hover .marquee-left,
+.marquee-track:hover .marquee-right {
+  animation-play-state: paused;
+}
+/* Marquee logo cards */
+.marquee-logo-wrap {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.marquee-logo-wrap:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 24px rgba(212, 160, 23, 0.18);
+  transform: scale(1.06);
+}
+.marquee-logo {
+  transition: filter 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: grayscale(80%) brightness(0.85);
+}
+.marquee-logo-wrap:hover .marquee-logo {
+  filter: grayscale(0%) brightness(1.1)
+    drop-shadow(0 0 8px rgba(212, 160, 23, 0.3));
 }
 
 /* Yoda 404 Animations */
@@ -113,12 +277,24 @@ body {
 }
 
 :root {
-  font-family: Montserrat, 'Open Sans', Helvetica, Arial, sans-serif;
+  /* Theme — dark (default) */
+  --surface: #0a0a0a;
+  --surface-card: #141414;
+  --surface-elevated: #1a1a1a;
+  --surface-footer: #050505;
+  --border: #222;
+  --border-light: #333;
+  --text-primary: #ffffff;
+  --text-secondary: #d1d5db;
+  --text-muted: #6b7280;
+  --marquee-fade: #0a0a0a;
+  --card-hover-bg: rgba(255, 255, 255, 0.06);
+
+  --site-font: Montserrat, 'Open Sans', Helvetica, Arial, sans-serif;
+  --heading-font: BioRhyme, serif;
+  font-family: var(--site-font);
   line-height: 1.5;
   font-weight: 500;
-
-  /* color: rgba(255, 255, 255, 0.87); */
-  /* background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -127,45 +303,114 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Light mode overrides */
+.light {
+  --surface: #fafafa;
+  --surface-card: #ffffff;
+  --surface-elevated: #f5f5f5;
+  --surface-footer: #f0f0f0;
+  --border: #e5e5e5;
+  --border-light: #d4d4d4;
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --marquee-fade: #fafafa;
+  --card-hover-bg: rgba(0, 0, 0, 0.03);
+}
+
+/* Light mode — theme corrections for hardcoded dark classes */
+.light .text-white {
+  color: var(--text-primary);
+}
+
+/* Light mode — accessible primary (gold) text contrast */
+/* #efb403 on white = ~1.7:1 ✗ → #8B5E00 on white = ~5.2:1 ✓ WCAG AA */
+.light .text-primary {
+  color: #8b5e00;
+}
+.light .text-primary-300 {
+  color: #7a5200;
+}
+.light .text-primary-400 {
+  color: #8b5e00;
+}
+.light .text-primary-500 {
+  color: #8b5e00;
+}
+.light .hover\:text-primary:hover {
+  color: #6d4900;
+}
+.light .hover\:text-primary-400:hover {
+  color: #7a5200;
+}
+/* Primary borders — darken for visibility on light surfaces */
+.light .border-primary {
+  border-color: #a87300;
+}
+.light .border-primary\/40 {
+  border-color: rgba(139, 94, 0, 0.4);
+}
+.light .hover\:border-primary\/40:hover {
+  border-color: rgba(139, 94, 0, 0.4);
+}
+
+.light .text-gray-300 {
+  color: #374151;
+}
+.light .text-gray-400 {
+  color: #4b5563;
+}
+.light .text-gray-500 {
+  color: #6b7280;
+}
+.light .text-gray-600 {
+  color: #9ca3af;
+}
+.light .text-gray-700 {
+  color: #9ca3af;
+}
+.light .bg-white\/5,
+.light .bg-white\/\[0\.01\],
+.light .bg-white\/\[0\.02\],
+.light .bg-white\/\[0\.04\],
+.light .bg-white\/\[0\.06\],
+.light .bg-white\/\[0\.12\] {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+.light .bg-\[\#0a0a0a\] {
+  background-color: var(--surface);
+}
+.light .bg-\[\#050505\] {
+  background-color: var(--surface-footer);
+}
+.light .bg-\[\#141414\] {
+  background-color: var(--surface-card);
+}
+.light .bg-\[\#1a1a1a\] {
+  background-color: var(--surface-elevated);
+}
+.light .border-\[\#222\] {
+  border-color: var(--border);
+}
+.light .stroke-\[\#222\],
+.light .stroke-\[\#1a1a1a\] {
+  stroke: #e5e5e5;
+}
+.light .marquee-logo {
+  filter: grayscale(30%) brightness(1);
+}
+.light .marquee-logo-wrap {
+  background: rgba(0, 0, 0, 0.04);
+}
+.light .marquee-logo-wrap:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+.light .marquee-logo-wrap:hover .marquee-logo {
+  filter: grayscale(0%) brightness(1);
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-}
-
-/* Orbitron Variable Font */
-@font-face {
-  font-family: 'Orbitron';
-  src: url('./assets/fonts/orbitron-variablefont_wght-webfont.woff2')
-    format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Asimovian Font */
-@font-face {
-  font-family: 'Asimovian';
-  src: url('./assets/fonts/asimovian-regular-webfont.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Montserrat Variable Font */
-@font-face {
-  font-family: 'Montserrat';
-  src: url('./assets/fonts/Montserrat-VariableFont_wght.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* BioRhyme Font */
-@font-face {
-  font-family: 'BioRhyme';
-  src: url('./assets/fonts/BioRhyme-ExtraBold.woff2') format('woff2');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
 }

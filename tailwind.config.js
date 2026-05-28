@@ -3,6 +3,7 @@ import typography from '@tailwindcss/typography'
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   safelist: [
     'ribbon-organizer',
     'ribbon-facilitator',
@@ -112,6 +113,38 @@ export default {
         ],
         montserrat: ['Montserrat', 'sans-serif'],
         biorhyme: ['BioRhyme', 'serif'],
+        inter: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        heading: ['var(--heading-font)'],
+      },
+      // Dark surface palette from redesign (now driven by CSS vars)
+      backgroundColor: {
+        surface: {
+          DEFAULT: 'var(--surface)',
+          card: 'var(--surface-card)',
+          elevated: 'var(--surface-elevated)',
+          footer: 'var(--surface-footer)',
+        },
+        'theme-surface': {
+          DEFAULT: 'var(--surface)',
+          card: 'var(--surface-card)',
+          elevated: 'var(--surface-elevated)',
+          footer: 'var(--surface-footer)',
+        },
+      },
+      borderColor: {
+        surface: {
+          DEFAULT: 'var(--border)',
+          light: 'var(--border-light)',
+        },
+        'theme-border': {
+          DEFAULT: 'var(--border)',
+          light: 'var(--border-light)',
+        },
+      },
+      textColor: {
+        'theme-primary': 'var(--text-primary)',
+        'theme-secondary': 'var(--text-secondary)',
+        'theme-muted': 'var(--text-muted)',
       },
     },
   },
