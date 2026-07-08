@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
 import CheckIcon from '@/components/ui/CheckIcon'
-import PlaceholderImage from '@/components/ui/PlaceholderImage'
+import innovationSummitImg from '@assets/images/generated/innovation-summit.png'
+import hackathonSceneImg from '@assets/images/generated/hackathon-scene.png'
+import devfestConferenceImg from '@assets/images/generated/devfest-conference.png'
+import careerMentorshipImg from '@assets/images/generated/career-mentorship.png'
 
 const programs = [
   {
@@ -92,9 +95,30 @@ export default function ProgramsPage() {
       <section className="border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="mb-12 grid gap-4 sm:grid-cols-3">
-            <PlaceholderImage preset="event" aspectRatio="aspect-[3/2]" />
-            <PlaceholderImage preset="hackathon" aspectRatio="aspect-[3/2]" />
-            <PlaceholderImage preset="impact" aspectRatio="aspect-[3/2]" />
+            <div className="img-zoom overflow-hidden rounded-xl border border-surface">
+              <img
+                src={innovationSummitImg}
+                alt="Innovation Summit keynote with tech industry leaders"
+                className="aspect-[3/2] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div className="img-zoom overflow-hidden rounded-xl border border-surface">
+              <img
+                src={hackathonSceneImg}
+                alt="Hack Michigan teams collaborating on projects"
+                className="aspect-[3/2] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div className="img-zoom overflow-hidden rounded-xl border border-surface">
+              <img
+                src={devfestConferenceImg}
+                alt="Michigan DevFest conference with attendees and speakers"
+                className="aspect-[3/2] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
           </div>
           <div className="flex flex-col gap-8">
             {programs.map((program, i) => (
@@ -153,11 +177,14 @@ export default function ProgramsPage() {
             <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
           </div>
           <div className="relative">
-            <PlaceholderImage
-              preset="tech"
-              aspectRatio="aspect-[16/5]"
-              className="mx-auto mb-10 max-w-[700px]"
-            />
+            <div className="img-zoom mx-auto mb-10 max-w-[700px] overflow-hidden rounded-xl border border-surface">
+              <img
+                src={careerMentorshipImg}
+                alt="Mentorship and career development at COMPASS Detroit"
+                className="aspect-[16/5] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
             <h2 className="mb-4 text-3xl font-extrabold tracking-tight">
               Ready to start your{' '}
               <span className="bg-gradient-to-r from-primary to-amber-300 bg-clip-text text-transparent">

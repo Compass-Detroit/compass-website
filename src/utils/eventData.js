@@ -1,11 +1,19 @@
+import { SpeakersData as Speakers2025 } from '@/data/2025/speakers'
 import { SpeakersData as Speakers2024 } from '@/data/2024/speakers'
 import { SpeakersData as Speakers2023 } from '@/data/2023/speakers'
+import { partnersData as Partners2025 } from '@/data/2025/partners'
 import { sponsorsData as Sponsors2024 } from '@/data/2024/sponsors'
 import { sponsorsData as Sponsors2023 } from '@/data/2023/sponsors'
+import { teamData as Team2025 } from '@/data/2025/team'
 import { teamData as Team2024 } from '@/data/2024/team'
 import { teamData as Team2023 } from '@/data/2023/team'
 
 const EVENT_YEARS = {
+  2025: {
+    speakers: Speakers2025,
+    sponsors: Partners2025,
+    team: Team2025,
+  },
   2024: {
     speakers: Speakers2024,
     sponsors: Sponsors2024,

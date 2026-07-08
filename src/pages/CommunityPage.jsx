@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
-import PlaceholderImage from '@/components/ui/PlaceholderImage'
+import communityGatheringImg from '@assets/images/generated/community-gathering.png'
+import CommunityCalendar from '@/components/events/CommunityCalendar'
 
 import NSBELogo from '@/assets/images/organizations/org-nsbe-logo.webp'
 import SHPELogo from '@/assets/images/organizations/org-shpe-logo.webp'
@@ -75,7 +76,7 @@ const collective = [
 ]
 
 const communityStats = [
-  { num: '2,203', label: 'Community members' },
+  { num: '4,111', label: 'Community members' },
   { num: '52%', label: 'Black/African-American' },
   { num: '75%', label: 'Women' },
   { num: '6+', label: 'Coalition organizations' },
@@ -181,14 +182,36 @@ export default function CommunityPage() {
         </div>
       </section>
 
+      {/* Community Calendar */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-10">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Community Calendar
+            </p>
+            <h2 className="mb-3 text-3xl font-bold tracking-tight">
+              What&apos;s happening this month
+            </h2>
+            <p className="max-w-lg text-sm text-gray-500">
+              Browse upcoming workshops, meetups, and community events.
+              Something for every Navigator, every week.
+            </p>
+          </div>
+          <CommunityCalendar />
+        </div>
+      </section>
+
       {/* For Navigators / Employers — with accent borders */}
       <section className="border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
-          <PlaceholderImage
-            preset="community"
-            aspectRatio="aspect-[3/1]"
-            className="mb-10"
-          />
+          <div className="img-zoom mb-10 overflow-hidden rounded-2xl border border-surface">
+            <img
+              src={communityGatheringImg}
+              alt="COMPASS Detroit community members at a networking event"
+              className="aspect-[3/1] w-full object-cover"
+              loading="lazy"
+            />
+          </div>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-xl border border-primary/20 bg-surface-card p-8">
               <p className="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">

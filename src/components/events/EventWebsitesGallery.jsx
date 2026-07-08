@@ -1,0 +1,140 @@
+import devfestImg from '@assets/images/generated/devfest-conference.png'
+import iwdImg from '@assets/images/generated/women-in-tech.png'
+import prideImg from '@assets/images/generated/pride-summit.png'
+import hackathonImg from '@assets/images/generated/hackathon-scene.png'
+
+const eventSites = [
+  {
+    name: 'Michigan DevFest',
+    url: 'https://midevfest.com',
+    accent: 'bg-blue-500/10 text-blue-400',
+    tag: '11th Annual',
+    description:
+      "Michigan's premier developer conference featuring AI/ML, cloud, mobile, and full-stack tracks",
+    date: 'November 2025 · 1,000+ Attendees',
+    image: devfestImg,
+    live: true,
+  },
+  {
+    name: 'IWD Innovation Summit',
+    url: 'https://iwdsummit.com',
+    accent: 'bg-purple-500/10 text-purple-400',
+    tag: '40+ Speakers',
+    description:
+      "International Women's Day celebration with 8 tracks and 120+ companies",
+    date: 'March 2026 · Detroit, MI',
+    image: iwdImg,
+    live: true,
+  },
+  {
+    name: 'Detroit Pride Innovation Summit',
+    url: 'https://detroitpridesummit.com',
+    accent: 'bg-amber-500/10 text-amber-400',
+    tag: 'Break the Pattern',
+    description:
+      "Celebrating LGBTQ+ leaders, technologists, and allies in Michigan's tech ecosystem",
+    date: 'June 2026 · IBM Detroit',
+    image: prideImg,
+    live: true,
+  },
+  {
+    name: 'Hack Michigan',
+    url: '#',
+    accent: 'bg-emerald-500/10 text-emerald-400',
+    tag: 'Coming 2026',
+    description:
+      'Team-based hackathon with industry mentorship and portfolio building',
+    date: 'Date TBD · Detroit, MI',
+    image: hackathonImg,
+    live: false,
+  },
+]
+
+export default function EventWebsitesGallery() {
+  return (
+    <section className="border-t border-surface">
+      <div className="mx-auto max-w-[1200px] px-6 py-20">
+        {/* Header */}
+        <div className="mb-12 text-center">
+          <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+            Event Platforms
+          </p>
+          <h2 className="mb-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+            Our Event Platforms
+          </h2>
+          <p className="mx-auto max-w-lg text-sm leading-relaxed text-gray-500">
+            Each event has its own dedicated experience
+          </p>
+        </div>
+
+        {/* Cards grid */}
+        <div className="reveal-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {eventSites.map((event) => (
+            <article
+              key={event.name}
+              className="hover-lift group rounded-xl border border-surface bg-surface-card transition-colors hover:border-primary/30"
+            >
+              {/* Image container */}
+              <div className="relative aspect-video overflow-hidden rounded-t-xl">
+                <img
+                  src={event.image}
+                  alt={event.name}
+                  className="img-zoom size-full object-cover"
+                  loading="lazy"
+                />
+                {/* Tag pill */}
+                <span
+                  className={`absolute right-2 top-2 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm ${event.accent}`}
+                >
+                  {event.tag}
+                </span>
+              </div>
+
+              {/* Content */}
+              <div className="flex flex-1 flex-col p-5">
+                <h3 className="mb-2 text-[15px] font-bold">{event.name}</h3>
+                <p className="mb-3 text-[13px] leading-relaxed text-gray-500">
+                  {event.description}
+                </p>
+                <p className="mb-4 text-[12px] font-medium text-gray-600">
+                  {event.date}
+                </p>
+
+                {/* CTA */}
+                <div className="mt-auto">
+                  {event.live ? (
+                    <a
+                      href={event.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[13px] font-semibold text-primary transition-colors hover:text-primary-400"
+                    >
+                      Visit Website
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </a>
+                  ) : (
+                    <span className="text-[13px] font-semibold text-gray-600">
+                      Coming Soon
+                    </span>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

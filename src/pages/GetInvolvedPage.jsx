@@ -1,7 +1,7 @@
 import SiteLayout from '@/layouts/SiteLayout'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
-import PlaceholderImage from '@/components/ui/PlaceholderImage'
+import careerMentorshipImg from '@assets/images/generated/career-mentorship.png'
 
 const pathways = [
   {
@@ -97,11 +97,14 @@ export default function GetInvolvedPage() {
       {/* Pathways */}
       <section className="border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
-          <PlaceholderImage
-            preset="mentorship"
-            aspectRatio="aspect-[3/1]"
-            className="mb-12"
-          />
+          <div className="img-zoom mb-12 overflow-hidden rounded-2xl border border-surface">
+            <img
+              src={careerMentorshipImg}
+              alt="Career mentorship session between tech professionals"
+              className="aspect-[3/1] w-full object-cover"
+              loading="lazy"
+            />
+          </div>
           <div className="flex flex-col gap-6">
             {pathways.map((pw) => (
               <div

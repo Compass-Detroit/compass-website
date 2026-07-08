@@ -2,10 +2,13 @@ import SiteLayout from '@/layouts/SiteLayout'
 import { Link } from 'react-router-dom'
 import MapPinIcon from '@/components/ui/MapPinIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
-import PlaceholderImage from '@/components/ui/PlaceholderImage'
+import EventWebsitesGallery from '@/components/events/EventWebsitesGallery'
+import communityGatheringImg from '@assets/images/generated/community-gathering.png'
+import CommunityCalendar from '@/components/events/CommunityCalendar'
 
 const typeColors = {
   'Innovation Summit': 'bg-primary/10 text-primary border-primary/20',
+  'Pride Summit': 'bg-primary/10 text-primary border-primary/20',
   Hackathon: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   'Industry Event': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
 }
@@ -69,6 +72,16 @@ const allEvents = [
     type: 'Innovation Summit',
     stages: ['engage', 'connect'],
     desc: 'Honoring women leading in technology with sessions on leadership, career growth, and breaking barriers in the industry.',
+  },
+  {
+    name: 'Detroit Pride Innovation Summit',
+    date: 'June 2026',
+    month: 'JUN',
+    location: 'IBM Detroit',
+    type: 'Pride Summit',
+    stages: ['engage', 'connect'],
+    desc: "Celebrating LGBTQ+ leaders, technologists, and allies in Michigan's tech ecosystem — breaking the pattern with inclusive innovation.",
+    url: 'https://detroitpridesummit.com',
   },
   {
     name: 'Hispanic Heritage Month Innovation Summit',
@@ -185,11 +198,14 @@ export default function EventsPage() {
       {/* Navigator Journey Flow — how events connect */}
       <section className="border-y border-surface bg-white/[0.01]">
         <div className="mx-auto max-w-[1200px] px-6 py-16">
-          <PlaceholderImage
-            preset="event"
-            aspectRatio="aspect-[4/1]"
-            className="mb-10"
-          />
+          <div className="img-zoom mb-10 overflow-hidden rounded-2xl border border-surface">
+            <img
+              src={communityGatheringImg}
+              alt="COMPASS Detroit event with community members networking"
+              className="aspect-[4/1] w-full object-cover"
+              loading="lazy"
+            />
+          </div>
           <div className="mb-10 text-center">
             <p className="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
               The Navigator Journey
@@ -328,6 +344,25 @@ export default function EventsPage() {
         </div>
       </section>
 
+      {/* Community Calendar */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-10">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Community Calendar
+            </p>
+            <h2 className="mb-3 text-3xl font-bold tracking-tight">
+              What&apos;s happening this month
+            </h2>
+            <p className="max-w-lg text-sm text-gray-500">
+              Browse upcoming workshops, meetups, and community events.
+              Something for every Navigator, every week.
+            </p>
+          </div>
+          <CommunityCalendar />
+        </div>
+      </section>
+
       {/* Past Events */}
       {pastEvents.length > 0 && (
         <section className="border-y border-surface">
@@ -342,7 +377,7 @@ export default function EventsPage() {
               {pastEvents.map((ev) => (
                 <div
                   key={ev.name}
-                  className="bg-surface-card/50 flex flex-col gap-3 rounded-xl border border-surface p-5 opacity-70 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-3 rounded-xl border border-surface bg-surface-card p-5 opacity-70 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04]">
@@ -412,6 +447,9 @@ export default function EventsPage() {
           </div>
         </div>
       </section>
+
+      {/* Event Websites Gallery */}
+      <EventWebsitesGallery />
 
       {/* CTA */}
       <section className="border-t border-surface">

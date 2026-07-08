@@ -1,6 +1,7 @@
 import SiteLayout from '@/layouts/SiteLayout'
 import { Link } from 'react-router-dom'
-import PlaceholderImage from '@/components/ui/PlaceholderImage'
+import devCollaborationImg from '@assets/images/generated/dev-collaboration.png'
+import hackathonSceneImg from '@assets/images/generated/hackathon-scene.png'
 
 function BriefcaseIcon() {
   return (
@@ -203,8 +204,22 @@ export default function ResourcesPage() {
       <section>
         <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="mb-12 grid gap-4 md:grid-cols-2">
-            <PlaceholderImage preset="workshop" aspectRatio="aspect-[2/1]" />
-            <PlaceholderImage preset="hackathon" aspectRatio="aspect-[2/1]" />
+            <div className="img-zoom overflow-hidden rounded-xl border border-surface">
+              <img
+                src={devCollaborationImg}
+                alt="Developers collaborating on code during a workshop"
+                className="aspect-[2/1] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div className="img-zoom overflow-hidden rounded-xl border border-surface">
+              <img
+                src={hackathonSceneImg}
+                alt="Hackathon teams building projects together"
+                className="aspect-[2/1] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
           </div>
           <div className="mb-12 text-center">
             <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
