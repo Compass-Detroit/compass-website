@@ -13,6 +13,8 @@ const footerCommunity = [
   { label: 'For Employers', to: '/community' },
   { label: 'For Partners', to: '/community' },
   { label: 'Our Collective', to: '/about' },
+  { label: 'News', to: '/news' },
+  { label: 'Team', to: '/team' },
 ]
 
 export default function SiteFooter() {

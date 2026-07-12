@@ -10,6 +10,8 @@ const navLinks = [
   { to: '/programs', label: 'Programs' },
   { to: '/community', label: 'Community' },
   { to: '/events', label: 'Events' },
+  { to: '/news', label: 'News' },
+  { to: '/team', label: 'Team' },
   { to: '/resources', label: 'Resources' },
   { to: '/get-involved', label: 'Get Involved' },
 ]

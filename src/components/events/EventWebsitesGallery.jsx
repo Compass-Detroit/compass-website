@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom'
 import devfestImg from '@assets/images/generated/devfest-conference.png'
 import iwdImg from '@assets/images/generated/women-in-tech.png'
 import prideImg from '@assets/images/generated/pride-summit.png'
 import hackathonImg from '@assets/images/generated/hackathon-scene.png'
+import innovationImg from '@assets/images/generated/innovation-summit.png'
 
 const eventSites = [
   {
@@ -28,7 +30,7 @@ const eventSites = [
   },
   {
     name: 'Detroit Pride Innovation Summit',
-    url: 'https://detroitpridesummit.com',
+    url: 'https://www.detroitpridesummit.com/',
     accent: 'bg-amber-500/10 text-amber-400',
     tag: 'Break the Pattern',
     description:
@@ -38,8 +40,19 @@ const eventSites = [
     live: true,
   },
   {
+    name: 'BHM Innovation Summit',
+    url: '/events',
+    accent: 'bg-orange-500/10 text-orange-400',
+    tag: 'The Belonging Blueprint',
+    description:
+      'Celebrating Black excellence in technology with keynotes, panels, and networking focused on career advancement',
+    date: 'February 2026 · Detroit, MI',
+    image: innovationImg,
+    live: true,
+  },
+  {
     name: 'Hack Michigan',
-    url: '#',
+    url: '/events',
     accent: 'bg-emerald-500/10 text-emerald-400',
     tag: 'Coming 2026',
     description:
@@ -68,7 +81,7 @@ export default function EventWebsitesGallery() {
         </div>
 
         {/* Cards grid */}
-        <div className="reveal-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="reveal-stagger grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {eventSites.map((event) => (
             <article
               key={event.name}
@@ -103,27 +116,49 @@ export default function EventWebsitesGallery() {
                 {/* CTA */}
                 <div className="mt-auto">
                   {event.live ? (
-                    <a
-                      href={event.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[13px] font-semibold text-primary transition-colors hover:text-primary-400"
-                    >
-                      Visit Website
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        aria-hidden="true"
+                    event.url.startsWith('/') ? (
+                      <Link
+                        to={event.url}
+                        className="inline-flex items-center gap-1 text-[13px] font-semibold text-primary transition-colors hover:text-primary-400"
                       >
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </a>
+                        Learn More
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    ) : (
+                      <a
+                        href={event.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[13px] font-semibold text-primary transition-colors hover:text-primary-400"
+                      >
+                        Visit Website
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                      </a>
+                    )
                   ) : (
                     <span className="text-[13px] font-semibold text-gray-600">
                       Coming Soon

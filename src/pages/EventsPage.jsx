@@ -77,11 +77,12 @@ const allEvents = [
     name: 'Detroit Pride Innovation Summit',
     date: 'June 2026',
     month: 'JUN',
-    location: 'IBM Detroit',
+    location: 'IBM Detroit, 500 Woodward Ave',
     type: 'Pride Summit',
     stages: ['engage', 'connect'],
-    desc: "Celebrating LGBTQ+ leaders, technologists, and allies in Michigan's tech ecosystem — breaking the pattern with inclusive innovation.",
-    url: 'https://detroitpridesummit.com',
+    desc: "Celebrating LGBTQ+ leaders, technologists, and allies in Michigan's tech ecosystem — breaking the pattern with inclusive innovation. Featuring talks by Greg Miller and Shugmi Shumunov.",
+    url: 'https://www.detroitpridesummit.com/',
+    speakers: ['Greg Miller', 'Shugmi Shumunov'],
   },
   {
     name: 'Hispanic Heritage Month Innovation Summit',
@@ -178,7 +179,7 @@ export default function EventsPage() {
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1">
             <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
             <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
-              5 Events Planned
+              6 Events Planned
             </span>
           </div>
           <h1 className="mb-6 max-w-[700px] text-4xl font-extrabold leading-[1.1] tracking-tight md:text-5xl">
@@ -389,7 +390,7 @@ export default function EventsPage() {
                       <div className="text-[15px] font-semibold text-gray-400">
                         {ev.name}
                       </div>
-                      <div className="mt-1 flex gap-4">
+                      <div className="mt-1 flex flex-wrap gap-4">
                         <span className="text-[13px] text-gray-600">
                           {ev.date}
                         </span>
@@ -397,11 +398,39 @@ export default function EventsPage() {
                           <MapPinIcon /> {ev.location}
                         </span>
                       </div>
+                      {ev.speakers && ev.speakers.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {ev.speakers.map((speaker) => (
+                            <span
+                              key={speaker}
+                              className="rounded-full bg-gradient-to-r from-red-500/20 via-yellow-500/20 to-violet-500/20 px-2.5 py-0.5 text-[10px] font-bold text-gray-400"
+                            >
+                              <span role="img" aria-label="Speaker">
+                                🎤
+                              </span>{' '}
+                              {speaker}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <span className="w-fit whitespace-nowrap rounded-full bg-white/[0.04] px-3 py-1 text-xs font-semibold text-gray-500">
-                    Completed
-                  </span>
+                  <div className="flex items-center gap-3">
+                    {ev.url && (
+                      <a
+                        href={ev.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[13px] font-semibold text-primary/60 transition-colors hover:text-primary"
+                        aria-label={`Visit ${ev.name} website`}
+                      >
+                        Website →
+                      </a>
+                    )}
+                    <span className="w-fit whitespace-nowrap rounded-full bg-white/[0.04] px-3 py-1 text-xs font-semibold text-gray-500">
+                      Completed
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>

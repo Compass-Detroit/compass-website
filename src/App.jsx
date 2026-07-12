@@ -17,6 +17,8 @@ import CommunityPage from '@/pages/CommunityPage'
 import EventsPage from '@/pages/EventsPage'
 import GetInvolvedPage from '@/pages/GetInvolvedPage'
 import ResourcesPage from '@/pages/ResourcesPage'
+import NewsPage from '@/pages/NewsPage'
+import TeamPage from '@/pages/TeamPage'
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
             <Route path="/events" element={<EventsPage />} />
             <Route path="/get-involved" element={<GetInvolvedPage />} />
             <Route path="/resources" element={<ResourcesPage />} />
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="/team" element={<TeamPage />} />
 
             {/* Legacy routes (existing pages still accessible) */}
             <Route path="/legacy" element={<Home />} />
