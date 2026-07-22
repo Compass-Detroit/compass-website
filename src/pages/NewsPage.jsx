@@ -328,7 +328,7 @@ export default function NewsPage() {
 
       {/* CTA */}
       <section className="border-t border-surface">
-        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl px-6 py-24 text-center">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent" />
           <div className="relative">
             <h2 className="mb-4 text-3xl font-extrabold tracking-tight">

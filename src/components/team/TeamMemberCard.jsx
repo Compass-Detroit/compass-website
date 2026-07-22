@@ -89,85 +89,97 @@ export default function TeamMemberCard({
   }
 
   return (
-    <article className="hover-lift group rounded-xl border border-surface bg-surface-card p-6 transition-colors hover:border-primary/40">
-      <div className="mb-4 flex items-center gap-3">
+    <article className="group overflow-hidden rounded-2xl border border-surface bg-surface-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5">
+      {/* Top Image area */}
+      <div className="from-surface relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br to-[var(--surface-card)]">
         {member.avatar ? (
           <img
             src={member.avatar}
             alt={member.name}
-            className="size-11 shrink-0 rounded-full border-2 border-primary/20 object-cover"
+            className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
           />
         ) : (
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/30 to-violet-500/20 text-sm font-bold text-primary">
+          <div className="flex size-full items-center justify-center bg-gradient-to-br from-primary/10 to-violet-500/5 text-5xl font-extrabold text-primary/40">
             {getInitials(member.name)}
           </div>
         )}
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="truncate text-[15px] font-semibold">
-              {member.name}
-            </h3>
+
+        {/* Overlay gradient for readability */}
+        <div className="via-[var(--surface-card)]/40 absolute inset-0 bg-gradient-to-t from-[var(--surface-card)] to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+
+        {/* Badges positioned over image */}
+        {badges.length > 0 && (
+          <div className="absolute left-4 top-4 flex flex-wrap gap-2">
             {badges.map((badge, i) => (
               <span
                 key={i}
                 className={
                   badge === 'Lead'
-                    ? 'shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary'
-                    : 'shrink-0 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-violet-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white'
+                    ? 'rounded-full bg-primary/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-black shadow-lg backdrop-blur-md'
+                    : 'rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg backdrop-blur-md'
                 }
               >
                 {badge}
               </span>
             ))}
           </div>
-          <p className="truncate text-[12px] text-gray-500">
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="relative -mt-16 p-5 pt-0">
+        <div className="mb-4">
+          <h3 className="truncate text-xl font-bold text-white transition-colors group-hover:text-primary">
+            {member.name}
+          </h3>
+          <p className="truncate text-[13px] font-medium text-primary">
             {member.role || member.position || ''}
           </p>
         </div>
-      </div>
 
-      {member.organization && (
-        <p className="mb-4 truncate text-[12px] text-gray-600">
-          {member.organization}
-        </p>
-      )}
+        {member.organization && (
+          <p className="mb-5 truncate text-[13px] text-gray-400">
+            {member.organization}
+          </p>
+        )}
 
-      {/* Social links */}
-      <div className="flex items-center gap-3">
-        {member.github && (
-          <a
-            href={member.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 transition-colors hover:text-primary"
-            aria-label={`${member.name} on GitHub`}
-          >
-            <GitHubIcon className="size-4" />
-          </a>
-        )}
-        {member.linkedin && (
-          <a
-            href={member.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 transition-colors hover:text-primary"
-            aria-label={`${member.name} on LinkedIn`}
-          >
-            <LinkedInIcon className="size-4" />
-          </a>
-        )}
-        {member.twitter && (
-          <a
-            href={`https://twitter.com/${member.twitter}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-600 transition-colors hover:text-primary"
-            aria-label={`${member.name} on X (Twitter)`}
-          >
-            <TwitterIcon className="size-4" />
-          </a>
-        )}
+        {/* Social links */}
+        <div className="flex items-center gap-3 border-t border-white/5 pt-4">
+          {member.github && (
+            <a
+              href={member.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 transition-colors hover:text-primary"
+              aria-label={`${member.name} on GitHub`}
+            >
+              <GitHubIcon className="size-4" />
+            </a>
+          )}
+          {member.linkedin && (
+            <a
+              href={member.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 transition-colors hover:text-primary"
+              aria-label={`${member.name} on LinkedIn`}
+            >
+              <LinkedInIcon className="size-4" />
+            </a>
+          )}
+          {member.twitter && (
+            <a
+              href={`https://twitter.com/${member.twitter}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 transition-colors hover:text-primary"
+              aria-label={`${member.name} on X (Twitter)`}
+            >
+              <TwitterIcon className="size-4" />
+            </a>
+          )}
+        </div>
       </div>
     </article>
   )

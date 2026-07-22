@@ -302,8 +302,11 @@ export default function EventsPage() {
                       <div>
                         <h3 className="text-[15px] font-semibold">{ev.name}</h3>
                         <div className="mt-1.5 flex flex-wrap gap-4">
-                          <span className="text-[13px] text-gray-600">
+                          <span className="flex items-center gap-2 text-[13px] text-gray-600">
                             {ev.date}
+                            <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+                              Placeholder Date
+                            </span>
                           </span>
                           <span className="flex items-center gap-1 text-[13px] text-gray-600">
                             <MapPinIcon /> {ev.location}
@@ -482,7 +485,7 @@ export default function EventsPage() {
 
       {/* CTA */}
       <section className="border-t border-surface">
-        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl px-6 py-24 text-center">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent" />
           <div className="relative">
             <h2 className="mb-4 text-3xl font-extrabold tracking-tight">

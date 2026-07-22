@@ -733,7 +733,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats — animated counters */}
+      {/* Impact — bento grid */}
       <section className="mx-auto max-w-[1200px] px-6 py-20">
         <div className="mb-12 text-center">
           <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
@@ -743,10 +743,49 @@ export default function HomePage() {
             The numbers tell the story
           </h2>
         </div>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <AnimatedStat key={stat.label} stat={stat} />
-          ))}
+        <div className="bento-grid">
+          {/* Large featured stat */}
+          <div className="bento-span-2 bento-tall via-surface-card to-surface-card flex flex-col justify-between rounded-2xl border border-surface bg-gradient-to-br from-primary/[0.06] p-8">
+            <div>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Community Growth
+              </p>
+              <p className="text-sm text-gray-500">324% growth over 3 years</p>
+            </div>
+            <div>
+              <AnimatedStat stat={stats[0]} />
+              <p className="mt-3 text-sm text-gray-500">
+                Navigators across Michigan and growing every month
+              </p>
+            </div>
+          </div>
+          {/* Diversity stat with benchmark */}
+          <div className="rounded-xl border border-surface bg-surface-card p-6">
+            <AnimatedStat stat={stats[1]} />
+            <div className="mt-3 flex items-center gap-2">
+              <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                vs. 8% industry avg
+              </span>
+            </div>
+          </div>
+          {/* Women leadership stat */}
+          <div className="rounded-xl border border-surface bg-surface-card p-6">
+            <AnimatedStat stat={stats[2]} />
+            <div className="mt-3 flex items-center gap-2">
+              <span className="rounded-full bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold text-violet-400">
+                Leading our mission
+              </span>
+            </div>
+          </div>
+          {/* Job-seeking stat */}
+          <div className="bento-span-2 flex items-center gap-8 rounded-xl border border-surface bg-surface-card p-6">
+            <AnimatedStat stat={stats[3]} />
+            <p className="hidden text-sm leading-relaxed text-gray-500 md:block">
+              Our Navigators aren&apos;t looking for more training —
+              they&apos;re looking for pathways to careers. COMPASS builds the
+              bridge.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -1043,6 +1082,74 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Fund This Work */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-12 text-center">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Support COMPASS
+            </p>
+            <h2 className="mb-4 text-3xl font-bold tracking-tight">
+              What your investment enables
+            </h2>
+            <p className="mx-auto max-w-lg text-sm text-gray-500">
+              Every dollar funds career infrastructure — not overhead.
+              Here&apos;s what partnership makes possible.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                amount: '$5,000',
+                title: 'Community Workshop',
+                desc: 'Fund a full-day professional development workshop for 50+ Navigators',
+                icon: '🎯',
+              },
+              {
+                amount: '$10,000',
+                title: 'Innovation Summit',
+                desc: 'Sponsor one complete Innovation Summit — 200+ attendees, speakers, and career connections',
+                icon: '🚀',
+              },
+              {
+                amount: '$25,000',
+                title: 'Annual Programming',
+                desc: 'Fund a full year of community events, workshops, and career pathway programs',
+                icon: '📈',
+              },
+              {
+                amount: '$50,000',
+                title: 'Ecosystem Builder',
+                desc: 'Transform the regional tech talent pipeline — fund scholarships, certifications, and employer partnerships',
+                icon: '🌟',
+              },
+            ].map((tier) => (
+              <div key={tier.amount} className="tier-card flex flex-col">
+                <span className="mb-3 text-3xl">{tier.icon}</span>
+                <span className="mb-1 text-2xl font-extrabold text-primary">
+                  {tier.amount}
+                </span>
+                <span className="mb-2 text-sm font-bold">{tier.title}</span>
+                <p className="mt-auto text-xs leading-relaxed text-gray-500">
+                  {tier.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <a
+              href="mailto:jritten@compass-detroit.com?subject=Sponsorship Inquiry"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
+            >
+              <span className="relative z-10">
+                Request a Sponsorship Prospectus
+              </span>
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section>
         <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl px-6 py-24 text-center">
@@ -1101,6 +1208,12 @@ export default function HomePage() {
                 className="rounded-lg border border-surface px-8 py-4 text-base font-semibold transition-colors hover:border-primary/40 hover:text-primary"
               >
                 Sponsor an Event
+              </Link>
+              <Link
+                to="/impact"
+                className="rounded-lg border border-primary/30 bg-primary/[0.06] px-8 py-4 text-base font-semibold text-primary transition-colors hover:bg-primary/[0.1]"
+              >
+                View Impact Report
               </Link>
             </div>
           </div>

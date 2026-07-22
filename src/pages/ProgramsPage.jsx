@@ -171,7 +171,7 @@ export default function ProgramsPage() {
 
       {/* CTA */}
       <section className="border-t border-surface">
-        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl px-6 py-24 text-center">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-emerald-500/[0.04]" />
             <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />

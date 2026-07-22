@@ -616,8 +616,25 @@ export default function CommunityCalendar() {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Coming Soon Banner */}
+      <div className="rounded-xl border border-primary/20 bg-primary/[0.06] p-6 text-center">
+        <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1">
+          <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
+          <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+            Preview Mode
+          </span>
+        </div>
+        <h3 className="mb-2 text-xl font-bold tracking-tight text-white">
+          Community Calendar Coming Soon
+        </h3>
+        <p className="text-sm text-gray-400">
+          We are finalizing our 2026 programming schedule. The events below are
+          placeholders and will be updated soon!
+        </p>
+      </div>
+
       {/* Calendar card */}
-      <div className="overflow-hidden rounded-2xl border border-surface bg-surface-card">
+      <div className="overflow-hidden rounded-2xl border border-surface bg-surface-card opacity-60">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-surface px-6 py-5">
           <div>

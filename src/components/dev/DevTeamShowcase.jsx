@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { teamData } from '@/data/2026/team'
 import devCollabImg from '@assets/images/generated/dev-collaboration.png'
+import TeamMemberCard from '@/components/team/TeamMemberCard'
 
 const devTeam = teamData.filter((m) => m.devfest === 'devteam')
 
@@ -62,15 +64,6 @@ const codeLines = [
   { indent: 1, tokens: [{ text: ')', color: 'text-gray-400' }] },
   { indent: 0, tokens: [{ text: '}', color: 'text-gray-400' }] },
 ]
-
-function getInitials(name) {
-  return name
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
-}
 
 function isLead(member) {
   return member.name === 'Greg Miller'
@@ -229,65 +222,57 @@ export default function DevTeamShowcase() {
         {/* Dev team grid */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {devTeam.map((member) => (
-            <article
+            <TeamMemberCard
               key={member.id}
-              className="hover-lift group rounded-xl border border-surface bg-surface-card p-6 transition-colors hover:border-primary/40"
-            >
-              <div className="mb-4 flex items-center gap-3">
-                {/* Avatar with initials */}
-                <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/30 to-violet-500/20 text-sm font-bold text-primary">
-                  {getInitials(member.name)}
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h3 className="truncate text-[15px] font-semibold">
-                      {member.name}
-                    </h3>
-                    {isLead(member) && (
-                      <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
-                        Lead
-                      </span>
-                    )}
-                  </div>
-                  <p className="truncate text-[12px] text-gray-500">
-                    {member.role}
-                  </p>
-                </div>
-              </div>
-
-              {member.organization && (
-                <p className="mb-4 truncate text-[12px] text-gray-600">
-                  {member.organization}
-                </p>
-              )}
-
-              {/* Social links */}
-              <div className="flex items-center gap-3">
-                {member.github && (
-                  <a
-                    href={member.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 transition-colors hover:text-primary"
-                    aria-label={`${member.name} on GitHub`}
-                  >
-                    <GitHubIcon className="size-4" />
-                  </a>
-                )}
-                {member.linkedin && (
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-600 transition-colors hover:text-primary"
-                    aria-label={`${member.name} on LinkedIn`}
-                  >
-                    <LinkedInIcon className="size-4" />
-                  </a>
-                )}
-              </div>
-            </article>
+              member={member}
+              badges={isLead(member) ? ['Lead'] : []}
+            />
           ))}
+        </div>
+
+        <div className="mt-12 flex justify-center gap-4">
+          <a
+            href="https://github.com/Compass-Detroit"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-surface px-5 py-3 text-sm font-semibold text-[var(--text-primary)] transition-colors hover:border-primary/40 hover:text-primary"
+          >
+            <GitHubIcon className="size-4" />
+            Compass-Detroit on GitHub
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </a>
+
+          <Link
+            to="/team"
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-black transition-colors hover:bg-primary-400"
+          >
+            Meet the Full Team
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

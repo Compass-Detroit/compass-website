@@ -13,8 +13,10 @@ const footerCommunity = [
   { label: 'For Employers', to: '/community' },
   { label: 'For Partners', to: '/community' },
   { label: 'Our Collective', to: '/about' },
+  { label: 'Gallery', to: '/gallery' },
   { label: 'News', to: '/news' },
   { label: 'Team', to: '/team' },
+  { label: 'Impact Report', to: '/impact' },
 ]
 
 export default function SiteFooter() {
@@ -95,6 +97,31 @@ export default function SiteFooter() {
               </span>
             </div>
           </div>
+
+          {/* Newsletter */}
+          <div className="sm:col-span-2 lg:col-span-4">
+            <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--surface-card)] p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <h3 className="mb-1 text-sm font-bold text-[var(--text-primary)]">
+                    Stay in the loop
+                  </h3>
+                  <p className="text-xs text-[var(--text-muted)]">
+                    Monthly updates on events, opportunities, and community
+                    wins.
+                  </p>
+                </div>
+                <div className="newsletter-input">
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    aria-label="Email address for newsletter"
+                  />
+                  <button type="button">Subscribe</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Social links */}
@@ -153,14 +180,51 @@ export default function SiteFooter() {
           </a>
         </div>
 
-        {/* Bottom bar */}
-        <div className="mt-10 flex flex-col items-center justify-between gap-2 border-t border-surface pt-6 sm:flex-row">
-          <span className="text-xs text-gray-700">
-            © {new Date().getFullYear()} COMPASS. All rights reserved.
-          </span>
-          <span className="text-xs text-gray-700">
-            501(c)(3) Nonprofit Organization
-          </span>
+        {/* Trust signals */}
+        <div className="mt-10 border-t border-[var(--border)] pt-6">
+          <div className="mb-4 flex flex-wrap items-center justify-center gap-3">
+            <span className="trust-badge trust-badge-accent">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="text-primary"
+                aria-hidden="true"
+              >
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+              </svg>
+              501(c)(3) Nonprofit
+            </span>
+            <span className="trust-badge">Detroit, Michigan</span>
+            <span className="trust-badge">Est. 2000</span>
+          </div>
+          <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+            <span className="text-xs text-[var(--text-muted)]">
+              © {new Date().getFullYear()} COMPASS — Collective of Minority
+              Professionals and STEAM Societies. All rights reserved.
+            </span>
+            <div className="flex gap-4">
+              <Link
+                to="/about"
+                className="text-xs text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+              >
+                About
+              </Link>
+              <Link
+                to="/impact"
+                className="text-xs text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+              >
+                Impact Report
+              </Link>
+              <a
+                href="mailto:jritten@compass-detroit.com"
+                className="text-xs text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+              >
+                Contact
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

@@ -19,6 +19,8 @@ import GetInvolvedPage from '@/pages/GetInvolvedPage'
 import ResourcesPage from '@/pages/ResourcesPage'
 import NewsPage from '@/pages/NewsPage'
 import TeamPage from '@/pages/TeamPage'
+import GalleryPage from '@/pages/GalleryPage'
+import ImpactReportPage from '@/pages/ImpactReportPage'
 
 function App() {
   return (
@@ -40,9 +42,13 @@ function App() {
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/get-involved" element={<GetInvolvedPage />} />
+            <Route path="/sponsor" element={<GetInvolvedPage />} />
+            <Route path="/partner" element={<GetInvolvedPage />} />
             <Route path="/resources" element={<ResourcesPage />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/team" element={<TeamPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/impact" element={<ImpactReportPage />} />
 
             {/* Legacy routes (existing pages still accessible) */}
             <Route path="/legacy" element={<Home />} />
