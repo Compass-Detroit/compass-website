@@ -1,11 +1,58 @@
 import { Link } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import SiteLayout from '@/layouts/SiteLayout'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import MapPinIcon from '@/components/ui/MapPinIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
-import PlaceholderImage from '@/components/ui/PlaceholderImage'
+import DevTeamShowcase from '@/components/dev/DevTeamShowcase'
+import CommunityCalendar from '@/components/events/CommunityCalendar'
+
+// Generated event images
+import communityGatheringImg from '@assets/images/generated/community-gathering.png'
+import prideSummitImg from '@assets/images/generated/pride-summit.png'
+import innovationSummitImg from '@assets/images/generated/innovation-summit.png'
+import careerMentorshipImg from '@assets/images/generated/career-mentorship.png'
+
+// Scroll reveal hook — applies IntersectionObserver to add 'revealed' class
+function useScrollReveal() {
+  const observersRef = useRef(new Map())
+
+  const observe = useCallback((node) => {
+    if (!node) {
+      observersRef.current.forEach((observer) => observer.disconnect())
+      observersRef.current.clear()
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+    )
+
+    // Observe the node and any children with .reveal or .reveal-stagger
+    if (
+      node.classList.contains('reveal') ||
+      node.classList.contains('reveal-stagger')
+    ) {
+      observer.observe(node)
+    }
+    node
+      .querySelectorAll('.reveal, .reveal-stagger')
+      .forEach((el) => observer.observe(el))
+
+    observersRef.current.set(node, observer)
+  }, [])
+
+  return observe
+}
 
 // Partner & sponsor logos — Row 1
 import GoogleLogo from '@/assets/images/sponsors/Google_logo.webp'
@@ -32,10 +79,10 @@ import RebusLogo from '@/assets/images/sponsors/rebus_blue70_on_blue20-260h.webp
 
 const stats = [
   {
-    value: 2203,
+    value: 4111,
     suffix: '',
     label: 'Community Members',
-    sub: '234% growth over 3 years',
+    sub: '324% growth over 3 years',
   },
   {
     value: 52,
@@ -133,6 +180,13 @@ const allEvents = [
     date: 'March 2026',
     location: 'Detroit, MI',
     type: 'Innovation Summit',
+  },
+  {
+    name: 'Detroit Pride Innovation Summit',
+    date: 'June 2026',
+    location: 'IBM Detroit',
+    type: 'Pride Summit',
+    accent: 'pride',
   },
   {
     name: 'Hispanic Heritage Month Innovation Summit',
@@ -572,6 +626,8 @@ function HeroVisual() {
 }
 
 export default function HomePage() {
+  const revealRef = useScrollReveal()
+
   return (
     <SiteLayout>
       {/* Hero — immersive with animated abstract visual */}
@@ -648,7 +704,7 @@ export default function HomePage() {
                   ))}
                 </div>
                 <div>
-                  <div className="text-sm font-semibold">2,203+ Navigators</div>
+                  <div className="text-sm font-semibold">4,111+ Navigators</div>
                   <div className="text-xs text-gray-500">
                     and growing every month
                   </div>
@@ -677,7 +733,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats — animated counters */}
+      {/* Impact — bento grid */}
       <section className="mx-auto max-w-[1200px] px-6 py-20">
         <div className="mb-12 text-center">
           <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
@@ -687,10 +743,49 @@ export default function HomePage() {
             The numbers tell the story
           </h2>
         </div>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <AnimatedStat key={stat.label} stat={stat} />
-          ))}
+        <div className="bento-grid">
+          {/* Large featured stat */}
+          <div className="bento-span-2 bento-tall via-surface-card to-surface-card flex flex-col justify-between rounded-2xl border border-surface bg-gradient-to-br from-primary/[0.06] p-8">
+            <div>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+                Community Growth
+              </p>
+              <p className="text-sm text-gray-500">324% growth over 3 years</p>
+            </div>
+            <div>
+              <AnimatedStat stat={stats[0]} />
+              <p className="mt-3 text-sm text-gray-500">
+                Navigators across Michigan and growing every month
+              </p>
+            </div>
+          </div>
+          {/* Diversity stat with benchmark */}
+          <div className="rounded-xl border border-surface bg-surface-card p-6">
+            <AnimatedStat stat={stats[1]} />
+            <div className="mt-3 flex items-center gap-2">
+              <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                vs. 8% industry avg
+              </span>
+            </div>
+          </div>
+          {/* Women leadership stat */}
+          <div className="rounded-xl border border-surface bg-surface-card p-6">
+            <AnimatedStat stat={stats[2]} />
+            <div className="mt-3 flex items-center gap-2">
+              <span className="rounded-full bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold text-violet-400">
+                Leading our mission
+              </span>
+            </div>
+          </div>
+          {/* Job-seeking stat */}
+          <div className="bento-span-2 flex items-center gap-8 rounded-xl border border-surface bg-surface-card p-6">
+            <AnimatedStat stat={stats[3]} />
+            <p className="hidden text-sm leading-relaxed text-gray-500 md:block">
+              Our Navigators aren&apos;t looking for more training —
+              they&apos;re looking for pathways to careers. COMPASS builds the
+              bridge.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -698,11 +793,14 @@ export default function HomePage() {
       <section className="border-y border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
           {/* Community image banner */}
-          <PlaceholderImage
-            preset="community"
-            aspectRatio="aspect-[3/1]"
-            className="mb-12"
-          />
+          <div className="img-zoom mb-12 overflow-hidden rounded-2xl border border-surface">
+            <img
+              src={communityGatheringImg}
+              alt="Diverse tech professionals networking at a COMPASS Detroit community event"
+              className="aspect-[3/1] w-full object-cover"
+              loading="lazy"
+            />
+          </div>
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
               <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
@@ -825,6 +923,73 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Pride Innovation Summit Spotlight */}
+      <section className="border-y border-surface" ref={revealRef}>
+        <div className="reveal mx-auto max-w-[1200px] px-6 py-20">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div>
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-4 py-1.5">
+                <span className="size-2 rounded-full bg-primary" />
+                <span className="text-xs font-semibold text-primary">
+                  June 2026 · IBM Detroit
+                </span>
+              </div>
+              <h2 className="mb-5 text-3xl font-extrabold leading-tight tracking-tight md:text-4xl">
+                Detroit Pride{' '}
+                <span className="bg-gradient-to-r from-primary via-amber-400 to-primary bg-clip-text text-transparent">
+                  Innovation Summit
+                </span>
+              </h2>
+              <p className="mb-4 text-lg leading-relaxed text-gray-400">
+                Break the Pattern in Michigan&apos;s Tech Ecosystem —
+                celebrating LGBTQ+ leaders, technologists, and allies building a
+                more inclusive future in tech.
+              </p>
+              <p className="mb-8 leading-relaxed text-gray-500">
+                Partnered with Out in Tech Detroit and GDG Detroit, the Pride
+                Innovation Summit brings together the brightest minds for talks,
+                workshops, and networking focused on AI, emerging technology,
+                inclusive leadership, and career development.
+              </p>
+              <div className="mb-8 flex flex-wrap gap-3">
+                {[
+                  'LGBTQ+ Leaders',
+                  'Tech Workshops',
+                  'Career Development',
+                  'Inclusive Leadership',
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1 text-xs font-semibold text-primary"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <a
+                href="https://detroitpridesummit.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-3.5 text-[15px] font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
+              >
+                Visit detroitpridesummit.com
+                <span className="inline-block transition-transform group-hover:translate-x-0.5">
+                  <ArrowRightIcon />
+                </span>
+              </a>
+            </div>
+            <div className="img-zoom overflow-hidden rounded-2xl border border-primary/20 shadow-lg shadow-primary/5">
+              <img
+                src={prideSummitImg}
+                alt="Detroit Pride Innovation Summit — diverse professionals at an inclusive tech conference with subtle rainbow lighting"
+                className="aspect-[4/3] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Traction — compact proof points */}
       <section className="border-y border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
@@ -836,9 +1001,23 @@ export default function HomePage() {
               Navigators hired through COMPASS events
             </h2>
           </div>
-          <div className="mb-10 grid gap-4 md:grid-cols-2">
-            <PlaceholderImage preset="impact" aspectRatio="aspect-[2/1]" />
-            <PlaceholderImage preset="career" aspectRatio="aspect-[2/1]" />
+          <div className="reveal-stagger mb-10 grid gap-4 md:grid-cols-2">
+            <div className="img-zoom overflow-hidden rounded-xl border border-surface">
+              <img
+                src={innovationSummitImg}
+                alt="Keynote speaker on stage at a COMPASS Detroit Innovation Summit"
+                className="aspect-[2/1] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div className="img-zoom overflow-hidden rounded-xl border border-surface">
+              <img
+                src={careerMentorshipImg}
+                alt="Career mentorship session between professionals at a COMPASS event"
+                className="aspect-[2/1] w-full object-cover"
+                loading="lazy"
+              />
+            </div>
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             {[
@@ -876,6 +1055,98 @@ export default function HomePage() {
             Three Navigators. Three offers. Partners came to our events looking
             for talent — and found it.
           </p>
+        </div>
+      </section>
+
+      {/* Dev Team & Open Source */}
+      <section ref={revealRef}>
+        <DevTeamShowcase />
+      </section>
+
+      {/* Community Calendar */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-10">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Community Calendar
+            </p>
+            <h2 className="mb-3 text-3xl font-bold tracking-tight">
+              What&apos;s happening this month
+            </h2>
+            <p className="max-w-lg text-sm text-gray-500">
+              Browse upcoming workshops, meetups, and community events.
+              Something for every Navigator, every week.
+            </p>
+          </div>
+          <CommunityCalendar />
+        </div>
+      </section>
+
+      {/* Fund This Work */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-12 text-center">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Support COMPASS
+            </p>
+            <h2 className="mb-4 text-3xl font-bold tracking-tight">
+              What your investment enables
+            </h2>
+            <p className="mx-auto max-w-lg text-sm text-gray-500">
+              Every dollar funds career infrastructure — not overhead.
+              Here&apos;s what partnership makes possible.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                amount: '$5,000',
+                title: 'Community Workshop',
+                desc: 'Fund a full-day professional development workshop for 50+ Navigators',
+                icon: '🎯',
+              },
+              {
+                amount: '$10,000',
+                title: 'Innovation Summit',
+                desc: 'Sponsor one complete Innovation Summit — 200+ attendees, speakers, and career connections',
+                icon: '🚀',
+              },
+              {
+                amount: '$25,000',
+                title: 'Annual Programming',
+                desc: 'Fund a full year of community events, workshops, and career pathway programs',
+                icon: '📈',
+              },
+              {
+                amount: '$50,000',
+                title: 'Ecosystem Builder',
+                desc: 'Transform the regional tech talent pipeline — fund scholarships, certifications, and employer partnerships',
+                icon: '🌟',
+              },
+            ].map((tier) => (
+              <div key={tier.amount} className="tier-card flex flex-col">
+                <span className="mb-3 text-3xl">{tier.icon}</span>
+                <span className="mb-1 text-2xl font-extrabold text-primary">
+                  {tier.amount}
+                </span>
+                <span className="mb-2 text-sm font-bold">{tier.title}</span>
+                <p className="mt-auto text-xs leading-relaxed text-gray-500">
+                  {tier.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <a
+              href="mailto:jritten@compass-detroit.com?subject=Sponsorship Inquiry"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
+            >
+              <span className="relative z-10">
+                Request a Sponsorship Prospectus
+              </span>
+              <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 group-hover:translate-x-full" />
+            </a>
+          </div>
         </div>
       </section>
 
@@ -937,6 +1208,12 @@ export default function HomePage() {
                 className="rounded-lg border border-surface px-8 py-4 text-base font-semibold transition-colors hover:border-primary/40 hover:text-primary"
               >
                 Sponsor an Event
+              </Link>
+              <Link
+                to="/impact"
+                className="rounded-lg border border-primary/30 bg-primary/[0.06] px-8 py-4 text-base font-semibold text-primary transition-colors hover:bg-primary/[0.1]"
+              >
+                View Impact Report
               </Link>
             </div>
           </div>

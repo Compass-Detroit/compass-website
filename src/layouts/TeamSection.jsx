@@ -90,8 +90,6 @@ const TeamSection = ({ teamData, year }) => {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <ul className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 text-center  lg:mx-0 lg:max-w-none lg:grid-cols-2 xl:grid-cols-3">
             {sortedTeamData.map((dev) => {
-              // Build ribbon class name - eslint-disable needed for dynamic class
-              // eslint-disable-next-line tailwindcss/no-custom-classname
               const ribbonClass = `ribbon-${dev.devfest}`
               return (
                 <li

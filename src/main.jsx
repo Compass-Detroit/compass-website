@@ -2,11 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import { inject } from '@vercel/analytics'
-import { injectSpeedInsights } from '@vercel/speed-insights'
 
-inject()
-injectSpeedInsights()
+// Load analytics gracefully — ad blockers may block these
+import('@vercel/analytics').then(({ inject }) => inject()).catch(() => {})
+import('@vercel/speed-insights')
+  .then(({ injectSpeedInsights }) => injectSpeedInsights())
+  .catch(() => {})
 
 // Initialize axe-core for accessibility testing in development mode
 if (import.meta.env.DEV) {

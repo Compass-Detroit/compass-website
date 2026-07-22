@@ -115,16 +115,30 @@ Currently, no environment variables are required to run the application. The app
 | `npm run format:check` | Check code formatting with Prettier                           |
 | `npm run commitlint`   | Validate commit message format                                |
 
+## Features & Pages
+
+- **Home (`/`)**: High-impact hero, Bento grid impact statistics with industry benchmarks, "Fund This Work" investment tier showcase, and sponsorship prospectus request.
+- **About (`/about`)**: Founder's "Letter from Leadership", 25-year milestone timeline (2000–2026), and partner/funder showcase.
+- **Impact Report (`/impact`)**: Presentation-style slide deck detailing Michigan talent statistics, 4-stage pipeline model (Engage → Prepare → Connect → Hire), and employment proof points.
+- **Media Hub Gallery (`/gallery`)**: Interactive 3D featured carousel, picture-in-picture parallax stories, infinite dual marquee photo stream, filterable 60+ photo grid, and full-screen lightbox modal.
+- **Get Involved (`/get-involved`)**: 12-partner logo grid with "Your Logo" empty slots, structured sponsorship tiers (Platinum, Gold, Silver, Community), and donation pathways.
+- **Display & Theme Drawer (`⚙️`)**: Portal-based slide-over drawer with dark/light mode toggles and live typography font switcher (Montserrat, Inter, BioRhyme, Orbitron, Asimovian).
+- **Institutional Trust Signals**: 501(c)(3) nonprofit badges, founding date (Est. 2000), and Detroit location tags across global footer.
+
 ## Project Structure
 
 ```text
 src/
-├── assets/             # Images, fonts, and static assets
-├── components/         # UI components
-└── constants/          # Application constants
-├── data/               # Static data and content (e.g. devs, facilitators, organizers, speakers, and sponsors - Contains multiple years)
-├── layouts/            # Section layout components
-├── pages/              # Page components
+├── assets/             # Images, logos, sponsor assets, and SVG icons
+├── components/         # Reusable UI components
+│   ├── ui/             # SettingsDrawer, ThemeSwitcher, FontSwitcher, etc.
+│   ├── team/           # TeamMemberCard, DevTeamShowcase
+│   ├── events/         # CommunityCalendar
+│   ├── SiteNavbar.jsx  # Primary header with Settings Drawer & Support Us CTA
+│   └── SiteFooter.jsx  # Global footer with 501(c)(3) trust badges & newsletter
+├── layouts/            # SiteLayout wrapper
+├── pages/              # Primary route pages (HomePage, AboutPage, ImpactReportPage, GalleryPage, etc.)
+└── index.css           # Global tokens, bento grid utilities, tier card styles, & animation keyframes
 ```
 
 ## Development

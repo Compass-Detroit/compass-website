@@ -2,10 +2,13 @@ import SiteLayout from '@/layouts/SiteLayout'
 import { Link } from 'react-router-dom'
 import MapPinIcon from '@/components/ui/MapPinIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
-import PlaceholderImage from '@/components/ui/PlaceholderImage'
+import EventWebsitesGallery from '@/components/events/EventWebsitesGallery'
+import communityGatheringImg from '@assets/images/generated/community-gathering.png'
+import CommunityCalendar from '@/components/events/CommunityCalendar'
 
 const typeColors = {
   'Innovation Summit': 'bg-primary/10 text-primary border-primary/20',
+  'Pride Summit': 'bg-primary/10 text-primary border-primary/20',
   Hackathon: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
   'Industry Event': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
 }
@@ -69,6 +72,17 @@ const allEvents = [
     type: 'Innovation Summit',
     stages: ['engage', 'connect'],
     desc: 'Honoring women leading in technology with sessions on leadership, career growth, and breaking barriers in the industry.',
+  },
+  {
+    name: 'Detroit Pride Innovation Summit',
+    date: 'June 2026',
+    month: 'JUN',
+    location: 'IBM Detroit, 500 Woodward Ave',
+    type: 'Pride Summit',
+    stages: ['engage', 'connect'],
+    desc: "Celebrating LGBTQ+ leaders, technologists, and allies in Michigan's tech ecosystem — breaking the pattern with inclusive innovation. Featuring talks by Greg Miller and Shugmi Shumunov.",
+    url: 'https://www.detroitpridesummit.com/',
+    speakers: ['Greg Miller', 'Shugmi Shumunov'],
   },
   {
     name: 'Hispanic Heritage Month Innovation Summit',
@@ -165,7 +179,7 @@ export default function EventsPage() {
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1">
             <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
             <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
-              5 Events Planned
+              6 Events Planned
             </span>
           </div>
           <h1 className="mb-6 max-w-[700px] text-4xl font-extrabold leading-[1.1] tracking-tight md:text-5xl">
@@ -185,11 +199,14 @@ export default function EventsPage() {
       {/* Navigator Journey Flow — how events connect */}
       <section className="border-y border-surface bg-white/[0.01]">
         <div className="mx-auto max-w-[1200px] px-6 py-16">
-          <PlaceholderImage
-            preset="event"
-            aspectRatio="aspect-[4/1]"
-            className="mb-10"
-          />
+          <div className="img-zoom mb-10 overflow-hidden rounded-2xl border border-surface">
+            <img
+              src={communityGatheringImg}
+              alt="COMPASS Detroit event with community members networking"
+              className="aspect-[4/1] w-full object-cover"
+              loading="lazy"
+            />
+          </div>
           <div className="mb-10 text-center">
             <p className="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
               The Navigator Journey
@@ -285,8 +302,11 @@ export default function EventsPage() {
                       <div>
                         <h3 className="text-[15px] font-semibold">{ev.name}</h3>
                         <div className="mt-1.5 flex flex-wrap gap-4">
-                          <span className="text-[13px] text-gray-600">
+                          <span className="flex items-center gap-2 text-[13px] text-gray-600">
                             {ev.date}
+                            <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+                              Placeholder Date
+                            </span>
                           </span>
                           <span className="flex items-center gap-1 text-[13px] text-gray-600">
                             <MapPinIcon /> {ev.location}
@@ -328,6 +348,25 @@ export default function EventsPage() {
         </div>
       </section>
 
+      {/* Community Calendar */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-10">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Community Calendar
+            </p>
+            <h2 className="mb-3 text-3xl font-bold tracking-tight">
+              What&apos;s happening this month
+            </h2>
+            <p className="max-w-lg text-sm text-gray-500">
+              Browse upcoming workshops, meetups, and community events.
+              Something for every Navigator, every week.
+            </p>
+          </div>
+          <CommunityCalendar />
+        </div>
+      </section>
+
       {/* Past Events */}
       {pastEvents.length > 0 && (
         <section className="border-y border-surface">
@@ -342,7 +381,7 @@ export default function EventsPage() {
               {pastEvents.map((ev) => (
                 <div
                   key={ev.name}
-                  className="bg-surface-card/50 flex flex-col gap-3 rounded-xl border border-surface p-5 opacity-70 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-3 rounded-xl border border-surface bg-surface-card p-5 opacity-70 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04]">
@@ -354,7 +393,7 @@ export default function EventsPage() {
                       <div className="text-[15px] font-semibold text-gray-400">
                         {ev.name}
                       </div>
-                      <div className="mt-1 flex gap-4">
+                      <div className="mt-1 flex flex-wrap gap-4">
                         <span className="text-[13px] text-gray-600">
                           {ev.date}
                         </span>
@@ -362,11 +401,39 @@ export default function EventsPage() {
                           <MapPinIcon /> {ev.location}
                         </span>
                       </div>
+                      {ev.speakers && ev.speakers.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {ev.speakers.map((speaker) => (
+                            <span
+                              key={speaker}
+                              className="rounded-full bg-gradient-to-r from-red-500/20 via-yellow-500/20 to-violet-500/20 px-2.5 py-0.5 text-[10px] font-bold text-gray-400"
+                            >
+                              <span role="img" aria-label="Speaker">
+                                🎤
+                              </span>{' '}
+                              {speaker}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <span className="w-fit whitespace-nowrap rounded-full bg-white/[0.04] px-3 py-1 text-xs font-semibold text-gray-500">
-                    Completed
-                  </span>
+                  <div className="flex items-center gap-3">
+                    {ev.url && (
+                      <a
+                        href={ev.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[13px] font-semibold text-primary/60 transition-colors hover:text-primary"
+                        aria-label={`Visit ${ev.name} website`}
+                      >
+                        Website →
+                      </a>
+                    )}
+                    <span className="w-fit whitespace-nowrap rounded-full bg-white/[0.04] px-3 py-1 text-xs font-semibold text-gray-500">
+                      Completed
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -413,9 +480,12 @@ export default function EventsPage() {
         </div>
       </section>
 
+      {/* Event Websites Gallery */}
+      <EventWebsitesGallery />
+
       {/* CTA */}
       <section className="border-t border-surface">
-        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl px-6 py-24 text-center">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent" />
           <div className="relative">
             <h2 className="mb-4 text-3xl font-extrabold tracking-tight">

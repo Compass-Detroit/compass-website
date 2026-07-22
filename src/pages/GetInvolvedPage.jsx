@@ -1,7 +1,38 @@
 import SiteLayout from '@/layouts/SiteLayout'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
-import PlaceholderImage from '@/components/ui/PlaceholderImage'
+import careerMentorshipImg from '@assets/images/generated/career-mentorship.png'
+
+// Partner & sponsor logos
+import GoogleLogo from '@/assets/images/sponsors/Google_logo.webp'
+import IBMLogo from '@/assets/images/sponsors/spo-ibm-logo.webp'
+import DTELogo from '@/assets/images/sponsors/spo-dte-logo.webp'
+import LittleCaesarsLogo from '@/assets/images/sponsors/Little_Caesars.webp'
+import GrandCircusLogo from '@/assets/images/sponsors/Grand_Circus.webp'
+import CCSLogo from '@/assets/images/sponsors/CCS_logo.webp'
+import AXIOMLogo from '@/assets/images/sponsors/AXIOM.webp'
+import AkkodisLogo from '@/assets/images/sponsors/Akkodis.webp'
+import SpinDanceLogo from '@/assets/images/sponsors/SpinDance.webp'
+import RIISLogo from '@/assets/images/sponsors/RIIS.webp'
+import ComposablesLogo from '@/assets/images/sponsors/Composables.webp'
+import RebusLogo from '@/assets/images/sponsors/rebus_blue70_on_blue20-260h.webp'
+
+const currentSponsors = [
+  { name: 'Google', logo: GoogleLogo },
+  { name: 'IBM', logo: IBMLogo },
+  { name: 'DTE Energy', logo: DTELogo },
+  { name: 'Little Caesars', logo: LittleCaesarsLogo },
+  { name: 'Grand Circus', logo: GrandCircusLogo },
+  { name: 'CCS', logo: CCSLogo },
+  { name: 'AXIOM', logo: AXIOMLogo },
+  { name: 'Akkodis', logo: AkkodisLogo },
+  { name: 'SpinDance', logo: SpinDanceLogo },
+  { name: 'RIIS', logo: RIISLogo },
+  { name: 'Composables', logo: ComposablesLogo },
+  { name: 'Rebus', logo: RebusLogo },
+]
+
+const emptySlots = 4 // number of "your logo here" placeholder slots
 
 const pathways = [
   {
@@ -97,11 +128,14 @@ export default function GetInvolvedPage() {
       {/* Pathways */}
       <section className="border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
-          <PlaceholderImage
-            preset="mentorship"
-            aspectRatio="aspect-[3/1]"
-            className="mb-12"
-          />
+          <div className="img-zoom mb-12 overflow-hidden rounded-2xl border border-surface">
+            <img
+              src={careerMentorshipImg}
+              alt="Career mentorship session between tech professionals"
+              className="aspect-[3/1] w-full object-cover"
+              loading="lazy"
+            />
+          </div>
           <div className="flex flex-col gap-6">
             {pathways.map((pw) => (
               <div
@@ -147,9 +181,181 @@ export default function GetInvolvedPage() {
         </div>
       </section>
 
+      {/* Current & Past Partners */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-12 text-center">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Our Partners
+            </p>
+            <h2 className="mb-4 text-3xl font-bold tracking-tight">
+              Backed by organizations that believe in this work
+            </h2>
+            <p className="mx-auto max-w-lg text-sm text-gray-500">
+              We partner with leading companies, universities, and community
+              organizations to build Michigan&apos;s tech talent pipeline.
+            </p>
+          </div>
+          {/* Sponsor logo grid */}
+          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6">
+            {currentSponsors.map((sponsor) => (
+              <div
+                key={sponsor.name}
+                className="flex items-center justify-center rounded-xl border border-surface bg-surface-card p-4 transition-all hover:border-primary/30 hover:bg-primary/[0.04]"
+              >
+                <img
+                  src={sponsor.logo}
+                  alt={sponsor.name}
+                  className="h-10 w-auto object-contain opacity-70 transition-opacity hover:opacity-100"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+            {/* Empty "Your logo here" slots */}
+            {Array.from({ length: emptySlots }).map((_, i) => (
+              <a
+                key={`empty-${i}`}
+                href="mailto:jritten@compass-detroit.com?subject=Partnership Inquiry"
+                className="sponsor-slot-empty aspect-[3/2]"
+                aria-label="Become a partner"
+              >
+                <div className="flex flex-col items-center gap-1">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                  </svg>
+                  <span className="text-[10px] font-semibold">Your Logo</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Sponsorship Tiers */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-12 text-center">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Partnership Tiers
+            </p>
+            <h2 className="mb-4 text-3xl font-bold tracking-tight">
+              Invest in career infrastructure
+            </h2>
+            <p className="mx-auto max-w-lg text-sm text-gray-500">
+              Every sponsorship directly funds programming, events, and
+              resources that create real career outcomes for Navigators.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                tier: 'Platinum',
+                amount: '$25,000+',
+                cardClass: 'tier-card tier-card-platinum',
+                benefits: [
+                  'Keynote naming rights',
+                  'Logo on all event materials',
+                  'Dedicated talent pipeline access',
+                  'Executive speaking slots',
+                  'Year-round brand visibility',
+                  'Custom impact report',
+                ],
+              },
+              {
+                tier: 'Gold',
+                amount: '$10,000',
+                cardClass: 'tier-card tier-card-gold',
+                benefits: [
+                  'Innovation Summit naming',
+                  'Logo on event materials',
+                  'Recruiting booth at events',
+                  'Panel speaking opportunity',
+                  'Quarterly impact updates',
+                ],
+              },
+              {
+                tier: 'Silver',
+                amount: '$5,000',
+                cardClass: 'tier-card tier-card-silver',
+                benefits: [
+                  'Logo on event website',
+                  'Social media recognition',
+                  'Recruiting access at events',
+                  'Community newsletter feature',
+                ],
+              },
+              {
+                tier: 'Community',
+                amount: '$1,000+',
+                cardClass: 'tier-card tier-card-community',
+                benefits: [
+                  'Logo on website',
+                  'Social media shoutout',
+                  'Event ticket packages',
+                  'Community supporter badge',
+                ],
+              },
+            ].map((t) => (
+              <div key={t.tier} className={t.cardClass}>
+                <span className="mb-1 text-xs font-bold uppercase tracking-wider text-gray-600">
+                  {t.tier}
+                </span>
+                <p className="mb-4 text-2xl font-extrabold text-primary">
+                  {t.amount}
+                </p>
+                <ul className="flex flex-col gap-2">
+                  {t.benefits.map((b) => (
+                    <li key={b} className="flex items-start gap-2 text-sm">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="mt-0.5 shrink-0 text-primary"
+                        aria-hidden="true"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      <span className="text-gray-400">{b}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={`mailto:jritten@compass-detroit.com?subject=Sponsorship - ${t.tier} Tier`}
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary/10 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
+                >
+                  Become a {t.tier} Partner
+                </a>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-center text-sm text-gray-500">
+            Custom partnership packages available.{' '}
+            <a
+              href="mailto:jritten@compass-detroit.com?subject=Custom Partnership"
+              className="font-semibold text-primary transition-colors hover:text-primary-400"
+            >
+              Let&apos;s talk →
+            </a>
+          </p>
+        </div>
+      </section>
+
       {/* Contact CTA */}
       <section className="border-t border-surface">
-        <div className="relative mx-auto max-w-[1200px] overflow-hidden px-6 py-24 text-center">
+        <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl px-6 py-24 text-center">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.04]" />
             <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />

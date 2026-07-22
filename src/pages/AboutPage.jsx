@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import SiteLayout from '@/layouts/SiteLayout'
 import CheckIcon from '@/components/ui/CheckIcon'
-import PlaceholderImage from '@/components/ui/PlaceholderImage'
+import communityGatheringImg from '@assets/images/generated/community-gathering.png'
+import innovationSummitImg from '@assets/images/generated/innovation-summit.png'
 
 import NSBELogo from '@/assets/images/organizations/org-nsbe-logo.webp'
 import SHPELogo from '@/assets/images/organizations/org-shpe-logo.webp'
 import GDGDetroitLogo from '@/assets/images/organizations/org-gdg-detroit.webp'
 import WTMLogo from '@/assets/images/organizations/org-wtm-logo.webp'
+import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 
 function XIcon() {
   return (
@@ -332,7 +334,7 @@ export default function AboutPage() {
               Our Community
             </p>
             <h2 className="text-2xl font-bold tracking-tight">
-              2,203 Members and Growing
+              4,111 Members and Growing
             </h2>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
@@ -351,14 +353,57 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Letter from Leadership */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[800px] px-6 py-20">
+          <div className="rounded-2xl border border-surface bg-surface-card p-8 md:p-12">
+            <p className="mb-6 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              A Message from Our Founder
+            </p>
+            <blockquote className="mb-8 text-lg leading-relaxed text-gray-400 md:text-xl">
+              &ldquo;When we started COMPASS in 2000, we saw something that
+              hasn&apos;t changed: Michigan produces extraordinary tech talent,
+              but the pathways from preparation to career simply didn&apos;t
+              exist for too many people.
+              <br />
+              <br />
+              We&apos;re not a bootcamp. We&apos;re not a training program.
+              We&apos;re the infrastructure that connects prepared,
+              underrepresented professionals to the technology careers
+              they&apos;ve earned. Every Innovation Summit, every Hack Michigan,
+              every DevFest — these are bridges, not destinations.
+              <br />
+              <br />
+              With 4,111 Navigators and growing, we&apos;re proving that when
+              you invest in pathways, talent stays. Careers launch. Communities
+              thrive. Join us.&rdquo;
+            </blockquote>
+            <div className="flex items-center gap-4">
+              <div className="flex size-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-black">
+                JR
+              </div>
+              <div>
+                <p className="text-sm font-bold">Justin Ritten</p>
+                <p className="text-xs text-gray-500">
+                  Founder &amp; Executive Director, COMPASS Detroit
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Mission + Do/Don't */}
       <section>
         <div className="mx-auto max-w-[1200px] px-6 py-20">
-          <PlaceholderImage
-            preset="community"
-            aspectRatio="aspect-[3/1]"
-            className="mb-12"
-          />
+          <div className="img-zoom mb-12 overflow-hidden rounded-2xl border border-surface">
+            <img
+              src={communityGatheringImg}
+              alt="Diverse community members gathering at a COMPASS Detroit networking event"
+              className="aspect-[3/1] w-full object-cover"
+              loading="lazy"
+            />
+          </div>
           <div className="grid gap-16 lg:grid-cols-2">
             <div>
               <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
@@ -456,11 +501,14 @@ export default function AboutPage() {
       {/* Navigator Journey — vertical timeline */}
       <section>
         <div className="mx-auto max-w-[1200px] px-6 py-20">
-          <PlaceholderImage
-            preset="mentorship"
-            aspectRatio="aspect-[4/1]"
-            className="mb-12"
-          />
+          <div className="img-zoom mb-12 overflow-hidden rounded-2xl border border-surface">
+            <img
+              src={innovationSummitImg}
+              alt="Innovation Summit keynote presentation with tech professionals"
+              className="aspect-[4/1] w-full object-cover"
+              loading="lazy"
+            />
+          </div>
           <div className="mx-auto mb-16 max-w-[700px] text-center">
             <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
               The Navigator Journey
@@ -598,6 +646,129 @@ export default function AboutPage() {
                 Explore Programs
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Milestones */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-12 text-center">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Our Journey
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight">
+              25 years of building pathways
+            </h2>
+          </div>
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute left-4 top-0 hidden h-full w-px bg-gradient-to-b from-primary/40 via-primary/20 to-transparent md:left-1/2 md:block" />
+            <div className="flex flex-col gap-8">
+              {[
+                {
+                  year: '2000',
+                  title: 'Founded',
+                  desc: 'COMPASS (originally COMPES) formed as collaboration between NSBE, SHPE, and SWE Detroit chapters.',
+                },
+                {
+                  year: '2023',
+                  title: 'Michigan DevFest',
+                  desc: 'Launched Michigan DevFest in partnership with GDG Detroit, bringing 200+ developers together.',
+                },
+                {
+                  year: '2024',
+                  title: 'Innovation Summits',
+                  desc: 'Expanded to quarterly Innovation Summits — BHM, IWD, Pride, and Hispanic Heritage celebrations.',
+                },
+                {
+                  year: '2025',
+                  title: '501(c)(3) Status',
+                  desc: 'Achieved nonprofit status, formalizing COMPASS as a recognized career infrastructure organization.',
+                },
+                {
+                  year: '2025',
+                  title: 'First Career Placements',
+                  desc: 'Navigators hired at DTE Energy, Little Caesars, and IBM through COMPASS event connections.',
+                },
+                {
+                  year: '2026',
+                  title: '4,111 Navigators',
+                  desc: '324% community growth. Hack Michigan, expanded programming, and a coalition of 20+ organizations.',
+                },
+              ].map((m, i) => (
+                <div
+                  key={m.title}
+                  className={`flex gap-6 ${
+                    i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                  } md:items-center`}
+                >
+                  <div
+                    className={`flex-1 ${i % 2 === 0 ? 'md:text-right' : ''}`}
+                  >
+                    <div className="rounded-xl border border-surface bg-surface-card p-6">
+                      <span className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+                        {m.year}
+                      </span>
+                      <h3 className="mb-2 text-lg font-bold">{m.title}</h3>
+                      <p className="text-sm text-gray-500">{m.desc}</p>
+                    </div>
+                  </div>
+                  <div className="relative hidden shrink-0 md:block">
+                    <div className="flex size-8 items-center justify-center rounded-full border-2 border-primary bg-[var(--surface)]">
+                      <div className="size-3 rounded-full bg-primary" />
+                    </div>
+                  </div>
+                  <div className="hidden flex-1 md:block" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partners & Funders */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-12 text-center">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Our Supporters
+            </p>
+            <h2 className="mb-4 text-3xl font-bold tracking-tight">
+              Organizations investing in pathways
+            </h2>
+            <p className="mx-auto max-w-lg text-sm text-gray-500">
+              We&apos;re grateful for the companies, universities, and community
+              organizations that make COMPASS possible.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-8">
+            {[
+              'Google',
+              'IBM',
+              'DTE Energy',
+              'Little Caesars',
+              'Wayne State University',
+              'CCS',
+              'Grand Circus',
+              'JetBrains',
+              'MongoDB',
+            ].map((org) => (
+              <span
+                key={org}
+                className="rounded-full border border-surface bg-surface-card px-5 py-2.5 text-sm font-medium text-gray-400"
+              >
+                {org}
+              </span>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              to="/get-involved"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-400"
+            >
+              Become a partner <ArrowRightIcon />
+            </Link>
           </div>
         </div>
       </section>
