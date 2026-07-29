@@ -313,7 +313,7 @@ body {
   --border-light: #d4d4d4;
   --text-primary: #111827;
   --text-secondary: #374151;
-  --text-muted: #6b7280;
+  --text-muted: #4b5563;
   --marquee-fade: #fafafa;
   --card-hover-bg: rgba(0, 0, 0, 0.03);
 }
@@ -323,10 +323,14 @@ body {
   color: var(--text-primary);
 }
 
+.light .text-black {
+  color: #000000 !important;
+}
+
 /* Light mode — accessible primary (gold) text contrast */
-/* #efb403 on white = ~1.7:1 ✗ → #8B5E00 on white = ~5.2:1 ✓ WCAG AA */
+/* #efb403 on white = ~1.7:1 ✗ → #7C5300 on white = ~5.4:1 ✓ WCAG AA */
 .light .text-primary {
-  color: #8b5e00;
+  color: #7c5300;
 }
 .light .text-primary-300 {
   color: #7a5200;
@@ -355,19 +359,54 @@ body {
 }
 
 .light .text-gray-300 {
-  color: #374151;
+  color: #1f2937;
 }
 .light .text-gray-400 {
-  color: #4b5563;
+  color: #374151;
 }
 .light .text-gray-500 {
-  color: #6b7280;
+  color: #374151;
 }
 .light .text-gray-600 {
-  color: #9ca3af;
+  color: #374151;
 }
 .light .text-gray-700 {
-  color: #9ca3af;
+  color: #1f2937;
+}
+
+/* Light mode accessible accent text overrides (WCAG AA >= 4.5:1) */
+.light .text-emerald-400,
+.light .text-emerald-500 {
+  color: #047857;
+}
+.light .text-violet-400,
+.light .text-violet-500 {
+  color: #6d28d9;
+}
+.light .text-amber-400,
+.light .text-amber-500 {
+  color: #b45309;
+}
+.light .text-blue-400,
+.light .text-blue-500 {
+  color: #1d4ed8;
+}
+.light .text-red-400,
+.light .text-red-500 {
+  color: #b91c1c;
+}
+.light .text-primary\/60 {
+  color: #8b5e00;
+}
+.light .opacity-70 {
+  opacity: 0.9;
+}
+.light .opacity-80 {
+  opacity: 0.95;
+}
+.light .trust-badge-accent {
+  color: #8b5e00;
+  border-color: rgba(139, 94, 0, 0.4);
 }
 .light .bg-white\/5,
 .light .bg-white\/\[0\.01\],
@@ -768,3 +807,242 @@ body {
   100% { transform: translateX(0%); }
 }
 
+/* ========== Welcome Banner ========== */
+@keyframes welcome-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes compass-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+@keyframes dismiss-check {
+  0% { transform: scale(0) rotate(-45deg); }
+  50% { transform: scale(1.2) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.welcome-banner {
+  animation: welcome-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.welcome-banner .compass-pulse {
+  display: inline-block;
+  animation: compass-pulse 3s ease-in-out infinite;
+}
+.welcome-banner-dismiss {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.welcome-banner-dismiss:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 160, 23, 0.15);
+}
+.welcome-banner-exit {
+  animation: welcome-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) reverse both;
+}
+
+/* ========== First Visit Timeline ========== */
+.first-visit-timeline {
+  position: relative;
+}
+.first-visit-timeline::before {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(212, 160, 23, 0.3), rgba(212, 160, 23, 0.05));
+}
+@media (min-width: 768px) {
+  .first-visit-timeline::before {
+    left: 31px;
+  }
+}
+.timeline-step {
+  position: relative;
+  padding-left: 56px;
+  opacity: 0;
+  transform: translateX(-16px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (min-width: 768px) {
+  .timeline-step {
+    padding-left: 72px;
+  }
+}
+.timeline-step.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+.timeline-step:nth-child(1) { transition-delay: 0ms; }
+.timeline-step:nth-child(2) { transition-delay: 120ms; }
+.timeline-step:nth-child(3) { transition-delay: 240ms; }
+.timeline-step:nth-child(4) { transition-delay: 360ms; }
+.timeline-step:nth-child(5) { transition-delay: 480ms; }
+.timeline-dot {
+  position: absolute;
+  left: 14px;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #D4A017;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+@media (min-width: 768px) {
+  .timeline-dot {
+    left: 22px;
+  }
+}
+.timeline-step:hover .timeline-dot {
+  background: rgba(212, 160, 23, 0.15);
+  box-shadow: 0 0 16px rgba(212, 160, 23, 0.3);
+}
+.timeline-dot-inner {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #D4A017;
+}
+.timeline-step:hover .card-glow {
+  box-shadow: 0 0 24px rgba(212, 160, 23, 0.08);
+  border-color: rgba(212, 160, 23, 0.25);
+}
+
+/* ========== Community Vibes Quote Carousel ========== */
+@keyframes quote-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes quote-fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+.quote-enter {
+  animation: quote-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.quote-exit {
+  animation: quote-fade-out 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.quote-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(212, 160, 23, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.quote-dot:hover {
+  background: rgba(212, 160, 23, 0.4);
+}
+.quote-dot-active {
+  background: #D4A017;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ========== Warm hover glow on interactive cards ========== */
+.warm-glow {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.warm-glow:hover {
+  border-color: rgba(212, 160, 23, 0.2) !important;
+  box-shadow: 0 0 20px rgba(212, 160, 23, 0.06);
+}
+
+/* ========== Tooltip (checklist popovers) ========== */
+.checklist-tooltip {
+  position: relative;
+}
+.checklist-tooltip .tooltip-content {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+  width: 280px;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--surface-elevated);
+  border: 1px solid rgba(212, 160, 23, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.checklist-tooltip:hover .tooltip-content {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.light .checklist-tooltip .tooltip-content {
+  background: #ffffff;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== Confetti Easter Egg ========== */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+.confetti-piece {
+  position: fixed;
+  top: -10px;
+  z-index: 9999;
+  width: 10px;
+  height: 10px;
+  animation: confetti-fall 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* ========== Reduced motion for new animations ========== */
+@media (prefers-reduced-motion: reduce) {
+  .welcome-banner,
+  .welcome-banner-exit,
+  .timeline-step,
+  .quote-enter,
+  .quote-exit,
+  .confetti-piece {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .welcome-banner .compass-pulse {
+    animation: none;
+  }
+  .timeline-step {
+    opacity: 1;
+    transform: none;
+  }
+}
