@@ -1234,12 +1234,9 @@ export default function HomePage() {
                 icon: '🌟',
               },
             ].map((tier) => (
-              <div key={tier.amount} className="tier-card flex flex-col">
+              <div key={tier.title} className="tier-card flex flex-col">
                 <span className="mb-3 text-3xl">{tier.icon}</span>
-                <span className="mb-1 text-2xl font-extrabold text-primary">
-                  {tier.amount}
-                </span>
-                <span className="mb-2 text-sm font-bold">{tier.title}</span>
+                <span className="mb-2 text-base font-bold">{tier.title}</span>
                 <p className="mt-auto text-xs leading-relaxed text-gray-500">
                   {tier.desc}
                 </p>
