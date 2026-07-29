@@ -45,17 +45,13 @@ export default function ScrollProgressButton() {
       <div
         className="fixed left-0 top-0 z-[60] h-0.5 bg-primary transition-all duration-150"
         style={{ width: `${scrollPercent}%` }}
-        role="progressbar"
-        aria-valuenow={Math.round(scrollPercent)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label="Page scroll progress"
+        aria-hidden="true"
       />
 
       {/* Floating button with circular progress */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 z-50 flex size-12 items-center justify-center rounded-full bg-surface-card/90 text-white shadow-lg shadow-black/30 backdrop-blur-sm transition-all duration-300 hover:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#0a0a0a] ${
+        className={`bg-surface-card/90 fixed bottom-6 right-6 z-50 flex size-12 items-center justify-center rounded-full text-white shadow-lg shadow-black/30 backdrop-blur-sm transition-all duration-300 hover:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#0a0a0a] ${
           isVisible
             ? 'translate-y-0 opacity-100'
             : 'pointer-events-none translate-y-4 opacity-0'

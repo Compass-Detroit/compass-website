@@ -634,14 +634,14 @@ export default function CommunityCalendar() {
       </div>
 
       {/* Calendar card */}
-      <div className="overflow-hidden rounded-2xl border border-surface bg-surface-card opacity-60">
+      <div className="overflow-hidden rounded-2xl border border-surface bg-surface-card">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-surface px-6 py-5">
           <div>
             <h3 className="text-xl font-bold tracking-tight">
               {MONTHS[currentMonth]} {currentYear}
             </h3>
-            <p className="mt-0.5 text-xs text-gray-500">
+            <p className="mt-0.5 text-xs text-[var(--text-muted)]">
               {monthEventCount} event{monthEventCount !== 1 ? 's' : ''} this
               month
             </p>
@@ -675,7 +675,7 @@ export default function CommunityCalendar() {
           {DAYS.map((day) => (
             <div
               key={day}
-              className="py-3 text-center text-[11px] font-semibold uppercase tracking-wider text-gray-600"
+              className="py-3 text-center text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]"
             >
               {day}
             </div>
@@ -735,6 +735,7 @@ export default function CommunityCalendar() {
                     ${isToday ? 'bg-primary font-bold text-black' : ''}
                     ${isSelected && !isToday ? 'font-bold text-primary' : ''}
                   `}
+                  style={isToday ? { color: '#000000' } : undefined}
                 >
                   {d.day}
                 </span>
@@ -763,7 +764,7 @@ export default function CommunityCalendar() {
 
       {/* Legend */}
       <div className="flex flex-wrap items-center gap-4 px-1">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-600">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
           Categories
         </span>
         {Object.entries(categoryColors).map(([key, val]) => (

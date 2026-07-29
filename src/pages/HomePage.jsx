@@ -7,6 +7,9 @@ import MapPinIcon from '@/components/ui/MapPinIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
 import DevTeamShowcase from '@/components/dev/DevTeamShowcase'
 import CommunityCalendar from '@/components/events/CommunityCalendar'
+import WelcomeBanner from '@/components/WelcomeBanner'
+import FirstVisitGuide from '@/components/FirstVisitGuide'
+import CommunityVibes from '@/components/CommunityVibes'
 
 // Generated event images
 import communityGatheringImg from '@assets/images/generated/community-gathering.png'
@@ -625,8 +628,85 @@ function HeroVisual() {
   )
 }
 
+// Easter egg — Konami Code
+const KONAMI = [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'b',
+  'a',
+]
+
+function useKonamiCode(callback) {
+  const indexRef = useRef(0)
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === KONAMI[indexRef.current]) {
+        indexRef.current++
+        if (indexRef.current === KONAMI.length) {
+          indexRef.current = 0
+          callback()
+        }
+      } else {
+        indexRef.current = 0
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [callback])
+}
+
+function triggerConfetti() {
+  const colors = [
+    '#D4A017',
+    '#efb403',
+    '#ffcb05',
+    '#10b981',
+    '#60a5fa',
+    '#a78bfa',
+    '#f472b6',
+  ]
+  const container = document.createElement('div')
+  container.setAttribute('aria-hidden', 'true')
+  document.body.appendChild(container)
+
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div')
+    piece.className = 'confetti-piece'
+    piece.style.left = `${Math.random() * 100}vw`
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)]
+    piece.style.animationDelay = `${Math.random() * 1.5}s`
+    piece.style.animationDuration = `${2 + Math.random() * 2}s`
+    piece.style.width = `${6 + Math.random() * 8}px`
+    piece.style.height = `${6 + Math.random() * 8}px`
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px'
+    container.appendChild(piece)
+  }
+
+  // Show message
+  const msg = document.createElement('div')
+  msg.style.cssText =
+    'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10000;background:var(--surface-card);border:1px solid rgba(212,160,23,0.3);border-radius:1rem;padding:2rem 3rem;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.4);animation:welcome-fade-in 0.6s cubic-bezier(0.16,1,0.3,1) both'
+  msg.innerHTML =
+    '<div style="margin-bottom:0.75rem;display:flex;justify-content:center"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#D4A017" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" opacity="0.3"/><circle cx="12" cy="12" r="7" opacity="0.15"/><polygon points="12,2.5 14,10 12,8 10,10" fill="#D4A017" stroke="none"/><polygon points="12,21.5 14,14 12,16 10,14" fill="#9ca3af" stroke="none" opacity="0.5"/><polygon points="2.5,12 10,10 8,12 10,14" fill="#9ca3af" stroke="none" opacity="0.5"/><polygon points="21.5,12 14,10 16,12 14,14" fill="#9ca3af" stroke="none" opacity="0.5"/><circle cx="12" cy="12" r="2" fill="#D4A017" stroke="none"/></svg></div><div style="font-size:1.125rem;font-weight:700;margin-bottom:0.5rem">You found it!</div><div style="font-size:0.875rem;color:#9ca3af">This is the kind of curiosity we love.<br/>Welcome to COMPASS.</div>'
+  document.body.appendChild(msg)
+
+  setTimeout(() => {
+    container.remove()
+    msg.remove()
+  }, 5000)
+}
+
 export default function HomePage() {
   const revealRef = useScrollReveal()
+
+  useKonamiCode(triggerConfetti)
 
   return (
     <SiteLayout>
@@ -665,9 +745,10 @@ export default function HomePage() {
                 </span>
               </h1>
               <p className="mb-10 max-w-[520px] text-lg leading-relaxed text-gray-500">
-                We build the career infrastructure that connects prepared,
-                underrepresented tech talent in Michigan to technology careers —
-                creating confidence, belonging, and economic mobility.
+                We&apos;re building something Detroit hasn&apos;t had before:
+                career infrastructure that connects talented, underrepresented
+                technologists to real opportunities. Whether you&apos;re a
+                student, career-changer, or seasoned engineer — you belong here.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
@@ -719,6 +800,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Welcome Banner for newcomers */}
+      <div className="py-8">
+        <WelcomeBanner />
+      </div>
 
       {/* Trusted By — infinite double marquee */}
       <section className="border-y border-surface bg-white/[0.01]">
@@ -844,18 +930,36 @@ export default function HomePage() {
                 </p>
                 <div className="flex flex-col gap-2">
                   {[
-                    'Recruit and prepare talent',
-                    'Build confidence and belonging',
-                    'Connect Navigators to opportunities',
-                    'Provide wraparound support',
-                    'Partner with employers for career exposure',
+                    {
+                      label: 'Recruit and prepare talent',
+                      tip: 'We meet people where they are — bootcamp grads, self-taught devs, career changers — and help them get career-ready.',
+                    },
+                    {
+                      label: 'Build confidence and belonging',
+                      tip: 'Imposter syndrome is real. We tackle it head-on with community, mentorship, and proof that you belong.',
+                    },
+                    {
+                      label: 'Connect Navigators to opportunities',
+                      tip: "Our employers don't just post jobs — they come to our events looking for people exactly like you.",
+                    },
+                    {
+                      label: 'Provide wraparound support',
+                      tip: "Resume reviews, mock interviews, portfolio feedback, and the pep talks you didn't know you needed.",
+                    },
+                    {
+                      label: 'Partner with employers for career exposure',
+                      tip: 'We bring companies to the table who are genuinely committed to diverse hiring — not just checking a box.',
+                    },
                   ].map((item) => (
                     <div
-                      key={item}
-                      className="flex items-center gap-3 rounded-lg border border-primary/15 bg-primary/[0.06] px-4 py-2.5"
+                      key={item.label}
+                      className="checklist-tooltip flex cursor-default items-center gap-3 rounded-lg border border-primary/15 bg-primary/[0.06] px-4 py-2.5"
                     >
                       <CheckIcon />
-                      <span className="text-sm text-gray-300">{item}</span>
+                      <span className="text-sm text-gray-300">
+                        {item.label}
+                      </span>
+                      <div className="tooltip-content">{item.tip}</div>
                     </div>
                   ))}
                 </div>
@@ -922,6 +1026,12 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Your First Visit Guide */}
+      <FirstVisitGuide />
+
+      {/* Community Vibes — quotes and social proof */}
+      <CommunityVibes />
 
       {/* Pride Innovation Summit Spotlight */}
       <section className="border-y border-surface" ref={revealRef}>

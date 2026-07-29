@@ -810,7 +810,7 @@ export default function GalleryPage() {
       </section>
 
       {/* Infinite Photo Stream Marquee */}
-      <section className="overflow-hidden border-t border-surface bg-black/40 py-16">
+      <section className="overflow-hidden border-t border-surface bg-[var(--surface-elevated)] py-16">
         <div className="mb-8 px-6 text-center">
           <p className="text-[11px] font-bold uppercase tracking-wider text-primary">
             Continuous Photo Stream
