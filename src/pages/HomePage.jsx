@@ -1210,25 +1210,25 @@ export default function HomePage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                amount: '$5,000',
+                amount: 'TBD',
                 title: 'Community Workshop',
                 desc: 'Fund a full-day professional development workshop for 50+ Navigators',
                 icon: '🎯',
               },
               {
-                amount: '$10,000',
+                amount: 'TBD',
                 title: 'Innovation Summit',
                 desc: 'Sponsor one complete Innovation Summit — 200+ attendees, speakers, and career connections',
                 icon: '🚀',
               },
               {
-                amount: '$25,000',
+                amount: 'TBD',
                 title: 'Annual Programming',
                 desc: 'Fund a full year of community events, workshops, and career pathway programs',
                 icon: '📈',
               },
               {
-                amount: '$50,000',
+                amount: 'TBD',
                 title: 'Ecosystem Builder',
                 desc: 'Transform the regional tech talent pipeline — fund scholarships, certifications, and employer partnerships',
                 icon: '🌟',
@@ -1236,7 +1236,10 @@ export default function HomePage() {
             ].map((tier) => (
               <div key={tier.title} className="tier-card flex flex-col">
                 <span className="mb-3 text-3xl">{tier.icon}</span>
-                <span className="mb-2 text-base font-bold">{tier.title}</span>
+                <span className="mb-1 text-2xl font-extrabold text-primary">
+                  {tier.amount}
+                </span>
+                <span className="mb-2 text-sm font-bold">{tier.title}</span>
                 <p className="mt-auto text-xs leading-relaxed text-gray-500">
                   {tier.desc}
                 </p>

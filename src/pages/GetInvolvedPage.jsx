@@ -260,7 +260,7 @@ export default function GetInvolvedPage() {
             {[
               {
                 tier: 'Platinum',
-                amount: '$25,000+',
+                amount: 'TBD',
                 cardClass: 'tier-card tier-card-platinum',
                 benefits: [
                   'Keynote naming rights',
@@ -273,7 +273,7 @@ export default function GetInvolvedPage() {
               },
               {
                 tier: 'Gold',
-                amount: '$10,000',
+                amount: 'TBD',
                 cardClass: 'tier-card tier-card-gold',
                 benefits: [
                   'Innovation Summit naming',
@@ -285,7 +285,7 @@ export default function GetInvolvedPage() {
               },
               {
                 tier: 'Silver',
-                amount: '$5,000',
+                amount: 'TBD',
                 cardClass: 'tier-card tier-card-silver',
                 benefits: [
                   'Logo on event website',
@@ -296,7 +296,7 @@ export default function GetInvolvedPage() {
               },
               {
                 tier: 'Community',
-                amount: '$1,000+',
+                amount: 'TBD',
                 cardClass: 'tier-card tier-card-community',
                 benefits: [
                   'Logo on website',
@@ -307,9 +307,12 @@ export default function GetInvolvedPage() {
               },
             ].map((t) => (
               <div key={t.tier} className={t.cardClass}>
-                <span className="mb-4 block text-xs font-bold uppercase tracking-wider text-gray-600">
+                <span className="mb-1 block text-xs font-bold uppercase tracking-wider text-gray-600">
                   {t.tier}
                 </span>
+                <p className="mb-4 text-2xl font-extrabold text-primary">
+                  {t.amount}
+                </p>
                 <ul className="flex flex-col gap-2">
                   {t.benefits.map((b) => (
                     <li key={b} className="flex items-start gap-2 text-sm">
