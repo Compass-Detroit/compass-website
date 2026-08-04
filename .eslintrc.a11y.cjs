@@ -70,6 +70,10 @@ module.exports = {
     'jsx-a11y/accessible-emoji': 'warn',
     'jsx-a11y/aria-activedescendant-has-tabindex': 'warn',
     'jsx-a11y/media-has-caption': 'warn',
+
+    // Disable tailwind formatting rules in a11y config
+    'tailwindcss/no-custom-classname': 'off',
+    'tailwindcss/classnames-order': 'off',
   },
   globals: {
     __dirname: true,

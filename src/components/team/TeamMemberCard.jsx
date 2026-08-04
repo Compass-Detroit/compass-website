@@ -106,7 +106,7 @@ export default function TeamMemberCard({
         )}
 
         {/* Overlay gradient for readability */}
-        <div className="via-surface-card/40 absolute inset-0 bg-gradient-to-t from-[var(--surface-card)] to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-card)] via-[var(--surface-card)] to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
 
         {/* Badges positioned over image */}
         {badges.length > 0 && (
