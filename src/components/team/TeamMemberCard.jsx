@@ -91,7 +91,7 @@ export default function TeamMemberCard({
   return (
     <article className="group overflow-hidden rounded-2xl border border-surface bg-surface-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5">
       {/* Top Image area */}
-      <div className="from-surface relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br to-[var(--surface-card)]">
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br from-surface-card to-[var(--surface-card)]">
         {member.avatar ? (
           <img
             src={member.avatar}
@@ -106,7 +106,7 @@ export default function TeamMemberCard({
         )}
 
         {/* Overlay gradient for readability */}
-        <div className="via-[var(--surface-card)]/40 absolute inset-0 bg-gradient-to-t from-[var(--surface-card)] to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="via-surface-card/40 absolute inset-0 bg-gradient-to-t from-[var(--surface-card)] to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
 
         {/* Badges positioned over image */}
         {badges.length > 0 && (

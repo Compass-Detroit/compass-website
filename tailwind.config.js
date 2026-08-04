@@ -149,6 +149,14 @@ export default {
           footer: 'var(--surface-footer)',
         },
       },
+      gradientColorStops: {
+        surface: {
+          DEFAULT: 'var(--surface)',
+          card: 'var(--surface-card)',
+          elevated: 'var(--surface-elevated)',
+          footer: 'var(--surface-footer)',
+        },
+      },
       borderColor: {
         surface: {
           DEFAULT: 'var(--border)',
