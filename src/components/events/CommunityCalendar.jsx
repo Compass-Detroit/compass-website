@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import { useCalendarEvents } from '@/utils/useCalendarEvents'
+import { getSubscribeUrl } from '@/utils/generateICS'
+import AddToCalendarButton from './AddToCalendarButton'
+import ScheduleView from './ScheduleView'
 
 const categoryColors = {
   Workshop: {
@@ -33,7 +37,7 @@ const categoryColors = {
   },
 }
 
-const mockEvents = [
+const PLACEHOLDER_EVENTS = [
   // July 2026
   {
     name: 'Monthly Community Standup',
@@ -433,6 +437,8 @@ const mockEvents = [
   },
 ]
 
+const CALENDAR_ID = 'community-calendar@compass-detroit.com'
+
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const MONTHS = [
   'January',
@@ -480,11 +486,11 @@ function getCalendarDays(year, month) {
   return days
 }
 
-function getEventsForDay(year, month, day) {
+function getEventsForDay(year, month, day, eventsList) {
   const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(
     day
   ).padStart(2, '0')}`
-  return mockEvents.filter((ev) => ev.date === dateStr)
+  return eventsList.filter((ev) => ev.date === dateStr)
 }
 
 function ChevronLeft() {
@@ -565,6 +571,20 @@ function MapPin() {
 
 export default function CommunityCalendar() {
   const now = new Date()
+  const {
+    events: liveEvents,
+    isLive,
+    error,
+    dataSource,
+    setDataSource,
+    refresh,
+  } = useCalendarEvents({
+    calendarId: CALENDAR_ID,
+    fallbackEvents: PLACEHOLDER_EVENTS,
+    enabled: true,
+  })
+  const [viewMode, setViewMode] = useState('calendar') // 'calendar' | 'schedule'
+  const [showDevPanel, setShowDevPanel] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(now.getMonth())
   const [currentYear, setCurrentYear] = useState(now.getFullYear())
   const [selectedDay, setSelectedDay] = useState(null)
@@ -602,7 +622,7 @@ export default function CommunityCalendar() {
   }
 
   const selectedEvents = selectedDay
-    ? getEventsForDay(currentYear, currentMonth, selectedDay)
+    ? getEventsForDay(currentYear, currentMonth, selectedDay, liveEvents)
     : []
 
   // Count total events this month
@@ -610,28 +630,39 @@ export default function CommunityCalendar() {
     .filter((d) => d.isCurrentMonth)
     .reduce(
       (acc, d) =>
-        acc + getEventsForDay(currentYear, currentMonth, d.day).length,
+        acc +
+        getEventsForDay(currentYear, currentMonth, d.day, liveEvents).length,
       0
     )
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Coming Soon Banner */}
-      <div className="rounded-xl border border-primary/20 bg-primary/[0.06] p-6 text-center">
-        <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1">
-          <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
-          <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
-            Preview Mode
-          </span>
+      {/* Data Source Banner */}
+      {isLive ? (
+        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.06] p-4 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1">
+            <span className="size-2 rounded-full bg-emerald-500" />
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
+              Live Calendar
+            </span>
+          </div>
+          <p className="mt-2 text-sm text-gray-400">
+            Events synced from Compass Detroit community calendar
+          </p>
         </div>
-        <h3 className="mb-2 text-xl font-bold tracking-tight text-white">
-          Community Calendar Coming Soon
-        </h3>
-        <p className="text-sm text-gray-400">
-          We are finalizing our 2026 programming schedule. The events below are
-          placeholders and will be updated soon!
-        </p>
-      </div>
+      ) : (
+        <div className="rounded-xl border border-primary/20 bg-primary/[0.06] p-4 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1">
+            <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
+            <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+              Preview Mode
+            </span>
+          </div>
+          <p className="mt-2 text-sm text-gray-400">
+            Placeholder events shown — live calendar sync coming soon!
+          </p>
+        </div>
+      )}
 
       {/* Calendar card */}
       <div className="overflow-hidden rounded-2xl border border-surface bg-surface-card">
@@ -653,6 +684,29 @@ export default function CommunityCalendar() {
             >
               Today
             </button>
+            {/* View toggle */}
+            <div className="flex items-center rounded-lg border border-surface">
+              <button
+                onClick={() => setViewMode('calendar')}
+                className={`px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  viewMode === 'calendar'
+                    ? 'bg-primary/10 text-primary'
+                    : 'hover:text-primary'
+                }`}
+              >
+                Calendar
+              </button>
+              <button
+                onClick={() => setViewMode('schedule')}
+                className={`px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  viewMode === 'schedule'
+                    ? 'bg-primary/10 text-primary'
+                    : 'hover:text-primary'
+                }`}
+              >
+                Schedule
+              </button>
+            </div>
             <button
               onClick={prevMonth}
               className="flex size-9 items-center justify-center rounded-lg border border-surface transition-colors hover:border-primary/40 hover:text-primary"
@@ -670,41 +724,48 @@ export default function CommunityCalendar() {
           </div>
         </div>
 
-        {/* Day headers */}
-        <div className="grid grid-cols-7 border-b border-surface">
-          {DAYS.map((day) => (
-            <div
-              key={day}
-              className="py-3 text-center text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]"
-            >
-              {day}
+        {viewMode === 'calendar' ? (
+          <>
+            {/* Day headers */}
+            <div className="grid grid-cols-7 border-b border-surface">
+              {DAYS.map((day) => (
+                <div
+                  key={day}
+                  className="py-3 text-center text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]"
+                >
+                  {day}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        {/* Calendar grid */}
-        <div className="grid grid-cols-7">
-          {calendarDays.map((d, i) => {
-            const events = d.isCurrentMonth
-              ? getEventsForDay(currentYear, currentMonth, d.day)
-              : []
-            const isToday =
-              d.isCurrentMonth &&
-              d.day === today &&
-              currentMonth === todayMonth &&
-              currentYear === todayYear
-            const isSelected = d.isCurrentMonth && d.day === selectedDay
-            const hasEvents = events.length > 0
+            {/* Calendar grid */}
+            <div className="grid grid-cols-7">
+              {calendarDays.map((d, i) => {
+                const events = d.isCurrentMonth
+                  ? getEventsForDay(
+                      currentYear,
+                      currentMonth,
+                      d.day,
+                      liveEvents
+                    )
+                  : []
+                const isToday =
+                  d.isCurrentMonth &&
+                  d.day === today &&
+                  currentMonth === todayMonth &&
+                  currentYear === todayYear
+                const isSelected = d.isCurrentMonth && d.day === selectedDay
+                const hasEvents = events.length > 0
 
-            return (
-              <button
-                key={i}
-                onClick={() => {
-                  if (d.isCurrentMonth) {
-                    setSelectedDay(d.day === selectedDay ? null : d.day)
-                  }
-                }}
-                className={`relative flex min-h-[72px] flex-col items-center border-b border-r border-surface p-2 transition-colors md:min-h-[84px]
+                return (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      if (d.isCurrentMonth) {
+                        setSelectedDay(d.day === selectedDay ? null : d.day)
+                      }
+                    }}
+                    className={`relative flex min-h-[72px] flex-col items-center border-b border-r border-surface p-2 transition-colors md:min-h-[84px]
                   ${
                     !d.isCurrentMonth
                       ? 'cursor-default opacity-30'
@@ -717,49 +778,58 @@ export default function CommunityCalendar() {
                   }
                   ${i % 7 === 6 ? 'border-r-0' : ''}
                 `}
-                disabled={!d.isCurrentMonth}
-                aria-label={
-                  d.isCurrentMonth
-                    ? `${MONTHS[currentMonth]} ${d.day}${
-                        hasEvents
-                          ? `, ${events.length} event${
-                              events.length > 1 ? 's' : ''
-                            }`
-                          : ''
-                      }`
-                    : undefined
-                }
-              >
-                <span
-                  className={`flex size-7 items-center justify-center rounded-full text-sm font-medium
+                    disabled={!d.isCurrentMonth}
+                    aria-label={
+                      d.isCurrentMonth
+                        ? `${MONTHS[currentMonth]} ${d.day}${
+                            hasEvents
+                              ? `, ${events.length} event${
+                                  events.length > 1 ? 's' : ''
+                                }`
+                              : ''
+                          }`
+                        : undefined
+                    }
+                  >
+                    <span
+                      className={`flex size-7 items-center justify-center rounded-full text-sm font-medium
                     ${isToday ? 'bg-primary font-bold text-black' : ''}
                     ${isSelected && !isToday ? 'font-bold text-primary' : ''}
                   `}
-                  style={isToday ? { color: '#000000' } : undefined}
-                >
-                  {d.day}
-                </span>
-                {hasEvents && (
-                  <div className="mt-1 flex items-center gap-0.5">
-                    {events.slice(0, 3).map((ev, j) => (
-                      <div
-                        key={j}
-                        className={`size-1.5 rounded-full ${
-                          categoryColors[ev.category]?.dot || 'bg-gray-500'
-                        }`}
-                      />
-                    ))}
-                    {events.length > 3 && (
-                      <span className="ml-0.5 text-[9px] text-gray-500">
-                        +{events.length - 3}
-                      </span>
+                      style={isToday ? { color: '#000000' } : undefined}
+                    >
+                      {d.day}
+                    </span>
+                    {hasEvents && (
+                      <div className="mt-1 flex items-center gap-0.5">
+                        {events.slice(0, 3).map((ev, j) => (
+                          <div
+                            key={j}
+                            className={`size-1.5 rounded-full ${
+                              categoryColors[ev.category]?.dot || 'bg-gray-500'
+                            }`}
+                          />
+                        ))}
+                        {events.length > 3 && (
+                          <span className="ml-0.5 text-[9px] text-gray-500">
+                            +{events.length - 3}
+                          </span>
+                        )}
+                      </div>
                     )}
-                  </div>
-                )}
-              </button>
-            )
-          })}
-        </div>
+                  </button>
+                )
+              })}
+            </div>
+          </>
+        ) : (
+          <ScheduleView
+            events={liveEvents}
+            currentMonth={currentMonth}
+            currentYear={currentYear}
+            categoryColors={categoryColors}
+          />
+        )}
       </div>
 
       {/* Legend */}
@@ -775,8 +845,79 @@ export default function CommunityCalendar() {
         ))}
       </div>
 
+      {/* Subscribe + Dev Panel */}
+      <div className="flex items-center justify-between">
+        <a
+          href={getSubscribeUrl(CALENDAR_ID)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-lg border border-surface px-3 py-1.5 text-xs font-semibold transition-colors hover:border-primary/40 hover:text-primary"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M4 11a9 9 0 0 1 9 9" />
+            <path d="M4 4a16 16 0 0 1 16 16" />
+            <circle cx="5" cy="19" r="1" />
+          </svg>
+          Subscribe to Calendar
+        </a>
+        {/* Hidden dev panel trigger - triple click */}
+        <button
+          onClick={() => setShowDevPanel(!showDevPanel)}
+          className="rounded px-2 py-1 text-[10px] text-gray-600 transition-colors hover:text-gray-400"
+          title="Dev Panel"
+        >
+          ⚙
+        </button>
+      </div>
+
+      {/* Dev Panel */}
+      {showDevPanel && (
+        <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
+          <div className="mb-2 text-[11px] font-bold uppercase tracking-wider text-amber-400">
+            Dev Panel
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {['auto', 'live', 'placeholder'].map((source) => (
+              <button
+                key={source}
+                onClick={() => setDataSource(source)}
+                className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  dataSource === source
+                    ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
+                    : 'border-surface hover:border-amber-500/20'
+                }`}
+              >
+                {source}
+              </button>
+            ))}
+          </div>
+          <div className="mt-2 flex items-center gap-3 text-[10px] text-gray-500">
+            <span>Source: {isLive ? 'Live' : 'Placeholder'}</span>
+            <span>Events: {liveEvents.length}</span>
+            {error && (
+              <span className="text-rose-400">Error: {error.message}</span>
+            )}
+            <button
+              onClick={refresh}
+              className="text-amber-400 hover:text-amber-300"
+            >
+              Refresh
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Selected day events */}
-      {selectedDay && (
+      {viewMode === 'calendar' && selectedDay && (
         <div className="rounded-xl border border-surface bg-surface-card p-6">
           <div className="mb-4 flex items-center justify-between">
             <h4 className="font-bold">
@@ -815,6 +956,9 @@ export default function CommunityCalendar() {
                         <p className="mt-2 text-sm leading-relaxed text-gray-500">
                           {ev.desc}
                         </p>
+                        <div className="mt-3">
+                          <AddToCalendarButton event={ev} />
+                        </div>
                       </div>
                       <span
                         className={`mt-2 w-fit shrink-0 whitespace-nowrap rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider sm:mt-0 ${cat.badge}`}

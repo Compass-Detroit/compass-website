@@ -831,7 +831,7 @@ export default function HomePage() {
         </div>
         <div className="bento-grid">
           {/* Large featured stat */}
-          <div className="bento-span-2 bento-tall via-surface-card to-surface-card flex flex-col justify-between rounded-2xl border border-surface bg-gradient-to-br from-primary/[0.06] p-8">
+          <div className="bento-span-2 bento-tall flex flex-col justify-between rounded-2xl border border-surface bg-gradient-to-br from-primary/[0.06] via-surface-card to-surface-card p-8">
             <div>
               <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
                 Community Growth

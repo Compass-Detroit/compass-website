@@ -159,6 +159,72 @@ const programs = [
   },
 ]
 
+const legacyColorMap = {
+  blue: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  orange: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+  purple: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+  cyan: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+  rose: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+  emerald: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+}
+
+const eventLegacy = [
+  {
+    name: 'Michigan DevFest',
+    year: 2026,
+    edition: '12th Annual',
+    color: 'blue',
+    desc: "Michigan's flagship technology conference spanning cloud, AI, mobile, web, and careers.",
+    link: 'https://midevfest.com',
+    stats: { speakers: '100+', attendees: '500+', tracks: '6' },
+  },
+  {
+    name: 'BHM Innovation Summit',
+    year: 2026,
+    edition: '4th Annual',
+    color: 'orange',
+    desc: 'Celebrating Black innovation and excellence in technology across Detroit.',
+    link: 'https://bit.ly/bhm-summit-website',
+    stats: { speakers: '30+', attendees: '200+', tracks: '4' },
+  },
+  {
+    name: 'IWD Innovation Summit',
+    year: 2026,
+    edition: '4th Annual',
+    color: 'purple',
+    desc: 'Empowering women in tech through innovation, leadership, and community.',
+    link: 'https://bit.ly/det-iwd-25-website',
+    stats: { speakers: '40+', attendees: '250+', tracks: '8' },
+  },
+  {
+    name: 'AI Hackathon',
+    year: 2026,
+    edition: '2nd Annual',
+    color: 'cyan',
+    desc: 'Hands-on agentic AI hackathon building real-world solutions.',
+    link: 'http://ibm.biz/agentic-ai-hackathon',
+    stats: { speakers: '10+', attendees: '100+', tracks: '2' },
+  },
+  {
+    name: 'Detroit Pride Innovation Summit',
+    year: 2026,
+    edition: '2nd Annual',
+    color: 'rose',
+    desc: 'Celebrating LGBTQ+ innovation and inclusive technology leadership.',
+    link: 'https://detroitpridesummit.com',
+    stats: { speakers: '20+', attendees: '150+', tracks: '3' },
+  },
+  {
+    name: 'Hack Michigan',
+    year: 2026,
+    edition: '3rd Annual',
+    color: 'emerald',
+    desc: 'Multi-day hackathon building solutions for Michigan communities.',
+    link: '/events',
+    stats: { speakers: '15+', attendees: '200+', tracks: '3' },
+  },
+]
+
 export default function EventsPage() {
   return (
     <SiteLayout>
@@ -344,6 +410,102 @@ export default function EventsPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Our Event Legacy */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mb-10">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Our Event Legacy
+            </p>
+            <h2 className="mb-3 text-3xl font-bold tracking-tight">
+              Celebrating years of innovation, community, and impact across
+              Michigan
+            </h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {eventLegacy.map((ev) => (
+              <div
+                key={ev.name}
+                className="group flex flex-col rounded-xl border border-surface bg-surface-card p-6 transition-colors hover:border-primary/30"
+              >
+                <div className="mb-4 flex items-center justify-between">
+                  <span
+                    className={`rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-wider ${
+                      legacyColorMap[ev.color]
+                    }`}
+                  >
+                    {ev.edition}
+                  </span>
+                  <span className="text-sm font-semibold text-gray-500">
+                    {ev.year}
+                  </span>
+                </div>
+                <h3 className="mb-3 text-xl font-bold">{ev.name}</h3>
+                <p className="mb-6 flex-1 text-sm leading-relaxed text-gray-400">
+                  {ev.desc}
+                </p>
+                <div className="mb-6 grid grid-cols-3 gap-2 border-y border-surface py-4">
+                  <div className="flex flex-col">
+                    <span className="text-lg font-bold text-gray-200">
+                      {ev.stats.speakers}
+                    </span>
+                    <span className="text-[10px] uppercase text-gray-500">
+                      Speakers
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-lg font-bold text-gray-200">
+                      {ev.stats.attendees}
+                    </span>
+                    <span className="text-[10px] uppercase text-gray-500">
+                      Attendees
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-lg font-bold text-gray-200">
+                      {ev.stats.tracks}
+                    </span>
+                    <span className="text-[10px] uppercase text-gray-500">
+                      Tracks
+                    </span>
+                  </div>
+                </div>
+                {ev.link.startsWith('/') ? (
+                  <Link
+                    to={ev.link}
+                    className="inline-flex items-center text-sm font-semibold text-primary transition-colors hover:text-primary-400"
+                  >
+                    Visit Website &rarr;
+                  </Link>
+                ) : (
+                  <a
+                    href={ev.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-sm font-semibold text-primary transition-colors hover:text-primary-400"
+                  >
+                    Visit Website &rarr;
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              to="/gallery"
+              className="inline-flex items-center gap-2 rounded-full border border-surface bg-surface-card px-4 py-2 text-sm font-medium text-gray-400 transition-colors hover:text-white"
+            >
+              <span>
+                <span role="img" aria-label="camera">
+                  📸
+                </span>{' '}
+                Photos from past events
+              </span>
+            </Link>
           </div>
         </div>
       </section>

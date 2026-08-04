@@ -10,18 +10,18 @@ const eventSites = [
     name: 'Michigan DevFest',
     url: 'https://midevfest.com',
     accent: 'bg-blue-500/10 text-blue-400',
-    tag: '11th Annual',
+    tag: '12th Annual',
     description:
       "Michigan's premier developer conference featuring AI/ML, cloud, mobile, and full-stack tracks",
-    date: 'November 2025 · 1,000+ Attendees',
+    date: 'November 2026 · 1,000+ Attendees',
     image: devfestImg,
     live: true,
   },
   {
     name: 'IWD Innovation Summit',
-    url: 'https://iwdsummit.com',
+    url: 'https://bit.ly/det-iwd-25-website',
     accent: 'bg-purple-500/10 text-purple-400',
-    tag: '40+ Speakers',
+    tag: '4th Annual',
     description:
       "International Women's Day celebration with 8 tracks and 120+ companies",
     date: 'March 2026 · Detroit, MI',
@@ -32,7 +32,7 @@ const eventSites = [
     name: 'Detroit Pride Innovation Summit',
     url: 'https://www.detroitpridesummit.com/',
     accent: 'bg-amber-500/10 text-amber-400',
-    tag: 'Break the Pattern',
+    tag: '2nd Annual',
     description:
       "Celebrating LGBTQ+ leaders, technologists, and allies in Michigan's tech ecosystem",
     date: 'June 2026 · IBM Detroit',
@@ -41,9 +41,9 @@ const eventSites = [
   },
   {
     name: 'BHM Innovation Summit',
-    url: '/events',
+    url: 'https://bit.ly/bhm-summit-website',
     accent: 'bg-orange-500/10 text-orange-400',
-    tag: 'The Belonging Blueprint',
+    tag: '4th Annual',
     description:
       'Celebrating Black excellence in technology with keynotes, panels, and networking focused on career advancement',
     date: 'February 2026 · Detroit, MI',
@@ -51,10 +51,21 @@ const eventSites = [
     live: true,
   },
   {
+    name: 'AI Hackathon',
+    url: 'http://ibm.biz/agentic-ai-hackathon',
+    accent: 'bg-cyan-500/10 text-cyan-400',
+    tag: '2nd Annual',
+    description:
+      'Hands-on agentic AI hackathon building real-world solutions with IBM and partners',
+    date: 'Summer 2026 · Detroit, MI',
+    image: hackathonImg,
+    live: true,
+  },
+  {
     name: 'Hack Michigan',
     url: '/events',
     accent: 'bg-emerald-500/10 text-emerald-400',
-    tag: 'Coming 2026',
+    tag: '3rd Annual',
     description:
       'Team-based hackathon with industry mentorship and portfolio building',
     date: 'Date TBD · Detroit, MI',
