@@ -1,42 +1,40 @@
-import AaronAmano from '@/data/2025/assets/images/team/aaron_amano-x96.webp'
-import AliElSharif from '@/data/2025/assets/images/team/ali_elsharif.webp'
-import DaveKoziol from '@/data/2025/assets/images/team/dav_koziol.webp'
-import GregMiller from '@/data/2025/assets/images/team/greg_miller-x96.webp'
-import HernandoMalabet from '@/data/2025/assets/images/team/hernando_malabet.webp'
-import HodaSolati from '@/data/2025/assets/images/team/hoda_solati.webp'
-import HudaHussaini from '@/data/2025/assets/images/team/huda_hussaini.webp'
-import JennaRitten from '@/data/2025/assets/images/team/jenna_ritten.webp'
-import JingranWang from '@/data/2025/assets/images/team/Jingran_Wang-x96.webp'
-import JustinBeaudry from '@/data/2025/assets/images/team/justin_beaudry-x96.webp'
-import KayleeBusenbark from '@/data/2025/assets/images/team/kaylee_busenbark-x96.webp'
-import MaridyMazaira from '@/data/2025/assets/images/team/maridy_mazaira.webp'
-import NisaSolano from '@/data/2025/assets/images/team/nisa_solano.webp'
-import RaquelEstrada from '@/data/2025/assets/images/team/raquel_estrada.webp'
-import Rehanashri from '@/data/2025/assets/images/team/rehanashri-x96.webp'
-import RishirajSarkar from '@/data/2025/assets/images/team/rishiraj_sarkar.webp'
-import ShimaSolati from '@/data/2025/assets/images/team/shima_solati.webp'
-import ShugmiShumunov from '@/data/2025/assets/images/team/shugmi_shumunov-x96.webp'
-import SohamMhatre from '@/data/2025/assets/images/team/soham_mhatre.webp'
-import SohanKetireddy from '@/data/2025/assets/images/team/sohan_ketireddy-x96.webp'
-import SumiaSaleh from '@/data/2025/assets/images/team/Sumia_Saleh-x96.webp'
+// 2026 team headshots — updated from midevfest26 repo
+import AaronAmano from '@/data/2026/assets/images/team/aaron_amano.webp'
+import AliElSharif from '@/data/2026/assets/images/team/ali_elsharif.webp'
+import BrandonWelch from '@/data/2026/assets/images/team/brandon_welch.webp'
+import DaveKoziol from '@/data/2026/assets/images/team/dav_koziol.webp'
+import DeAndreBoston from '@/data/2026/assets/images/team/DeAndre_Boston.png'
+import GregMiller from '@/data/2026/assets/images/team/greg_miller.webp'
+import HernandoMalabet from '@/data/2026/assets/images/team/hernando_malabet.webp'
+import HodaSolati from '@/data/2026/assets/images/team/hoda_solati.webp'
+import HudaHussaini from '@/data/2026/assets/images/team/huda_hussaini.webp'
+import IdaByrdHill from '@/data/2026/assets/images/team/IdaByrd-Hill.webp'
+import JennaRitten from '@/data/2026/assets/images/team/jenna_ritten.webp'
+import JeseekiaVaughn from '@/data/2026/assets/images/team/jeseekia_vaughn.webp'
+import JingranWang from '@/data/2026/assets/images/team/Jingran_Wang-x96.webp'
+import JustinBeaudry from '@/data/2026/assets/images/team/justin_beaudry.webp'
+import KakoozaHarunah from '@/data/2026/assets/images/team/Kakooza_Harunah.png'
+import KateShenton from '@/data/2026/assets/images/team/kate_shenton.webp'
+import KayleeBusenbark from '@/data/2026/assets/images/team/kaylee_busenbark.webp'
+import MaridyMazaira from '@/data/2026/assets/images/team/maridy_mazaira.webp'
+import NisaSolano from '@/data/2026/assets/images/team/nisa_solano.webp'
+import RaquelEstrada from '@/data/2026/assets/images/team/raquel_estrada.webp'
+import Rehanashri from '@/data/2026/assets/images/team/rehanashri.webp'
+import RishirajSarkar from '@/data/2026/assets/images/team/rishiraj_sarkar.webp'
+import RolandFrohman from '@/data/2026/assets/images/team/roland_frohman.webp'
+import ShimaSolati from '@/data/2026/assets/images/team/shima_solati.webp'
+import ShugmiShumunov from '@/data/2026/assets/images/team/shugmi_shumunov.png'
+import SohamMhatre from '@/data/2026/assets/images/team/soham_mhatre.webp'
+import SohanKetireddy from '@/data/2026/assets/images/team/sohan_ketireddy.webp'
+import SumiaSaleh from '@/data/2026/assets/images/team/Sumia_Saleh-x96.webp'
 import TerrellMcKinney from '@/data/2026/assets/images/team/Terrell_McKinney.webp'
+import TylerMcBeath from '@/data/2026/assets/images/team/tyler_mcbeath.webp'
+import UmeloOnyejiaka from '@/data/2026/assets/images/team/UmeloOnyejiaka.webp'
 
 export const teamData = [
+  // ── Compass Board & Organizers ──
   {
     id: 1,
-    name: 'Dave Koziol',
-    twitter: 'davekoziol',
-    linkedin: 'https://www.linkedin.com/in/davekoziol/',
-    github: '',
-    devfest: 'organizer',
-    star: true,
-    university: '',
-    organization: 'Little Caesars',
-    role: 'GDG Organizer',
-    avatar: DaveKoziol,
-  },
-  {
-    id: 2,
     name: 'Jenna Ritten',
     twitter: 'jritten',
     linkedin: 'https://www.linkedin.com/in/jritten/',
@@ -45,11 +43,36 @@ export const teamData = [
     star: true,
     university: '',
     organization: 'IBM',
-    role: 'GDG Organizer + Women Techmakers',
+    role: 'Executive Director',
     avatar: JennaRitten,
   },
   {
+    id: 2,
+    name: 'Dave Koziol',
+    twitter: 'davekoziol',
+    linkedin: 'https://www.linkedin.com/in/davekoziol/',
+    github: '',
+    devfest: 'organizer',
+    star: true,
+    university: '',
+    organization: 'Little Caesars',
+    role: 'Secretary and GDG Chair',
+    avatar: DaveKoziol,
+  },
+  {
     id: 3,
+    name: 'Ida Byrd-Hill',
+    linkedin: 'https://www.linkedin.com/in/idabyrdhill/',
+    github: '',
+    devfest: 'organizer',
+    star: false,
+    university: '',
+    organization: 'Automation Workz',
+    role: 'Treasurer and Automation Workz Chair',
+    avatar: IdaByrdHill,
+  },
+  {
+    id: 4,
     name: 'Huda Hussaini',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/huda-hussaini/',
@@ -63,7 +86,7 @@ export const teamData = [
     avatar: HudaHussaini,
   },
   {
-    id: 4,
+    id: 5,
     name: 'Sumia Saleh',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/sumia-saleh-163741263/',
@@ -77,97 +100,21 @@ export const teamData = [
     avatar: SumiaSaleh,
   },
   {
-    id: 5,
-    name: 'Greg Miller',
-    linkedin: 'https://www.linkedin.com/in/gregraymiller/',
-    github: 'https://github.com/shrinkray',
-    devfest: 'devteam',
+    id: 6,
+    name: 'Hoda Solati',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/hoda-solati/',
+    github: '',
+    devfest: 'organizer',
     star: false,
     university: '',
-    bio: `
-	  Hello, I am the founder of Shrinkray Interactive, a web development studio in Toledo, Ohio, leaning-in on accessible, high-performance, and user-friendly web experiences. As a founding member of GDG Toledo, I connect developers and designers through events and hackathons. Collaborating with the devteam, I oversee UX engineering and redesign for the Michigan DevFest website—creating a fast, inclusive experience for speakers, partners, and attendees. If you are seeking a friendly and talented developer for your project, let's connect.
-	`,
-    organization: 'Shrinkray Interactive + GDG Toledo + Toledo Codes',
-    role: 'Senior UX Engineer + Frontend',
-    avatar: GregMiller,
-  },
-  {
-    id: 6,
-    name: 'Aaron Amano',
-    twitter: '',
-    linkedin: 'https://www.linkedin.com/in/aaronamano/',
-    github: 'https://github.com/aaronamano',
-    devfest: 'devteam',
-    star: false,
-    university: 'University Of Michigan Dearborn',
-    bio: ``,
-    organization: '',
-    role: 'CS Student',
-    avatar: AaronAmano,
+    bio: `Hoda Solati is an award-winning UX designer working at BraunAbility blending creativity, technology, and innovation to craft inclusive, user-centered experiences. With advanced degrees in UX Design and Animation, she explores cutting-edge technologies such as VR, AR, and robotics to solve complex design challenges. Recognized at global events including DDX'25 NYC and IEEE Smart Mobility, Hoda is passionate about redefining the future of user experience through innovation and accessibility.`,
+    organization: 'BraunAbility',
+    role: 'Head of Human-Centered Experience Design',
+    avatar: HodaSolati,
   },
   {
     id: 7,
-    name: 'Shugmi Shumunov',
-    twitter: '',
-    linkedin: 'https://www.linkedin.com/in/shugmishumunov/',
-    github: 'https://github.com/ShugKnight24',
-    devfest: 'devteam',
-    star: false,
-    university: '',
-    bio: `
-      Shugmi Shumunov is a software developer who believes code is the ultimate storytelling medium. With a primary focus on the JavaScript ecosystem within e-commerce, working across the stack in various industries. Always seeking beautiful, elegant, and performant solutions while collaborating with talented, curious, and passionate engineers and tech enthusiasts.
-
-      When the terminal is closed and his hands are off the keyboard, you'll find him lifting weights, adventuring outdoors, exploring new places, or immersed in the worlds of manga or a good book
-    `,
-    organization: 'Shumunov Solutions',
-    role: 'Developer',
-    avatar: ShugmiShumunov,
-  },
-  {
-    id: 8,
-    name: 'Justin Beaudry',
-    twitter: '',
-    linkedin: 'https://www.linkedin.com/in/justinbeaudry/',
-    github: 'https://github.com/justinbeaudry',
-    devfest: 'devteam',
-    star: false,
-    university: '',
-    bio: ``,
-    organization: 'Actual Reality Technologies + Toledo Codes + GDG Toledo',
-    role: 'Director of Engineering',
-    avatar: JustinBeaudry,
-  },
-  {
-    id: 9,
-    name: 'Rishiraj Sarkar',
-    twitter: '',
-    linkedin: null,
-    github: null,
-    devfest: 'marketing',
-    star: false,
-    university: 'University of Michigan - Dearborn',
-    bio: `Cybersecurity graduate student working with AI privacy and network security`,
-    organization: '',
-    role: 'Student + GDGC Dearborn',
-    avatar: RishirajSarkar,
-  },
-  {
-    id: 10,
-    name: 'Soham Mhatre',
-    twitter: '',
-    linkedin: null,
-    github: 'https://github.com/soham02',
-    devfest: 'devteam',
-    star: false,
-    university: '',
-    bio: `Soham Mhatre is a developer focused on building practical, human-centered software. He works across the MERN stack with a strong focus on cloud and AI workflows. Recent projects include an image labeling system using AWS Recognition and a financial planning/learning platform with real-time persona generation. Soham enjoys translating complex, real-world requirements into simple, shippable features and cares deeply about clean APIs, accessible UIs, and measurable outcomes. Having recently graduated from Harrisburg University with a Master's in Software Engineering, he's now pursuing full-time opportunities where he can contribute end-to-end from backend services and databases to polished frontends that people love to use.  
-`,
-    organization: 'Mhatre Solutions',
-    role: 'Developer',
-    avatar: SohamMhatre,
-  },
-  {
-    id: 11,
     name: 'Shima Solati',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/shima-solati/',
@@ -175,27 +122,106 @@ export const teamData = [
     devfest: 'organizer',
     star: false,
     university: '',
-    bio: `Shima Solati is an award-winning UX/UI designer and researcher at BraunAbility, leading efforts to advance mobility and accessibility through innovative, user-centered design. With a Master’s in User Experience Design from the College for Creative Studies and dual degrees in fashion and textiles, Shima brings a rare multidisciplinary perspective to solving complex challenges. Her expertise spans immersive and assistive technologies, VR, AR, robotics, and her portfolio includes impactful work for KUKA Robotics, the Augmented Reality Center, General Motors, and Ford. Passionate about inclusive design and emerging technologies, Shima is dedicated to creating intuitive, innovative solutions that empower all users.`,
+    bio: `Shima Solati is an award-winning UX/UI designer and researcher at BraunAbility, leading efforts to advance mobility and accessibility through innovative, user-centered design. With a Master's in User Experience Design from the College for Creative Studies and dual degrees in fashion and textiles, Shima brings a rare multidisciplinary perspective to solving complex challenges. Her expertise spans immersive and assistive technologies, VR, AR, robotics, and her portfolio includes impactful work for KUKA Robotics, the Augmented Reality Center, General Motors, and Ford. Passionate about inclusive design and emerging technologies, Shima is dedicated to creating intuitive, innovative solutions that empower all users.`,
     organization: 'BraunAbility',
-    role: 'UX/UI Designer & Researcher',
+    role: 'Head of Human-Centered Design Research',
     avatar: ShimaSolati,
   },
   {
-    id: 12,
-    name: 'Hoda Solati',
+    id: 8,
+    name: 'Roland Frohman III',
     twitter: '',
-    linkedin: 'https://www.linkedin.com/in/hoda-solati/',
+    linkedin: 'https://www.linkedin.com/in/rhfrohman3/',
+    github: '',
+    devfest: 'organizer',
+    star: false,
+    university: '',
+    organization: 'AFROTECH',
+    role: 'Head of Innovation',
+    avatar: RolandFrohman,
+  },
+  {
+    id: 9,
+    name: 'Rishiraj Sarkar',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/risarkar/',
+    github: null,
+    devfest: 'organizer',
+    star: false,
+    university: 'University of Michigan - Dearborn',
+    bio: `Cybersecurity graduate student working with AI privacy and network security`,
+    organization: '',
+    role: 'Head of Marketing and Volunteers',
+    avatar: RishirajSarkar,
+  },
+  {
+    id: 10,
+    name: 'Tyler McBeath',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/tyler-mcbeath-913b54102/',
+    github: '',
+    devfest: 'organizer',
+    star: false,
+    university: '',
+    organization: 'Ford Motor Company',
+    role: 'Head of Logistics and NSBE Chair',
+    avatar: TylerMcBeath,
+  },
+  {
+    id: 11,
+    name: 'Hernando Gonzalez Malabet',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/hernando-gonzalez-malabet-baa03625/',
+    github: '',
+    devfest: 'organizer',
+    star: false,
+    university: '',
+    bio: `Hernando was born and raised in Barranquilla, Colombia. He holds a dual bachelor degree in Mechanical Engineering from the Universidad del Norte and University of South Florida, as well as a Ph.D. in Mechanical Engineering from the University of Alabama in Huntsville. He's currently working as a Battery Electro-Chemical Interactions Researcher at General Motors R&D, researching new technologies to increase battery safety for EVs. He's been part of SHPE since 2009 and has been an open advocate for hispanic development and  formation in advanced STEM careers`,
+    organization: 'General Motors',
+    role: 'Head of Speakers and SHPE Chair',
+    avatar: HernandoMalabet,
+  },
+  {
+    id: 12,
+    name: 'Jeseekia Vaughn',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/jeseekiavaughn/',
+    github: '',
+    devfest: 'organizer',
+    star: false,
+    university: '',
+    organization: 'Detroit Black Tech',
+    role: 'Head of Community and Detroit Hacker House Chair',
+    avatar: JeseekiaVaughn,
+  },
+  {
+    id: 13,
+    name: 'Umelo Onyejiaka',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/umelo-onyejiaka-84213524b/',
+    github: '',
+    devfest: 'organizer',
+    star: false,
+    university: '',
+    organization: 'Continental',
+    role: 'Head of Social Media and DevOps Detroit Chair',
+    avatar: UmeloOnyejiaka,
+  },
+  {
+    id: 14,
+    name: 'Brandon Welch',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/brandon-welch-179a16338/',
     github: '',
     devfest: 'marketing',
     star: false,
     university: '',
-    bio: `Hoda Solati is an award-winning UX designer working at BraunAbility blending creativity, technology, and innovation to craft inclusive, user-centered experiences. With advanced degrees in UX Design and Animation, she explores cutting-edge technologies such as VR, AR, and robotics to solve complex design challenges. Recognized at global events including DDX’25 NYC and IEEE Smart Mobility, Hoda is passionate about redefining the future of user experience through innovation and accessibility.`,
-    organization: 'BraunAbility + GDG + Women Techmakers, I/O 2025',
-    role: 'UX/UI Designer & Researcher',
-    avatar: HodaSolati,
+    organization: 'Why Not Collab Detroit',
+    role: 'Head of Social Media',
+    avatar: BrandonWelch,
   },
   {
-    id: 13,
+    id: 15,
     name: 'Ali El Sharif',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/ali-el-sharif-76530222b/',
@@ -209,22 +235,7 @@ export const teamData = [
     avatar: AliElSharif,
   },
   {
-    id: 14,
-    name: 'Hernando Gonzalez Malabet',
-    twitter: '',
-    linkedin: 'https://www.linkedin.com/in/hernando-gonzalez-malabet-baa03625/',
-    github: '',
-    devfest: 'organizer',
-    star: false,
-    university: '',
-    bio: `Hernando was born and raised in Barranquilla, Colombia. He holds a dual bachelor degree in Mechanical Engineering from the Universidad del Norte and University of South Florida, as well as a Ph.D. in Mechanical Engineering from the University of Alabama in Huntsville. He's currently working as a Battery Electro-Chemical Interactions Researcher at General Motors R&D, researching new technologies to increase battery safety for EVs. He's been part of SHPE since 2009 and has been an open advocate for hispanic development and  formation in advanced STEM careers`,
-    organization:
-      'Society of Hispanic Professional Engineers - SHPE Detroit Professional',
-    role: 'Director of Professional Development',
-    avatar: HernandoMalabet,
-  },
-  {
-    id: 15,
+    id: 16,
     name: 'Nisa Solano',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/nisa-solano/',
@@ -238,7 +249,7 @@ export const teamData = [
     avatar: NisaSolano,
   },
   {
-    id: 16,
+    id: 17,
     name: 'Raquel Estrada',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/raquel-estrada/',
@@ -246,14 +257,14 @@ export const teamData = [
     devfest: 'organizer',
     star: false,
     university: '',
-    bio: `Raquel Estrada is the Vice President of Internal Relations for SHPE Detroit and a proud Salvadoran who is passionate about empowering the Hispanic community. She believes in the power of unity and collaboration to open doors for others in STEM. Raquel is a Process Transformation Manager – VP at Comerica Bank and holds three master’s degrees, along with a Bachelor’s in Industrial Engineering. With more than twelve years of international experience in financial services, consumer goods, and automotive, Raquel has built her career around driving change, leading with impact, and a deep passion for Continuous Improvement.`,
+    bio: `Raquel Estrada is the Vice President of Internal Relations for SHPE Detroit and a proud Salvadoran who is passionate about empowering the Hispanic community. She believes in the power of unity and collaboration to open doors for others in STEM. Raquel is a Process Transformation Manager – VP at Comerica Bank and holds three master's degrees, along with a Bachelor's in Industrial Engineering. With more than twelve years of international experience in financial services, consumer goods, and automotive, Raquel has built her career around driving change, leading with impact, and a deep passion for Continuous Improvement.`,
     organization:
       'Society of Hispanic Professional Engineers - SHPE Detroit Professional',
     role: 'SHPE Detroit Vice President',
     avatar: RaquelEstrada,
   },
   {
-    id: 17,
+    id: 18,
     name: 'Maridy Mazaira',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/maridy-mazaira/',
@@ -269,7 +280,7 @@ Today, Maridy serves as President of the Society of Hispanic Professional Engine
     avatar: MaridyMazaira,
   },
   {
-    id: 18,
+    id: 19,
     name: 'Jingran Wang',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/jingranwang/',
@@ -283,7 +294,118 @@ Today, Maridy serves as President of the Society of Hispanic Professional Engine
     avatar: JingranWang,
   },
   {
-    id: 19,
+    id: 20,
+    name: 'Kate Shenton',
+    twitter: '',
+    linkedin: '',
+    github: '',
+    devfest: 'organizer',
+    star: false,
+    university: '',
+    organization: '',
+    role: 'Community Organizer',
+    avatar: KateShenton,
+  },
+  {
+    id: 21,
+    name: 'DeAndre Boston',
+    twitter: '',
+    linkedin: '',
+    github: '',
+    devfest: 'organizer',
+    star: false,
+    university: '',
+    organization: '',
+    role: 'Community Organizer',
+    avatar: DeAndreBoston,
+  },
+  {
+    id: 22,
+    name: 'Kakooza Harunah',
+    twitter: '',
+    linkedin: '',
+    github: '',
+    devfest: 'organizer',
+    star: false,
+    university: '',
+    organization: '',
+    role: 'Community Organizer',
+    avatar: KakoozaHarunah,
+  },
+  // ── Dev Team ──
+  {
+    id: 23,
+    name: 'Greg Miller',
+    linkedin: 'https://www.linkedin.com/in/gregraymiller/',
+    github: 'https://github.com/shrinkray',
+    devfest: 'devteam',
+    star: false,
+    university: '',
+    bio: `Hello, I am the founder of Shrinkray Interactive, a UX/UI development studio in Toledo, Ohio, leaning-in on accessible, high-performance, and user-friendly web experiences. As a founding member of GDG Toledo, I connect developers and designers through events and hackathons. Collaborating with the devteam, I oversee UX Engineering for the Michigan DevFest/Detroit Compass websites creating smooth, inclusive experience for speakers, partners, and attendees. If you are seeking a friendly, versatile, and talented developer for your project, let's connect.`,
+    organization: 'Shrinkray Interactive + GDG Toledo + Toledo Codes',
+    role: 'Tech Lead, Compass Detroit',
+    avatar: GregMiller,
+  },
+  {
+    id: 24,
+    name: 'Shugmi Shumunov',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/shugmishumunov/',
+    github: 'https://github.com/ShugKnight24',
+    devfest: 'devteam',
+    star: false,
+    university: '',
+    bio: `Shugmi Shumunov is a software developer who believes code is the ultimate storytelling medium. With a primary focus on the JavaScript ecosystem within e-commerce, working across the stack in various industries. Always seeking beautiful, elegant, and performant solutions while collaborating with talented, curious, and passionate engineers and tech enthusiasts.
+
+      When the terminal is closed and his hands are off the keyboard, you'll find him lifting weights, adventuring outdoors, exploring new places, or immersed in the worlds of manga or a good book`,
+    organization: 'Shumunov Solutions',
+    role: 'Developer',
+    avatar: ShugmiShumunov,
+  },
+  {
+    id: 25,
+    name: 'Aaron Amano',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/aaronamano/',
+    github: 'https://github.com/aaronamano',
+    devfest: 'devteam',
+    star: false,
+    university: 'University Of Michigan Dearborn',
+    bio: ``,
+    organization: '',
+    role: 'CS Student',
+    avatar: AaronAmano,
+  },
+  {
+    id: 26,
+    name: 'Justin Beaudry',
+    twitter: '',
+    linkedin: 'https://www.linkedin.com/in/justinbeaudry/',
+    github: 'https://github.com/justinbeaudry',
+    devfest: 'devteam',
+    star: false,
+    university: '',
+    bio: ``,
+    organization: 'Actual Reality Technologies + Toledo Codes + GDG Toledo',
+    role: 'Director of Engineering',
+    avatar: JustinBeaudry,
+  },
+  {
+    id: 27,
+    name: 'Soham Mhatre',
+    twitter: '',
+    linkedin: null,
+    github: 'https://github.com/soham02',
+    devfest: 'devteam',
+    star: false,
+    university: '',
+    bio: `Soham Mhatre is a developer focused on building practical, human-centered software. He works across the MERN stack with a strong focus on cloud and AI workflows. Recent projects include an image labeling system using AWS Recognition and a financial planning/learning platform with real-time persona generation. Soham enjoys translating complex, real-world requirements into simple, shippable features and cares deeply about clean APIs, accessible UIs, and measurable outcomes. Having recently graduated from Harrisburg University with a Master's in Software Engineering, he's now pursuing full-time opportunities where he can contribute end-to-end from backend services and databases to polished frontends that people love to use.`,
+    organization: 'Mhatre Solutions',
+    role: 'Developer',
+    avatar: SohamMhatre,
+  },
+  {
+    id: 28,
     name: 'Sohan Ketireddy',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/sohan-k',
@@ -297,7 +419,7 @@ Today, Maridy serves as President of the Society of Hispanic Professional Engine
     avatar: SohanKetireddy,
   },
   {
-    id: 20,
+    id: 29,
     name: 'Kaylee Busenbark',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/kaylee-busenbark',
@@ -311,7 +433,7 @@ Today, Maridy serves as President of the Society of Hispanic Professional Engine
     avatar: KayleeBusenbark,
   },
   {
-    id: 21,
+    id: 30,
     name: 'Rehanashri',
     github: 'https://github.com/rehanashri',
     devfest: 'devteam',
@@ -322,7 +444,7 @@ Today, Maridy serves as President of the Society of Hispanic Professional Engine
     avatar: Rehanashri,
   },
   {
-    id: 22,
+    id: 31,
     name: 'Terrell McKinney',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/terrellmckinney/',

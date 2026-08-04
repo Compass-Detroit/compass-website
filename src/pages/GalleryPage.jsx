@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
+import { CATALOG_PHOTOS } from '@/data/galleryData'
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -9,441 +10,60 @@ import {
   FaXmark,
   FaExpand,
   FaWandMagicSparkles,
+  FaCamera,
+  FaHeart,
 } from 'react-icons/fa6'
 
-// Complete inventory of converted gallery photos
-const ALL_GALLERY_PHOTOS = [
-  // AI Hackathon
-  {
-    id: 'ai-1',
-    src: '/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0520.jpg',
-    title: 'AI Hackathon Opening Kickoff',
-    category: 'AI Hackathon',
-  },
-  {
-    id: 'ai-2',
-    src: '/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0521.jpg',
-    title: 'AI Solution Architecture',
-    category: 'AI Hackathon',
-  },
-  {
-    id: 'ai-3',
-    src: '/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0522.jpg',
-    title: 'AI Hackathon Final Pitch',
-    category: 'AI Hackathon',
-  },
-  {
-    id: 'ai-4',
-    src: '/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0523.jpg',
-    title: 'AI Demo & Prototype Testing',
-    category: 'AI Hackathon',
-  },
-  {
-    id: 'ai-5',
-    src: '/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0524.jpg',
-    title: 'Prompt Engineering & System Design',
-    category: 'AI Hackathon',
-  },
-  {
-    id: 'ai-6',
-    src: '/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0526.jpg',
-    title: 'AI Model Building Sprint',
-    category: 'AI Hackathon',
-  },
-  {
-    id: 'ai-7',
-    src: '/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0527.jpg',
-    title: 'AI Challenge Brainstorming',
-    category: 'AI Hackathon',
-  },
-  {
-    id: 'ai-8',
-    src: '/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0529.jpg',
-    title: 'AI Hackathon Team Collaboration',
-    category: 'AI Hackathon',
-  },
-
-  // Keynotes & Speakers
-  {
-    id: 'spk-1',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0598.jpg',
-    title: 'Keynote Speaker on Stage',
-    category: 'Keynotes & Speakers',
-  },
-  {
-    id: 'spk-2',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0593.jpg',
-    title: 'AI Keynote Address',
-    category: 'Keynotes & Speakers',
-  },
-  {
-    id: 'spk-3',
-    src: '/assets/gallery/devfest25/Student pictures/11421de5-2098-462e-8dc6-d2251b2493ac.jpg',
-    title: 'Panel Discussion & Q&A',
-    category: 'Keynotes & Speakers',
-  },
-  {
-    id: 'spk-4',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0592.jpg',
-    title: 'Leadership Panel Session',
-    category: 'Keynotes & Speakers',
-  },
-  {
-    id: 'spk-5',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0597.jpg',
-    title: 'Tech Trends Keynote Presentation',
-    category: 'Keynotes & Speakers',
-  },
-  {
-    id: 'spk-6',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0594.jpg',
-    title: 'Audience Engagement & Q&A',
-    category: 'Keynotes & Speakers',
-  },
-  {
-    id: 'spk-7',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0596.jpg',
-    title: 'Speaker Stage Spotlight',
-    category: 'Keynotes & Speakers',
-  },
-  {
-    id: 'spk-8',
-    src: '/assets/gallery/devfest25/Student pictures/dadc3fd6-cfaa-454b-994e-8c439cda346b.JPG',
-    title: 'DevFest Main Hall Keynote',
-    category: 'Keynotes & Speakers',
-  },
-
-  // Mentorship & Careers
-  {
-    id: 'car-1',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0576.jpg',
-    title: 'Tech Mentorship & Career Guidance',
-    category: 'Mentorship & Careers',
-  },
-  {
-    id: 'car-2',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0605.jpg',
-    title: 'Corporate Partner Networking',
-    category: 'Mentorship & Careers',
-  },
-  {
-    id: 'car-3',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0604.jpg',
-    title: 'Resume Review & Career Advice',
-    category: 'Mentorship & Careers',
-  },
-  {
-    id: 'car-4',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0577.jpg',
-    title: 'Portfolio Review Session',
-    category: 'Mentorship & Careers',
-  },
-  {
-    id: 'car-5',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0588.jpg',
-    title: 'COMPASS Executive Advisory',
-    category: 'Mentorship & Careers',
-  },
-  {
-    id: 'car-6',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0585.jpg',
-    title: 'Corporate Partner Hiring Table',
-    category: 'Mentorship & Careers',
-  },
-  {
-    id: 'car-7',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0587.jpg',
-    title: 'Industry Partner Connections',
-    category: 'Mentorship & Careers',
-  },
-  {
-    id: 'car-8',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0584.jpg',
-    title: 'Mentorship Connection Circle',
-    category: 'Mentorship & Careers',
-  },
-
-  // DevFest 2025 Workshops & Hackathons
-  {
-    id: 'dev-1',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0558.jpg',
-    title: 'Interactive Coding Workshop',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-2',
-    src: '/assets/gallery/devfest25/Student pictures/022e16f6-4555-4285-847d-f98332ebcf8d.jpg',
-    title: 'Student Engineer Showcase',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-3',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0559.jpg',
-    title: 'Collaborative Engineering Sprint',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-4',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0599.jpg',
-    title: 'Innovators Project Pitch',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-5',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0600.jpg',
-    title: 'Michigan DevFest General Assembly',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-6',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0601.jpg',
-    title: 'Student Solution Architects',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-7',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0575.jpg',
-    title: 'Hackathon Team Sprint',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-8',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0603.jpg',
-    title: 'Tech Community Networking Lounge',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-9',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0602.jpg',
-    title: 'Live Code Demonstration',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-10',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0560.jpg',
-    title: 'DevFest Hands-on Lab',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-11',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0548.jpg',
-    title: 'Student Project Display',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-12',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_6572.JPG',
-    title: 'DevFest Community Gathering',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-13',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_6573.JPG',
-    title: 'Student Innovators Meetup',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-14',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_6571.JPG',
-    title: 'Employer Expo & Career Booths',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-15',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_6570.JPG',
-    title: 'Registration & Welcome Counter',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-16',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0539.jpg',
-    title: 'STEAM Cohort Group',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-17',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_6574.JPG',
-    title: 'Team Awards & Recognition',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-18',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0532.jpg',
-    title: 'Participant Idea Whiteboarding',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-19',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0533.jpg',
-    title: 'Hacker House Accelerator Session',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-20',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0534.jpg',
-    title: 'Final Pitch Preparation',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-21',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0545.jpg',
-    title: 'Peer Code Review',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-22',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0579.jpg',
-    title: 'Mentor Guidance Circle',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-23',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0578.jpg',
-    title: 'Hackathon Project Pitch',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-24',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0544.jpg',
-    title: 'Technical Workshop Lab',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-25',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0591.jpg',
-    title: 'Navigator Developer Spotlight',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-26',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0546.jpg',
-    title: 'Collaborative Coding Session',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-27',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0553.jpg',
-    title: 'Group Hackathon Pitch',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-28',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0547.jpg',
-    title: 'Hackathon Prototype Polish',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-29',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0590.jpg',
-    title: 'Audience Q&A Session',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-30',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0580.jpg',
-    title: 'Student Recognition & Awards',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-31',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0543.jpg',
-    title: 'Software Architecture Workshop',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-32',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0557.jpg',
-    title: 'Tech Talent Pipeline Discussion',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-33',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0556.jpg',
-    title: 'Student Developer Demo',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-34',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0595.jpg',
-    title: 'Innovation Summit Highlights',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-35',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0581.jpg',
-    title: 'Career Pathways Advisory',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-36',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0554.jpg',
-    title: 'Group Hackathon Showcase',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-37',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0540.jpg',
-    title: 'Student Cohort Photo',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-38',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0555.jpg',
-    title: 'Final Showcase Ceremony',
-    category: 'DevFest 2025',
-  },
-  {
-    id: 'dev-39',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0582.jpg',
-    title: 'COMPASS Community Gathering',
-    category: 'DevFest 2025',
-  },
-]
+const ALL_GALLERY_PHOTOS =
+  CATALOG_PHOTOS && CATALOG_PHOTOS.length > 0
+    ? CATALOG_PHOTOS
+    : [
+        {
+          id: 'img-1',
+          src: '/assets/gallery/iwd26/image0.jpeg',
+          title: 'IWD Summit 2026 Group Photo',
+          category: 'IWD Summit 2026',
+          photographer: 'Heart of the City Photography',
+        },
+      ]
 
 const FEATURED_SLIDES = [
   {
-    id: 'ai-3',
-    src: '/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0522.jpg',
-    title: 'AI Hackathon Final Pitch',
-    subtitle: '50+ Developers · 12 AI Prototypes Built in 8 Hours',
-    tag: 'Featured Highlight',
+    id: 'iwd26-feat',
+    src: '/assets/gallery/iwd26/image0.jpeg',
+    title: 'IWD Summit 2026 Group Showcase',
+    subtitle:
+      'Captured by Heart of the City Photography · Celebrating Inclusion & Empowerment',
+    tag: 'Heart of the City Spotlight',
   },
   {
-    id: 'spk-1',
+    id: 'devfest25-feat',
     src: '/assets/gallery/devfest25/Student pictures/IMG_0598.jpg',
     title: 'Michigan DevFest Keynote',
     subtitle: 'Pioneering emerging tech & inclusive leadership in Detroit',
-    tag: 'Keynote Stage',
+    tag: 'DevFest Stage',
   },
   {
-    id: 'car-1',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0576.jpg',
-    title: '1-on-1 Career Mentorship',
-    subtitle: 'Connecting Navigators directly to corporate tech partners',
-    tag: 'Career Pathways',
-  },
-  {
-    id: 'dev-1',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0558.jpg',
-    title: 'Hands-on Technical Workshops',
-    subtitle: 'Building production skills through collaborative coding',
-    tag: 'DevFest 2025',
-  },
-  {
-    id: 'car-2',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0605.jpg',
-    title: 'Employer Expo & Talent Pipeline',
-    subtitle: 'Over 50% of Navigators actively connecting to new roles',
-    tag: 'Corporate Partners',
+    id: 'iwd25-feat',
+    src: '/assets/gallery/iwd26/image1.jpeg',
+    title: 'Navigators & Mentors Circle',
+    subtitle: 'Connecting students directly to corporate tech leaders',
+    tag: 'IWD 2026',
   },
 ]
 
 const CATEGORIES = [
   'All',
-  'AI Hackathon',
+  'IWD Summit 2026',
   'DevFest 2025',
-  'Keynotes & Speakers',
-  'Mentorship & Careers',
+  'IWD Summit 2025',
+  'DevFest 2024',
+  'IWD Summit 2024',
+  'BHM Summit 2024',
+  'Level Up 2024',
+  'Winter Mixer 2023',
+  'COMPES PDC 2023',
+  'COMPES PDC Channel 4',
 ]
 
 export default function GalleryPage() {
@@ -505,21 +125,19 @@ export default function GalleryPage() {
   const openLightbox = (index) => setLightboxIndex(index)
   const closeLightbox = () => setLightboxIndex(null)
 
-  // Reset lightbox on category change
   const handleCategoryChange = (cat) => {
     setLightboxIndex(null)
     setSelectedCategory(cat)
   }
 
-  // Marquee opens lightbox against ALL photos — reset filter first
   const openMarqueeLightbox = (globalIndex) => {
     setSelectedCategory('All')
-    setLightboxIndex(globalIndex)
+    setLightboxIndex(globalIndex % ALL_GALLERY_PHOTOS.length)
   }
 
   return (
     <SiteLayout>
-      {/* Hero */}
+      {/* Hero Section */}
       <section className="relative overflow-hidden pb-16 pt-24">
         <div className="hero-orb-1 absolute -right-32 -top-32 size-[400px] rounded-full bg-gradient-to-br from-primary/[0.08] to-transparent blur-3xl" />
         <div className="hero-orb-2 absolute -bottom-20 left-1/4 size-[300px] rounded-full bg-gradient-to-tr from-emerald-500/[0.05] to-transparent blur-3xl" />
@@ -529,7 +147,7 @@ export default function GalleryPage() {
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3.5 py-1">
             <FaWandMagicSparkles className="size-3 animate-pulse text-primary" />
             <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
-              60+ Real Event Moments
+              {ALL_GALLERY_PHOTOS.length}+ Event Moments Cataloged
             </span>
           </div>
           <h1 className="mb-6 max-w-[750px] text-4xl font-extrabold leading-[1.08] tracking-tight md:text-6xl">
@@ -539,9 +157,51 @@ export default function GalleryPage() {
             </span>
           </h1>
           <p className="max-w-screen-sm text-lg leading-relaxed text-gray-500">
-            From high-energy AI hackathons to 1-on-1 mentorship sessions —
-            explore real moments from COMPASS Detroit events.
+            From DevFest and IWD Summits to BHM Summits and COMPES PDC events —
+            explore high-resolution memories from our COMPASS Detroit community.
           </p>
+        </div>
+      </section>
+
+      {/* Heart of the City Photography Recognition Banner */}
+      <section className="mx-auto max-w-[1200px] px-6 pb-12">
+        <div className="relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-primary/10 to-purple-500/10 p-8 shadow-xl backdrop-blur-md">
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+            <div className="flex items-start gap-4">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 shadow-md">
+                <FaCamera className="size-6" />
+              </div>
+              <div>
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
+                    Special Recognition
+                  </span>
+                  <FaHeart className="size-3 animate-pulse text-red-500" />
+                </div>
+                <h3 className="text-xl font-bold tracking-tight text-white md:text-2xl">
+                  Heart of the City Photography
+                </h3>
+                <p className="mt-1 max-w-2xl text-sm leading-relaxed text-gray-300">
+                  A massive thank you to{' '}
+                  <strong className="text-white">
+                    Heart of the City Photography
+                  </strong>{' '}
+                  for capturing our stunning{' '}
+                  <strong className="text-primary">
+                    2026 International Women&apos;s Day (IWD) Group Pictures
+                  </strong>
+                  ! Their artistry, dedication, and passion beautifully showcase
+                  the vibrancy of our COMPASS community.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => handleCategoryChange('IWD Summit 2026')}
+              className="shrink-0 rounded-xl border border-amber-400/40 bg-amber-500/20 px-5 py-2.5 text-xs font-bold text-amber-300 transition-all hover:bg-amber-500 hover:text-black hover:shadow-lg"
+            >
+              View IWD 2026 Photos
+            </button>
+          </div>
         </div>
       </section>
 
@@ -634,7 +294,7 @@ export default function GalleryPage() {
               )
             })}
 
-            {/* Slide Navigation Dots — positioned above glass bar */}
+            {/* Slide Navigation Dots */}
             <div className="absolute right-8 top-6 z-20 flex items-center gap-2">
               {FEATURED_SLIDES.map((_, i) => (
                 <button
@@ -665,7 +325,6 @@ export default function GalleryPage() {
             </h2>
           </div>
 
-          {/* Story 1: Parallax Picture-in-Picture Frame */}
           <div className="mb-24 grid items-center gap-12 lg:grid-cols-12">
             <div className="lg:col-span-7">
               <div
@@ -673,17 +332,15 @@ export default function GalleryPage() {
                 onMouseLeave={() => setHoveredParallax(false)}
                 className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-surface bg-surface-card shadow-2xl transition-all duration-500 hover:border-primary/40"
               >
-                {/* Background Outer Photo */}
                 <img
-                  src="/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0520.jpg"
-                  alt="AI Hackathon Hall"
+                  src="/assets/gallery/iwd26/image0.jpeg"
+                  alt="IWD 2026 Group"
                   className={`size-full object-cover transition-transform duration-700 ease-out ${
                     hoveredParallax ? 'scale-105 brightness-75' : 'scale-100'
                   }`}
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-transparent to-black/30" />
 
-                {/* Picture-in-Picture Floating Inner Photo Frame */}
                 <div
                   className={`absolute bottom-6 right-6 aspect-[4/3] w-3/5 overflow-hidden rounded-xl border-2 border-primary/40 shadow-2xl transition-all duration-700 ease-out ${
                     hoveredParallax
@@ -692,19 +349,18 @@ export default function GalleryPage() {
                   }`}
                 >
                   <img
-                    src="/assets/gallery/devfest25/Student pictures/Ai hackathon/IMG_0529.jpg"
-                    alt="AI Hackathon Team"
+                    src="/assets/gallery/iwd26/image2.jpeg"
+                    alt="IWD 2026 Group Detail"
                     className="size-full object-cover"
                   />
                   <div className="absolute bottom-2 left-2 rounded bg-black/70 px-2 py-0.5 text-[10px] font-semibold text-primary backdrop-blur-sm">
-                    AI Team Sprint
+                    Heart of the City Photography
                   </div>
                 </div>
 
-                {/* Floating Tag Badge */}
                 <div className="absolute left-6 top-6 rounded-xl border border-white/10 bg-black/60 px-4 py-2.5 backdrop-blur-md">
                   <span className="text-xs font-bold text-white">
-                    AI Hackathon Cohort
+                    IWD 2026 Group Celebration
                   </span>
                   <p className="text-[10px] text-gray-400">Detroit, Michigan</p>
                 </div>
@@ -712,96 +368,33 @@ export default function GalleryPage() {
             </div>
 
             <div className="lg:col-span-5">
-              <span className="mb-3 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
-                Hackathon Spotlight
+              <span className="mb-3 inline-block rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-400">
+                Special Photography Spotlight
               </span>
               <h3 className="mb-4 text-2xl font-bold tracking-tight md:text-3xl">
-                Building AI prototypes in 8 hours
+                IWD 2026 Group Pictures by Heart of the City Photography
               </h3>
               <p className="mb-6 leading-relaxed text-gray-400">
-                Our Navigators collaborated with industry software engineers and
-                product managers to design, build, and pitch functional AI
-                applications.
+                We extend our deepest gratitude to Heart of the City Photography
+                for capturing the inspiring energy and unity of the 2026
+                International Women&apos;s Day Summit in Detroit.
               </p>
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-3 rounded-xl border border-surface bg-surface-card p-4">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-sm font-bold text-emerald-400">
-                    12
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-sm font-bold text-amber-400">
+                    <FaCamera />
                   </div>
                   <span className="text-sm font-semibold text-gray-300">
-                    Functional AI prototypes demonstrated live
+                    Professional Group &amp; Speaker Photography
                   </span>
                 </div>
                 <div className="flex items-center gap-3 rounded-xl border border-surface bg-surface-card p-4">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-sm font-bold text-violet-400">
-                    50+
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-sm font-bold text-red-400">
+                    <FaHeart />
                   </div>
                   <span className="text-sm font-semibold text-gray-300">
-                    Diverse student developers &amp; mentors paired
+                    Thank you, Heart of the City Photography!
                   </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Story 2: Mentorship & Keynote Parallax Cards */}
-          <div className="grid items-center gap-12 lg:grid-cols-12">
-            <div className="order-2 lg:order-1 lg:col-span-5">
-              <span className="mb-3 inline-block rounded-full bg-violet-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-violet-400">
-                Career Pathways
-              </span>
-              <h3 className="mb-4 text-2xl font-bold tracking-tight md:text-3xl">
-                Mentorship that leads to job offers
-              </h3>
-              <p className="mb-6 leading-relaxed text-gray-400">
-                At every summit, Navigators receive 1-on-1 resume feedback,
-                portfolio reviews, and direct employer networking with partners
-                like DTE, IBM, and Little Caesars.
-              </p>
-              <Link
-                to="/get-involved"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-black transition-colors hover:bg-primary-400"
-              >
-                Become a Partner
-              </Link>
-            </div>
-
-            <div className="order-1 lg:order-2 lg:col-span-7">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="group overflow-hidden rounded-2xl border border-surface bg-surface-card transition-transform duration-500 hover:-translate-y-2">
-                  <div className="aspect-[3/4] w-full overflow-hidden">
-                    <img
-                      src="/assets/gallery/devfest25/Student pictures/IMG_0576.jpg"
-                      alt="Mentorship Review"
-                      className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <p className="text-xs font-bold text-primary">
-                      1-on-1 Mentorship
-                    </p>
-                    <p className="text-[11px] text-gray-400">
-                      Portfolio &amp; Interview Prep
-                    </p>
-                  </div>
-                </div>
-
-                <div className="group mt-8 overflow-hidden rounded-2xl border border-surface bg-surface-card transition-transform duration-500 hover:-translate-y-2">
-                  <div className="aspect-[3/4] w-full overflow-hidden">
-                    <img
-                      src="/assets/gallery/devfest25/Student pictures/IMG_0605.jpg"
-                      alt="Corporate Connections"
-                      className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <p className="text-xs font-bold text-emerald-400">
-                      Corporate Connections
-                    </p>
-                    <p className="text-[11px] text-gray-400">
-                      Direct Employer Pipelines
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
@@ -810,114 +403,48 @@ export default function GalleryPage() {
       </section>
 
       {/* Infinite Photo Stream Marquee */}
-      <section className="overflow-hidden border-t border-surface bg-[var(--surface-elevated)] py-16">
-        <div className="mb-8 px-6 text-center">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-primary">
-            Continuous Photo Stream
-          </p>
-          <h3 className="text-xl font-bold tracking-tight">
-            Hover to pause · Click to expand
-          </h3>
-        </div>
+      {ALL_GALLERY_PHOTOS.length > 0 && (
+        <section className="overflow-hidden border-t border-surface bg-[var(--surface-elevated)] py-16">
+          <div className="mb-8 px-6 text-center">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-primary">
+              Continuous Photo Stream
+            </p>
+            <h3 className="text-xl font-bold tracking-tight">
+              Hover to pause · Click to expand
+            </h3>
+          </div>
 
-        {/* Row 1 Marquee (Scroll Left) */}
-        <div className="group mb-4 flex gap-4 overflow-hidden">
-          <div className="animate-marquee-left flex shrink-0 gap-4 group-hover:[animation-play-state:paused]">
-            {ALL_GALLERY_PHOTOS.slice(0, 20).map((photo, i) => (
-              <div
-                key={`m1-${i}`}
-                role="button"
-                tabIndex={0}
-                onClick={() => openMarqueeLightbox(i)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    openMarqueeLightbox(i)
-                  }
-                }}
-                className="relative h-44 w-64 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-surface bg-surface-card transition-transform hover:scale-105 hover:border-primary/40"
-              >
-                <img
-                  src={photo.src}
-                  alt={photo.title}
-                  className="size-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity hover:opacity-100">
-                  <FaExpand className="size-5 text-white" />
+          <div className="group mb-4 flex gap-4 overflow-hidden">
+            <div className="animate-marquee-left flex shrink-0 gap-4 group-hover:[animation-play-state:paused]">
+              {ALL_GALLERY_PHOTOS.slice(0, 20).map((photo, i) => (
+                <div
+                  key={`m1-${i}`}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => openMarqueeLightbox(i)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      openMarqueeLightbox(i)
+                    }
+                  }}
+                  className="relative h-44 w-64 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-surface bg-surface-card transition-transform hover:scale-105 hover:border-primary/40"
+                >
+                  <img
+                    src={photo.src}
+                    alt={photo.title}
+                    className="size-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity hover:opacity-100">
+                    <FaExpand className="size-5 text-white" />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          <div
-            className="animate-marquee-left flex shrink-0 gap-4 group-hover:[animation-play-state:paused]"
-            aria-hidden="true"
-          >
-            {ALL_GALLERY_PHOTOS.slice(0, 20).map((photo, i) => (
-              <div
-                key={`m1-dup-${i}`}
-                className="relative h-44 w-64 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-surface bg-surface-card transition-transform hover:scale-105 hover:border-primary/40"
-              >
-                <img
-                  src={photo.src}
-                  alt=""
-                  className="size-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Row 2 Marquee (Scroll Right) */}
-        <div className="group flex gap-4 overflow-hidden">
-          <div className="animate-marquee-right flex shrink-0 gap-4 group-hover:[animation-play-state:paused]">
-            {ALL_GALLERY_PHOTOS.slice(20, 40).map((photo, i) => (
-              <div
-                key={`m2-${i}`}
-                role="button"
-                tabIndex={0}
-                onClick={() => openMarqueeLightbox(i + 20)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    openMarqueeLightbox(i + 20)
-                  }
-                }}
-                className="relative h-44 w-64 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-surface bg-surface-card transition-transform hover:scale-105 hover:border-primary/40"
-              >
-                <img
-                  src={photo.src}
-                  alt={photo.title}
-                  className="size-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity hover:opacity-100">
-                  <FaExpand className="size-5 text-white" />
-                </div>
-              </div>
-            ))}
-          </div>
-          <div
-            className="animate-marquee-right flex shrink-0 gap-4 group-hover:[animation-play-state:paused]"
-            aria-hidden="true"
-          >
-            {ALL_GALLERY_PHOTOS.slice(20, 40).map((photo, i) => (
-              <div
-                key={`m2-dup-${i}`}
-                className="relative h-44 w-64 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-surface bg-surface-card transition-transform hover:scale-105 hover:border-primary/40"
-              >
-                <img
-                  src={photo.src}
-                  alt=""
-                  className="size-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Filterable Full Photo Gallery Grid */}
       <section className="border-t border-surface py-20">
@@ -928,17 +455,16 @@ export default function GalleryPage() {
                 Full Collection
               </p>
               <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">
-                Browse All Event Photos
+                Browse Event Drive Catalog ({filteredPhotos.length} Photos)
               </h2>
             </div>
 
-            {/* Category Filter Tabs */}
             <div className="flex flex-wrap gap-2">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => handleCategoryChange(cat)}
-                  className={`rounded-xl px-4 py-2 text-xs font-semibold transition-all ${
+                  className={`rounded-xl px-3.5 py-2 text-xs font-semibold transition-all ${
                     selectedCategory === cat
                       ? 'bg-primary font-bold text-black shadow-md shadow-primary/20'
                       : 'border border-surface bg-surface-card text-gray-400 hover:border-primary/40 hover:text-white'
@@ -950,7 +476,6 @@ export default function GalleryPage() {
             </div>
           </div>
 
-          {/* Photo Grid */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {filteredPhotos.map((img, i) => (
               <div
@@ -979,6 +504,14 @@ export default function GalleryPage() {
                   <p className="text-xs font-bold leading-tight text-white">
                     {img.title}
                   </p>
+                  {img.photographer && (
+                    <p className="mt-1 text-[10px] font-medium text-amber-300">
+                      <span role="img" aria-label="camera">
+                        📸
+                      </span>{' '}
+                      {img.photographer}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
@@ -986,17 +519,15 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Fullscreen Lightbox Modal */}
-      {lightboxIndex !== null && (
+      {/* Lightbox Modal */}
+      {lightboxIndex !== null && filteredPhotos[lightboxIndex] && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/95 p-4 backdrop-blur-2xl md:p-10">
-          {/* Backdrop Click Dismiss */}
           <div
             className="absolute inset-0"
             onClick={closeLightbox}
             aria-hidden="true"
           />
 
-          {/* Lightbox Controls */}
           <button
             onClick={closeLightbox}
             className="absolute right-6 top-6 z-20 flex size-10 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white/20"
@@ -1028,7 +559,6 @@ export default function GalleryPage() {
             <FaChevronRight className="size-5" />
           </button>
 
-          {/* Active Image Container */}
           <div className="relative z-10 max-h-[85vh] max-w-[90vw] overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
             <img
               src={filteredPhotos[lightboxIndex].src}
@@ -1039,6 +569,11 @@ export default function GalleryPage() {
               <p className="text-sm font-bold text-white">
                 {filteredPhotos[lightboxIndex].title}
               </p>
+              {filteredPhotos[lightboxIndex].photographer && (
+                <p className="mt-1 text-xs font-semibold text-amber-300">
+                  Photo by {filteredPhotos[lightboxIndex].photographer}
+                </p>
+              )}
               <p className="mt-1 text-xs text-gray-400">
                 Photo {lightboxIndex + 1} of {filteredPhotos.length} ·{' '}
                 {filteredPhotos[lightboxIndex].category}
