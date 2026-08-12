@@ -34,6 +34,9 @@ import SubscriberDashboardPage from '@/pages/SubscriberDashboardPage'
 import MemberDirectoryPage from '@/pages/MemberDirectoryPage'
 import SpeakerSubmissionPage from '@/pages/SpeakerSubmissionPage'
 import GalleryManagerPage from '@/pages/GalleryManagerPage'
+import AnalyticsDashboardPage from '@/pages/AnalyticsDashboardPage'
+import TelemetryProvider from '@/components/TelemetryProvider'
+import WebVitalsOverlay from '@/components/WebVitalsOverlay'
 
 function App() {
   return (
@@ -47,44 +50,66 @@ function App() {
           >
             Skip to main content
           </a>
-          <Routes>
-            {/* New redesign routes */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/programs" element={<ProgramsPage />} />
-            <Route path="/community" element={<CommunityPage />} />
-            <Route path="/events" element={<EventsPage />} />
-            <Route path="/events/previous" element={<PreviousEventsPage />} />
-            <Route path="/get-involved" element={<GetInvolvedPage />} />
-            <Route path="/sponsor" element={<GetInvolvedPage />} />
-            <Route path="/partner" element={<GetInvolvedPage />} />
-            <Route path="/resources" element={<ResourcesPage />} />
-            <Route path="/news" element={<NewsPage />} />
-            <Route path="/team" element={<TeamPage />} />
-            <Route path="/gallery" element={<GalleryPage />} />
-            <Route path="/gallery/photographer" element={<PhotographerPage />} />
-            <Route path="/impact" element={<ImpactReportPage />} />
-            <Route path="/speakers" element={<SpeakersDirectoryPage />} />
-            <Route path="/speakers/:slug" element={<SpeakerProfilePage />} />
-            <Route path="/community-hub" element={<CommunityHubPage />} />
-            <Route path="/tools" element={<ToolsPage />} />
-            <Route path="/tools/newsletter" element={<NewsletterStudioPage />} />
-            <Route path="/tools/social-cards" element={<SocialCardGeneratorPage />} />
-            <Route path="/tools/qr" element={<QRCodeGeneratorPage />} />
-            <Route path="/tools/subscribers" element={<SubscriberDashboardPage />} />
-            <Route path="/tools/gallery" element={<GalleryManagerPage />} />
-            <Route path="/submit-talk" element={<SpeakerSubmissionPage />} />
-            <Route path="/members" element={<MemberDirectoryPage />} />
+          <TelemetryProvider>
+            <Routes>
+              {/* New redesign routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/programs" element={<ProgramsPage />} />
+              <Route path="/community" element={<CommunityPage />} />
+              <Route path="/events" element={<EventsPage />} />
+              <Route path="/events/previous" element={<PreviousEventsPage />} />
+              <Route path="/get-involved" element={<GetInvolvedPage />} />
+              <Route path="/sponsor" element={<GetInvolvedPage />} />
+              <Route path="/partner" element={<GetInvolvedPage />} />
+              <Route path="/resources" element={<ResourcesPage />} />
+              <Route path="/news" element={<NewsPage />} />
+              <Route path="/team" element={<TeamPage />} />
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route
+                path="/gallery/photographer"
+                element={<PhotographerPage />}
+              />
+              <Route path="/impact" element={<ImpactReportPage />} />
+              <Route path="/speakers" element={<SpeakersDirectoryPage />} />
+              <Route path="/speakers/:slug" element={<SpeakerProfilePage />} />
+              <Route path="/community-hub" element={<CommunityHubPage />} />
+              <Route path="/tools" element={<ToolsPage />} />
+              <Route
+                path="/tools/newsletter"
+                element={<NewsletterStudioPage />}
+              />
+              <Route
+                path="/tools/social-cards"
+                element={<SocialCardGeneratorPage />}
+              />
+              <Route path="/tools/qr" element={<QRCodeGeneratorPage />} />
+              <Route
+                path="/tools/subscribers"
+                element={<SubscriberDashboardPage />}
+              />
+              <Route path="/tools/gallery" element={<GalleryManagerPage />} />
+              <Route
+                path="/tools/analytics"
+                element={<AnalyticsDashboardPage />}
+              />
+              <Route path="/submit-talk" element={<SpeakerSubmissionPage />} />
+              <Route path="/members" element={<MemberDirectoryPage />} />
 
-            {/* Legacy routes (existing pages still accessible) */}
-            <Route path="/legacy" element={<Home />} />
-            <Route path="/careers-hub" element={<CareersHub />} />
-            <Route path="/connections" element={<ConnectionsPage />} />
-            <Route path="/media" element={<MediaPage />} />
-            <Route path="/previous-events" element={<PreviousEvents />} />
-            <Route path="/previous-events/:year" element={<PreviousEvent />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+              {/* Legacy routes (existing pages still accessible) */}
+              <Route path="/legacy" element={<Home />} />
+              <Route path="/careers-hub" element={<CareersHub />} />
+              <Route path="/connections" element={<ConnectionsPage />} />
+              <Route path="/media" element={<MediaPage />} />
+              <Route path="/previous-events" element={<PreviousEvents />} />
+              <Route
+                path="/previous-events/:year"
+                element={<PreviousEvent />}
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </TelemetryProvider>
+          <WebVitalsOverlay />
         </div>
       </Router>
     </ThemeProvider>

@@ -23,3 +23,22 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Utility / helper scripts
+download.py
+download_all_events.py
+generate_gallery_data.py
+
+# Raw media (HEIC/MOV originals belong in cloud storage, not git)
+*.heic
+*.HEIC
+*.mov
+*.MOV
+
+# Documents
+*.pdf
+
+# Test results
+test-results/
+playwright-report/
+coverage/

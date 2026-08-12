@@ -83,6 +83,19 @@ Example — destructive op:
 > ```
 > Caveman resume. Verify backup exist first.
 
+## Test Output
+
+Compress test results:
+- Strip verbose assertion messages, keep file:line + pass/fail
+- Group by file, count pass/fail
+- Format: `file.test.jsx: 8/8 pass` or `file.test.jsx: 7/8 pass (FAIL: test name)`
+- Coverage: `coverage: 75% stmts, 60% branch`
+- E2E: `e2e/nav.spec: 6/6 pass [3.2s]`
+
+Compress telemetry output:
+- Format: `[metric]: value (rating)`
+- Example: `LCP: 1.2s (good), CLS: 0.05 (good), INP: 120ms (good)`
+
 ## Boundaries
 
 Persisted outside chat: write normal prose — code, comments, commits, docs, issue/PR/MR text, memory files, third-party messages (/caveman-compress exempt). "stop caveman" or "normal mode": revert. Level persist until changed or session end.

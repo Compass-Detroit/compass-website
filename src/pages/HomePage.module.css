@@ -1,0 +1,19 @@
+.sectionSubtitle {
+  color: var(--text-secondary);
+}
+
+.cardLabel {
+  color: var(--text-muted);
+}
+
+.bodyText {
+  color: var(--text-secondary);
+}
+
+.caption {
+  color: var(--text-muted);
+}
+
+.statValue {
+  color: var(--text-primary);
+}

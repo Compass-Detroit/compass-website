@@ -24,6 +24,7 @@ import { getSpeakerBySlug, getAllSpeakers } from '@/utils/speakerRegistry'
 
 import GDEIcon from '@/assets/images/icons/gdge.svg'
 import WTMLogo from '@/assets/images/icons/wtm.svg'
+import styles from './SpeakerProfilePage.module.css'
 
 // Convert Tailwind hex to rgba for gradients/patterns
 const hexToRgba = (hex, alpha) => {
@@ -344,7 +345,9 @@ export default function SpeakerProfilePage() {
                   <img
                     src={
                       speaker.avatar ||
-                      `https://placehold.co/600x400/0F9D58/FFFFFF?text=${speaker.name.charAt(0)}`
+                      `https://placehold.co/600x400/0F9D58/FFFFFF?text=${speaker.name.charAt(
+                        0
+                      )}`
                     }
                     alt={`${speaker.name}`}
                     className="size-full rounded-full object-cover"
@@ -473,7 +476,9 @@ export default function SpeakerProfilePage() {
 
               {speaker.categories && speaker.categories.length > 0 && (
                 <div className="mt-8">
-                  <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500">
+                  <h3
+                    className={`mb-3 text-sm font-bold uppercase tracking-wide ${styles.sectionHeader}`}
+                  >
                     Expertise
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -513,7 +518,9 @@ export default function SpeakerProfilePage() {
                             {session.year}
                           </span>
                           {session.track && (
-                            <span className="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-700 bg-surface-card px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:text-gray-300">
+                            <span
+                              className={`inline-flex items-center rounded-full border border-gray-200 dark:border-gray-700 bg-surface-card px-2.5 py-0.5 text-xs font-medium ${styles.trackBadge}`}
+                            >
                               {session.track}
                             </span>
                           )}
@@ -528,7 +535,7 @@ export default function SpeakerProfilePage() {
                             {session.tags.map((tag, tIdx) => (
                               <span
                                 key={tIdx}
-                                className="text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                className={`text-xs font-medium uppercase tracking-wider ${styles.tagLabel}`}
                               >
                                 #{tag}
                               </span>
@@ -595,7 +602,9 @@ export default function SpeakerProfilePage() {
                           {resource.title}
                         </h3>
                         {resource.description && (
-                          <p className="mt-1 text-sm text-gray-500 line-clamp-2">
+                          <p
+                            className={`mt-1 text-sm line-clamp-2 ${styles.resourceDescription}`}
+                          >
                             {resource.description}
                           </p>
                         )}
@@ -617,7 +626,9 @@ export default function SpeakerProfilePage() {
                   {speaker.talkPhotos.map((photo, idx) => (
                     <div
                       key={idx}
-                      className={`relative overflow-hidden rounded-lg bg-gray-100 ${idx === 0 ? 'col-span-2 aspect-video' : 'aspect-square'}`}
+                      className={`relative overflow-hidden rounded-lg bg-gray-100 ${
+                        idx === 0 ? 'col-span-2 aspect-video' : 'aspect-square'
+                      }`}
                     >
                       <img
                         src={photo}
@@ -701,7 +712,9 @@ export default function SpeakerProfilePage() {
                     <ProfileCard
                       avatar={
                         rs.avatar ||
-                        `https://placehold.co/600x400/0F9D58/FFFFFF?text=${rs.name.charAt(0)}`
+                        `https://placehold.co/600x400/0F9D58/FFFFFF?text=${rs.name.charAt(
+                          0
+                        )}`
                       }
                       name={rs.name}
                       organization={rs.organization}

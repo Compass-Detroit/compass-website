@@ -561,6 +561,101 @@ def test_search_returns_matching_products():
     assert result[0].name == "Widget A"
 ```
 
+### Vitest Patterns
+
+❌ verbose:
+```javascript
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
+import MyComponent from './MyComponent'
+
+describe('MyComponent', () => {
+  it('should render the component correctly with all the expected elements', () => {
+    render(
+      <BrowserRouter>
+        <MyComponent title="Test" />
+      </BrowserRouter>
+    )
+    const titleElement = screen.getByText('Test')
+    expect(titleElement).toBeInTheDocument()
+    expect(titleElement).toBeVisible()
+  })
+})
+```
+
+✅ cove:
+```javascript
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
+import MyComponent from './MyComponent'
+
+const wrap = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>)
+
+describe('MyComponent', () => {
+  it('renders title', () => {
+    wrap(<MyComponent title="Test" />)
+    expect(screen.getByText('Test')).toBeInTheDocument()
+  })
+})
+```
+
+### Playwright Patterns
+
+❌ verbose:
+```javascript
+import { test, expect } from '@playwright/test'
+
+test.describe('Navigation', () => {
+  test('should navigate to the about page when clicking the about link', async ({ page }) => {
+    await page.goto('http://localhost:4173/')
+    await page.waitForLoadState('networkidle')
+    const aboutLink = await page.getByRole('link', { name: 'About' })
+    await aboutLink.click()
+    await page.waitForURL('**/about')
+    const heading = await page.getByRole('heading', { level: 1 })
+    await expect(heading).toBeVisible()
+  })
+})
+```
+
+✅ cove:
+```javascript
+import { test, expect } from '@playwright/test'
+
+test('navigates to about', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('link', { name: 'About' }).click()
+  await expect(page).toHaveURL(/about/)
+})
+```
+
+### Telemetry Patterns
+
+❌ verbose:
+```javascript
+import { trackEvent, trackFeatureUsage } from '@/utils/telemetry'
+
+function handleThemeToggle() {
+  const newTheme = theme === 'dark' ? 'light' : 'dark'
+  setTheme(newTheme)
+  trackEvent('settings', 'theme_toggle', newTheme, null)
+  trackFeatureUsage('theme_toggle', { from: theme, to: newTheme })
+}
+```
+
+✅ cove:
+```javascript
+import { trackEvent } from '@/utils/telemetry'
+
+const handleThemeToggle = () => {
+  const next = theme === 'dark' ? 'light' : 'dark'
+  setTheme(next)
+  trackEvent('settings', 'theme_toggle', next)
+}
+```
+
 ## Error Messages 
 
 Auto-applies when showing or describing errors.

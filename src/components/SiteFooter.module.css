@@ -1,0 +1,39 @@
+.columnHeader {
+  color: var(--text-muted);
+}
+
+.navLink {
+  color: var(--text-secondary);
+}
+
+.navLink:hover {
+  color: var(--text-primary);
+}
+
+.contactInfo {
+  color: var(--text-secondary);
+}
+
+.socialIcon {
+  color: var(--text-muted);
+}
+
+.socialIcon:hover {
+  color: var(--text-primary);
+}
+
+.copyright {
+  color: var(--text-muted);
+}
+
+.legalLink {
+  color: var(--text-muted);
+}
+
+.legalLink:hover {
+  color: var(--text-primary);
+}
+
+.brandDescription {
+  color: var(--text-secondary);
+}

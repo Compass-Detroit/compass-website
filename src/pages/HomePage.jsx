@@ -13,6 +13,7 @@ import WelcomeBanner from '@/components/WelcomeBanner'
 import FirstVisitGuide from '@/components/FirstVisitGuide'
 import CommunityVibes from '@/components/CommunityVibes'
 import EventSpotlightSection from '@/components/events/EventSpotlightSection'
+import styles from './HomePage.module.css'
 
 // Generated event images
 import communityGatheringImg from '@assets/images/generated/community-gathering.png'
@@ -273,11 +274,13 @@ function AnimatedStat({ stat }) {
       ref={ref}
       className="rounded-xl border border-surface bg-surface-card p-6 text-center"
     >
-      <div className="mb-2 text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
+      <div
+        className={`mb-2 text-3xl font-extrabold tracking-tight md:text-4xl ${styles.statValue}`}
+      >
         {formatted}
       </div>
       <div className="mb-1 text-sm font-semibold text-white">{stat.label}</div>
-      <div className="text-xs text-gray-600">{stat.sub}</div>
+      <div className={`text-xs ${styles.cardLabel}`}>{stat.sub}</div>
     </div>
   )
 }
@@ -318,7 +321,9 @@ function TalentGapViz() {
       ref={ref}
       className="rounded-xl border border-surface bg-surface-card p-6"
     >
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+      <p
+        className={`mb-1 text-xs font-semibold uppercase tracking-wider ${styles.cardLabel}`}
+      >
         Michigan Talent Pipeline
       </p>
       <p className="mb-5 text-sm font-semibold text-white">
@@ -348,7 +353,9 @@ function TalentGapViz() {
 function PipelineViz() {
   return (
     <div className="rounded-xl border border-surface bg-surface-card p-6">
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+      <p
+        className={`mb-1 text-xs font-semibold uppercase tracking-wider ${styles.cardLabel}`}
+      >
         The COMPASS Model
       </p>
       <p className="mb-5 text-sm font-semibold text-white">
@@ -389,7 +396,9 @@ function PipelineViz() {
                 <span className="text-sm font-bold text-primary">
                   {item.step}
                 </span>
-                <span className="text-xs text-gray-500">{item.desc}</span>
+                <span className={`text-xs ${styles.cardLabel}`}>
+                  {item.desc}
+                </span>
               </div>
             </div>
           </div>
@@ -423,7 +432,9 @@ function RetentionGauge() {
       ref={ref}
       className="rounded-xl border border-surface bg-surface-card p-6"
     >
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+      <p
+        className={`mb-1 text-xs font-semibold uppercase tracking-wider ${styles.cardLabel}`}
+      >
         Navigator Retention
       </p>
       <p className="mb-5 text-sm font-semibold text-white">
@@ -478,7 +489,7 @@ function RetentionGauge() {
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-2 text-xs">
               <div className="size-1.5 rounded-full bg-primary/60" />
-              <span className="text-gray-500">{item.label}</span>
+              <span className={styles.cardLabel}>{item.label}</span>
               <span className="ml-auto font-bold text-gray-300">
                 {item.value}
               </span>
@@ -679,7 +690,9 @@ export default function HomePage() {
       {/* Trusted By — infinite double marquee */}
       <section className="border-y border-surface bg-white/[0.01]">
         <div className="py-10">
-          <p className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-gray-600">
+          <p
+            className={`mb-6 text-center text-xs font-semibold uppercase tracking-widest ${styles.caption}`}
+          >
             Trusted by leading organizations
           </p>
           <div className="flex flex-col gap-2">
@@ -703,14 +716,18 @@ export default function HomePage() {
           {/* Large featured stat */}
           <div className="bento-span-2 bento-tall flex flex-col justify-between rounded-2xl border border-surface bg-gradient-to-br from-primary/[0.06] via-surface-card to-surface-card p-8">
             <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+              <p
+                className={`mb-1 text-xs font-semibold uppercase tracking-wider ${styles.cardLabel}`}
+              >
                 Community Growth
               </p>
-              <p className="text-sm text-gray-500">324% growth over 3 years</p>
+              <p className={`text-sm ${styles.cardLabel}`}>
+                324% growth over 3 years
+              </p>
             </div>
             <div>
               <AnimatedStat stat={stats[0]} />
-              <p className="mt-3 text-sm text-gray-500">
+              <p className={`mt-3 text-sm ${styles.cardLabel}`}>
                 Navigators across Michigan and growing every month
               </p>
             </div>
@@ -736,7 +753,9 @@ export default function HomePage() {
           {/* Job-seeking stat */}
           <div className="bento-span-2 flex items-center gap-8 rounded-xl border border-surface bg-surface-card p-6">
             <AnimatedStat stat={stats[3]} />
-            <p className="hidden text-sm leading-relaxed text-gray-500 md:block">
+            <p
+              className={`hidden text-sm leading-relaxed md:block ${styles.bodyText}`}
+            >
               Our Navigators aren&apos;t looking for more training —
               they&apos;re looking for pathways to careers. COMPASS builds the
               bridge.
@@ -765,7 +784,7 @@ export default function HomePage() {
               <h2 className="mb-5 text-3xl font-bold leading-tight tracking-tight">
                 Building the pathways that don&apos;t exist yet.
               </h2>
-              <p className="mb-6 leading-relaxed text-gray-500">
+              <p className={`mb-6 leading-relaxed ${styles.bodyText}`}>
                 Detroit is producing tech talent — but losing it. Despite
                 historic investments in training programs, 45% of Michigan STEM
                 graduates leave the state within two years.
@@ -774,7 +793,7 @@ export default function HomePage() {
               {/* Inline viz: the talent gap */}
               <TalentGapViz />
 
-              <p className="mt-6 leading-relaxed text-gray-500">
+              <p className={`mt-6 leading-relaxed ${styles.bodyText}`}>
                 The gap isn&apos;t skills. It&apos;s infrastructure. COMPASS is
                 a 501(c)(3) nonprofit closing this gap through a collective of
                 organizations: NSBE, SHPE, SWE, MCWT, Out in Tech, and more.
@@ -871,10 +890,12 @@ export default function HomePage() {
                   <div>
                     <div className="text-[15px] font-semibold">{ev.name}</div>
                     <div className="mt-1 flex gap-4">
-                      <span className="text-[13px] text-gray-600">
+                      <span className={`text-[13px] ${styles.cardLabel}`}>
                         {ev.date}
                       </span>
-                      <span className="flex items-center gap-1 text-[13px] text-gray-600">
+                      <span
+                        className={`flex items-center gap-1 text-[13px] ${styles.cardLabel}`}
+                      >
                         <MapPinIcon /> {ev.location}
                       </span>
                     </div>
@@ -928,7 +949,7 @@ export default function HomePage() {
                 celebrating LGBTQ+ leaders, technologists, and allies building a
                 more inclusive future in tech.
               </p>
-              <p className="mb-8 leading-relaxed text-gray-500">
+              <p className={`mb-8 leading-relaxed ${styles.bodyText}`}>
                 Partnered with Out in Tech Detroit and GDG Detroit, the Pride
                 Innovation Summit brings together the brightest minds for talks,
                 workshops, and networking focused on AI, emerging technology,
@@ -1024,7 +1045,9 @@ export default function HomePage() {
                 key={t.company}
                 className="rounded-xl border border-surface bg-surface-card p-6"
               >
-                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <span
+                  className={`text-[11px] font-bold uppercase tracking-wider ${styles.cardLabel}`}
+                >
                   {t.type}
                 </span>
                 <p className="mt-2 text-xl font-bold text-primary">
@@ -1034,7 +1057,7 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-          <p className="mt-8 text-center text-sm text-gray-500">
+          <p className={`mt-8 text-center text-sm ${styles.bodyText}`}>
             Three Navigators. Three offers. Partners came to our events looking
             for talent — and found it.
           </p>
@@ -1056,7 +1079,7 @@ export default function HomePage() {
             <h2 className="mb-3 text-3xl font-bold tracking-tight">
               What&apos;s happening this month
             </h2>
-            <p className="max-w-lg text-sm text-gray-500">
+            <p className={`max-w-lg text-sm ${styles.sectionSubtitle}`}>
               Browse upcoming workshops, meetups, and community events.
               Something for every Navigator, every week.
             </p>
@@ -1075,7 +1098,7 @@ export default function HomePage() {
             <h2 className="mb-4 text-3xl font-bold tracking-tight">
               What your investment enables
             </h2>
-            <p className="mx-auto max-w-lg text-sm text-gray-500">
+            <p className={`mx-auto max-w-lg text-sm ${styles.sectionSubtitle}`}>
               Every dollar funds career infrastructure — not overhead.
               Here&apos;s what partnership makes possible.
             </p>
@@ -1155,7 +1178,9 @@ export default function HomePage() {
                   {tier.amount}
                 </span>
                 <span className="mb-2 text-sm font-bold">{tier.title}</span>
-                <p className="mt-auto text-xs leading-relaxed text-gray-500">
+                <p
+                  className={`mt-auto text-xs leading-relaxed ${styles.cardLabel}`}
+                >
                   {tier.desc}
                 </p>
               </div>
@@ -1209,7 +1234,9 @@ export default function HomePage() {
                 together.
               </span>
             </h2>
-            <p className="mx-auto mb-10 max-w-[540px] text-lg leading-relaxed text-gray-500">
+            <p
+              className={`mx-auto mb-10 max-w-[540px] text-lg leading-relaxed ${styles.sectionSubtitle}`}
+            >
               Whether you&apos;re a tech professional, a student, an employer,
               or a community organization — there&apos;s a place for you at
               COMPASS.
