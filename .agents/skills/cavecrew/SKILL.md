@@ -70,6 +70,26 @@ Spawn 2-3 `cavecrew-investigator` calls in one message (different angles: defs v
 **Single-shot edit** (when site is already known):
 Skip investigator. Hand exact path:line to `cavecrew-builder` directly.
 
+## Test delegation
+
+**`cavecrew-tester`** (new role):
+- Runs test suites, returns compressed pass/fail summary
+- Output contract:
+```
+unit: 45/47 pass, 2 fail
+  FAIL src/components/Foo.test.jsx:23 — expected true, got false
+  FAIL src/utils/bar.test.js:11 — timeout
+coverage: 72% stmts, 58% branch
+e2e: 12/12 pass [28s]
+```
+
+| Task | Use |
+|---|---|
+| Run full test suite, report results | `cavecrew-tester` |
+| Fix failing test (known file) | `cavecrew-builder` |
+| Find which tests cover a function | `cavecrew-investigator` |
+| Review test quality/coverage gaps | `cavecrew-reviewer` |
+
 ## What NOT to do
 
 - Don't use `cavecrew-builder` when you don't already know the file. Spawn investigator first or main thread will eat tokens passing context.
