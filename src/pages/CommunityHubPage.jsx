@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { PageLayout } from '@/layouts/PageLayout'
 import ProfileCardBuilder from '@/components/community/ProfileCardBuilder'
 import { FaMicrophone, FaUser, FaUsers, FaNewspaper } from 'react-icons/fa6'
@@ -11,7 +11,7 @@ const CommunityHubPage = () => {
     days: 0,
     hours: 0,
     minutes: 0,
-    seconds: 0
+    seconds: 0,
   })
 
   // Target date: October 1, 2026
@@ -25,7 +25,7 @@ const CommunityHubPage = () => {
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
           minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60)
+          seconds: Math.floor((difference / 1000) % 60),
         })
       }
     }
@@ -45,11 +45,15 @@ const CommunityHubPage = () => {
   }
 
   const scrollToDemo = () => {
-    document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' })
+    document
+      .getElementById('demo-section')
+      ?.scrollIntoView({ behavior: 'smooth' })
   }
 
   const scrollToWaitlist = () => {
-    document.getElementById('waitlist-section')?.scrollIntoView({ behavior: 'smooth' })
+    document
+      .getElementById('waitlist-section')
+      ?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -59,18 +63,27 @@ const CommunityHubPage = () => {
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent opacity-70"></div>
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-lime-500/20 via-transparent to-transparent opacity-70"></div>
         {/* Subtle mesh pattern */}
-        <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-        
+        <div
+          className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-5"
+          style={{
+            backgroundImage: 'radial-gradient(#000 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+          }}
+        ></div>
+
         <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary-900 dark:bg-primary/20 dark:text-primary-300">
             Coming Q3 2026
           </span>
           <h1 className="mb-6 text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-6xl md:text-7xl">
             The Detroit Tech <br className="hidden sm:block" />
-            <span className="bg-gradient-to-r from-primary to-lime-500 bg-clip-text text-transparent">Community Platform</span>
+            <span className="bg-gradient-to-r from-primary to-lime-500 bg-clip-text text-transparent">
+              Community Platform
+            </span>
           </h1>
           <p className="mx-auto mb-10 max-w-2xl text-xl text-gray-600 dark:text-gray-300">
-            A more tailored LinkedIn for the Detroit tech scene and our global reach. Connect, collaborate, and grow your professional identity.
+            A more tailored LinkedIn for the Detroit tech scene and our global
+            reach. Connect, collaborate, and grow your professional identity.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <button
@@ -94,7 +107,7 @@ const CommunityHubPage = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-16 text-center">
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-              What We're Building
+              What We&apos;re Building
             </h2>
             <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
               A comprehensive ecosystem designed specifically for our community.
@@ -107,9 +120,12 @@ const CommunityHubPage = () => {
               <div className="mb-6 inline-flex size-14 items-center justify-center rounded-2xl bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
                 <FaMicrophone className="size-6" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">Speaker Profiles</h3>
+              <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">
+                Speaker Profiles
+              </h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Permanent profile pages for every speaker who's graced our stage.
+                Permanent profile pages for every speaker who&apos;s graced our
+                stage.
               </p>
             </div>
 
@@ -118,7 +134,9 @@ const CommunityHubPage = () => {
               <div className="mb-6 inline-flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary-600 dark:bg-primary/20 dark:text-primary-400">
                 <FaUser className="size-6" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">Member Profiles</h3>
+              <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">
+                Member Profiles
+              </h3>
               <p className="text-gray-600 dark:text-gray-400">
                 Build your professional identity in the Detroit tech ecosystem.
               </p>
@@ -129,7 +147,9 @@ const CommunityHubPage = () => {
               <div className="mb-6 inline-flex size-14 items-center justify-center rounded-2xl bg-lime-100 text-lime-600 dark:bg-lime-900/30 dark:text-lime-400">
                 <FaUsers className="size-6" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">Community Spaces</h3>
+              <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">
+                Community Spaces
+              </h3>
               <p className="text-gray-600 dark:text-gray-400">
                 Subcommittee and team collaboration spaces for members.
               </p>
@@ -140,7 +160,9 @@ const CommunityHubPage = () => {
               <div className="mb-6 inline-flex size-14 items-center justify-center rounded-2xl bg-sky-100 text-sky-600 dark:bg-sky-900/30 dark:text-sky-400">
                 <FaNewspaper className="size-6" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">Newsletter</h3>
+              <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-white">
+                Newsletter
+              </h3>
               <p className="text-gray-600 dark:text-gray-400">
                 Community updates and insights delivered right to your inbox.
               </p>
@@ -157,27 +179,43 @@ const CommunityHubPage = () => {
               <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
                 Full Platform Launching Q3 2026
               </h2>
-              
+
               {/* Countdown Timer */}
               <div className="mt-8 flex justify-center gap-4 sm:gap-8 text-white">
                 <div className="flex flex-col items-center">
-                  <span className="text-4xl font-bold sm:text-5xl">{timeLeft.days}</span>
-                  <span className="text-xs uppercase tracking-wider text-gray-400">Days</span>
+                  <span className="text-4xl font-bold sm:text-5xl">
+                    {timeLeft.days}
+                  </span>
+                  <span className="text-xs uppercase tracking-wider text-gray-400">
+                    Days
+                  </span>
                 </div>
                 <span className="text-4xl font-bold text-gray-600">:</span>
                 <div className="flex flex-col items-center">
-                  <span className="text-4xl font-bold sm:text-5xl">{timeLeft.hours}</span>
-                  <span className="text-xs uppercase tracking-wider text-gray-400">Hours</span>
+                  <span className="text-4xl font-bold sm:text-5xl">
+                    {timeLeft.hours}
+                  </span>
+                  <span className="text-xs uppercase tracking-wider text-gray-400">
+                    Hours
+                  </span>
                 </div>
                 <span className="text-4xl font-bold text-gray-600">:</span>
                 <div className="flex flex-col items-center">
-                  <span className="text-4xl font-bold sm:text-5xl">{timeLeft.minutes}</span>
-                  <span className="text-xs uppercase tracking-wider text-gray-400">Mins</span>
+                  <span className="text-4xl font-bold sm:text-5xl">
+                    {timeLeft.minutes}
+                  </span>
+                  <span className="text-xs uppercase tracking-wider text-gray-400">
+                    Mins
+                  </span>
                 </div>
                 <span className="text-4xl font-bold text-gray-600">:</span>
                 <div className="flex flex-col items-center">
-                  <span className="text-4xl font-bold text-primary sm:text-5xl">{timeLeft.seconds}</span>
-                  <span className="text-xs uppercase tracking-wider text-gray-400">Secs</span>
+                  <span className="text-4xl font-bold text-primary sm:text-5xl">
+                    {timeLeft.seconds}
+                  </span>
+                  <span className="text-xs uppercase tracking-wider text-gray-400">
+                    Secs
+                  </span>
                 </div>
               </div>
             </div>
@@ -186,22 +224,33 @@ const CommunityHubPage = () => {
             <div className="grid gap-4 sm:grid-cols-4">
               <div className="flex flex-col items-center rounded-xl bg-white/10 p-4 text-center">
                 <FaCheckCircle className="mb-2 size-6 text-green-400" />
-                <span className="text-sm font-semibold text-white">Phase 1</span>
+                <span className="text-sm font-semibold text-white">
+                  Phase 1
+                </span>
                 <span className="text-xs text-gray-300">Speaker Network</span>
               </div>
               <div className="flex flex-col items-center rounded-xl bg-white/10 p-4 text-center border-b-2 border-primary">
-                <FaSync className="mb-2 size-6 text-primary animate-spin-slow" style={{ animationDuration: '3s' }} />
-                <span className="text-sm font-semibold text-white">Phase 2</span>
+                <FaSync
+                  className="mb-2 size-6 text-primary animate-spin-slow"
+                  style={{ animationDuration: '3s' }}
+                />
+                <span className="text-sm font-semibold text-white">
+                  Phase 2
+                </span>
                 <span className="text-xs text-primary-300">Profile Cards</span>
               </div>
               <div className="flex flex-col items-center rounded-xl bg-white/5 p-4 text-center opacity-70">
                 <FaHourglassHalf className="mb-2 size-6 text-gray-400" />
-                <span className="text-sm font-semibold text-white">Phase 3</span>
+                <span className="text-sm font-semibold text-white">
+                  Phase 3
+                </span>
                 <span className="text-xs text-gray-400">Community Spaces</span>
               </div>
               <div className="flex flex-col items-center rounded-xl bg-white/5 p-4 text-center opacity-70">
                 <FaHourglassHalf className="mb-2 size-6 text-gray-400" />
-                <span className="text-sm font-semibold text-white">Phase 4</span>
+                <span className="text-sm font-semibold text-white">
+                  Phase 4
+                </span>
                 <span className="text-xs text-gray-400">Full Platform</span>
               </div>
             </div>
@@ -220,30 +269,38 @@ const CommunityHubPage = () => {
               Preview what your community profile will look like when we launch.
             </p>
           </div>
-          
+
           <ProfileCardBuilder />
         </div>
       </section>
 
       {/* Early Access Section */}
-      <section id="waitlist-section" className="bg-white py-24 dark:bg-gray-900">
+      <section
+        id="waitlist-section"
+        className="bg-white py-24 dark:bg-gray-900"
+      >
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
             Be among the first to join
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
-            Join the waitlist to secure your spot and receive exclusive updates leading up to the launch.
+            Join the waitlist to secure your spot and receive exclusive updates
+            leading up to the launch.
           </p>
-          
+
           <div className="mt-10 mx-auto max-w-md">
             {subscribed ? (
               <div className="rounded-2xl bg-green-50 p-6 border border-green-200 dark:bg-green-900/20 dark:border-green-800">
                 <p className="text-lg font-semibold text-green-800 dark:text-green-400">
-                  Thank you for joining the waitlist! We'll be in touch soon.
+                  Thank you for joining the waitlist! We&apos;ll be in touch
+                  soon.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubscribe} className="flex flex-col gap-3 sm:flex-row">
+              <form
+                onSubmit={handleSubscribe}
+                className="flex flex-col gap-3 sm:flex-row"
+              >
                 <input
                   type="email"
                   required
@@ -261,9 +318,12 @@ const CommunityHubPage = () => {
               </form>
             )}
           </div>
-          
+
           <p className="mt-8 text-sm font-medium text-gray-500 dark:text-gray-400">
-            Join <span className="text-gray-900 dark:text-white">1,200+</span> community members across <span className="text-gray-900 dark:text-white">120+</span> companies
+            Join <span className="text-gray-900 dark:text-white">1,200+</span>{' '}
+            community members across{' '}
+            <span className="text-gray-900 dark:text-white">120+</span>{' '}
+            companies
           </p>
         </div>
       </section>

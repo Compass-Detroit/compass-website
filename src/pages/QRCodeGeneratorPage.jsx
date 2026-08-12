@@ -1,19 +1,11 @@
 import { useState, useRef, useCallback } from 'react'
 import { PageLayout } from '@/layouts/PageLayout'
-import { IoDownloadOutline, IoCopyOutline, IoQrCodeOutline, IoCheckmark } from 'react-icons/io5'
-
-// QR Code generator using QR code algorithm
-// Generates QR codes as SVG paths — zero external dependencies
-const ERROR_CORRECTION = { L: 1, M: 0, Q: 3, H: 2 }
-
-// Simplified QR encoding — generates a visual QR-like SVG pattern
-// For production, this would use a proper QR library. For now we use
-// a canvas-based approach with the built-in browser API
-function generateQRDataURL(text, size = 256, darkColor = '#000000', lightColor = '#ffffff') {
-  // We'll use a canvas-based QR approach
-  // For now, create a placeholder that will be replaced with actual QR generation
-  return { text, size, darkColor, lightColor }
-}
+import {
+  IoDownloadOutline,
+  IoCopyOutline,
+  IoQrCodeOutline,
+  IoCheckmark,
+} from 'react-icons/io5'
 
 const PRESET_URLS = [
   { label: 'COMPASS Website', url: 'https://compassdetroit.org' },
@@ -22,7 +14,10 @@ const PRESET_URLS = [
   { label: 'Community Hub', url: 'https://compassdetroit.org/community-hub' },
   { label: 'Get Involved', url: 'https://compassdetroit.org/get-involved' },
   { label: 'GitHub', url: 'https://github.com/Compass-Detroit' },
-  { label: 'LinkedIn', url: 'https://www.linkedin.com/company/compass-detroit/' },
+  {
+    label: 'LinkedIn',
+    url: 'https://www.linkedin.com/company/compass-detroit/',
+  },
 ]
 
 const COLOR_PRESETS = [
@@ -85,17 +80,36 @@ export default function QRCodeGeneratorPage() {
 
     // Draw finder patterns (the three big squares in corners)
     drawFinderPattern(ctx, 0, 0, cellSize, fgColor, bgColor)
-    drawFinderPattern(ctx, (moduleCount - 7) * cellSize, 0, cellSize, fgColor, bgColor)
-    drawFinderPattern(ctx, 0, (moduleCount - 7) * cellSize, cellSize, fgColor, bgColor)
+    drawFinderPattern(
+      ctx,
+      (moduleCount - 7) * cellSize,
+      0,
+      cellSize,
+      fgColor,
+      bgColor
+    )
+    drawFinderPattern(
+      ctx,
+      0,
+      (moduleCount - 7) * cellSize,
+      cellSize,
+      fgColor,
+      bgColor
+    )
 
     // Draw alignment pattern
-    drawAlignmentPattern(ctx, 18 * cellSize, 18 * cellSize, cellSize, fgColor, bgColor)
+    drawAlignmentPattern(
+      ctx,
+      18 * cellSize,
+      18 * cellSize,
+      cellSize,
+      fgColor,
+      bgColor
+    )
 
     // Draw logo overlay if enabled
     if (showLogo) {
       const logoSize = size * 0.18
-      const logoX = (size - logoSize) / 2
-      const logoY = (size - logoSize) / 2
 
       // White circle background for logo
       ctx.fillStyle = bgColor
@@ -119,7 +133,7 @@ export default function QRCodeGeneratorPage() {
     // Simple hash-based pattern generation
     let hash = 0
     for (let i = 0; i < text.length; i++) {
-      hash = ((hash << 5) - hash) + text.charCodeAt(i)
+      hash = (hash << 5) - hash + text.charCodeAt(i)
       hash = hash & hash
     }
 
@@ -127,7 +141,12 @@ export default function QRCodeGeneratorPage() {
     for (let y = 0; y < count; y++) {
       for (let x = 0; x < count; x++) {
         // Skip finder pattern areas
-        if ((x < 8 && y < 8) || (x >= count - 8 && y < 8) || (x < 8 && y >= count - 8)) continue
+        if (
+          (x < 8 && y < 8) ||
+          (x >= count - 8 && y < 8) ||
+          (x < 8 && y >= count - 8)
+        )
+          continue
         // Skip alignment pattern
         if (x >= 16 && x <= 20 && y >= 16 && y <= 20) continue
         // Skip timing patterns
@@ -137,7 +156,13 @@ export default function QRCodeGeneratorPage() {
         }
 
         // Deterministic pattern from URL content
-        const seed = (hash + x * 31 + y * 37 + text.charCodeAt(x % text.length) * 13 + text.charCodeAt(y % text.length) * 7) & 0xFFFF
+        const seed =
+          (hash +
+            x * 31 +
+            y * 37 +
+            text.charCodeAt(x % text.length) * 13 +
+            text.charCodeAt(y % text.length) * 7) &
+          0xffff
         matrix[y][x] = seed % 3 !== 0
       }
     }
@@ -185,19 +210,20 @@ export default function QRCodeGeneratorPage() {
       if (!canvas) return
       canvas.toBlob((blob) => {
         if (blob) {
-          navigator.clipboard.write([
-            new ClipboardItem({ 'image/png': blob })
-          ]).then(() => {
-            setCopied(true)
-            setTimeout(() => setCopied(false), 2000)
-          }).catch(() => {
-            // Fallback: copy data URL
-            const dataUrl = canvas.toDataURL()
-            navigator.clipboard.writeText(dataUrl).then(() => {
+          navigator.clipboard
+            .write([new ClipboardItem({ 'image/png': blob })])
+            .then(() => {
               setCopied(true)
               setTimeout(() => setCopied(false), 2000)
             })
-          })
+            .catch(() => {
+              // Fallback: copy data URL
+              const dataUrl = canvas.toDataURL()
+              navigator.clipboard.writeText(dataUrl).then(() => {
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              })
+            })
         }
       })
     }, 100)
@@ -236,7 +262,10 @@ export default function QRCodeGeneratorPage() {
             <div className="space-y-6">
               {/* URL Input */}
               <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                <label className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300" htmlFor="qr-url">
+                <label
+                  className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-300"
+                  htmlFor="qr-url"
+                >
                   URL or Text
                 </label>
                 <input
@@ -249,7 +278,10 @@ export default function QRCodeGeneratorPage() {
                 />
 
                 {/* Label */}
-                <label className="mb-2 mt-4 block text-sm font-bold text-gray-700 dark:text-gray-300" htmlFor="qr-label">
+                <label
+                  className="mb-2 mt-4 block text-sm font-bold text-gray-700 dark:text-gray-300"
+                  htmlFor="qr-label"
+                >
                   Label (for filename)
                 </label>
                 <input
@@ -272,7 +304,9 @@ export default function QRCodeGeneratorPage() {
                         key={preset.url}
                         onClick={() => {
                           setUrl(preset.url)
-                          setLabel(preset.label.toLowerCase().replace(/\s+/g, '-'))
+                          setLabel(
+                            preset.label.toLowerCase().replace(/\s+/g, '-')
+                          )
                         }}
                         className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                           url === preset.url
@@ -306,9 +340,16 @@ export default function QRCodeGeneratorPage() {
                           ? 'ring-2 ring-indigo-500 ring-offset-2 dark:ring-offset-gray-800'
                           : 'hover:scale-[1.03]'
                       }`}
-                      style={{ backgroundColor: preset.bg, color: preset.fg, border: '1px solid rgba(128,128,128,0.3)' }}
+                      style={{
+                        backgroundColor: preset.bg,
+                        color: preset.fg,
+                        border: '1px solid rgba(128,128,128,0.3)',
+                      }}
                     >
-                      <span className="size-3 rounded-full" style={{ backgroundColor: preset.fg }} />
+                      <span
+                        className="size-3 rounded-full"
+                        style={{ backgroundColor: preset.fg }}
+                      />
                       {preset.label}
                     </button>
                   ))}
@@ -316,17 +357,43 @@ export default function QRCodeGeneratorPage() {
                 {/* Custom color pickers */}
                 <div className="flex gap-4">
                   <div className="flex-1">
-                    <label className="mb-1 block text-xs text-gray-500" htmlFor="fg-color">Foreground</label>
+                    <label
+                      className="mb-1 block text-xs text-gray-500"
+                      htmlFor="fg-color"
+                    >
+                      Foreground
+                    </label>
                     <div className="flex items-center gap-2 rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 dark:border-gray-600 dark:bg-gray-700">
-                      <input id="fg-color" type="color" value={fgColor} onChange={(e) => setFgColor(e.target.value)} className="size-6 cursor-pointer border-0" />
-                      <span className="text-xs text-gray-600 dark:text-gray-400">{fgColor}</span>
+                      <input
+                        id="fg-color"
+                        type="color"
+                        value={fgColor}
+                        onChange={(e) => setFgColor(e.target.value)}
+                        className="size-6 cursor-pointer border-0"
+                      />
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                        {fgColor}
+                      </span>
                     </div>
                   </div>
                   <div className="flex-1">
-                    <label className="mb-1 block text-xs text-gray-500" htmlFor="bg-color">Background</label>
+                    <label
+                      className="mb-1 block text-xs text-gray-500"
+                      htmlFor="bg-color"
+                    >
+                      Background
+                    </label>
                     <div className="flex items-center gap-2 rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 dark:border-gray-600 dark:bg-gray-700">
-                      <input id="bg-color" type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="size-6 cursor-pointer border-0" />
-                      <span className="text-xs text-gray-600 dark:text-gray-400">{bgColor}</span>
+                      <input
+                        id="bg-color"
+                        type="color"
+                        value={bgColor}
+                        onChange={(e) => setBgColor(e.target.value)}
+                        className="size-6 cursor-pointer border-0"
+                      />
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                        {bgColor}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -372,10 +439,16 @@ export default function QRCodeGeneratorPage() {
                 <h3 className="mb-6 text-center text-sm font-bold text-gray-700 dark:text-gray-300">
                   Preview
                 </h3>
-                <div ref={qrContainerRef} className="flex items-center justify-center">
+                <div
+                  ref={qrContainerRef}
+                  className="flex items-center justify-center"
+                >
                   <div
                     className="overflow-hidden rounded-2xl shadow-lg transition-all"
-                    style={{ width: Math.min(size, 380), height: Math.min(size, 380) }}
+                    style={{
+                      width: Math.min(size, 380),
+                      height: Math.min(size, 380),
+                    }}
                   >
                     <canvas
                       ref={(el) => {
@@ -384,7 +457,10 @@ export default function QRCodeGeneratorPage() {
                       }}
                       width={size}
                       height={size}
-                      style={{ width: Math.min(size, 380), height: Math.min(size, 380) }}
+                      style={{
+                        width: Math.min(size, 380),
+                        height: Math.min(size, 380),
+                      }}
                       className="block"
                     />
                   </div>
@@ -436,11 +512,20 @@ export default function QRCodeGeneratorPage() {
                   💡 Tips for QR Codes
                 </h4>
                 <ul className="space-y-1.5 text-xs text-amber-700 dark:text-amber-400">
-                  <li>• Ensure high contrast between foreground and background colors</li>
-                  <li>• Test scanning before printing — not all color combos work well</li>
+                  <li>
+                    • Ensure high contrast between foreground and background
+                    colors
+                  </li>
+                  <li>
+                    • Test scanning before printing — not all color combos work
+                    well
+                  </li>
                   <li>• Use 512px+ for print materials, 256px for digital</li>
                   <li>• Keep URLs short for denser, more reliable QR codes</li>
-                  <li>• The COMPASS logo overlay may affect scanning at very small sizes</li>
+                  <li>
+                    • The COMPASS logo overlay may affect scanning at very small
+                    sizes
+                  </li>
                 </ul>
               </div>
             </div>

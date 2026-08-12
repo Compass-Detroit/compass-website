@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
   IoChevronBack,
@@ -12,7 +13,7 @@ import {
   IoPlayCircleOutline,
   IoCalendarOutline,
   IoChevronDown,
-  IoChevronUp
+  IoChevronUp,
 } from 'react-icons/io5'
 import { FaMastodon } from 'react-icons/fa6'
 import colors from 'tailwindcss/colors'
@@ -167,7 +168,9 @@ function ExpandableDescription({ text }) {
   const needsExpansion = text?.length > maxLength
 
   if (!needsExpansion) {
-    return <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{text}</p>
+    return (
+      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{text}</p>
+    )
   }
 
   return (
@@ -191,6 +194,10 @@ function ExpandableDescription({ text }) {
       </button>
     </div>
   )
+}
+
+ExpandableDescription.propTypes = {
+  text: PropTypes.string,
 }
 
 export default function SpeakerProfilePage() {
@@ -224,22 +231,28 @@ export default function SpeakerProfilePage() {
           jobTitle: foundSpeaker.position,
           worksFor: {
             '@type': 'Organization',
-            name: foundSpeaker.organization
+            name: foundSpeaker.organization,
           },
           url: window.location.href,
           image: foundSpeaker.avatar,
-          description: foundSpeaker.bio
+          description: foundSpeaker.bio,
         })
 
         // Find related speakers (shared categories or tracks)
         const all = getAllSpeakers()
-        const related = all.filter(s => {
-          if (s.slug === foundSpeaker.slug) return false
-          const sharedCategories = s.categories?.some(c => foundSpeaker.categories?.includes(c))
-          const sharedTracks = s.sessions?.some(s1 => foundSpeaker.sessions?.some(s2 => s1.track === s2.track))
-          return sharedCategories || sharedTracks
-        }).slice(0, 6)
-        
+        const related = all
+          .filter((s) => {
+            if (s.slug === foundSpeaker.slug) return false
+            const sharedCategories = s.categories?.some((c) =>
+              foundSpeaker.categories?.includes(c)
+            )
+            const sharedTracks = s.sessions?.some((s1) =>
+              foundSpeaker.sessions?.some((s2) => s1.track === s2.track)
+            )
+            return sharedCategories || sharedTracks
+          })
+          .slice(0, 6)
+
         setRelatedSpeakers(related)
       }
     } catch (err) {
@@ -267,7 +280,7 @@ export default function SpeakerProfilePage() {
             Speaker Not Found
           </h1>
           <p className="mb-8 text-lg text-gray-500">
-            We couldn't find the speaker profile you're looking for.
+            We couldn&apos;t find the speaker profile you&apos;re looking for.
           </p>
           <Link
             to="/speakers"
@@ -298,25 +311,41 @@ export default function SpeakerProfilePage() {
     <SiteLayout>
       {/* 1. Hero Section */}
       <section className="relative w-full pt-16">
-        <div className="relative px-6 py-20 text-white lg:py-24" style={heroStyle}>
+        <div
+          className="relative px-6 py-20 text-white lg:py-24"
+          style={heroStyle}
+        >
           <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/10 to-transparent mix-blend-soft-light"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/20 to-transparent"></div>
-          
+
           <div className="mx-auto max-w-[1200px] relative z-20">
             {/* Breadcrumbs / Back */}
             <div className="mb-8 flex items-center gap-2 text-sm text-white/80 font-medium">
-              <Link to="/" className="hover:text-white hover:underline transition-colors">Home</Link>
+              <Link
+                to="/"
+                className="hover:text-white hover:underline transition-colors"
+              >
+                Home
+              </Link>
               <span>›</span>
-              <Link to="/speakers" className="hover:text-white hover:underline transition-colors">Speakers</Link>
+              <Link
+                to="/speakers"
+                className="hover:text-white hover:underline transition-colors"
+              >
+                Speakers
+              </Link>
               <span>›</span>
               <span className="text-white">{speaker.name}</span>
             </div>
-            
+
             <div className="flex flex-col items-center text-center lg:flex-row lg:text-left lg:items-end gap-10">
               <div className="relative">
                 <div className="size-48 md:size-56 lg:size-64 rounded-full bg-black/30 p-2 border-4 border-white/20 shadow-2xl backdrop-blur-sm">
                   <img
-                    src={speaker.avatar || `https://placehold.co/600x400/0F9D58/FFFFFF?text=${speaker.name.charAt(0)}`}
+                    src={
+                      speaker.avatar ||
+                      `https://placehold.co/600x400/0F9D58/FFFFFF?text=${speaker.name.charAt(0)}`
+                    }
                     alt={`${speaker.name}`}
                     className="size-full rounded-full object-cover"
                   />
@@ -324,31 +353,40 @@ export default function SpeakerProfilePage() {
                 {/* Badges positioning */}
                 <div className="absolute -bottom-2 right-4 flex gap-2">
                   {speaker.isGDE && (
-                    <div className="rounded-full bg-white p-1.5 shadow-lg" title="Google Developer Expert">
+                    <div
+                      className="rounded-full bg-white p-1.5 shadow-lg"
+                      title="Google Developer Expert"
+                    >
                       <img src={GDEIcon} alt="GDE" className="size-6" />
                     </div>
                   )}
                   {speaker.isWTM && (
-                    <div className="rounded-full bg-white p-1.5 shadow-lg" title="Women Techmakers Ambassador">
+                    <div
+                      className="rounded-full bg-white p-1.5 shadow-lg"
+                      title="Women Techmakers Ambassador"
+                    >
                       <img src={WTMLogo} alt="WTM" className="size-6" />
                     </div>
                   )}
                 </div>
               </div>
-              
+
               <div className="flex-1 pb-4">
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-3">
-                  {speaker.yearsActive?.map(year => (
-                    <span key={year} className="inline-flex items-center rounded-full bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide border border-white/20">
+                  {speaker.yearsActive?.map((year) => (
+                    <span
+                      key={year}
+                      className="inline-flex items-center rounded-full bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide border border-white/20"
+                    >
                       🎤 {year}
                     </span>
                   ))}
                 </div>
-                
+
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-2">
                   {speaker.name}
                 </h1>
-                
+
                 <p className="text-xl md:text-2xl text-white/90 font-medium mb-1">
                   {speaker.position}
                 </p>
@@ -357,31 +395,57 @@ export default function SpeakerProfilePage() {
                     {speaker.organization}
                   </p>
                 )}
-                
+
                 {/* Social links */}
                 <div className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3">
                   {speaker.twitter && (
-                    <a href={`https://twitter.com/${speaker.twitter}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md">
-                      <IoLogoTwitter className="mr-2 size-4" /> @{speaker.twitter}
+                    <a
+                      href={`https://twitter.com/${speaker.twitter}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
+                    >
+                      <IoLogoTwitter className="mr-2 size-4" /> @
+                      {speaker.twitter}
                     </a>
                   )}
                   {speaker.linkedIn && (
-                    <a href={speaker.linkedIn} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md">
+                    <a
+                      href={speaker.linkedIn}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
+                    >
                       <IoLogoLinkedin className="mr-2 size-4" /> LinkedIn
                     </a>
                   )}
                   {speaker.github && (
-                    <a href={speaker.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md">
+                    <a
+                      href={speaker.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
+                    >
                       <IoLogoGithub className="mr-2 size-4" /> GitHub
                     </a>
                   )}
                   {speaker.mastodon && (
-                    <a href={speaker.mastodon} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md">
+                    <a
+                      href={speaker.mastodon}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
+                    >
                       <FaMastodon className="mr-2 size-4" /> Mastodon
                     </a>
                   )}
                   {speaker.url && (
-                    <a href={speaker.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md">
+                    <a
+                      href={speaker.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
+                    >
                       <IoLinkOutline className="mr-2 size-4" /> Website
                     </a>
                   )}
@@ -394,26 +458,28 @@ export default function SpeakerProfilePage() {
 
       <div className="mx-auto max-w-[1200px] px-6 py-16">
         <div className="grid gap-16 lg:grid-cols-3">
-          
           {/* Main Content Column */}
           <div className="lg:col-span-2 space-y-16">
-            
             {/* 2. About Section */}
             <section>
-              <h2 className="mb-6 text-3xl font-bold tracking-tight">About {speaker.name.split(' ')[0]}</h2>
-              <div className="prose prose-lg dark:prose-invert max-w-[65ch]">
+              <h2 className="mb-6 text-3xl font-bold tracking-tight">
+                About {speaker.name.split(' ')[0]}
+              </h2>
+              <div className="prose prose-lg dark:prose-invert max-w-prose">
                 <p className="whitespace-pre-line leading-relaxed text-gray-700 dark:text-gray-300">
                   {speaker.bio}
                 </p>
               </div>
-              
+
               {speaker.categories && speaker.categories.length > 0 && (
                 <div className="mt-8">
-                  <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500">Expertise</h3>
+                  <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500">
+                    Expertise
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {speaker.categories.map((cat, i) => (
-                      <Link 
-                        key={i} 
+                      <Link
+                        key={i}
                         to={`/speakers?category=${encodeURIComponent(cat)}`}
                         className="rounded-full bg-surface-card border border-surface px-4 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors hover:border-primary hover:text-primary"
                       >
@@ -428,60 +494,80 @@ export default function SpeakerProfilePage() {
             {/* 3. Talk History Timeline */}
             {speaker.sessions && speaker.sessions.length > 0 && (
               <section>
-                <h2 className="mb-8 text-3xl font-bold tracking-tight">Session History</h2>
+                <h2 className="mb-8 text-3xl font-bold tracking-tight">
+                  Session History
+                </h2>
                 <div className="relative border-l-2 border-gray-200 dark:border-gray-700 ml-4 md:ml-6 space-y-12">
-                  
-                  {speaker.sessions.sort((a, b) => b.year - a.year).map((session, idx) => (
-                    <div key={idx} className="relative pl-8 md:pl-10">
-                      {/* Timeline dot */}
-                      <div 
-                        className="absolute -left-[11px] top-1 h-5 w-5 rounded-full border-4 border-[var(--surface)] bg-primary"
-                        aria-hidden="true"
-                      ></div>
-                      
-                      <div className="mb-1 flex flex-wrap items-center gap-3">
-                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">
-                          {session.year}
-                        </span>
-                        {session.track && (
-                          <span className="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-700 bg-surface-card px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:text-gray-300">
-                            {session.track}
+                  {speaker.sessions
+                    .sort((a, b) => b.year - a.year)
+                    .map((session, idx) => (
+                      <div key={idx} className="relative pl-8 md:pl-10">
+                        {/* Timeline dot */}
+                        <div
+                          className="absolute -left-[11px] top-1 size-5 rounded-full border-4 border-[var(--surface)] bg-primary"
+                          aria-hidden="true"
+                        ></div>
+
+                        <div className="mb-1 flex flex-wrap items-center gap-3">
+                          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">
+                            {session.year}
                           </span>
-                        )}
-                      </div>
-                      
-                      <h3 className="text-xl font-bold tracking-tight mb-2">{session.title}</h3>
-                      
-                      {session.tags && session.tags.length > 0 && (
-                        <div className="mb-4 flex flex-wrap gap-1.5">
-                          {session.tags.map((tag, tIdx) => (
-                            <span key={tIdx} className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              #{tag}
+                          {session.track && (
+                            <span className="inline-flex items-center rounded-full border border-gray-200 dark:border-gray-700 bg-surface-card px-2.5 py-0.5 text-xs font-medium text-gray-600 dark:text-gray-300">
+                              {session.track}
                             </span>
-                          ))}
+                          )}
                         </div>
-                      )}
-                      
-                      <div className="mb-4">
-                        <ExpandableDescription text={session.abstract || session.description} />
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-3 mt-4">
-                        {speaker.slidesUrl && idx === 0 && (
-                          <a href={speaker.slidesUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-surface-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary">
-                            <IoDocumentTextOutline className="size-4" />
-                            View Slides
-                          </a>
+
+                        <h3 className="text-xl font-bold tracking-tight mb-2">
+                          {session.title}
+                        </h3>
+
+                        {session.tags && session.tags.length > 0 && (
+                          <div className="mb-4 flex flex-wrap gap-1.5">
+                            {session.tags.map((tag, tIdx) => (
+                              <span
+                                key={tIdx}
+                                className="text-xs font-medium text-gray-500 uppercase tracking-wider"
+                              >
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
                         )}
-                        {speaker.videoUrl && idx === 0 && (
-                          <a href={speaker.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-surface-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary">
-                            <IoPlayCircleOutline className="size-4" />
-                            Watch Recording
-                          </a>
-                        )}
+
+                        <div className="mb-4">
+                          <ExpandableDescription
+                            text={session.abstract || session.description}
+                          />
+                        </div>
+
+                        <div className="flex flex-wrap gap-3 mt-4">
+                          {speaker.slidesUrl && idx === 0 && (
+                            <a
+                              href={speaker.slidesUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-surface-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
+                            >
+                              <IoDocumentTextOutline className="size-4" />
+                              View Slides
+                            </a>
+                          )}
+                          {speaker.videoUrl && idx === 0 && (
+                            <a
+                              href={speaker.videoUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-surface-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
+                            >
+                              <IoPlayCircleOutline className="size-4" />
+                              Watch Recording
+                            </a>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </section>
             )}
@@ -489,11 +575,13 @@ export default function SpeakerProfilePage() {
             {/* 4. Resources Section */}
             {speaker.resources && speaker.resources.length > 0 && (
               <section>
-                <h2 className="mb-6 text-2xl font-bold tracking-tight">Resources &amp; Links</h2>
+                <h2 className="mb-6 text-2xl font-bold tracking-tight">
+                  Resources &amp; Links
+                </h2>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {speaker.resources.map((resource, idx) => (
-                    <a 
-                      key={idx} 
+                    <a
+                      key={idx}
                       href={resource.url}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -521,16 +609,18 @@ export default function SpeakerProfilePage() {
 
           {/* Sidebar Column */}
           <div className="lg:col-span-1 space-y-12">
-            
             {/* 5. Talk Photos Gallery */}
             {speaker.talkPhotos && speaker.talkPhotos.length > 0 && (
               <section className="rounded-2xl border border-surface bg-surface-card p-6">
                 <h3 className="mb-4 text-lg font-bold">In Action</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {speaker.talkPhotos.map((photo, idx) => (
-                    <div key={idx} className={`relative overflow-hidden rounded-lg bg-gray-100 ${idx === 0 ? 'col-span-2 aspect-video' : 'aspect-square'}`}>
-                      <img 
-                        src={photo} 
+                    <div
+                      key={idx}
+                      className={`relative overflow-hidden rounded-lg bg-gray-100 ${idx === 0 ? 'col-span-2 aspect-video' : 'aspect-square'}`}
+                    >
+                      <img
+                        src={photo}
                         alt={`${speaker.name} speaking`}
                         className="size-full object-cover transition-transform duration-500 hover:scale-105"
                         loading="lazy"
@@ -540,15 +630,18 @@ export default function SpeakerProfilePage() {
                 </div>
               </section>
             )}
-            
+
             <section className="rounded-2xl border border-surface bg-primary/5 p-6 text-center">
               <IoCalendarOutline className="mx-auto mb-3 size-8 text-primary" />
-              <h3 className="mb-2 text-lg font-bold">Book {speaker.name.split(' ')[0]}</h3>
+              <h3 className="mb-2 text-lg font-bold">
+                Book {speaker.name.split(' ')[0]}
+              </h3>
               <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                Interested in having {speaker.name.split(' ')[0]} speak at your next event?
+                Interested in having {speaker.name.split(' ')[0]} speak at your
+                next event?
               </p>
               {speaker.url ? (
-                <a 
+                <a
                   href={speaker.url}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -557,7 +650,7 @@ export default function SpeakerProfilePage() {
                   Visit Website
                 </a>
               ) : speaker.twitter ? (
-                <a 
+                <a
                   href={`https://twitter.com/${speaker.twitter}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -566,7 +659,7 @@ export default function SpeakerProfilePage() {
                   Contact via X
                 </a>
               ) : speaker.linkedIn ? (
-                <a 
+                <a
                   href={speaker.linkedIn}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -578,24 +671,38 @@ export default function SpeakerProfilePage() {
             </section>
           </div>
         </div>
-        
+
         {/* 6. Related Speakers */}
         {relatedSpeakers.length > 0 && (
           <section className="mt-24 border-t border-surface pt-16">
             <div className="mb-8 flex items-center justify-between">
-              <h2 className="text-2xl font-bold tracking-tight">Similar Speakers</h2>
-              <Link to="/speakers" className="text-sm font-semibold text-primary hover:underline">
+              <h2 className="text-2xl font-bold tracking-tight">
+                Similar Speakers
+              </h2>
+              <Link
+                to="/speakers"
+                className="text-sm font-semibold text-primary hover:underline"
+              >
                 View all speakers →
               </Link>
             </div>
-            
+
             {/* Horizontal scroll container */}
             <div className="flex snap-x snap-mandatory overflow-x-auto pb-8 -mx-6 px-6 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:overflow-visible md:pb-0 md:mx-0 md:px-0">
-              {relatedSpeakers.map(rs => (
-                <div key={rs.slug} className="min-w-[280px] snap-start md:min-w-0">
-                  <Link to={`/speakers/${rs.slug}`} className="block h-full transition-transform hover:-translate-y-1">
-                    <ProfileCard 
-                      avatar={rs.avatar || `https://placehold.co/600x400/0F9D58/FFFFFF?text=${rs.name.charAt(0)}`}
+              {relatedSpeakers.map((rs) => (
+                <div
+                  key={rs.slug}
+                  className="min-w-[280px] snap-start md:min-w-0"
+                >
+                  <Link
+                    to={`/speakers/${rs.slug}`}
+                    className="block h-full transition-transform hover:-translate-y-1"
+                  >
+                    <ProfileCard
+                      avatar={
+                        rs.avatar ||
+                        `https://placehold.co/600x400/0F9D58/FFFFFF?text=${rs.name.charAt(0)}`
+                      }
                       name={rs.name}
                       organization={rs.organization}
                       position={rs.position}
@@ -613,32 +720,35 @@ export default function SpeakerProfilePage() {
             </div>
           </section>
         )}
-        
+
         {/* 8. Bottom Navigation */}
         <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-surface-card p-6 border border-surface">
-          <button 
+          <button
             onClick={() => {
-              const all = getAllSpeakers();
-              const currentIndex = all.findIndex(s => s.slug === speaker.slug);
+              const all = getAllSpeakers()
+              const currentIndex = all.findIndex((s) => s.slug === speaker.slug)
               if (currentIndex > 0) {
-                navigate(`/speakers/${all[currentIndex - 1].slug}`);
+                navigate(`/speakers/${all[currentIndex - 1].slug}`)
               }
             }}
             className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-surface px-4 py-2.5 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
           >
             <IoChevronBack /> Previous Speaker
           </button>
-          
-          <Link to="/speakers" className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
+
+          <Link
+            to="/speakers"
+            className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+          >
             All Speakers
           </Link>
-          
-          <button 
+
+          <button
             onClick={() => {
-              const all = getAllSpeakers();
-              const currentIndex = all.findIndex(s => s.slug === speaker.slug);
+              const all = getAllSpeakers()
+              const currentIndex = all.findIndex((s) => s.slug === speaker.slug)
               if (currentIndex < all.length - 1) {
-                navigate(`/speakers/${all[currentIndex + 1].slug}`);
+                navigate(`/speakers/${all[currentIndex + 1].slug}`)
               }
             }}
             className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-surface px-4 py-2.5 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
@@ -646,7 +756,6 @@ export default function SpeakerProfilePage() {
             Next Speaker <IoChevronForward />
           </button>
         </div>
-
       </div>
     </SiteLayout>
   )

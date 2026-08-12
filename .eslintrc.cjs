@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   root: true,
   env: { browser: true, es2020: true },
@@ -12,7 +14,11 @@ module.exports = {
   ignorePatterns: [
     'dist',
     'build',
+    'api',
+    '*.config.js',
+    '*.config.cjs',
     '.eslintrc.cjs',
+    '.eslintrc.a11y.cjs',
     'node_modules',
     '.prettierrc',
   ],
@@ -20,7 +26,7 @@ module.exports = {
   settings: {
     react: { version: '18.2' },
     tailwindcss: {
-      config: 'tailwind.config.js',
+      config: path.resolve(__dirname, 'tailwind.config.js'),
       callees: ['classnames', 'clsx', 'ctl', 'cn'],
     },
   },
