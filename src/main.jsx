@@ -9,6 +9,13 @@ import('@vercel/speed-insights')
   .then(({ injectSpeedInsights }) => injectSpeedInsights())
   .catch(() => {})
 
+// Initialize custom telemetry
+import { initTelemetry } from './utils/telemetry.js'
+initTelemetry({
+  endpoint: import.meta.env.VITE_TELEMETRY_ENDPOINT || null,
+  debug: import.meta.env.DEV,
+})
+
 // Initialize axe-core for accessibility testing in development mode
 if (import.meta.env.DEV) {
   import('@axe-core/react').then((axe) => {
