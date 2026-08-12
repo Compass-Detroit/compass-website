@@ -1,16 +1,19 @@
 import PropTypes from 'prop-types'
 import { useCallback, useContext, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   IoChevronBack,
   IoChevronForward,
   IoClose,
   IoLinkOutline,
   IoLogoTwitter,
+  IoArrowForward,
 } from 'react-icons/io5'
 import { FaInstagram, FaMastodon } from 'react-icons/fa6'
 
 import colors from 'tailwindcss/colors'
 import { SpeakerContext } from './SpeakerContext'
+import { generateSlug } from '@/utils/speakerRegistry'
 
 // Convert Tailwind hex to rgba for gradients/patterns (Tailwind v3.4 default palette)
 const hexToRgba = (hex, alpha) => {
@@ -512,6 +515,26 @@ function SpeakerDetails({
             </div>
           </div>
         </div>
+
+            {/* View Full Profile Link */}
+            <div className="mt-6">
+              <Link
+                to={`/speakers/${generateSlug(name)}`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  if (onClose) onClose()
+                }}
+                className="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-white transition-all hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2"
+                style={{
+                  background: trackTheme.gradient,
+                  ...interactiveFocusVars,
+                }}
+                aria-label={`View ${name}'s full speaker profile page`}
+              >
+                View Full Profile
+                <IoArrowForward className="size-4" aria-hidden="true" />
+              </Link>
+            </div>
 
         <div className="mt-8 flex items-center justify-center space-x-6 text-sm text-gray-500">
           <div className="flex items-center space-x-2">

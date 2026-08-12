@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ReactComponent as CompassLogo } from '@/assets/images/compass-logo.svg'
+import NewsletterSignup from '@/components/newsletter/NewsletterSignup'
 
 const footerPrograms = [
   { label: 'Innovation Summits', to: '/programs' },
@@ -12,6 +13,8 @@ const footerCommunity = [
   { label: 'For Navigators', to: '/community' },
   { label: 'For Employers', to: '/community' },
   { label: 'For Partners', to: '/community' },
+  { label: 'Speakers', to: '/speakers' },
+  { label: 'Community Hub', to: '/community-hub' },
   { label: 'Our Collective', to: '/about' },
   { label: 'Gallery', to: '/gallery' },
   { label: 'News', to: '/news' },
@@ -100,26 +103,13 @@ export default function SiteFooter() {
 
           {/* Newsletter */}
           <div className="sm:col-span-2 lg:col-span-4">
-            <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--surface-card)] p-6">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h3 className="mb-1 text-sm font-bold text-[var(--text-primary)]">
-                    Stay in the loop
-                  </h3>
-                  <p className="text-xs text-[var(--text-muted)]">
-                    Monthly updates on events, opportunities, and community
-                    wins.
-                  </p>
-                </div>
-                <div className="newsletter-input">
-                  <input
-                    type="email"
-                    placeholder="your@email.com"
-                    aria-label="Email address for newsletter"
-                  />
-                  <button type="button">Subscribe</button>
-                </div>
-              </div>
+            <div className="mt-6">
+              <NewsletterSignup
+                variant="footer"
+                showInterests={false}
+                title="Stay in the loop"
+                subtitle="Monthly updates on events, opportunities, and community wins."
+              />
             </div>
           </div>
         </div>

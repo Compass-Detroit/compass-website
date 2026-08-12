@@ -9,6 +9,7 @@ const navLinks = [
   { to: '/programs', label: 'Programs' },
   { to: '/events', label: 'Events' },
   { to: '/community', label: 'Community' },
+  { to: '/speakers', label: 'Speakers' },
   { to: '/impact', label: 'Impact' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/news', label: 'News' },
