@@ -286,7 +286,7 @@ body {
   --border-light: #333;
   --text-primary: #ffffff;
   --text-secondary: #d1d5db;
-  --text-muted: #6b7280;
+  --text-muted: #9ca3af;
   --marquee-fade: #0a0a0a;
   --card-hover-bg: rgba(255, 255, 255, 0.06);
 
@@ -321,6 +321,35 @@ body {
 /* Light mode — theme corrections for hardcoded dark classes */
 .light .text-white {
   color: var(--text-primary);
+}
+
+/* Escape hatch: inside .media-overlay (image overlays, carousels on photos),
+   text must ALWAYS be white/light regardless of theme — the background is
+   a dark image with gradient, not a themed surface. */
+.light .media-overlay .text-white {
+  color: #ffffff !important;
+}
+.light .media-overlay .text-gray-100 {
+  color: #f3f4f6 !important;
+}
+.light .media-overlay .text-gray-200 {
+  color: #e5e7eb !important;
+}
+.light .media-overlay .text-gray-400 {
+  color: #9ca3af !important;
+}
+.light .media-overlay .text-primary {
+  color: var(--primary) !important;
+}
+.light .media-overlay .text-amber-300 {
+  color: #fcd34d !important;
+}
+.light .media-overlay .text-amber-400 {
+  color: #fbbf24 !important;
+}
+.light .media-overlay .bg-clip-text {
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
 }
 
 .light .text-black {
@@ -562,7 +591,7 @@ body {
               box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .hover-lift:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 0 20px rgba(212, 160, 23, 0.08);
 }
 

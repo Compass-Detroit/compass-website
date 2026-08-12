@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useWebVitals } from '@/hooks/useTelemetry'
+import styles from './WebVitalsOverlay.module.css'
 
 export default function WebVitalsOverlay() {
   const [isVisible, setIsVisible] = useState(false)
@@ -19,11 +20,11 @@ export default function WebVitalsOverlay() {
 
   if (!import.meta.env.DEV || !isVisible) return null
 
-  const getColor = (rating) => {
-    if (rating === 'good') return 'bg-green-500 text-white'
-    if (rating === 'needs-improvement') return 'bg-[#FFA706] text-white'
-    if (rating === 'poor') return 'bg-red-500 text-white'
-    return 'bg-gray-200 text-gray-800'
+  const getColorClass = (rating) => {
+    if (rating === 'good') return styles.badgeGood
+    if (rating === 'needs-improvement') return styles.badgeNeedsImprovement
+    if (rating === 'poor') return styles.badgePoor
+    return styles.badgeDefault
   }
 
   const formatValue = (metric, value) => {
@@ -57,7 +58,7 @@ export default function WebVitalsOverlay() {
                 {key}
               </span>
               <span
-                className={`rounded px-2 py-1 text-xs font-bold ${getColor(
+                className={`rounded px-2 py-1 text-xs font-bold ${getColorClass(
                   data.rating
                 )}`}
               >

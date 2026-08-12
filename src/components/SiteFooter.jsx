@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ReactComponent as CompassLogo } from '@/assets/images/compass-logo.svg'
 import NewsletterSignup from '@/components/newsletter/NewsletterSignup'
+import styles from './SiteFooter.module.css'
 
 const footerPrograms = [
   { label: 'Innovation Summits', to: '/programs' },
@@ -39,7 +40,9 @@ export default function SiteFooter() {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <p className="max-w-[280px] text-[13px] leading-relaxed text-gray-600">
+            <p
+              className={`${styles.brandDescription} max-w-[280px] text-[13px] leading-relaxed`}
+            >
               Collective of Minority Professionals and STEAM Societies. A
               501(c)(3) nonprofit building career infrastructure for
               underrepresented tech talent in Michigan.
@@ -48,7 +51,9 @@ export default function SiteFooter() {
 
           {/* Programs */}
           <div>
-            <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-500">
+            <h3
+              className={`${styles.columnHeader} mb-4 text-xs font-bold uppercase tracking-wider`}
+            >
               Programs
             </h3>
             <div className="flex flex-col gap-2.5">
@@ -56,7 +61,7 @@ export default function SiteFooter() {
                 <Link
                   key={link.label}
                   to={link.to}
-                  className="text-[13px] text-gray-600 transition-colors hover:text-gray-400"
+                  className={`${styles.navLink} text-[13px] transition-colors`}
                 >
                   {link.label}
                 </Link>
@@ -66,7 +71,9 @@ export default function SiteFooter() {
 
           {/* Community */}
           <div>
-            <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-500">
+            <h3
+              className={`${styles.columnHeader} mb-4 text-xs font-bold uppercase tracking-wider`}
+            >
               Community
             </h3>
             <div className="flex flex-col gap-2.5">
@@ -74,7 +81,7 @@ export default function SiteFooter() {
                 <Link
                   key={link.label}
                   to={link.to}
-                  className="text-[13px] text-gray-600 transition-colors hover:text-gray-400"
+                  className={`${styles.navLink} text-[13px] transition-colors`}
                 >
                   {link.label}
                 </Link>
@@ -84,18 +91,22 @@ export default function SiteFooter() {
 
           {/* Contact */}
           <div>
-            <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-500">
+            <h3
+              className={`${styles.columnHeader} mb-4 text-xs font-bold uppercase tracking-wider`}
+            >
               Contact
             </h3>
             <div className="flex flex-col gap-2.5">
               <a
                 href="mailto:jritten@compass-detroit.com"
-                className="text-[13px] text-gray-600 transition-colors hover:text-gray-400"
+                className={`${styles.navLink} text-[13px] transition-colors`}
               >
                 jritten@compass-detroit.com
               </a>
-              <span className="text-[13px] text-gray-600">810-441-3259</span>
-              <span className="text-[13px] text-gray-600">
+              <span className={`${styles.contactInfo} text-[13px]`}>
+                810-441-3259
+              </span>
+              <span className={`${styles.contactInfo} text-[13px]`}>
                 Detroit, Michigan
               </span>
             </div>
@@ -121,7 +132,7 @@ export default function SiteFooter() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="text-gray-500 transition-colors hover:text-primary"
+            className={`${styles.socialIcon} transition-colors`}
           >
             <svg
               className="size-5"
@@ -141,7 +152,7 @@ export default function SiteFooter() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
-            className="text-gray-500 transition-colors hover:text-primary"
+            className={`${styles.socialIcon} transition-colors`}
           >
             <svg
               className="size-5"
@@ -178,26 +189,26 @@ export default function SiteFooter() {
             discovering them together.&rdquo;
           </p>
           <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
-            <span className="text-xs text-[var(--text-muted)]">
+            <span className={`${styles.copyright} text-xs`}>
               © {new Date().getFullYear()} COMPASS — Collective of Minority
               Professionals and STEAM Societies. All rights reserved.
             </span>
             <div className="flex gap-4">
               <Link
                 to="/about"
-                className="text-xs text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+                className={`${styles.legalLink} text-xs transition-colors`}
               >
                 About
               </Link>
               <Link
                 to="/impact"
-                className="text-xs text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+                className={`${styles.legalLink} text-xs transition-colors`}
               >
                 Impact Report
               </Link>
               <a
                 href="mailto:jritten@compass-detroit.com"
-                className="text-xs text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+                className={`${styles.legalLink} text-xs transition-colors`}
               >
                 Contact
               </a>

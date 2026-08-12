@@ -1,0 +1,27 @@
+.filterButtonActive {
+  background-color: var(--primary, #efb403);
+  color: #111827;
+}
+
+.filterButtonInactive {
+  background-color: #ffffff;
+  color: var(--text-secondary, #4b5563);
+}
+
+:global(.dark) .filterButtonInactive {
+  background-color: #1f2937;
+  color: var(--text-secondary, #d1d5db);
+}
+
+.trackButtonActive {
+  background-color: #4f46e5;
+  color: #ffffff;
+}
+
+.metaText {
+  color: var(--text-muted);
+}
+
+.bodyText {
+  color: var(--text-secondary);
+}
