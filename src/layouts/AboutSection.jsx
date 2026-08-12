@@ -1,4 +1,4 @@
-import aboutLogo from '@/assets/images/aboutLogo.png'
+import aboutLogo from '@/assets/images/compass-logo.svg'
 
 function AboutSection() {
   return (
