@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import QRCodeModal from './QRCodeModal'
 
-import devfestQr from '/assets/qr/devfest-qr.png'
-import devfestCfsQr from '/assets/qr/devfest-cfs-qr.png'
-import compassQr from '/assets/qr/compass-qr.png'
+const devfestQr = '/assets/qr/devfest-qr.png'
+const devfestCfsQr = '/assets/qr/devfest-cfs-qr.png'
+const compassQr = '/assets/qr/compass-qr.png'
 
 export default function EventSpotlightSection() {
   const [activeModal, setActiveModal] = useState(null)
