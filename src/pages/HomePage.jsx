@@ -6,10 +6,14 @@ import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import MapPinIcon from '@/components/ui/MapPinIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
 import DevTeamShowcase from '@/components/dev/DevTeamShowcase'
+import TechHeroCanvas from '@/components/dev/TechHeroCanvas'
+import AnimatedCompass from '@/components/AnimatedCompass'
 import CommunityCalendar from '@/components/events/CommunityCalendar'
 import WelcomeBanner from '@/components/WelcomeBanner'
 import FirstVisitGuide from '@/components/FirstVisitGuide'
 import CommunityVibes from '@/components/CommunityVibes'
+import EventSpotlightSection from '@/components/events/EventSpotlightSection'
+import styles from './HomePage.module.css'
 
 // Generated event images
 import communityGatheringImg from '@assets/images/generated/community-gathering.png'
@@ -270,11 +274,13 @@ function AnimatedStat({ stat }) {
       ref={ref}
       className="rounded-xl border border-surface bg-surface-card p-6 text-center"
     >
-      <div className="mb-2 text-3xl font-extrabold tracking-tight text-primary md:text-4xl">
+      <div
+        className={`mb-2 text-3xl font-extrabold tracking-tight md:text-4xl ${styles.statValue}`}
+      >
         {formatted}
       </div>
       <div className="mb-1 text-sm font-semibold text-white">{stat.label}</div>
-      <div className="text-xs text-gray-600">{stat.sub}</div>
+      <div className={`text-xs ${styles.cardLabel}`}>{stat.sub}</div>
     </div>
   )
 }
@@ -315,7 +321,9 @@ function TalentGapViz() {
       ref={ref}
       className="rounded-xl border border-surface bg-surface-card p-6"
     >
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+      <p
+        className={`mb-1 text-xs font-semibold uppercase tracking-wider ${styles.cardLabel}`}
+      >
         Michigan Talent Pipeline
       </p>
       <p className="mb-5 text-sm font-semibold text-white">
@@ -345,7 +353,9 @@ function TalentGapViz() {
 function PipelineViz() {
   return (
     <div className="rounded-xl border border-surface bg-surface-card p-6">
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+      <p
+        className={`mb-1 text-xs font-semibold uppercase tracking-wider ${styles.cardLabel}`}
+      >
         The COMPASS Model
       </p>
       <p className="mb-5 text-sm font-semibold text-white">
@@ -386,7 +396,9 @@ function PipelineViz() {
                 <span className="text-sm font-bold text-primary">
                   {item.step}
                 </span>
-                <span className="text-xs text-gray-500">{item.desc}</span>
+                <span className={`text-xs ${styles.cardLabel}`}>
+                  {item.desc}
+                </span>
               </div>
             </div>
           </div>
@@ -420,7 +432,9 @@ function RetentionGauge() {
       ref={ref}
       className="rounded-xl border border-surface bg-surface-card p-6"
     >
-      <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+      <p
+        className={`mb-1 text-xs font-semibold uppercase tracking-wider ${styles.cardLabel}`}
+      >
         Navigator Retention
       </p>
       <p className="mb-5 text-sm font-semibold text-white">
@@ -475,7 +489,7 @@ function RetentionGauge() {
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-2 text-xs">
               <div className="size-1.5 rounded-full bg-primary/60" />
-              <span className="text-gray-500">{item.label}</span>
+              <span className={styles.cardLabel}>{item.label}</span>
               <span className="ml-auto font-bold text-gray-300">
                 {item.value}
               </span>
@@ -487,143 +501,11 @@ function RetentionGauge() {
   )
 }
 
-// Animated compass constellation for hero section
-function HeroVisual() {
+// Animated 3D Tech Scene for hero section
+export function HeroVisual() {
   return (
-    <div className="relative flex items-center justify-center">
-      {/* Outer glow ring */}
-      <div className="hero-spin-slow absolute size-[420px] rounded-full border border-primary/10" />
-      <div className="hero-spin-reverse absolute size-[340px] rounded-full border border-dashed border-primary/15" />
-      <div className="absolute size-[260px] rounded-full border border-primary/20" />
-
-      {/* Floating nodes */}
-      {[
-        { x: '10%', y: '15%', size: 'size-3', delay: '0s', label: 'Engage' },
-        { x: '85%', y: '20%', size: 'size-2.5', delay: '0.5s', label: 'Build' },
-        { x: '75%', y: '80%', size: 'size-3', delay: '1s', label: 'Connect' },
-        { x: '15%', y: '75%', size: 'size-2', delay: '1.5s', label: 'Hire' },
-      ].map((node) => (
-        <div
-          key={node.label}
-          className="hero-float absolute flex flex-col items-center gap-1.5"
-          style={{
-            left: node.x,
-            top: node.y,
-            animationDelay: node.delay,
-          }}
-        >
-          <div
-            className={`${node.size} rounded-full bg-primary shadow-lg shadow-primary/30`}
-          />
-          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
-            {node.label}
-          </span>
-        </div>
-      ))}
-
-      {/* Center compass element */}
-      <div className="relative flex size-[160px] items-center justify-center rounded-full border border-primary/30 bg-gradient-to-br from-primary/[0.08] to-transparent backdrop-blur-sm">
-        <div className="flex size-[100px] items-center justify-center rounded-full border border-primary/20 bg-[var(--surface-card)]">
-          <svg
-            width="48"
-            height="48"
-            viewBox="0 0 48 48"
-            fill="none"
-            aria-hidden="true"
-          >
-            <circle
-              cx="24"
-              cy="24"
-              r="22"
-              stroke="#D4A017"
-              strokeWidth="1"
-              opacity="0.3"
-            />
-            <circle cx="24" cy="24" r="4" fill="#D4A017" opacity="0.8" />
-            <path
-              d="M24 2 L27 14 L24 10 L21 14 Z"
-              fill="#D4A017"
-              opacity="0.9"
-            />
-            <path
-              d="M24 46 L27 34 L24 38 L21 34 Z"
-              fill="#D4A017"
-              opacity="0.4"
-            />
-            <path
-              d="M46 24 L34 21 L38 24 L34 27 Z"
-              fill="#D4A017"
-              opacity="0.4"
-            />
-            <path
-              d="M2 24 L14 21 L10 24 L14 27 Z"
-              fill="#D4A017"
-              opacity="0.4"
-            />
-          </svg>
-        </div>
-      </div>
-
-      {/* Connecting lines */}
-      <svg
-        className="absolute inset-0 size-full"
-        viewBox="0 0 420 420"
-        fill="none"
-        aria-hidden="true"
-      >
-        <line
-          x1="42"
-          y1="63"
-          x2="170"
-          y2="170"
-          stroke="#D4A017"
-          strokeWidth="0.5"
-          opacity="0.2"
-        />
-        <line
-          x1="357"
-          y1="84"
-          x2="250"
-          y2="170"
-          stroke="#D4A017"
-          strokeWidth="0.5"
-          opacity="0.2"
-        />
-        <line
-          x1="315"
-          y1="336"
-          x2="250"
-          y2="250"
-          stroke="#D4A017"
-          strokeWidth="0.5"
-          opacity="0.2"
-        />
-        <line
-          x1="63"
-          y1="315"
-          x2="170"
-          y2="250"
-          stroke="#D4A017"
-          strokeWidth="0.5"
-          opacity="0.2"
-        />
-      </svg>
-
-      {/* Floating stat cards */}
-      <div
-        className="hero-float absolute -right-4 top-[15%] rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 py-2 shadow-lg"
-        style={{ animationDelay: '0.3s' }}
-      >
-        <div className="text-lg font-extrabold text-primary">52%</div>
-        <div className="text-[9px] text-gray-500">Black / African-American</div>
-      </div>
-      <div
-        className="hero-float absolute -left-4 bottom-[20%] rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 py-2 shadow-lg"
-        style={{ animationDelay: '0.8s' }}
-      >
-        <div className="text-lg font-extrabold text-primary">75%</div>
-        <div className="text-[9px] text-gray-500">Women Leaders</div>
-      </div>
+    <div className="relative w-full">
+      <TechHeroCanvas />
     </div>
   )
 }
@@ -705,55 +587,48 @@ function triggerConfetti() {
 
 export default function HomePage() {
   const revealRef = useScrollReveal()
+  const [sceneIndex, setSceneIndex] = useState(0)
 
   useKonamiCode(triggerConfetti)
 
   return (
     <SiteLayout>
-      {/* Hero — immersive with animated abstract visual */}
-      <section className="relative overflow-hidden">
-        {/* Animated gradient orbs */}
-        <div className="hero-orb-1 absolute -right-24 -top-24 size-[600px] rounded-full bg-gradient-to-br from-primary/[0.08] via-primary/[0.03] to-transparent blur-3xl" />
-        <div className="hero-orb-2 absolute -bottom-32 -left-32 size-[500px] rounded-full bg-gradient-to-tr from-indigo-500/[0.06] via-primary/[0.02] to-transparent blur-3xl" />
-        <div className="hero-orb-3 absolute left-1/2 top-1/4 size-[400px] -translate-x-1/2 rounded-full bg-gradient-to-b from-emerald-500/[0.04] to-transparent blur-3xl" />
+      {/* Hero Section 1 — Centered text + animated compass */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#000804] via-[#02120a] to-[#081a10]">
+        {/* Subtle background orb */}
+        <div className="hero-orb-1 absolute -right-24 -top-24 size-[600px] rounded-full bg-gradient-to-br from-emerald-500/[0.06] via-primary/[0.02] to-transparent blur-3xl" />
 
-        {/* Subtle grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              'linear-gradient(var(--text-primary) 1px, transparent 1px), linear-gradient(90deg, var(--text-primary) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-          aria-hidden="true"
-        />
+        <div className="relative z-[2] mx-auto max-w-[1200px] px-6 pb-12 pt-20 md:pt-28 lg:pb-16">
+          <div className="flex flex-col items-center gap-8 md:flex-row md:justify-center md:gap-12 lg:gap-16">
+            {/* Animated Compass */}
+            <div className="shrink-0">
+              <AnimatedCompass sceneIndex={sceneIndex} />
+            </div>
 
-        <div className="relative mx-auto max-w-[1200px] px-6 pb-24 pt-20 md:pt-28 lg:pb-32">
-          <div className="grid items-center gap-16 lg:grid-cols-2">
-            {/* Text */}
-            <div>
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-4 py-1.5">
-                <span className="size-2 animate-pulse rounded-full bg-primary" />
-                <span className="text-xs font-semibold text-primary">
+            {/* Hero Text — centered */}
+            <div className="max-w-2xl text-center md:text-left">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-4 py-1.5">
+                <span className="size-2 animate-pulse rounded-full bg-emerald-400" />
+                <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400">
                   2026 Programming Live
                 </span>
               </div>
-              <h1 className="mb-6 text-4xl font-extrabold leading-[1.06] tracking-tight md:text-5xl lg:text-[56px]">
+              <h1 className="mb-6 text-4xl font-black leading-[1.08] tracking-tight text-white md:text-5xl lg:text-[56px]">
                 Training programs create talent.{' '}
-                <span className="bg-gradient-to-r from-primary via-primary-400 to-primary bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-primary via-amber-300 to-primary bg-clip-text text-transparent">
                   COMPASS creates pathways.
                 </span>
               </h1>
-              <p className="mb-10 max-w-[520px] text-lg leading-relaxed text-gray-500">
+              <p className="mx-auto mb-10 max-w-[520px] text-lg font-medium leading-relaxed text-gray-200 md:mx-0">
                 We&apos;re building something Detroit hasn&apos;t had before:
                 career infrastructure that connects talented, underrepresented
                 technologists to real opportunities. Whether you&apos;re a
                 student, career-changer, or seasoned engineer — you belong here.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap justify-center gap-4 md:justify-start">
                 <Link
                   to="/get-involved"
-                  className="group inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-3.5 text-[15px] font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
+                  className="group inline-flex items-center gap-2 rounded-xl bg-primary px-7 py-4 text-[15px] font-extrabold text-black shadow-xl shadow-primary/25 transition-all hover:bg-primary-400 hover:shadow-primary/40 hover:-translate-y-0.5"
                 >
                   Join the Community
                   <span className="inline-block transition-transform group-hover:translate-x-0.5">
@@ -762,13 +637,13 @@ export default function HomePage() {
                 </Link>
                 <Link
                   to="/get-involved"
-                  className="inline-flex items-center rounded-lg border border-[var(--border)] px-7 py-3.5 text-[15px] font-semibold transition-all hover:border-primary/40 hover:bg-primary/[0.04]"
+                  className="inline-flex items-center rounded-xl border border-white/25 bg-white/10 px-7 py-4 text-[15px] font-extrabold text-white transition-all hover:border-emerald-400/60 hover:bg-emerald-500/15 hover:-translate-y-0.5"
                 >
                   Partner with Us
                 </Link>
               </div>
               {/* Social proof strip */}
-              <div className="mt-12 flex items-center gap-6">
+              <div className="mt-10 flex items-center justify-center gap-6 border-t border-white/15 pt-8 md:justify-start">
                 <div className="flex -space-x-2">
                   {[
                     'bg-primary',
@@ -778,27 +653,33 @@ export default function HomePage() {
                   ].map((bg, i) => (
                     <div
                       key={i}
-                      className={`flex size-8 items-center justify-center rounded-full border-2 border-[var(--surface)] text-[10px] font-bold text-white ${bg}`}
+                      className={`flex size-8 items-center justify-center rounded-full border-2 border-black text-[10px] font-black text-white ${bg}`}
                     >
                       {['JR', 'MK', 'AS', 'TL'][i]}
                     </div>
                   ))}
                 </div>
                 <div>
-                  <div className="text-sm font-semibold">4,111+ Navigators</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-base font-extrabold text-white">
+                    5,000+ Navigators
+                  </div>
+                  <div className="text-xs font-semibold text-gray-400">
                     and growing every month
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* Abstract visual — compass constellation */}
-            <div className="relative hidden lg:block" aria-hidden="true">
-              <HeroVisual />
-            </div>
           </div>
         </div>
+      </section>
+
+      {/* Hero Section 2 — Animated Detroit skyline scene */}
+      <section className="relative h-[50vh] min-h-[320px] overflow-hidden md:h-[60vh]">
+        <TechHeroCanvas onSceneChange={setSceneIndex} />
+        {/* Top fade from hero text section */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-24 bg-gradient-to-b from-[#081a10] to-transparent" />
+        {/* Bottom fade to next section */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-24 bg-gradient-to-t from-[var(--surface)] to-transparent" />
       </section>
 
       {/* Welcome Banner for newcomers */}
@@ -809,7 +690,9 @@ export default function HomePage() {
       {/* Trusted By — infinite double marquee */}
       <section className="border-y border-surface bg-white/[0.01]">
         <div className="py-10">
-          <p className="mb-6 text-center text-xs font-semibold uppercase tracking-widest text-gray-600">
+          <p
+            className={`mb-6 text-center text-xs font-semibold uppercase tracking-widest ${styles.caption}`}
+          >
             Trusted by leading organizations
           </p>
           <div className="flex flex-col gap-2">
@@ -833,14 +716,18 @@ export default function HomePage() {
           {/* Large featured stat */}
           <div className="bento-span-2 bento-tall flex flex-col justify-between rounded-2xl border border-surface bg-gradient-to-br from-primary/[0.06] via-surface-card to-surface-card p-8">
             <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
+              <p
+                className={`mb-1 text-xs font-semibold uppercase tracking-wider ${styles.cardLabel}`}
+              >
                 Community Growth
               </p>
-              <p className="text-sm text-gray-500">324% growth over 3 years</p>
+              <p className={`text-sm ${styles.cardLabel}`}>
+                324% growth over 3 years
+              </p>
             </div>
             <div>
               <AnimatedStat stat={stats[0]} />
-              <p className="mt-3 text-sm text-gray-500">
+              <p className={`mt-3 text-sm ${styles.cardLabel}`}>
                 Navigators across Michigan and growing every month
               </p>
             </div>
@@ -866,7 +753,9 @@ export default function HomePage() {
           {/* Job-seeking stat */}
           <div className="bento-span-2 flex items-center gap-8 rounded-xl border border-surface bg-surface-card p-6">
             <AnimatedStat stat={stats[3]} />
-            <p className="hidden text-sm leading-relaxed text-gray-500 md:block">
+            <p
+              className={`hidden text-sm leading-relaxed md:block ${styles.bodyText}`}
+            >
               Our Navigators aren&apos;t looking for more training —
               they&apos;re looking for pathways to careers. COMPASS builds the
               bridge.
@@ -895,7 +784,7 @@ export default function HomePage() {
               <h2 className="mb-5 text-3xl font-bold leading-tight tracking-tight">
                 Building the pathways that don&apos;t exist yet.
               </h2>
-              <p className="mb-6 leading-relaxed text-gray-500">
+              <p className={`mb-6 leading-relaxed ${styles.bodyText}`}>
                 Detroit is producing tech talent — but losing it. Despite
                 historic investments in training programs, 45% of Michigan STEM
                 graduates leave the state within two years.
@@ -904,7 +793,7 @@ export default function HomePage() {
               {/* Inline viz: the talent gap */}
               <TalentGapViz />
 
-              <p className="mt-6 leading-relaxed text-gray-500">
+              <p className={`mt-6 leading-relaxed ${styles.bodyText}`}>
                 The gap isn&apos;t skills. It&apos;s infrastructure. COMPASS is
                 a 501(c)(3) nonprofit closing this gap through a collective of
                 organizations: NSBE, SHPE, SWE, MCWT, Out in Tech, and more.
@@ -1001,10 +890,12 @@ export default function HomePage() {
                   <div>
                     <div className="text-[15px] font-semibold">{ev.name}</div>
                     <div className="mt-1 flex gap-4">
-                      <span className="text-[13px] text-gray-600">
+                      <span className={`text-[13px] ${styles.cardLabel}`}>
                         {ev.date}
                       </span>
-                      <span className="flex items-center gap-1 text-[13px] text-gray-600">
+                      <span
+                        className={`flex items-center gap-1 text-[13px] ${styles.cardLabel}`}
+                      >
                         <MapPinIcon /> {ev.location}
                       </span>
                     </div>
@@ -1026,6 +917,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Event Spotlight — Michigan DevFest 2026 & HHM */}
+      <EventSpotlightSection />
 
       {/* Your First Visit Guide */}
       <FirstVisitGuide />
@@ -1055,7 +949,7 @@ export default function HomePage() {
                 celebrating LGBTQ+ leaders, technologists, and allies building a
                 more inclusive future in tech.
               </p>
-              <p className="mb-8 leading-relaxed text-gray-500">
+              <p className={`mb-8 leading-relaxed ${styles.bodyText}`}>
                 Partnered with Out in Tech Detroit and GDG Detroit, the Pride
                 Innovation Summit brings together the brightest minds for talks,
                 workshops, and networking focused on AI, emerging technology,
@@ -1151,7 +1045,9 @@ export default function HomePage() {
                 key={t.company}
                 className="rounded-xl border border-surface bg-surface-card p-6"
               >
-                <span className="text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <span
+                  className={`text-[11px] font-bold uppercase tracking-wider ${styles.cardLabel}`}
+                >
                   {t.type}
                 </span>
                 <p className="mt-2 text-xl font-bold text-primary">
@@ -1161,7 +1057,7 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-          <p className="mt-8 text-center text-sm text-gray-500">
+          <p className={`mt-8 text-center text-sm ${styles.bodyText}`}>
             Three Navigators. Three offers. Partners came to our events looking
             for talent — and found it.
           </p>
@@ -1183,7 +1079,7 @@ export default function HomePage() {
             <h2 className="mb-3 text-3xl font-bold tracking-tight">
               What&apos;s happening this month
             </h2>
-            <p className="max-w-lg text-sm text-gray-500">
+            <p className={`max-w-lg text-sm ${styles.sectionSubtitle}`}>
               Browse upcoming workshops, meetups, and community events.
               Something for every Navigator, every week.
             </p>
@@ -1202,7 +1098,7 @@ export default function HomePage() {
             <h2 className="mb-4 text-3xl font-bold tracking-tight">
               What your investment enables
             </h2>
-            <p className="mx-auto max-w-lg text-sm text-gray-500">
+            <p className={`mx-auto max-w-lg text-sm ${styles.sectionSubtitle}`}>
               Every dollar funds career infrastructure — not overhead.
               Here&apos;s what partnership makes possible.
             </p>
@@ -1213,34 +1109,78 @@ export default function HomePage() {
                 amount: 'TBD',
                 title: 'Community Workshop',
                 desc: 'Fund a full-day professional development workshop for 50+ Navigators',
-                icon: '🎯',
+                icon: (
+                  <svg
+                    className="size-7 text-amber-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="6" />
+                    <circle cx="12" cy="12" r="2" />
+                  </svg>
+                ),
               },
               {
                 amount: 'TBD',
                 title: 'Innovation Summit',
                 desc: 'Sponsor one complete Innovation Summit — 200+ attendees, speakers, and career connections',
-                icon: '🚀',
+                icon: (
+                  <svg
+                    className="size-7 text-sky-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71 1.62-2 1.62-2L4.5 16.5z" />
+                    <path d="M12 15l-3-3 7.5-7.5a2.121 2.121 0 0 1 3 3L12 15z" />
+                  </svg>
+                ),
               },
               {
                 amount: 'TBD',
                 title: 'Annual Programming',
                 desc: 'Fund a full year of community events, workshops, and career pathway programs',
-                icon: '📈',
+                icon: (
+                  <svg
+                    className="size-7 text-emerald-400"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                    <polyline points="17 6 23 6 23 12" />
+                  </svg>
+                ),
               },
               {
                 amount: 'TBD',
                 title: 'Ecosystem Builder',
                 desc: 'Transform the regional tech talent pipeline — fund scholarships, certifications, and employer partnerships',
-                icon: '🌟',
+                icon: (
+                  <svg
+                    className="size-7 text-purple-400"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 2L9.19 8.63 2 12l7.19 3.37L12 22l2.81-6.63L22 12l-7.19-3.37z" />
+                  </svg>
+                ),
               },
             ].map((tier) => (
               <div key={tier.title} className="tier-card flex flex-col">
-                <span className="mb-3 text-3xl">{tier.icon}</span>
+                <div className="mb-3">{tier.icon}</div>
                 <span className="mb-1 text-2xl font-extrabold text-primary">
                   {tier.amount}
                 </span>
                 <span className="mb-2 text-sm font-bold">{tier.title}</span>
-                <p className="mt-auto text-xs leading-relaxed text-gray-500">
+                <p
+                  className={`mt-auto text-xs leading-relaxed ${styles.cardLabel}`}
+                >
                   {tier.desc}
                 </p>
               </div>
@@ -1294,7 +1234,9 @@ export default function HomePage() {
                 together.
               </span>
             </h2>
-            <p className="mx-auto mb-10 max-w-[540px] text-lg leading-relaxed text-gray-500">
+            <p
+              className={`mx-auto mb-10 max-w-[540px] text-lg leading-relaxed ${styles.sectionSubtitle}`}
+            >
               Whether you&apos;re a tech professional, a student, an employer,
               or a community organization — there&apos;s a place for you at
               COMPASS.

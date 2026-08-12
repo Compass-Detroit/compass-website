@@ -19,9 +19,18 @@
     "format:check": "prettier --check .",
     "commitlint": "commitlint --edit",
     "preview": "vite preview",
-    "prepare": "husky",
+    "prepare": "husky || true",
     "test:a11y": "npm run build && echo 'Accessibility testing skipped due to ChromeDriver version mismatch'",
-    "audit": "npm audit --audit-level moderate"
+    "audit": "npm audit --audit-level moderate",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "npx playwright test",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:e2e:headed": "npx playwright test --headed",
+    "test:selenium": "node --test selenium/",
+    "test:all": "npm run test && npm run test:e2e"
   },
   "lint-staged": {
     "*.{js,jsx}": [
@@ -43,12 +52,18 @@
   },
   "devDependencies": {
     "@axe-core/cli": "^4.8.4",
+    "@axe-core/playwright": "^4.13.0",
     "@axe-core/react": "^4.10.2",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@playwright/test": "^1.61.1",
     "@svgr/rollup": "^8.1.0",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.4",
     "@vitejs/plugin-react-swc": "^3.3.2",
+    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/ui": "^4.1.10",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.19.5",
     "eslint": "^8.45.0",
@@ -59,11 +74,15 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "eslint-plugin-tailwindcss": "^3.18.2",
     "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
     "lint-staged": "^16.2.0",
     "postcss": "^8.5.6",
     "prettier": "^3.0.3",
+    "selenium-webdriver": "^4.47.0",
     "serve": "^14.2.1",
     "tailwindcss": "^3.4.18",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vitest": "^4.1.10",
+    "web-vitals": "^6.1.0"
   }
 }

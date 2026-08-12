@@ -1,0 +1,15 @@
+.sectionHeader {
+  color: var(--text-muted);
+}
+
+.trackBadge {
+  color: var(--text-secondary);
+}
+
+.tagLabel {
+  color: var(--text-muted);
+}
+
+.resourceDescription {
+  color: var(--text-muted);
+}

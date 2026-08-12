@@ -1,6 +1,6 @@
 import Arrow from '@/assets/images/icn-arrow.png'
 import GenericCard from '@/components/ui/GenericCard'
-import { organizersData } from '@/data/organizers'
+const organizersData = []
 
 function OrganizersSection() {
   return (

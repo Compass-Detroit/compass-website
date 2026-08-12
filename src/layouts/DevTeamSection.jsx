@@ -1,6 +1,6 @@
 import DevLogo from '@/assets/images/icn-dev.png'
 import DevTeamCard from '@/components/dev/DevTeamCard'
-import { devTeamData } from '@/data/dev'
+import { devTeamData } from '@/data/2024/dev'
 
 const DevTeamSection = () => {
   const sortedDevTeamData = [...devTeamData].sort((a, b) =>

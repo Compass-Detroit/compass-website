@@ -1,6 +1,6 @@
 import Connector from '@/assets/images/icn-connect.png'
 import GenericCard from '@/components/ui/GenericCard'
-import { facilitatorsData } from '@/data/facilitators'
+const facilitatorsData = []
 
 function FacilitatorsSection() {
   return (

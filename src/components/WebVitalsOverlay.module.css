@@ -1,0 +1,19 @@
+.badgeGood {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+.badgeNeedsImprovement {
+  background-color: #FFA706;
+  color: #111827;
+}
+
+.badgePoor {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+.badgeDefault {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
