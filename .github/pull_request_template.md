@@ -1,83 +1,48 @@
-# Pull Request
+# 🚀 Agentic Dev Pull Request
 
-## Description
-
-<!-- Provide a brief description of the changes in this PR -->
-
-## Type of Change
-
-<!-- Mark the relevant option with an "x" -->
-
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Code refactoring
-- [ ] Performance improvement
-- [ ] Accessibility improvement
-- [ ] Other (please describe):
-
-## Related Issues
-
-<!-- Link any related issues using "Fixes #123" or "Closes #123" -->
-
-## Code Quality Checklist
-
-<!-- Mark completed items with an "x" -->
-
-- [ ] Code follows the project's coding standards
-- [ ] Self-review of the code has been performed
-- [ ] Code is properly commented where necessary
-- [ ] No console.log statements left in the code
-- [ ] No hardcoded values that should be configurable
-- [ ] Error handling is implemented where appropriate
-
-## Testing
-
-<!-- Mark completed items with an "x" -->
-
-- [ ] Changes have been tested locally
-- [ ] All existing tests pass (if applicable)
-- [ ] New tests have been added for new functionality (if applicable)
-- [ ] Manual testing has been performed
-- [ ] Accessibility testing has been performed (for UI changes)
-
-## Accessibility (for UI changes)
-
-<!-- Mark completed items with an "x" -->
-
-- [ ] All interactive elements are keyboard accessible
-- [ ] Color contrast meets WCAG AA standards
-- [ ] Images have appropriate alt text
-- [ ] Form labels are properly associated
-- [ ] Focus indicators are visible
-- [ ] Screen reader compatibility has been tested
-
-## Build & Deployment
-
-<!-- Mark completed items with an "x" -->
-
-- [ ] Application builds successfully
-- [ ] No build warnings or errors
-- [ ] Dependencies are up to date
-- [ ] No security vulnerabilities introduced
-
-## Screenshots (if applicable)
-
-<!-- Add screenshots to help explain your changes -->
-
-## Additional Notes
-
-<!-- Any additional information that reviewers should know -->
+## 🤖 Agentic Context
+- **Pair Programming Mode**: [Agent Name] + Human Lead
+- **Skills Activated**: `caveman`, `cove`, `cavecrew`, [list others]
 
 ---
 
-**Note**: This PR will be automatically checked for:
+## 📌 Summary of Changes
+[Brief description of what this PR accomplishes]
 
-- Code quality (ESLint)
-- Code formatting (Prettier)
-- Build verification
-- Accessibility compliance
-- Security vulnerabilities
+### Key Changes
+- [Change 1]
+- [Change 2]
+- [Change 3]
 
-All checks must pass before this PR can be merged.
+---
+
+## 🔍 Type of Change
+- [ ] 🚀 New Feature
+- [ ] 🐛 Bug Fix
+- [ ] 🎨 UI & Design Enhancement
+- [ ] ⚡ Performance Improvement
+- [ ] ♻️ Refactor
+- [ ] ♿ Accessibility
+- [ ] 📝 Documentation
+- [ ] 🔧 Configuration / DevOps
+
+---
+
+## 🧪 Verification Checklist
+- [ ] Build passes (`npm run build` or equivalent)
+- [ ] Lint / format clean
+- [ ] Accessibility reviewed (ARIA, focus, contrast)
+- [ ] Responsive tested (mobile + desktop)
+- [ ] No regressions in existing functionality
+
+---
+
+## 📸 Preview & Evidence
+| Area | Screenshot / Link |
+|---|---|
+| [Feature Area] | [Screenshot or deployment link] |
+
+---
+
+## 📝 Notes
+[Any additional context, breaking changes, or follow-up items]
