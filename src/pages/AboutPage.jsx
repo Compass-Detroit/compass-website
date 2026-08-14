@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import SiteLayout from '@/layouts/SiteLayout'
 import CheckIcon from '@/components/ui/CheckIcon'
-import communityGatheringImg from '@assets/images/generated/community-gathering.png'
-import innovationSummitImg from '@assets/images/generated/innovation-summit.png'
+import { communityPhotos, innovationSummitPhotos } from '@/data/galleryPhotos'
+import MiniCarousel from '@/components/ui/MiniCarousel'
 
 import NSBELogo from '@/assets/images/organizations/org-nsbe-logo.webp'
 import SHPELogo from '@/assets/images/organizations/org-shpe-logo.webp'
@@ -397,11 +397,10 @@ export default function AboutPage() {
       <section>
         <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="img-zoom mb-12 overflow-hidden rounded-2xl border border-surface">
-            <img
-              src={communityGatheringImg}
-              alt="Diverse community members gathering at a COMPASS Detroit networking event"
-              className="aspect-[3/1] w-full object-cover"
-              loading="lazy"
+            <MiniCarousel
+              photos={communityPhotos}
+              aspectRatio="3/1"
+              className="w-full object-cover"
             />
           </div>
           <div className="grid gap-16 lg:grid-cols-2">
@@ -502,11 +501,10 @@ export default function AboutPage() {
       <section>
         <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="img-zoom mb-12 overflow-hidden rounded-2xl border border-surface">
-            <img
-              src={innovationSummitImg}
-              alt="Innovation Summit keynote presentation with tech professionals"
-              className="aspect-[4/1] w-full object-cover"
-              loading="lazy"
+            <MiniCarousel
+              photos={innovationSummitPhotos}
+              aspectRatio="4/3"
+              className="w-full object-cover"
             />
           </div>
           <div className="mx-auto mb-16 max-w-[700px] text-center">

@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
-import devfestImg from '@assets/images/generated/devfest-conference.png'
-import iwdImg from '@assets/images/generated/women-in-tech.png'
-import prideImg from '@assets/images/generated/pride-summit.png'
-import hackathonImg from '@assets/images/generated/hackathon-scene.png'
-import innovationImg from '@assets/images/generated/innovation-summit.png'
+import {
+  devfestPhotos,
+  womenInTechPhotos,
+  prideSummitPhotos,
+  hackathonPhotos,
+  innovationSummitPhotos,
+} from '@/data/galleryPhotos'
+import MiniCarousel from '@/components/ui/MiniCarousel'
 
 const eventSites = [
   {
@@ -14,7 +17,7 @@ const eventSites = [
     description:
       "Michigan's premier developer conference featuring AI/ML, cloud, mobile, and full-stack tracks",
     date: 'November 2026 · 1,000+ Attendees',
-    image: devfestImg,
+    photos: devfestPhotos,
     live: true,
   },
   {
@@ -25,7 +28,7 @@ const eventSites = [
     description:
       "International Women's Day celebration with 8 tracks and 120+ companies",
     date: 'March 2026 · Detroit, MI',
-    image: iwdImg,
+    photos: womenInTechPhotos,
     live: true,
   },
   {
@@ -36,7 +39,7 @@ const eventSites = [
     description:
       "Celebrating LGBTQ+ leaders, technologists, and allies in Michigan's tech ecosystem",
     date: 'June 2026 · IBM Detroit',
-    image: prideImg,
+    photos: prideSummitPhotos,
     live: true,
   },
   {
@@ -47,7 +50,7 @@ const eventSites = [
     description:
       'Celebrating Black excellence in technology with keynotes, panels, and networking focused on career advancement',
     date: 'February 2026 · Detroit, MI',
-    image: innovationImg,
+    photos: innovationSummitPhotos,
     live: true,
   },
   {
@@ -58,7 +61,7 @@ const eventSites = [
     description:
       'Hands-on agentic AI hackathon building real-world solutions with IBM and partners',
     date: 'Summer 2026 · Detroit, MI',
-    image: hackathonImg,
+    photos: hackathonPhotos,
     live: true,
   },
   {
@@ -69,7 +72,7 @@ const eventSites = [
     description:
       'Team-based hackathon with industry mentorship and portfolio building',
     date: 'Date TBD · Detroit, MI',
-    image: hackathonImg,
+    photos: hackathonPhotos,
     live: false,
   },
 ]
@@ -100,11 +103,10 @@ export default function EventWebsitesGallery() {
             >
               {/* Image container */}
               <div className="relative aspect-video overflow-hidden rounded-t-xl">
-                <img
-                  src={event.image}
-                  alt={event.name}
-                  className="img-zoom size-full object-cover"
-                  loading="lazy"
+                <MiniCarousel
+                  photos={event.photos}
+                  aspectRatio="16/9"
+                  className="w-full object-cover"
                 />
                 {/* Tag pill */}
                 <span

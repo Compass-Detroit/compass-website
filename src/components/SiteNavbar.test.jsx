@@ -1,7 +1,7 @@
-/* eslint-disable react/prop-types */
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from './ThemeProvider'
 import SiteNavbar from './SiteNavbar'
 
 vi.mock('@/assets/images/compass-logo.svg', () => ({
@@ -12,7 +12,12 @@ vi.mock('@/components/ui/SettingsDrawer', () => ({
   default: () => <div data-testid="settings-drawer" />,
 }))
 
-const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>)
+const renderWithRouter = (ui) =>
+  render(
+    <ThemeProvider>
+      <BrowserRouter>{ui}</BrowserRouter>
+    </ThemeProvider>
+  )
 
 describe('SiteNavbar', () => {
   it('renders logo', () => {

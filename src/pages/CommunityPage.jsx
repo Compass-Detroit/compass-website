@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
-import communityGatheringImg from '@assets/images/generated/community-gathering.png'
+import { communityPhotos } from '@/data/galleryPhotos'
+import MiniCarousel from '@/components/ui/MiniCarousel'
 import CommunityCalendar from '@/components/events/CommunityCalendar'
 
 import NSBELogo from '@/assets/images/organizations/org-nsbe-logo.webp'
@@ -205,11 +206,10 @@ export default function CommunityPage() {
       <section className="border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="img-zoom mb-10 overflow-hidden rounded-2xl border border-surface">
-            <img
-              src={communityGatheringImg}
-              alt="COMPASS Detroit community members at a networking event"
-              className="aspect-[3/1] w-full object-cover"
-              loading="lazy"
+            <MiniCarousel
+              photos={communityPhotos}
+              aspectRatio="3/1"
+              className="w-full object-cover"
             />
           </div>
           <div className="grid gap-6 md:grid-cols-2">

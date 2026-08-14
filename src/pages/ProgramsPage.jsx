@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
 import CheckIcon from '@/components/ui/CheckIcon'
-import innovationSummitImg from '@assets/images/generated/innovation-summit.png'
-import hackathonSceneImg from '@assets/images/generated/hackathon-scene.png'
-import devfestConferenceImg from '@assets/images/generated/devfest-conference.png'
-import careerMentorshipImg from '@assets/images/generated/career-mentorship.png'
+import {
+  innovationSummitPhotos,
+  hackathonPhotos,
+  devfestPhotos,
+  careerMentorshipPhotos,
+} from '@/data/galleryPhotos'
+import MiniCarousel from '@/components/ui/MiniCarousel'
 
 const programs = [
   {
@@ -96,27 +99,24 @@ export default function ProgramsPage() {
         <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="mb-12 grid gap-4 sm:grid-cols-3">
             <div className="img-zoom overflow-hidden rounded-xl border border-surface">
-              <img
-                src={innovationSummitImg}
-                alt="Innovation Summit keynote with tech industry leaders"
-                className="aspect-[3/2] w-full object-cover"
-                loading="lazy"
+              <MiniCarousel
+                photos={innovationSummitPhotos}
+                aspectRatio="16/9"
+                className="w-full object-cover"
               />
             </div>
             <div className="img-zoom overflow-hidden rounded-xl border border-surface">
-              <img
-                src={hackathonSceneImg}
-                alt="Hack Michigan teams collaborating on projects"
-                className="aspect-[3/2] w-full object-cover"
-                loading="lazy"
+              <MiniCarousel
+                photos={hackathonPhotos}
+                aspectRatio="16/9"
+                className="w-full object-cover"
               />
             </div>
             <div className="img-zoom overflow-hidden rounded-xl border border-surface">
-              <img
-                src={devfestConferenceImg}
-                alt="Michigan DevFest conference with attendees and speakers"
-                className="aspect-[3/2] w-full object-cover"
-                loading="lazy"
+              <MiniCarousel
+                photos={devfestPhotos}
+                aspectRatio="16/9"
+                className="w-full object-cover"
               />
             </div>
           </div>
@@ -178,11 +178,10 @@ export default function ProgramsPage() {
           </div>
           <div className="relative">
             <div className="img-zoom mx-auto mb-10 max-w-[700px] overflow-hidden rounded-xl border border-surface">
-              <img
-                src={careerMentorshipImg}
-                alt="Mentorship and career development at COMPASS Detroit"
-                className="aspect-[16/5] w-full object-cover"
-                loading="lazy"
+              <MiniCarousel
+                photos={careerMentorshipPhotos}
+                aspectRatio="3/1"
+                className="w-full object-cover"
               />
             </div>
             <h2 className="mb-4 text-3xl font-extrabold tracking-tight">

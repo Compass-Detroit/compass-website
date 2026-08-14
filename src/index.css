@@ -277,16 +277,16 @@ body {
 }
 
 :root {
-  /* Theme — dark (default) */
+  /* Theme — Midnight (Dark default) */
   --surface: #0a0a0a;
   --surface-card: #141414;
-  --surface-elevated: #1a1a1a;
+  --surface-elevated: #1e1e1e;
   --surface-footer: #050505;
-  --border: #222;
-  --border-light: #333;
+  --border: #262626;
+  --border-light: #383838;
   --text-primary: #ffffff;
-  --text-secondary: #d1d5db;
-  --text-muted: #9ca3af;
+  --text-secondary: #e2e8f0;
+  --text-muted: #a1a1aa;
   --marquee-fade: #0a0a0a;
   --card-hover-bg: rgba(255, 255, 255, 0.06);
 
@@ -303,178 +303,237 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-/* Light mode overrides */
+/* Daylight — Crisp Light Mode (WCAG AA compliant contrast) */
 .light {
-  --surface: #fafafa;
-  --surface-card: #ffffff;
-  --surface-elevated: #f5f5f5;
-  --surface-footer: #f0f0f0;
-  --border: #e5e5e5;
-  --border-light: #d4d4d4;
-  --text-primary: #111827;
-  --text-secondary: #374151;
-  --text-muted: #4b5563;
-  --marquee-fade: #fafafa;
+  --surface: #ffffff;
+  --surface-card: #f8fafc;
+  --surface-elevated: #f1f5f9;
+  --surface-footer: #e2e8f0;
+  --border: #e2e8f0;
+  --border-light: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #475569;
+  --marquee-fade: #ffffff;
   --card-hover-bg: rgba(0, 0, 0, 0.03);
 }
 
-/* Light mode — theme corrections for hardcoded dark classes */
-.light .text-white {
-  color: var(--text-primary);
+/* Motor City — Deep Automotive Navy + Blue */
+.theme-motor-city {
+  --surface: #0a1322;
+  --surface-card: #0f1f38;
+  --surface-elevated: #162b4c;
+  --surface-footer: #060c17;
+  --border: #1d3b66;
+  --border-light: #2b548f;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --marquee-fade: #0a1322;
+  --card-hover-bg: rgba(59, 130, 246, 0.08);
 }
 
-/* Escape hatch: inside .media-overlay (image overlays, carousels on photos),
-   text must ALWAYS be white/light regardless of theme — the background is
-   a dark image with gradient, not a themed surface. */
-.light .media-overlay .text-white {
-  color: #ffffff !important;
-}
-.light .media-overlay .text-gray-100 {
-  color: #f3f4f6 !important;
-}
-.light .media-overlay .text-gray-200 {
-  color: #e5e7eb !important;
-}
-.light .media-overlay .text-gray-400 {
-  color: #9ca3af !important;
-}
-.light .media-overlay .text-primary {
-  color: var(--primary) !important;
-}
-.light .media-overlay .text-amber-300 {
-  color: #fcd34d !important;
-}
-.light .media-overlay .text-amber-400 {
-  color: #fbbf24 !important;
-}
-.light .media-overlay .bg-clip-text {
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
+/* Campus — Warm Academic Cream */
+.theme-campus {
+  --surface: #faf7f2;
+  --surface-card: #ffffff;
+  --surface-elevated: #f4ede4;
+  --surface-footer: #ede2d5;
+  --border: #e2d7c8;
+  --border-light: #d3c4b1;
+  --text-primary: #1c1917;
+  --text-secondary: #44403c;
+  --text-muted: #57534e;
+  --marquee-fade: #faf7f2;
+  --card-hover-bg: rgba(0, 0, 0, 0.04);
 }
 
-.light .text-black {
-  color: #000000 !important;
+/* Neon — Cyber Tech Ultra-Dark */
+.theme-neon {
+  --surface: #050505;
+  --surface-card: #0f0f0f;
+  --surface-elevated: #1a1a1a;
+  --surface-footer: #000000;
+  --border: #262626;
+  --border-light: #3f3f3f;
+  --text-primary: #f8fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #a1a1aa;
+  --marquee-fade: #050505;
+  --card-hover-bg: rgba(34, 197, 94, 0.08);
 }
 
-/* Light mode — accessible primary (gold) text contrast */
-/* #efb403 on white = ~1.7:1 ✗ → #7C5300 on white = ~5.4:1 ✓ WCAG AA */
-.light .text-primary {
-  color: #7c5300;
-}
-.light .text-primary-300 {
-  color: #7a5200;
-}
-.light .text-primary-400 {
-  color: #8b5e00;
-}
-.light .text-primary-500 {
-  color: #8b5e00;
-}
-.light .hover\:text-primary:hover {
-  color: #6d4900;
-}
-.light .hover\:text-primary-400:hover {
-  color: #7a5200;
-}
-/* Primary borders — darken for visibility on light surfaces */
-.light .border-primary {
-  border-color: #a87300;
-}
-.light .border-primary\/40 {
-  border-color: rgba(139, 94, 0, 0.4);
-}
-.light .hover\:border-primary\/40:hover {
-  border-color: rgba(139, 94, 0, 0.4);
+/* Ember — Warm Espresso + Burnt Orange */
+.theme-ember {
+  --surface: #120c08;
+  --surface-card: #1c130d;
+  --surface-elevated: #291c13;
+  --surface-footer: #0a0604;
+  --border: #3d291a;
+  --border-light: #5c3d26;
+  --text-primary: #fff7ed;
+  --text-secondary: #fed7aa;
+  --text-muted: #d4a373;
+  --marquee-fade: #120c08;
+  --card-hover-bg: rgba(249, 115, 22, 0.08);
 }
 
-.light .text-gray-300 {
-  color: #1f2937;
-}
-.light .text-gray-400 {
-  color: #374151;
-}
-.light .text-gray-500 {
-  color: #374151;
-}
-.light .text-gray-600 {
-  color: #374151;
-}
-.light .text-gray-700 {
-  color: #1f2937;
+/* Cyber Matrix — Terminal Matrix Green */
+.theme-cyber {
+  --surface: #010c04;
+  --surface-card: #041a0a;
+  --surface-elevated: #07260f;
+  --surface-footer: #010602;
+  --border: #0e451b;
+  --border-light: #156628;
+  --text-primary: #4ade80;
+  --text-secondary: #86efac;
+  --text-muted: #22c55e;
+  --marquee-fade: #010c04;
+  --card-hover-bg: rgba(34, 197, 94, 0.12);
 }
 
-/* Light mode accessible accent text overrides (WCAG AA >= 4.5:1) */
+/* =========================================================================
+   Light Theme & Campus Theme Contrast Adjustments (WCAG AA ≥ 4.5:1)
+   ========================================================================= */
+
+.light .text-primary,
+.theme-campus .text-primary {
+  color: #854d0e; /* Accessible warm gold/amber against light surfaces: ~5.6:1 */
+}
+
+.light .text-primary-400,
+.theme-campus .text-primary-400 {
+  color: #78350f;
+}
+
+.light .hover\:text-primary:hover,
+.theme-campus .hover\:text-primary:hover {
+  color: #713f12;
+}
+
+.light .text-gray-300,
+.theme-campus .text-gray-300 {
+  color: #1e293b;
+}
+
+.light .text-gray-400,
+.theme-campus .text-gray-400 {
+  color: #475569;
+}
+
+.light .text-gray-500,
+.theme-campus .text-gray-500 {
+  color: #64748b;
+}
+
+.light .border-primary,
+.theme-campus .border-primary {
+  border-color: #a16207;
+}
+
+.light .border-primary\/30,
+.light .border-primary\/40,
+.theme-campus .border-primary\/30,
+.theme-campus .border-primary\/40 {
+  border-color: rgba(161, 98, 7, 0.4);
+}
+
+/* Accessible Accent Overrides in Light/Campus */
 .light .text-emerald-400,
-.light .text-emerald-500 {
+.light .text-emerald-500,
+.theme-campus .text-emerald-400,
+.theme-campus .text-emerald-500 {
   color: #047857;
 }
-.light .text-violet-400,
-.light .text-violet-500 {
-  color: #6d28d9;
-}
-.light .text-amber-400,
-.light .text-amber-500 {
-  color: #b45309;
-}
+
 .light .text-blue-400,
-.light .text-blue-500 {
+.light .text-blue-500,
+.theme-campus .text-blue-400,
+.theme-campus .text-blue-500 {
   color: #1d4ed8;
 }
-.light .text-red-400,
-.light .text-red-500 {
-  color: #b91c1c;
+
+.light .text-violet-400,
+.light .text-violet-500,
+.theme-campus .text-violet-400,
+.theme-campus .text-violet-500 {
+  color: #6d28d9;
 }
-.light .text-primary\/60 {
-  color: #8b5e00;
+
+/* =========================================================================
+   PROTECTIVE SCOPE: Explicitly dark surfaces, media overlays & cards
+   Ensure text inside dark surfaces ALWAYS stays crisp, radiant and high contrast
+   ========================================================================= */
+
+.media-overlay,
+.dark-surface,
+[class*="from-blue-950"],
+[class*="from-amber-950"],
+[class*="bg-black/"],
+.tier-card-platinum,
+.tier-card-gold {
+  color-scheme: dark;
 }
-.light .opacity-70 {
-  opacity: 0.9;
+
+.media-overlay .text-white,
+.dark-surface .text-white,
+[class*="from-blue-950"] .text-white,
+[class*="from-amber-950"] .text-white {
+  color: #ffffff !important;
 }
-.light .opacity-80 {
-  opacity: 0.95;
+
+.media-overlay .text-gray-200,
+.dark-surface .text-gray-200,
+[class*="from-blue-950"] .text-gray-200 {
+  color: #e2e8f0 !important;
 }
-.light .trust-badge-accent {
-  color: #8b5e00;
-  border-color: rgba(139, 94, 0, 0.4);
+
+.media-overlay .text-gray-300,
+.dark-surface .text-gray-300,
+[class*="from-blue-950"] .text-gray-300 {
+  color: #cbd5e1 !important;
 }
-.light .bg-white\/5,
-.light .bg-white\/\[0\.01\],
-.light .bg-white\/\[0\.02\],
-.light .bg-white\/\[0\.04\],
-.light .bg-white\/\[0\.06\],
-.light .bg-white\/\[0\.12\] {
-  background-color: rgba(0, 0, 0, 0.03);
+
+.media-overlay .text-gray-400,
+.dark-surface .text-gray-400,
+[class*="from-blue-950"] .text-gray-400 {
+  color: #94a3b8 !important;
 }
-.light .bg-\[\#0a0a0a\] {
-  background-color: var(--surface);
+
+.media-overlay .text-primary,
+.dark-surface .text-primary,
+[class*="from-blue-950"] .text-primary {
+  color: #efb403 !important;
 }
-.light .bg-\[\#050505\] {
-  background-color: var(--surface-footer);
+
+/* =========================================================================
+   Theme-Specific Glow and Focus States
+   ========================================================================= */
+
+.theme-cyber *:focus-visible {
+  outline: 2px solid #4ade80 !important;
+  outline-offset: 2px;
 }
-.light .bg-\[\#141414\] {
-  background-color: var(--surface-card);
+
+.theme-motor-city *:focus-visible {
+  outline: 2px solid #60a5fa !important;
+  outline-offset: 2px;
 }
-.light .bg-\[\#1a1a1a\] {
-  background-color: var(--surface-elevated);
+
+.theme-neon *:focus-visible {
+  outline: 2px solid #22c55e !important;
+  outline-offset: 2px;
 }
-.light .border-\[\#222\] {
-  border-color: var(--border);
+
+.theme-ember *:focus-visible {
+  outline: 2px solid #fb923c !important;
+  outline-offset: 2px;
 }
-.light .stroke-\[\#222\],
-.light .stroke-\[\#1a1a1a\] {
-  stroke: #e5e5e5;
-}
-.light .marquee-logo {
-  filter: grayscale(30%) brightness(1);
-}
-.light .marquee-logo-wrap {
-  background: rgba(0, 0, 0, 0.04);
-}
-.light .marquee-logo-wrap:hover {
-  background: rgba(0, 0, 0, 0.08);
-}
-.light .marquee-logo-wrap:hover .marquee-logo {
-  filter: grayscale(0%) brightness(1);
+
+*:focus-visible {
+  outline: 2px solid #efb403;
+  outline-offset: 2px;
 }
 
 body {
@@ -1062,7 +1121,9 @@ body {
   .timeline-step,
   .quote-enter,
   .quote-exit,
-  .confetti-piece {
+  .confetti-piece,
+  .hero-stagger,
+  .hero-underline {
     animation: none;
     opacity: 1;
     transform: none;
@@ -1074,4 +1135,51 @@ body {
     opacity: 1;
     transform: none;
   }
+  .hero-stagger {
+    opacity: 1;
+    transform: none;
+  }
+  .hero-underline {
+    width: 100% !important;
+  }
+}
+
+/* ========== Hero staggered reveal ========== */
+@keyframes hero-stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-stagger {
+  opacity: 0;
+  animation: hero-stagger-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-stagger:nth-child(1) { animation-delay: 0.1s; }
+.hero-stagger:nth-child(2) { animation-delay: 0.25s; }
+.hero-stagger:nth-child(3) { animation-delay: 0.4s; }
+.hero-stagger:nth-child(4) { animation-delay: 0.55s; }
+.hero-stagger:nth-child(5) { animation-delay: 0.7s; }
+.hero-stagger:nth-child(6) { animation-delay: 0.85s; }
+
+/* ========== Hero underline draw-in ========== */
+@keyframes hero-underline-draw {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.hero-underline {
+  width: 0;
+  animation: hero-underline-draw 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+/* ========== Smooth theme transitions ========== */
+html {
+  transition: background-color 0.4s ease, color 0.3s ease;
+}
+body {
+  transition: background-color 0.4s ease;
 }

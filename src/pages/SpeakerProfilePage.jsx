@@ -381,7 +381,14 @@ export default function SpeakerProfilePage() {
                       key={year}
                       className="inline-flex items-center rounded-full bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide border border-white/20"
                     >
-                      🎤 {year}
+                      <span
+                        role="img"
+                        aria-label="Microphone"
+                        className="mr-1.5"
+                      >
+                        🎤
+                      </span>{' '}
+                      {year}
                     </span>
                   ))}
                 </div>
@@ -509,7 +516,7 @@ export default function SpeakerProfilePage() {
                       <div key={idx} className="relative pl-8 md:pl-10">
                         {/* Timeline dot */}
                         <div
-                          className="absolute -left-[11px] top-1 size-5 rounded-full border-4 border-[var(--surface)] bg-primary"
+                          className="absolute left-[-11px] top-1 size-5 rounded-full border-4 border-[var(--surface)] bg-primary"
                           aria-hidden="true"
                         ></div>
 

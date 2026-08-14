@@ -114,3 +114,8 @@ This project uses three core agent skills:
 Additional project skills:
 - **scraper**: Speaker data collection and enrichment
 - **platformbuilder**: Community platform development patterns
+- **modern-web-guidance**: Search tool for modern web standards and best practices
+- **a11y-debugging**: Accessibility (WCAG 2.1 AA) auditing and debugging
+- **debug-optimize-lcp**: Web vitals (LCP, INP, CLS) performance optimization
+- **telemetry**: Custom Web Vitals tracking and analytics
+- **testing**: Vitest, React Testing Library, and Playwright patterns

@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { FaGithub, FaLinkedin, FaTwitter, FaGlobe } from 'react-icons/fa6'
 
@@ -29,8 +28,24 @@ const MemberProfileCard = ({
   return (
     <div className="relative w-full max-w-[350px] overflow-hidden rounded-3xl bg-white/70 p-6 shadow-xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl dark:bg-[rgba(15,15,25,0.7)]">
       {/* Gradient border effect via pseudo element or wrapper */}
-      <div className="absolute inset-0 z-0 rounded-3xl border border-transparent bg-gradient-to-br from-primary to-lime-500 opacity-20" style={{ maskImage: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)' }}></div>
-      <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-gradient-to-br from-[#efb403] to-[#00C605] pointer-events-none z-10 opacity-50 border border-transparent" style={{background: 'linear-gradient(to bottom right, #efb403, #00C605) border-box', WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude'}}></div>
+      <div
+        className="absolute inset-0 z-0 rounded-3xl border border-transparent bg-gradient-to-br from-primary to-lime-500 opacity-20"
+        style={{
+          maskImage:
+            'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+        }}
+      ></div>
+      <div
+        className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-gradient-to-br from-[#efb403] to-[#00C605] pointer-events-none z-10 opacity-50 border border-transparent"
+        style={{
+          background:
+            'linear-gradient(to bottom right, #efb403, #00C605) border-box',
+          WebkitMask:
+            'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
+          WebkitMaskComposite: 'xor',
+          maskComposite: 'exclude',
+        }}
+      ></div>
 
       <div className="relative z-20 flex flex-col items-center">
         {/* Avatar */}
@@ -62,7 +77,7 @@ const MemberProfileCard = ({
         {/* Bio */}
         {bio && (
           <p className="mt-4 line-clamp-2 text-center text-sm italic text-gray-700 dark:text-gray-400">
-            "{bio}"
+            &ldquo;{bio}&rdquo;
           </p>
         )}
 
@@ -136,7 +151,10 @@ const MemberProfileCard = ({
         {/* Badge */}
         <div className="mt-6 border-t border-gray-200 pt-4 dark:border-gray-700/50 w-full text-center">
           <p className="text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400">
-            🧭 COMPASS Detroit Community
+            <span role="img" aria-label="Compass" className="mr-1">
+              🧭
+            </span>{' '}
+            COMPASS Detroit Community
           </p>
         </div>
       </div>
