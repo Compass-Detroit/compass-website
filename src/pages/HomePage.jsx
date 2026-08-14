@@ -5,6 +5,7 @@ import SiteLayout from '@/layouts/SiteLayout'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import MapPinIcon from '@/components/ui/MapPinIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
+import MiniCarousel from '@/components/ui/MiniCarousel'
 import DevTeamShowcase from '@/components/dev/DevTeamShowcase'
 import TechHeroCanvas from '@/components/dev/TechHeroCanvas'
 import AnimatedCompass from '@/components/AnimatedCompass'
@@ -14,12 +15,12 @@ import FirstVisitGuide from '@/components/FirstVisitGuide'
 import CommunityVibes from '@/components/CommunityVibes'
 import EventSpotlightSection from '@/components/events/EventSpotlightSection'
 import styles from './HomePage.module.css'
-
-// Generated event images
-import communityGatheringImg from '@assets/images/generated/community-gathering.png'
-import prideSummitImg from '@assets/images/generated/pride-summit.png'
-import innovationSummitImg from '@assets/images/generated/innovation-summit.png'
-import careerMentorshipImg from '@assets/images/generated/career-mentorship.png'
+import {
+  communityPhotos,
+  prideSummitPhotos,
+  innovationSummitPhotos,
+  careerMentorshipPhotos,
+} from '@/data/galleryPhotos'
 
 // Scroll reveal hook — applies IntersectionObserver to add 'revealed' class
 function useScrollReveal() {
@@ -593,57 +594,58 @@ export default function HomePage() {
 
   return (
     <SiteLayout>
-      {/* Hero Section 1 — Centered text + animated compass */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#000804] via-[#02120a] to-[#081a10]">
-        {/* Subtle background orb */}
-        <div className="hero-orb-1 absolute -right-24 -top-24 size-[600px] rounded-full bg-gradient-to-br from-emerald-500/[0.06] via-primary/[0.02] to-transparent blur-3xl" />
+      {/* Hero Section 1 — Mission-focused with animated compass */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[var(--surface)] via-[var(--surface-elevated)] to-[var(--surface)] border-b border-[var(--border)]">
+        {/* Background orbs */}
+        <div className="hero-orb-1 absolute -right-24 -top-24 size-[600px] rounded-full bg-gradient-to-br from-emerald-500/[0.06] via-primary/[0.03] to-transparent blur-3xl" />
+        <div className="hero-orb-2 absolute -left-32 bottom-0 size-[400px] rounded-full bg-gradient-to-tr from-primary/[0.05] to-transparent blur-3xl" />
 
         <div className="relative z-[2] mx-auto max-w-[1200px] px-6 pb-12 pt-20 md:pt-28 lg:pb-16">
           <div className="flex flex-col items-center gap-8 md:flex-row md:justify-center md:gap-12 lg:gap-16">
-            {/* Animated Compass */}
+            {/* Animated Compass + Michigan */}
             <div className="shrink-0">
               <AnimatedCompass sceneIndex={sceneIndex} />
             </div>
 
-            {/* Hero Text — centered */}
+            {/* Hero Text — bold, direct */}
             <div className="max-w-2xl text-center md:text-left">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-4 py-1.5">
-                <span className="size-2 animate-pulse rounded-full bg-emerald-400" />
-                <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-400">
-                  2026 Programming Live
+              <div className="hero-stagger mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 shimmer">
+                <span className="size-2 animate-pulse rounded-full bg-primary" />
+                <span className="text-xs font-extrabold uppercase tracking-wider text-primary">
+                  Now Building · Detroit&apos;s Tech Future
                 </span>
               </div>
-              <h1 className="mb-6 text-4xl font-black leading-[1.08] tracking-tight text-white md:text-5xl lg:text-[56px]">
-                Training programs create talent.{' '}
-                <span className="bg-gradient-to-r from-primary via-amber-300 to-primary bg-clip-text text-transparent">
-                  COMPASS creates pathways.
+              <h1 className="hero-stagger mb-6 text-5xl font-black leading-[1.04] tracking-tight text-[var(--text-primary)] md:text-6xl lg:text-7xl">
+                Detroit has the talent.{' '}
+                <span className="relative inline-block text-primary">
+                  We build the bridge.
+                  <span className="hero-underline absolute -bottom-1 left-0 h-1 rounded-full bg-primary/60" />
                 </span>
               </h1>
-              <p className="mx-auto mb-10 max-w-[520px] text-lg font-medium leading-relaxed text-gray-200 md:mx-0">
-                We&apos;re building something Detroit hasn&apos;t had before:
-                career infrastructure that connects talented, underrepresented
-                technologists to real opportunities. Whether you&apos;re a
-                student, career-changer, or seasoned engineer — you belong here.
+              <p className="hero-stagger mx-auto mb-10 max-w-[540px] text-lg font-medium leading-relaxed text-[var(--text-secondary)] md:mx-0 md:text-xl">
+                5,000+ underrepresented technologists. Zero gatekeeping. Real
+                careers launched. This is what happens when community becomes
+                infrastructure.
               </p>
-              <div className="flex flex-wrap justify-center gap-4 md:justify-start">
+              <div className="hero-stagger flex flex-wrap justify-center gap-4 md:justify-start">
                 <Link
                   to="/get-involved"
                   className="group inline-flex items-center gap-2 rounded-xl bg-primary px-7 py-4 text-[15px] font-extrabold text-black shadow-xl shadow-primary/25 transition-all hover:bg-primary-400 hover:shadow-primary/40 hover:-translate-y-0.5"
                 >
-                  Join the Community
+                  Become a Navigator
                   <span className="inline-block transition-transform group-hover:translate-x-0.5">
                     <ArrowRightIcon />
                   </span>
                 </Link>
                 <Link
                   to="/get-involved"
-                  className="inline-flex items-center rounded-xl border border-white/25 bg-white/10 px-7 py-4 text-[15px] font-extrabold text-white transition-all hover:border-emerald-400/60 hover:bg-emerald-500/15 hover:-translate-y-0.5"
+                  className="inline-flex items-center rounded-xl border border-[var(--border)] bg-[var(--surface-card)] px-7 py-4 text-[15px] font-extrabold text-[var(--text-primary)] transition-all hover:border-primary/60 hover:text-primary hover:-translate-y-0.5"
                 >
                   Partner with Us
                 </Link>
               </div>
               {/* Social proof strip */}
-              <div className="mt-10 flex items-center justify-center gap-6 border-t border-white/15 pt-8 md:justify-start">
+              <div className="hero-stagger mt-10 flex items-center justify-center gap-6 border-t border-[var(--border)] pt-8 md:justify-start">
                 <div className="flex -space-x-2">
                   {[
                     'bg-primary',
@@ -653,17 +655,17 @@ export default function HomePage() {
                   ].map((bg, i) => (
                     <div
                       key={i}
-                      className={`flex size-8 items-center justify-center rounded-full border-2 border-black text-[10px] font-black text-white ${bg}`}
+                      className={`flex size-8 items-center justify-center rounded-full border-2 border-[var(--surface)] text-[10px] font-black text-white ${bg}`}
                     >
                       {['JR', 'MK', 'AS', 'TL'][i]}
                     </div>
                   ))}
                 </div>
                 <div>
-                  <div className="text-base font-extrabold text-white">
+                  <div className="text-base font-extrabold text-[var(--text-primary)]">
                     5,000+ Navigators
                   </div>
-                  <div className="text-xs font-semibold text-gray-400">
+                  <div className="text-xs font-semibold text-[var(--text-muted)]">
                     and growing every month
                   </div>
                 </div>
@@ -767,13 +769,13 @@ export default function HomePage() {
       {/* Mission — with visualizations */}
       <section className="border-y border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
-          {/* Community image banner */}
-          <div className="img-zoom mb-12 overflow-hidden rounded-2xl border border-surface">
-            <img
-              src={communityGatheringImg}
-              alt="Diverse tech professionals networking at a COMPASS Detroit community event"
-              className="aspect-[3/1] w-full object-cover"
-              loading="lazy"
+          {/* Community image banner carousel */}
+          <div className="mb-12 overflow-hidden rounded-2xl border border-surface">
+            <MiniCarousel
+              photos={communityPhotos}
+              aspectRatio="3/1"
+              showArrows={true}
+              interval={5000}
             />
           </div>
           <div className="grid gap-12 lg:grid-cols-2">
@@ -927,6 +929,57 @@ export default function HomePage() {
       {/* Community Vibes — quotes and social proof */}
       <CommunityVibes />
 
+      {/* Hero 2 — Emotionally compelling storytelling */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[var(--surface)] via-[var(--surface-elevated)] to-[var(--surface)] border-y border-[var(--border)]">
+        <div className="pointer-events-none absolute -left-40 top-1/3 size-[500px] rounded-full bg-primary/[0.04] blur-3xl" />
+        <div className="pointer-events-none absolute -right-40 bottom-1/4 size-[400px] rounded-full bg-emerald-500/[0.04] blur-3xl" />
+        <div className="relative z-[1] mx-auto max-w-[900px] px-6 py-24 text-center md:py-32">
+          <p className="mb-6 text-[13px] font-semibold uppercase tracking-[0.12em] text-primary">
+            Why This Matters
+          </p>
+          <h2 className="mb-8 text-3xl font-black leading-[1.1] tracking-tight text-[var(--text-primary)] md:text-5xl lg:text-6xl">
+            We don&apos;t teach people to code.{' '}
+            <span className="text-primary">We make sure coders eat.</span>
+          </h2>
+          <p className="mx-auto mb-8 max-w-screen-sm text-lg leading-relaxed text-[var(--text-secondary)] md:text-xl">
+            45% of Michigan&apos;s STEM graduates leave the state within two
+            years. Not because they lack skills — because nobody built them a
+            path to stay. COMPASS is that path.
+          </p>
+          <div className="mx-auto mb-10 grid max-w-[560px] gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-card)] px-4 py-6 shadow-sm">
+              <div className="mb-1 text-2xl font-black text-primary">45%</div>
+              <div className="text-xs text-[var(--text-muted)] font-medium">
+                Leave Michigan in 2 years
+              </div>
+            </div>
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-card)] px-4 py-6 shadow-sm">
+              <div className="mb-1 text-2xl font-black text-emerald-500 dark:text-emerald-400">
+                78%
+              </div>
+              <div className="text-xs text-[var(--text-muted)] font-medium">
+                COMPASS retention rate
+              </div>
+            </div>
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-card)] px-4 py-6 shadow-sm">
+              <div className="mb-1 text-2xl font-black text-[var(--text-primary)]">
+                $0
+              </div>
+              <div className="text-xs text-[var(--text-muted)] font-medium">
+                Cost to Navigators
+              </div>
+            </div>
+          </div>
+          <p className="mx-auto max-w-[500px] text-sm italic leading-relaxed text-[var(--text-muted)]">
+            &ldquo;I was terrified to walk in alone. Left with three new friends
+            and a job referral.&rdquo;
+            <span className="mt-2 block not-italic font-semibold text-[var(--text-secondary)]">
+              — First-time Navigator, DevFest 2025
+            </span>
+          </p>
+        </div>
+      </section>
+
       {/* Pride Innovation Summit Spotlight */}
       <section className="border-y border-surface" ref={revealRef}>
         <div className="reveal mx-auto max-w-[1200px] px-6 py-20">
@@ -982,12 +1035,11 @@ export default function HomePage() {
                 </span>
               </a>
             </div>
-            <div className="img-zoom overflow-hidden rounded-2xl border border-primary/20 shadow-lg shadow-primary/5">
-              <img
-                src={prideSummitImg}
-                alt="Detroit Pride Innovation Summit — diverse professionals at an inclusive tech conference with subtle rainbow lighting"
-                className="aspect-[4/3] w-full object-cover"
-                loading="lazy"
+            <div className="overflow-hidden rounded-2xl border border-primary/20 shadow-lg shadow-primary/5">
+              <MiniCarousel
+                photos={prideSummitPhotos}
+                aspectRatio="4/3"
+                interval={4500}
               />
             </div>
           </div>
@@ -1006,20 +1058,18 @@ export default function HomePage() {
             </h2>
           </div>
           <div className="reveal-stagger mb-10 grid gap-4 md:grid-cols-2">
-            <div className="img-zoom overflow-hidden rounded-xl border border-surface">
-              <img
-                src={innovationSummitImg}
-                alt="Keynote speaker on stage at a COMPASS Detroit Innovation Summit"
-                className="aspect-[2/1] w-full object-cover"
-                loading="lazy"
+            <div className="overflow-hidden rounded-xl border border-surface">
+              <MiniCarousel
+                photos={innovationSummitPhotos}
+                aspectRatio="2/1"
+                interval={4000}
               />
             </div>
-            <div className="img-zoom overflow-hidden rounded-xl border border-surface">
-              <img
-                src={careerMentorshipImg}
-                alt="Career mentorship session between professionals at a COMPASS event"
-                className="aspect-[2/1] w-full object-cover"
-                loading="lazy"
+            <div className="overflow-hidden rounded-xl border border-surface">
+              <MiniCarousel
+                photos={careerMentorshipPhotos}
+                aspectRatio="2/1"
+                interval={4500}
               />
             </div>
           </div>

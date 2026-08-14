@@ -104,7 +104,7 @@ const MemberDirectoryPage = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
           <div className="rounded-2xl bg-white p-4 shadow-xl ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700">
             <div className="flex flex-col gap-4 md:flex-row">
-              <div className="relative flex-grow group">
+              <div className="relative grow group">
                 <input
                   type="text"
                   disabled

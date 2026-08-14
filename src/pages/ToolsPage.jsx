@@ -100,16 +100,28 @@ const ToolsPage = () => {
 
               const CardContent = (
                 <div
-                  className={`relative flex h-full flex-col overflow-hidden rounded-2xl bg-white p-6 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800 ${isActive ? 'hover:ring-2 hover:ring-primary/50' : 'opacity-75 grayscale-[30%]'}`}
+                  className={`relative flex h-full flex-col overflow-hidden rounded-2xl bg-white p-6 shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl dark:bg-gray-800 ${
+                    isActive
+                      ? 'hover:ring-2 hover:ring-primary/50'
+                      : 'opacity-75 grayscale-[30%]'
+                  }`}
                 >
                   <div className="mb-4 flex items-start justify-between">
                     <div
-                      className={`inline-flex rounded-xl p-3 ${isActive ? 'bg-primary/10 text-primary-600 dark:bg-primary/20 dark:text-primary-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'}`}
+                      className={`inline-flex rounded-xl p-3 ${
+                        isActive
+                          ? 'bg-primary/10 text-primary-600 dark:bg-primary/20 dark:text-primary-400'
+                          : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
+                      }`}
                     >
                       <Icon className="size-6" />
                     </div>
                     <span
-                      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${isActive ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}
+                      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${
+                        isActive
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                          : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                      }`}
                     >
                       {tool.status}
                     </span>
@@ -117,7 +129,7 @@ const ToolsPage = () => {
                   <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
                     {tool.name}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 flex-grow">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 grow">
                     {tool.description}
                   </p>
 

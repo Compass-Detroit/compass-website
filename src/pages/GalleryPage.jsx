@@ -11,7 +11,6 @@ import {
   FaExpand,
   FaWandMagicSparkles,
   FaCamera,
-  FaHeart,
 } from 'react-icons/fa6'
 
 const ALL_GALLERY_PHOTOS =
@@ -27,27 +26,62 @@ const ALL_GALLERY_PHOTOS =
         },
       ]
 
-const FEATURED_SLIDES = [
+// Hero showcase slides — large cinematic carousel
+const HERO_SLIDES = [
   {
-    id: 'iwd26-feat',
     src: '/assets/gallery/iwd26/image0.jpeg',
-    title: 'IWD Summit 2026 Group Showcase',
+    title: 'IWD Innovation Summit 2026',
     subtitle:
-      'Captured by Heart of the City Photography · Celebrating Inclusion & Empowerment',
-    tag: 'Heart of the City Spotlight',
+      "Celebrating inclusion, empowerment, and Detroit's tech community",
+    credit: 'Heart of the City Photography x Shawn Lee Studios',
   },
   {
-    id: 'devfest25-feat',
-    src: '/assets/gallery/devfest25/Student pictures/IMG_0598.jpg',
-    title: 'Michigan DevFest Keynote',
-    subtitle: 'Pioneering emerging tech & inclusive leadership in Detroit',
-    tag: 'DevFest Stage',
-  },
-  {
-    id: 'iwd25-feat',
     src: '/assets/gallery/iwd26/image1.jpeg',
     title: 'Navigators & Mentors Circle',
     subtitle: 'Connecting students directly to corporate tech leaders',
+    credit: 'Heart of the City Photography x Shawn Lee Studios',
+  },
+  {
+    src: '/assets/gallery/iwd26/image2.jpeg',
+    title: 'Community in Action',
+    subtitle: 'Building pathways through shared purpose and collaboration',
+    credit: 'Heart of the City Photography x Shawn Lee Studios',
+  },
+  {
+    src: '/assets/gallery/iwd26/image3.jpeg',
+    title: 'IWD Group Celebration',
+    subtitle: '250+ attendees, 40 speakers, 8 tracks of innovation',
+    credit: 'Heart of the City Photography x Shawn Lee Studios',
+  },
+  {
+    src: '/assets/gallery/iwd26/image4.jpeg',
+    title: 'Tech Leaders Unite',
+    subtitle: '120+ companies represented at Google Detroit',
+    credit: 'Heart of the City Photography x Shawn Lee Studios',
+  },
+  {
+    src: '/assets/gallery/iwd26/image5.jpeg',
+    title: 'The COMPASS Community',
+    subtitle:
+      "Every face, every story — building Michigan's inclusive tech future",
+    credit: 'Heart of the City Photography x Shawn Lee Studios',
+  },
+]
+
+const SPOTLIGHT_SLIDES = [
+  {
+    id: 'devfest25-feat',
+    src: '/assets/gallery/devfest25/Student pictures/IMG_0598.jpg',
+    title: 'Shams Ahsan at Michigan DevFest',
+    subtitle:
+      'Sharing insights on emerging tech & inclusive leadership in Detroit',
+    tag: 'DevFest 2025',
+  },
+  {
+    id: 'iwd26-group',
+    src: '/assets/gallery/iwd26/image0.jpeg',
+    title: 'IWD Summit 2026 Group Showcase',
+    subtitle: 'Captured by Heart of the City Photography x Shawn Lee Studios',
     tag: 'IWD 2026',
   },
 ]
@@ -68,10 +102,11 @@ const CATEGORIES = [
 
 export default function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState('All')
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0)
+  const [heroIndex, setHeroIndex] = useState(0)
+  const [spotlightIndex, setSpotlightIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
   const [lightboxIndex, setLightboxIndex] = useState(null)
-  const [hoveredParallax, setHoveredParallax] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(24)
 
   // Filtered photos
   const filteredPhotos =
@@ -79,11 +114,21 @@ export default function GalleryPage() {
       ? ALL_GALLERY_PHOTOS
       : ALL_GALLERY_PHOTOS.filter((p) => p.category === selectedCategory)
 
-  // 3D Carousel Auto-play
+  const displayedPhotos = filteredPhotos.slice(0, visibleCount)
+
+  // Hero carousel auto-play
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % HERO_SLIDES.length)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Spotlight auto-play
   useEffect(() => {
     if (!isPlaying) return
     const interval = setInterval(() => {
-      setActiveSlideIndex((prev) => (prev + 1) % FEATURED_SLIDES.length)
+      setSpotlightIndex((prev) => (prev + 1) % SPOTLIGHT_SLIDES.length)
     }, 4500)
     return () => clearInterval(interval)
   }, [isPlaying])
@@ -128,6 +173,7 @@ export default function GalleryPage() {
   const handleCategoryChange = (cat) => {
     setLightboxIndex(null)
     setSelectedCategory(cat)
+    setVisibleCount(24)
   }
 
   const openMarqueeLightbox = (globalIndex) => {
@@ -137,272 +183,269 @@ export default function GalleryPage() {
 
   return (
     <SiteLayout>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pb-16 pt-24">
-        <div className="hero-orb-1 absolute -right-32 -top-32 size-[400px] rounded-full bg-gradient-to-br from-primary/[0.08] to-transparent blur-3xl" />
-        <div className="hero-orb-2 absolute -bottom-20 left-1/4 size-[300px] rounded-full bg-gradient-to-tr from-emerald-500/[0.05] to-transparent blur-3xl" />
-        <div className="hero-grid-pattern pointer-events-none absolute inset-0" />
-
-        <div className="relative mx-auto max-w-[1200px] px-6">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3.5 py-1">
-            <FaWandMagicSparkles className="size-3 animate-pulse text-primary" />
-            <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
-              {ALL_GALLERY_PHOTOS.length}+ Event Moments Cataloged
-            </span>
-          </div>
-          <h1 className="mb-6 max-w-[750px] text-4xl font-extrabold leading-[1.08] tracking-tight md:text-6xl">
-            Experience our community{' '}
-            <span className="bg-gradient-to-r from-primary via-primary-400 to-amber-300 bg-clip-text text-transparent">
-              in action.
-            </span>
-          </h1>
-          <p className="max-w-screen-sm text-lg leading-relaxed text-gray-500">
-            From DevFest and IWD Summits to BHM Summits and COMPES PDC events —
-            explore high-resolution memories from our COMPASS Detroit community.
-          </p>
-        </div>
-      </section>
-
-      {/* Heart of the City Photography Recognition Banner */}
-      <section className="mx-auto max-w-[1200px] px-6 pb-12">
-        <div className="relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-primary/10 to-purple-500/10 p-8 shadow-xl backdrop-blur-md">
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-            <div className="flex items-start gap-4">
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 shadow-md">
-                <FaCamera className="size-6" />
-              </div>
-              <div>
-                <div className="mb-1 flex items-center gap-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
-                    Special Recognition
-                  </span>
-                  <FaHeart className="size-3 animate-pulse text-red-500" />
-                </div>
-                <h3 className="text-xl font-bold tracking-tight text-white md:text-2xl">
-                  Heart of the City Photography
-                </h3>
-                <p className="mt-1 max-w-2xl text-sm leading-relaxed text-gray-300">
-                  A massive thank you to{' '}
-                  <strong className="text-white">
-                    Heart of the City Photography
-                  </strong>{' '}
-                  for capturing our stunning{' '}
-                  <strong className="text-primary">
-                    2026 International Women&apos;s Day (IWD) Group Pictures
-                  </strong>
-                  ! Their artistry, dedication, and passion beautifully showcase
-                  the vibrancy of our COMPASS community.
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => handleCategoryChange('IWD Summit 2026')}
-              className="shrink-0 rounded-xl border border-amber-400/40 bg-amber-500/20 px-5 py-2.5 text-xs font-bold text-amber-300 transition-all hover:bg-amber-500 hover:text-black hover:shadow-lg"
-            >
-              View IWD 2026 Photos
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* 3D Showcase Carousel Section */}
-      <section className="border-t border-surface bg-gradient-to-b from-primary/[0.02] to-transparent py-16">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-primary">
-                Featured Gallery
-              </p>
-              <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">
-                Spotlight Highlights
-              </h2>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setIsPlaying((p) => !p)}
-                className="flex size-10 items-center justify-center rounded-xl border border-surface bg-surface-card text-gray-400 transition-colors hover:border-primary/40 hover:text-primary"
-                aria-label={isPlaying ? 'Pause auto-play' : 'Start auto-play'}
-              >
-                {isPlaying ? (
-                  <FaPause className="size-3.5" />
-                ) : (
-                  <FaPlay className="size-3.5" />
-                )}
-              </button>
-              <button
-                onClick={() =>
-                  setActiveSlideIndex(
-                    (prev) =>
-                      (prev - 1 + FEATURED_SLIDES.length) %
-                      FEATURED_SLIDES.length
-                  )
-                }
-                className="flex size-10 items-center justify-center rounded-xl border border-surface bg-surface-card text-gray-400 transition-colors hover:border-primary/40 hover:text-primary"
-                aria-label="Previous featured slide"
-              >
-                <FaChevronLeft className="size-3.5" />
-              </button>
-              <button
-                onClick={() =>
-                  setActiveSlideIndex(
-                    (prev) => (prev + 1) % FEATURED_SLIDES.length
-                  )
-                }
-                className="flex size-10 items-center justify-center rounded-xl border border-surface bg-surface-card text-gray-400 transition-colors hover:border-primary/40 hover:text-primary"
-                aria-label="Next featured slide"
-              >
-                <FaChevronRight className="size-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Featured Stage Display */}
-          <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-primary/20 bg-surface-card shadow-2xl md:aspect-[21/9]">
-            {FEATURED_SLIDES.map((slide, idx) => {
-              const isActive = idx === activeSlideIndex
-              return (
-                <div
-                  key={slide.id}
-                  className={`absolute inset-0 transition-all duration-700 ease-out ${
-                    isActive
-                      ? 'pointer-events-auto scale-100 opacity-100'
-                      : 'pointer-events-none scale-105 opacity-0'
-                  }`}
-                >
-                  <img
-                    src={slide.src}
-                    alt={slide.title}
-                    className="size-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/10" />
-
-                  {/* Slide Content Overlay Glass Bar */}
-                  <div className="absolute inset-x-6 bottom-6 rounded-2xl border border-white/30 bg-black/90 p-6 shadow-2xl backdrop-blur-2xl md:inset-x-8 md:bottom-8 md:p-8">
-                    <div className="flex max-w-3xl flex-col gap-2">
-                      <span className="w-fit rounded-full border border-primary/50 bg-primary/25 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-primary backdrop-blur-md">
-                        {slide.tag}
-                      </span>
-                      <h3 className="text-2xl font-extrabold tracking-tight text-white drop-shadow-lg md:text-3xl">
-                        {slide.title}
-                      </h3>
-                      <p className="text-sm font-medium leading-relaxed text-gray-100 md:text-base">
-                        {slide.subtitle}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-
-            {/* Slide Navigation Dots */}
-            <div className="absolute right-8 top-6 z-20 flex items-center gap-2">
-              {FEATURED_SLIDES.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveSlideIndex(i)}
-                  className={`h-2.5 rounded-full shadow-sm transition-all duration-300 ${
-                    i === activeSlideIndex
-                      ? 'w-8 bg-primary shadow-primary/30'
-                      : 'w-2.5 bg-white/60 hover:bg-white'
-                  }`}
-                  aria-label={`Go to slide ${i + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Picture-in-Picture Parallax Story Section */}
-      <section className="border-t border-surface py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <div className="mb-16 text-center">
-            <p className="mb-3 text-[11px] font-bold uppercase tracking-wider text-primary">
-              Visual Stories
-            </p>
-            <h2 className="text-3xl font-extrabold tracking-tight md:text-4xl">
-              Moments of Impact
-            </h2>
-          </div>
-
-          <div className="mb-24 grid items-center gap-12 lg:grid-cols-12">
-            <div className="lg:col-span-7">
+      {/* ========== HERO: Large IWD Photo Carousel ========== */}
+      <section className="relative overflow-hidden">
+        {/* Full-width cinematic carousel */}
+        <div className="media-overlay relative aspect-[16/9] w-full overflow-hidden md:aspect-[21/9] lg:aspect-[24/9]">
+          {HERO_SLIDES.map((slide, idx) => {
+            const isActive = idx === heroIndex
+            return (
               <div
-                onMouseEnter={() => setHoveredParallax(true)}
-                onMouseLeave={() => setHoveredParallax(false)}
-                className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-surface bg-surface-card shadow-2xl transition-all duration-500 hover:border-primary/40"
+                key={`hero-${idx}`}
+                className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+                  isActive
+                    ? 'z-10 opacity-100 scale-100'
+                    : 'z-0 opacity-0 scale-105'
+                }`}
               >
                 <img
-                  src="/assets/gallery/iwd26/image0.jpeg"
-                  alt="IWD 2026 Group"
-                  className={`size-full object-cover transition-transform duration-700 ease-out ${
-                    hoveredParallax ? 'scale-105 brightness-75' : 'scale-100'
-                  }`}
+                  src={slide.src}
+                  alt={slide.title}
+                  className="size-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-transparent to-black/30" />
+                {/* Strong gradient for text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+              </div>
+            )
+          })}
 
-                <div
-                  className={`absolute bottom-6 right-6 aspect-[4/3] w-3/5 overflow-hidden rounded-xl border-2 border-primary/40 shadow-2xl transition-all duration-700 ease-out ${
-                    hoveredParallax
-                      ? 'translate-y-[-12px] scale-105 border-primary'
-                      : 'translate-y-0 scale-100'
-                  }`}
-                >
-                  <img
-                    src="/assets/gallery/iwd26/image2.jpeg"
-                    alt="IWD 2026 Group Detail"
-                    className="size-full object-cover"
+          {/* Hero text overlay — always visible, high contrast */}
+          <div className="absolute inset-0 z-20 flex flex-col justify-end">
+            <div className="mx-auto w-full max-w-[1200px] px-6 pb-8 md:pb-12">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 backdrop-blur-md">
+                <FaWandMagicSparkles className="size-3 animate-pulse text-primary" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-white">
+                  {ALL_GALLERY_PHOTOS.length}+ Event Moments
+                </span>
+              </div>
+              <h1
+                className="mb-3 max-w-[700px] text-3xl font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-2xl md:text-5xl lg:text-6xl"
+                style={{ textShadow: '0 2px 20px rgba(0,0,0,0.8)' }}
+              >
+                {HERO_SLIDES[heroIndex].title}
+              </h1>
+              <p
+                className="mb-4 max-w-[500px] text-sm font-medium text-gray-200 drop-shadow-lg md:text-base"
+                style={{ textShadow: '0 1px 10px rgba(0,0,0,0.9)' }}
+              >
+                {HERO_SLIDES[heroIndex].subtitle}
+              </p>
+
+              {/* Photographer credit pill */}
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/60 px-4 py-2 backdrop-blur-md">
+                <FaCamera className="size-3 text-primary" />
+                <span className="text-xs font-semibold text-white">
+                  {HERO_SLIDES[heroIndex].credit}
+                </span>
+              </div>
+
+              {/* Navigation dots */}
+              <div className="flex items-center gap-3">
+                {HERO_SLIDES.map((_, i) => (
+                  <button
+                    key={`hero-dot-${i}`}
+                    onClick={() => setHeroIndex(i)}
+                    className={`h-1.5 rounded-full transition-all duration-500 ${
+                      i === heroIndex
+                        ? 'w-10 bg-primary shadow-lg shadow-primary/40'
+                        : 'w-3 bg-white/40 hover:bg-white/70'
+                    }`}
+                    aria-label={`Go to slide ${i + 1}`}
                   />
-                  <div className="absolute bottom-2 left-2 rounded bg-black/70 px-2 py-0.5 text-[10px] font-semibold text-primary backdrop-blur-sm">
-                    Heart of the City Photography
-                  </div>
-                </div>
-
-                <div className="absolute left-6 top-6 rounded-xl border border-white/10 bg-black/60 px-4 py-2.5 backdrop-blur-md">
-                  <span className="text-xs font-bold text-white">
-                    IWD 2026 Group Celebration
-                  </span>
-                  <p className="text-[10px] text-gray-400">Detroit, Michigan</p>
-                </div>
+                ))}
               </div>
             </div>
+          </div>
 
-            <div className="lg:col-span-5">
-              <span className="mb-3 inline-block rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-400">
-                Special Photography Spotlight
-              </span>
-              <h3 className="mb-4 text-2xl font-bold tracking-tight md:text-3xl">
-                IWD 2026 Group Pictures by Heart of the City Photography
-              </h3>
-              <p className="mb-6 leading-relaxed text-gray-400">
-                We extend our deepest gratitude to Heart of the City Photography
-                for capturing the inspiring energy and unity of the 2026
-                International Women&apos;s Day Summit in Detroit.
+          {/* Navigation arrows */}
+          <button
+            onClick={() =>
+              setHeroIndex(
+                (prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length
+              )
+            }
+            className="absolute left-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-white/20 bg-black/50 p-3 text-white backdrop-blur-md transition-all hover:bg-black/70 hover:border-white/40"
+          >
+            <FaChevronLeft className="size-4" />
+          </button>
+          <button
+            onClick={() =>
+              setHeroIndex((prev) => (prev + 1) % HERO_SLIDES.length)
+            }
+            className="absolute right-4 top-1/2 z-30 -translate-y-1/2 rounded-full border border-white/20 bg-black/50 p-3 text-white backdrop-blur-md transition-all hover:bg-black/70 hover:border-white/40"
+          >
+            <FaChevronRight className="size-4" />
+          </button>
+        </div>
+      </section>
+
+      {/* ========== Photographer Credit Card — compact, elegant ========== */}
+      <section className="border-t border-surface">
+        <div className="mx-auto max-w-[1200px] px-6 py-10">
+          <div className="flex flex-col items-center gap-6 rounded-2xl border border-surface bg-surface-card p-6 sm:flex-row sm:items-center sm:gap-8 sm:p-8">
+            <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+              <FaCamera className="size-7 text-primary" />
+            </div>
+            <div className="flex-1 text-center sm:text-left">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                Official Event Photography
               </p>
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-3 rounded-xl border border-surface bg-surface-card p-4">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-sm font-bold text-amber-400">
-                    <FaCamera />
-                  </div>
-                  <span className="text-sm font-semibold text-gray-300">
-                    Professional Group &amp; Speaker Photography
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 rounded-xl border border-surface bg-surface-card p-4">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-sm font-bold text-red-400">
-                    <FaHeart />
-                  </div>
-                  <span className="text-sm font-semibold text-gray-300">
-                    Thank you, Heart of the City Photography!
-                  </span>
-                </div>
-              </div>
+              <h3 className="mt-1 text-xl font-extrabold tracking-tight">
+                Heart of the City Photography{' '}
+                <span className="bg-gradient-to-r from-primary via-primary-400 to-amber-300 bg-clip-text text-transparent">
+                  x Shawn Lee Studios
+                </span>
+              </h3>
+              <p className="mt-1.5 text-sm text-gray-500">
+                28+ years combined experience · Event, corporate & portrait
+                photography · Metro Detroit
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+              <Link
+                to="/gallery/photographer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
+              >
+                Meet the Photographer
+              </Link>
+              <a
+                href="https://www.hocxsls.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-surface px-5 py-2.5 text-sm font-semibold text-gray-400 transition-colors hover:border-primary/40 hover:text-primary"
+              >
+                <FaCamera className="size-3.5 text-primary" /> Visit Studio
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Infinite Photo Stream Marquee */}
+      {/* ========== Spotlight Highlights Carousel ========== */}
+      {SPOTLIGHT_SLIDES.length > 0 && (
+        <section className="border-t border-surface bg-gradient-to-b from-primary/[0.02] to-transparent py-16">
+          <div className="mx-auto max-w-[1200px] px-6">
+            <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+              <div>
+                <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-primary">
+                  Featured Gallery
+                </p>
+                <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">
+                  Spotlight Highlights
+                </h2>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setIsPlaying((p) => !p)}
+                  className="flex size-10 items-center justify-center rounded-xl border border-surface bg-surface-card text-gray-400 transition-colors hover:border-primary/40 hover:text-primary"
+                  aria-label={isPlaying ? 'Pause auto-play' : 'Start auto-play'}
+                >
+                  {isPlaying ? (
+                    <FaPause className="size-3.5" />
+                  ) : (
+                    <FaPlay className="size-3.5" />
+                  )}
+                </button>
+                <button
+                  onClick={() =>
+                    setSpotlightIndex(
+                      (prev) =>
+                        (prev - 1 + SPOTLIGHT_SLIDES.length) %
+                        SPOTLIGHT_SLIDES.length
+                    )
+                  }
+                  className="flex size-10 items-center justify-center rounded-xl border border-surface bg-surface-card text-gray-400 transition-colors hover:border-primary/40 hover:text-primary"
+                  aria-label="Previous featured slide"
+                >
+                  <FaChevronLeft className="size-3.5" />
+                </button>
+                <button
+                  onClick={() =>
+                    setSpotlightIndex(
+                      (prev) => (prev + 1) % SPOTLIGHT_SLIDES.length
+                    )
+                  }
+                  className="flex size-10 items-center justify-center rounded-xl border border-surface bg-surface-card text-gray-400 transition-colors hover:border-primary/40 hover:text-primary"
+                  aria-label="Next featured slide"
+                >
+                  <FaChevronRight className="size-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Featured Stage Display */}
+            <div className="media-overlay relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-primary/20 bg-surface-card shadow-2xl md:aspect-[21/9]">
+              {SPOTLIGHT_SLIDES.map((slide, idx) => {
+                const isActive = idx === spotlightIndex
+                return (
+                  <div
+                    key={slide.id}
+                    className={`absolute inset-0 transition-all duration-700 ease-out ${
+                      isActive
+                        ? 'pointer-events-auto scale-100 opacity-100'
+                        : 'pointer-events-none scale-105 opacity-0'
+                    }`}
+                  >
+                    <img
+                      src={slide.src}
+                      alt={slide.title}
+                      className="size-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/10" />
+
+                    {/* Slide Content Overlay Glass Bar */}
+                    <div className="absolute inset-x-6 bottom-6 rounded-2xl border border-white/20 bg-black/80 p-6 shadow-2xl backdrop-blur-2xl md:inset-x-8 md:bottom-8 md:p-8">
+                      <div className="flex max-w-3xl flex-col gap-2">
+                        <span className="w-fit rounded-full border border-primary/50 bg-primary/25 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-primary backdrop-blur-md">
+                          {slide.tag}
+                        </span>
+                        <h3
+                          className="text-2xl font-extrabold tracking-tight text-white md:text-3xl"
+                          style={{ textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}
+                        >
+                          {slide.title}
+                        </h3>
+                        <p className="text-sm font-medium leading-relaxed text-gray-200 md:text-base">
+                          {slide.subtitle}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+
+              {/* Slide Navigation Dots */}
+              <div className="absolute right-8 top-6 z-20 flex items-center gap-2">
+                {SPOTLIGHT_SLIDES.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSpotlightIndex(i)}
+                    className={`h-2.5 rounded-full shadow-sm transition-all duration-300 ${
+                      i === spotlightIndex
+                        ? 'w-8 bg-primary shadow-primary/30'
+                        : 'w-2.5 bg-white/60 hover:bg-white'
+                    }`}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ========== Infinite Photo Stream Marquee ========== */}
       {ALL_GALLERY_PHOTOS.length > 0 && (
         <section className="overflow-hidden border-t border-surface bg-[var(--surface-elevated)] py-16">
           <div className="mb-8 px-6 text-center">
@@ -437,7 +480,7 @@ export default function GalleryPage() {
                     loading="lazy"
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity hover:opacity-100">
-                    <FaExpand className="size-5 text-white" />
+                    <FaExpand className="size-5 text-white drop-shadow-lg" />
                   </div>
                 </div>
               ))}
@@ -446,7 +489,7 @@ export default function GalleryPage() {
         </section>
       )}
 
-      {/* Filterable Full Photo Gallery Grid */}
+      {/* ========== Filterable Full Photo Gallery Grid ========== */}
       <section className="border-t border-surface py-20">
         <div className="mx-auto max-w-[1200px] px-6">
           <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
@@ -477,7 +520,7 @@ export default function GalleryPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {filteredPhotos.map((img, i) => (
+            {displayedPhotos.map((img, i) => (
               <div
                 key={img.id}
                 role="button"
@@ -489,39 +532,56 @@ export default function GalleryPage() {
                     openLightbox(i)
                   }
                 }}
-                className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-xl border border-surface bg-surface-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl"
+                className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-xl border border-surface bg-surface-card transition-colors duration-200 hover:border-primary/40"
+                style={{
+                  contentVisibility: 'auto',
+                  containIntrinsicSize: '0 225px',
+                }}
               >
                 <img
                   src={img.src}
                   alt={img.title}
-                  className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  width={400}
+                  height={300}
+                  decoding="async"
+                  className="size-full object-cover transition-transform duration-300 will-change-transform group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <span className="mb-1 w-fit rounded-full border border-primary/30 bg-primary/20 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary">
+                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black via-black/50 to-transparent p-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                  <span className="mb-1.5 w-fit rounded-md bg-primary px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-black">
                     {img.category}
                   </span>
-                  <p className="text-xs font-bold leading-tight text-white">
+                  <p className="text-sm font-bold leading-tight text-white drop-shadow-lg">
                     {img.title}
                   </p>
                   {img.photographer && (
-                    <p className="mt-1 text-[10px] font-medium text-amber-300">
-                      <span role="img" aria-label="camera">
-                        📸
-                      </span>{' '}
-                      {img.photographer}
+                    <p className="mt-1.5 text-xs font-semibold text-amber-300 flex items-center gap-1.5 drop-shadow-lg">
+                      <FaCamera className="size-3" /> {img.photographer}
                     </p>
                   )}
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Load More Button */}
+          {visibleCount < filteredPhotos.length && (
+            <div className="mt-12 text-center">
+              <button
+                onClick={() => setVisibleCount((prev) => prev + 24)}
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-black shadow-lg transition-all hover:bg-primary-400 hover:shadow-primary/20 hover:-translate-y-0.5"
+              >
+                Load More Photos ({filteredPhotos.length - visibleCount}{' '}
+                remaining)
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Lightbox Modal */}
+      {/* ========== Lightbox Modal ========== */}
       {lightboxIndex !== null && filteredPhotos[lightboxIndex] && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/95 p-4 backdrop-blur-2xl md:p-10">
+        <div className="media-overlay fixed inset-0 z-[10000] flex items-center justify-center bg-black/95 p-4 backdrop-blur-2xl md:p-10">
           <div
             className="absolute inset-0"
             onClick={closeLightbox}
@@ -570,11 +630,14 @@ export default function GalleryPage() {
                 {filteredPhotos[lightboxIndex].title}
               </p>
               {filteredPhotos[lightboxIndex].photographer && (
-                <p className="mt-1 text-xs font-semibold text-amber-300">
-                  Photo by {filteredPhotos[lightboxIndex].photographer}
-                </p>
+                <div className="mt-2 flex justify-center">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                    <FaCamera className="size-3" />
+                    {filteredPhotos[lightboxIndex].photographer}
+                  </span>
+                </div>
               )}
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-3 text-xs text-gray-400">
                 Photo {lightboxIndex + 1} of {filteredPhotos.length} ·{' '}
                 {filteredPhotos[lightboxIndex].category}
               </p>
@@ -583,7 +646,7 @@ export default function GalleryPage() {
         </div>
       )}
 
-      {/* Final CTA */}
+      {/* ========== Final CTA ========== */}
       <section className="border-t border-surface">
         <div className="relative mx-auto max-w-[1200px] overflow-hidden rounded-2xl px-6 py-24 text-center">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.04] to-transparent" />

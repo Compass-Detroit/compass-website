@@ -181,7 +181,7 @@ export default function PreviousEventsPage() {
       </section>
 
       {/* Filter & Search Bar */}
-      <section className="border-t border-surface bg-black sticky top-16 md:top-20 z-40 py-4 shadow-2xl backdrop-blur-md bg-black/90">
+      <section className="sticky top-16 z-40 border-t border-surface bg-black/90 py-4 shadow-2xl backdrop-blur-md md:top-20">
         <div className="mx-auto max-w-[1200px] px-6 flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex overflow-x-auto gap-2 w-full md:w-auto pb-1 no-scrollbar items-center">
             <button
@@ -240,7 +240,7 @@ export default function PreviousEventsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search past events..."
-              className="w-full rounded-full border border-surface bg-surface-card py-2 pl-9 pr-4 text-xs font-medium text-white placeholder-gray-500 focus:border-primary focus:outline-none"
+              className="w-full rounded-full border border-surface bg-surface-card py-2 pl-9 pr-4 text-xs font-medium text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
             />
             <svg
               className="absolute left-3 top-2.5 size-3.5 text-gray-500"
@@ -297,7 +297,7 @@ export default function PreviousEventsPage() {
                     <h2 className="text-5xl md:text-6xl font-extrabold text-white tracking-tight">
                       {year}
                     </h2>
-                    <div className="h-px bg-surface flex-grow"></div>
+                    <div className="h-px bg-surface grow"></div>
                     <div className="text-gray-400 font-medium whitespace-nowrap">
                       {yearEvents.length} Event{yearEvents.length !== 1 && 's'}
                     </div>
@@ -314,7 +314,7 @@ export default function PreviousEventsPage() {
                           className="group rounded-xl border border-surface bg-surface-card overflow-hidden hover:border-primary/30 transition-colors hover-lift flex flex-col h-full reveal-stagger"
                           style={{ '--stagger': index + 1 }}
                         >
-                          <div className="p-6 flex-grow flex flex-col">
+                          <div className="p-6 grow flex flex-col">
                             <div className="mb-4">
                               <span className="inline-flex items-center gap-1.5 rounded-full bg-surface/50 border border-surface px-2.5 py-1 text-xs font-semibold text-white">
                                 {renderTypeIcon(eventType.icon)}
@@ -365,7 +365,7 @@ export default function PreviousEventsPage() {
                               </div>
                             </div>
 
-                            <p className="text-sm leading-relaxed text-gray-400 mb-6 flex-grow">
+                            <p className="text-sm leading-relaxed text-gray-400 mb-6 grow">
                               {event.description}
                             </p>
 
@@ -409,7 +409,7 @@ export default function PreviousEventsPage() {
                                   href={event.externalUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="block w-full text-center rounded-lg bg-surface/50 border border-surface px-4 py-2.5 text-sm font-semibold text-white hover:bg-surface hover:text-primary transition-colors flex items-center justify-center gap-2"
+                                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-surface bg-surface/50 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-surface hover:text-primary"
                                 >
                                   Visit Event Site
                                   <svg
