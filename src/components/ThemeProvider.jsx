@@ -5,7 +5,23 @@ import PropTypes from 'prop-types'
 const ThemeContext = createContext()
 
 const THEME_KEY = 'compass-theme'
+const VARIANT_KEY = 'compass-theme-variant'
 const FONT_KEY = 'compass-font'
+
+export const THEME_VARIANTS = [
+  { id: 'midnight', label: 'Midnight', cssClass: 'dark', base: 'dark' },
+  { id: 'daylight', label: 'Daylight', cssClass: 'light', base: 'light' },
+  {
+    id: 'motor-city',
+    label: 'Motor City',
+    cssClass: 'theme-motor-city',
+    base: 'dark',
+  },
+  { id: 'campus', label: 'Campus', cssClass: 'theme-campus', base: 'light' },
+  { id: 'neon', label: 'Neon', cssClass: 'theme-neon', base: 'dark' },
+  { id: 'ember', label: 'Ember', cssClass: 'theme-ember', base: 'dark' },
+  { id: 'cyber', label: 'Cyber Matrix', cssClass: 'theme-cyber', base: 'dark' },
+]
 
 export const FONT_OPTIONS = [
   {
@@ -41,13 +57,20 @@ export const FONT_OPTIONS = [
 ]
 
 export function ThemeProvider({ children }) {
-  const [mode, setMode] = useState(() => {
-    const saved = localStorage.getItem(THEME_KEY)
-    if (saved === 'light' || saved === 'dark') return saved
+  const [variant, setVariant] = useState(() => {
+    const saved = localStorage.getItem(VARIANT_KEY)
+    if (THEME_VARIANTS.some((v) => v.id === saved)) return saved
+    const savedMode = localStorage.getItem(THEME_KEY)
+    if (savedMode === 'light') return 'daylight'
+    if (savedMode === 'dark') return 'midnight'
     return window.matchMedia('(prefers-color-scheme: light)').matches
-      ? 'light'
-      : 'dark'
+      ? 'daylight'
+      : 'midnight'
   })
+
+  const currentVariant =
+    THEME_VARIANTS.find((v) => v.id === variant) || THEME_VARIANTS[0]
+  const mode = currentVariant.base
 
   const [font, setFont] = useState(() => {
     const saved = localStorage.getItem(FONT_KEY)
@@ -57,10 +80,17 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     const root = document.documentElement
-    root.classList.remove('light', 'dark')
-    root.classList.add(mode)
+    const allVariantClasses = THEME_VARIANTS.map((v) => v.cssClass)
+    root.classList.remove('light', 'dark', ...allVariantClasses)
+
+    root.classList.add(currentVariant.cssClass)
+    if (currentVariant.cssClass !== currentVariant.base) {
+      root.classList.add(currentVariant.base)
+    }
+
+    localStorage.setItem(VARIANT_KEY, variant)
     localStorage.setItem(THEME_KEY, mode)
-  }, [mode])
+  }, [variant, currentVariant, mode])
 
   useEffect(() => {
     const selected = FONT_OPTIONS.find((f) => f.id === font)
@@ -74,10 +104,17 @@ export function ThemeProvider({ children }) {
     localStorage.setItem(FONT_KEY, font)
   }, [font])
 
-  const toggle = () => setMode((m) => (m === 'dark' ? 'light' : 'dark'))
+  const toggle = () => {
+    setVariant((current) => {
+      const idx = THEME_VARIANTS.findIndex((v) => v.id === current)
+      return THEME_VARIANTS[(idx + 1) % THEME_VARIANTS.length].id
+    })
+  }
 
   return (
-    <ThemeContext.Provider value={{ mode, setMode, toggle, font, setFont }}>
+    <ThemeContext.Provider
+      value={{ mode, variant, setVariant, toggle, font, setFont }}
+    >
       {children}
     </ThemeContext.Provider>
   )

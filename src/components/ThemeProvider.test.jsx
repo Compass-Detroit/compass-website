@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, act } from '@testing-library/react'
 import { ThemeProvider, useTheme } from './ThemeProvider'
@@ -68,8 +67,34 @@ describe('ThemeProvider', () => {
         <TestComponent />
       </ThemeProvider>
     )
-    // Should persist the initial font 'montserrat' based on the requirements
     expect(localStorage.getItem('compass-font')).toBe('montserrat')
+  })
+
+  it('supports theme variants', () => {
+    const VariantTester = () => {
+      const { variant, setVariant, mode } = useTheme()
+      return (
+        <div>
+          <span data-testid="variant">{variant}</span>
+          <span data-testid="mode">{mode}</span>
+          <button onClick={() => setVariant('cyber')} data-testid="set-cyber">
+            cyber
+          </button>
+        </div>
+      )
+    }
+
+    render(
+      <ThemeProvider>
+        <VariantTester />
+      </ThemeProvider>
+    )
+
+    const btn = screen.getByTestId('set-cyber')
+    act(() => btn.click())
+    expect(screen.getByTestId('variant')).toHaveTextContent('cyber')
+    expect(screen.getByTestId('mode')).toHaveTextContent('dark')
+    expect(localStorage.getItem('compass-theme-variant')).toBe('cyber')
   })
 
   it('useTheme throws outside provider', () => {
