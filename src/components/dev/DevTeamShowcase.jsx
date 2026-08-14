@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { teamData } from '@/data/2026/team'
-import devCollabImg from '@assets/images/generated/dev-collaboration.png'
+import { devCollaborationPhotos } from '@/data/galleryPhotos'
+import MiniCarousel from '@/components/ui/MiniCarousel'
 import TeamMemberCard from '@/components/team/TeamMemberCard'
 
 const devTeam = teamData.filter((m) => m.devfest === 'devteam')
@@ -182,11 +183,10 @@ export default function DevTeamShowcase() {
 
           {/* Generated image */}
           <div className="overflow-hidden rounded-xl border border-surface">
-            <img
-              src={devCollabImg}
-              alt="Developers collaborating on the Compass Detroit website"
+            <MiniCarousel
+              photos={devCollaborationPhotos}
+              aspectRatio="16/9"
               className="size-full object-cover"
-              loading="lazy"
             />
           </div>
         </div>

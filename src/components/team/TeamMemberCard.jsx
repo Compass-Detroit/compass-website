@@ -89,7 +89,7 @@ export default function TeamMemberCard({
   }
 
   return (
-    <article className="group overflow-hidden rounded-2xl border border-surface bg-surface-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5">
+    <article className="group overflow-hidden rounded-2xl border border-surface bg-surface-card transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5">
       {/* Top Image area */}
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br from-surface-card to-[var(--surface-card)]">
         {member.avatar ? (

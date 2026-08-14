@@ -1,7 +1,7 @@
 import SiteLayout from '@/layouts/SiteLayout'
 import { Link } from 'react-router-dom'
-import devCollaborationImg from '@assets/images/generated/dev-collaboration.png'
-import hackathonSceneImg from '@assets/images/generated/hackathon-scene.png'
+import { devCollaborationPhotos, hackathonPhotos } from '@/data/galleryPhotos'
+import MiniCarousel from '@/components/ui/MiniCarousel'
 
 function BriefcaseIcon() {
   return (
@@ -205,19 +205,17 @@ export default function ResourcesPage() {
         <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="mb-12 grid gap-4 md:grid-cols-2">
             <div className="img-zoom overflow-hidden rounded-xl border border-surface">
-              <img
-                src={devCollaborationImg}
-                alt="Developers collaborating on code during a workshop"
-                className="aspect-[2/1] w-full object-cover"
-                loading="lazy"
+              <MiniCarousel
+                photos={devCollaborationPhotos}
+                aspectRatio="2/1"
+                className="w-full object-cover"
               />
             </div>
             <div className="img-zoom overflow-hidden rounded-xl border border-surface">
-              <img
-                src={hackathonSceneImg}
-                alt="Hackathon teams building projects together"
-                className="aspect-[2/1] w-full object-cover"
-                loading="lazy"
+              <MiniCarousel
+                photos={hackathonPhotos}
+                aspectRatio="2/1"
+                className="w-full object-cover"
               />
             </div>
           </div>

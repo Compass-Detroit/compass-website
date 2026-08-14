@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom'
 import MapPinIcon from '@/components/ui/MapPinIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
 import EventWebsitesGallery from '@/components/events/EventWebsitesGallery'
-import communityGatheringImg from '@assets/images/generated/community-gathering.png'
+import EventSpotlightSection from '@/components/events/EventSpotlightSection'
+import { communityPhotos } from '@/data/galleryPhotos'
+import MiniCarousel from '@/components/ui/MiniCarousel'
 import CommunityCalendar from '@/components/events/CommunityCalendar'
 
 const typeColors = {
@@ -85,13 +87,15 @@ const allEvents = [
     speakers: ['Greg Miller', 'Shugmi Shumunov'],
   },
   {
-    name: 'Hispanic Heritage Month Innovation Summit',
+    name: 'Hispanic Heritage Month Innovation Summit (HHM)',
     date: 'September 2026',
     month: 'SEP',
     location: 'Detroit, MI',
     type: 'Innovation Summit',
     stages: ['engage', 'connect'],
-    desc: 'Highlighting Hispanic and Latinx contributions to technology with career-focused programming and community building.',
+    statusBadge: 'More Info Coming Soon for HHM!',
+    desc: 'Highlighting Hispanic and Latinx contributions to technology with career-focused programming, mentorship, and community building in partnership with SHPE Detroit and Techqueria Detroit.',
+    hasQr: true,
   },
   {
     name: 'Hack Michigan',
@@ -103,13 +107,16 @@ const allEvents = [
     desc: "Michigan's premier community hackathon bringing together developers, designers, and innovators to build solutions for real-world challenges.",
   },
   {
-    name: 'Michigan DevFest',
+    name: 'Michigan DevFest 2026',
     date: 'November 2026',
     month: 'NOV',
-    location: 'Detroit, MI',
+    location: 'MotorCity Casino Hotel, Detroit, MI',
     type: 'Industry Event',
     stages: ['engage', 'build', 'connect'],
-    desc: 'A flagship technology conference featuring sessions on cloud, AI, mobile, web, and career development — co-produced with GDG Detroit.',
+    statusBadge: 'Exciting Lineup To Be Announced!',
+    url: 'https://midevfest26.vercel.app/',
+    desc: "Michigan's 12th annual flagship developer conference — 1,000+ attendees, 50+ speakers across 6 tracks (Cloud, AI, Mobile, Web, Leadership, Innovation). Co-produced with GDG Detroit.",
+    hasQr: true,
   },
 ]
 
@@ -262,15 +269,17 @@ export default function EventsPage() {
         </div>
       </section>
 
+      {/* Featured Event Spotlight — Michigan DevFest 2026 & HHM */}
+      <EventSpotlightSection />
+
       {/* Navigator Journey Flow — how events connect */}
       <section className="border-y border-surface bg-white/[0.01]">
         <div className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="img-zoom mb-10 overflow-hidden rounded-2xl border border-surface">
-            <img
-              src={communityGatheringImg}
-              alt="COMPASS Detroit event with community members networking"
-              className="aspect-[4/1] w-full object-cover"
-              loading="lazy"
+            <MiniCarousel
+              photos={communityPhotos}
+              aspectRatio="4/3"
+              className="w-full object-cover"
             />
           </div>
           <div className="mb-10 text-center">
@@ -499,10 +508,17 @@ export default function EventsPage() {
               to="/gallery"
               className="inline-flex items-center gap-2 rounded-full border border-surface bg-surface-card px-4 py-2 text-sm font-medium text-gray-400 transition-colors hover:text-white"
             >
-              <span>
-                <span role="img" aria-label="camera">
-                  📸
-                </span>{' '}
+              <span className="flex items-center gap-2">
+                <svg
+                  className="size-4 text-primary"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
                 Photos from past events
               </span>
             </Link>
@@ -568,11 +584,18 @@ export default function EventsPage() {
                           {ev.speakers.map((speaker) => (
                             <span
                               key={speaker}
-                              className="rounded-full bg-gradient-to-r from-red-500/20 via-yellow-500/20 to-violet-500/20 px-2.5 py-0.5 text-[10px] font-bold text-gray-400"
+                              className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-red-500/20 via-yellow-500/20 to-violet-500/20 px-2.5 py-0.5 text-[10px] font-bold text-gray-400"
                             >
-                              <span role="img" aria-label="Speaker">
-                                🎤
-                              </span>{' '}
+                              <svg
+                                className="size-3 text-primary"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                              </svg>
                               {speaker}
                             </span>
                           ))}
@@ -639,6 +662,48 @@ export default function EventsPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Previous Events CTA */}
+      <section className="border-t border-surface bg-surface-card/30">
+        <div className="mx-auto max-w-[1200px] px-6 py-20 text-center">
+          <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+            Event History
+          </p>
+          <h2 className="mb-4 text-3xl font-bold tracking-tight">
+            Explore our previous events
+          </h2>
+          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-gray-500">
+            Discover the speakers, sessions, and moments from past COMPASS
+            events.
+          </p>
+          <div className="mb-10 flex justify-center gap-12">
+            <div className="flex flex-col items-center">
+              <span className="text-3xl font-extrabold text-white">97+</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                Speakers
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-3xl font-extrabold text-white">88+</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                Sessions
+              </span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-3xl font-extrabold text-white">3</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                Years
+              </span>
+            </div>
+          </div>
+          <Link
+            to="/events/previous"
+            className="inline-flex rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-colors hover:bg-primary-400"
+          >
+            View Event History
+          </Link>
         </div>
       </section>
 

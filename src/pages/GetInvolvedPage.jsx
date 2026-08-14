@@ -1,7 +1,8 @@
 import SiteLayout from '@/layouts/SiteLayout'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import CheckIcon from '@/components/ui/CheckIcon'
-import careerMentorshipImg from '@assets/images/generated/career-mentorship.png'
+import { careerMentorshipPhotos } from '@/data/galleryPhotos'
+import MiniCarousel from '@/components/ui/MiniCarousel'
 
 // Partner & sponsor logos
 import GoogleLogo from '@/assets/images/sponsors/Google_logo.webp'
@@ -129,11 +130,10 @@ export default function GetInvolvedPage() {
       <section className="border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
           <div className="img-zoom mb-12 overflow-hidden rounded-2xl border border-surface">
-            <img
-              src={careerMentorshipImg}
-              alt="Career mentorship session between tech professionals"
-              className="aspect-[3/1] w-full object-cover"
-              loading="lazy"
+            <MiniCarousel
+              photos={careerMentorshipPhotos}
+              aspectRatio="3/1"
+              className="w-full object-cover"
             />
           </div>
           <div className="flex flex-col gap-6">
