@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { FaCircleCheck } from 'react-icons/fa6'
 import MemberProfileCard from './MemberProfileCard'
 
 const COMMON_SKILLS = [
@@ -321,11 +322,9 @@ const ProfileCardBuilder = () => {
 
               {submitted ? (
                 <div className="rounded-2xl bg-green-50 p-6 text-center border border-green-200 dark:bg-green-900/20 dark:border-green-800">
-                  <h3 className="text-lg font-semibold text-green-800 dark:text-green-400 mb-2">
-                    You&apos;re on the list!{' '}
-                    <span role="img" aria-label="Party popper">
-                      🎉
-                    </span>
+                  <h3 className="text-lg font-semibold text-green-800 dark:text-green-400 mb-2 inline-flex items-center justify-center gap-2">
+                    <FaCircleCheck className="size-5 text-green-600 dark:text-green-400" />
+                    You&apos;re on the list!
                   </h3>
                   <p className="text-green-700 dark:text-green-500 text-sm">
                     We&apos;ve saved your profile preview. We&apos;ll email you

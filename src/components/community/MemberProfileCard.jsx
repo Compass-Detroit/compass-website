@@ -1,5 +1,11 @@
 import PropTypes from 'prop-types'
-import { FaGithub, FaLinkedin, FaTwitter, FaGlobe } from 'react-icons/fa6'
+import {
+  FaGithub,
+  FaLinkedin,
+  FaTwitter,
+  FaGlobe,
+  FaCompass,
+} from 'react-icons/fa6'
 
 const MemberProfileCard = ({
   name,
@@ -150,10 +156,8 @@ const MemberProfileCard = ({
 
         {/* Badge */}
         <div className="mt-6 border-t border-gray-200 pt-4 dark:border-gray-700/50 w-full text-center">
-          <p className="text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400">
-            <span role="img" aria-label="Compass" className="mr-1">
-              🧭
-            </span>{' '}
+          <p className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold tracking-wider text-gray-500 uppercase dark:text-gray-400">
+            <FaCompass className="size-3.5 text-primary" aria-hidden="true" />
             COMPASS Detroit Community
           </p>
         </div>

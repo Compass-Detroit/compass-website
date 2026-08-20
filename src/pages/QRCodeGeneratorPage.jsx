@@ -6,6 +6,7 @@ import {
   IoQrCodeOutline,
   IoCheckmark,
 } from 'react-icons/io5'
+import { FaLightbulb } from 'react-icons/fa6'
 
 const PRESET_URLS = [
   { label: 'COMPASS Website', url: 'https://compassdetroit.org' },
@@ -117,12 +118,22 @@ export default function QRCodeGeneratorPage() {
       ctx.arc(size / 2, size / 2, logoSize * 0.65, 0, Math.PI * 2)
       ctx.fill()
 
-      // Compass emoji as logo placeholder
+      // Vector compass star as logo placeholder
       ctx.fillStyle = fgColor
-      ctx.font = `${logoSize * 0.6}px serif`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText('🧭', size / 2, size / 2)
+      const cx = size / 2
+      const cy = size / 2
+      const r = logoSize * 0.45
+      ctx.beginPath()
+      ctx.moveTo(cx, cy - r)
+      ctx.lineTo(cx + r * 0.3, cy - r * 0.3)
+      ctx.lineTo(cx + r, cy)
+      ctx.lineTo(cx + r * 0.3, cy + r * 0.3)
+      ctx.lineTo(cx, cy + r)
+      ctx.lineTo(cx - r * 0.3, cy + r * 0.3)
+      ctx.lineTo(cx - r, cy)
+      ctx.lineTo(cx - r * 0.3, cy - r * 0.3)
+      ctx.closePath()
+      ctx.fill()
     }
   }, [url, fgColor, bgColor, size, showLogo])
 
@@ -508,8 +519,9 @@ export default function QRCodeGeneratorPage() {
 
               {/* Tips */}
               <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-800 dark:bg-amber-900/20">
-                <h4 className="mb-2 text-sm font-bold text-amber-800 dark:text-amber-300">
-                  💡 Tips for QR Codes
+                <h4 className="mb-2 text-sm font-bold text-amber-800 dark:text-amber-300 inline-flex items-center gap-1.5">
+                  <FaLightbulb className="size-4 text-amber-600 dark:text-amber-400" />
+                  Tips for QR Codes
                 </h4>
                 <ul className="space-y-1.5 text-xs text-amber-700 dark:text-amber-400">
                   <li>
