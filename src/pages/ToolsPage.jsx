@@ -9,9 +9,17 @@ import {
   FaChartBar,
   FaQrcode,
   FaPen,
+  FaShapes,
 } from 'react-icons/fa6'
 
 const tools = [
+  {
+    name: 'DevFest Brand Kit',
+    icon: FaShapes,
+    status: 'Active',
+    route: '/brand',
+    description: 'Explore 2026 brand colors, logos, stickers, and assets',
+  },
   {
     name: 'Newsletter Studio',
     icon: FaEnvelope,

@@ -112,11 +112,11 @@ export default function NewsletterSignup({
       <div
         className={`${containerClasses[variant]} text-center animate-in fade-in zoom-in duration-500`}
       >
-        <div className="mx-auto mb-4 inline-flex size-16 items-center justify-center rounded-full bg-primary/20 text-primary animate-bounce">
-          🎉
+        <div className="mx-auto mb-4 inline-flex size-16 items-center justify-center rounded-full bg-primary/20 text-primary">
+          <FaCheckCircle className="size-8 text-primary" />
         </div>
         <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Welcome aboard! 🎉
+          Welcome aboard!
         </h3>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
           We&apos;ve successfully added {email} to our newsletter.

@@ -15,7 +15,7 @@ import {
   IoChevronDown,
   IoChevronUp,
 } from 'react-icons/io5'
-import { FaMastodon } from 'react-icons/fa6'
+import { FaMastodon, FaMicrophone } from 'react-icons/fa6'
 import colors from 'tailwindcss/colors'
 
 import SiteLayout from '@/layouts/SiteLayout'
@@ -379,15 +379,12 @@ export default function SpeakerProfilePage() {
                   {speaker.yearsActive?.map((year) => (
                     <span
                       key={year}
-                      className="inline-flex items-center rounded-full bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide border border-white/20"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide border border-white/20"
                     >
-                      <span
-                        role="img"
-                        aria-label="Microphone"
-                        className="mr-1.5"
-                      >
-                        🎤
-                      </span>{' '}
+                      <FaMicrophone
+                        className="size-3 text-primary"
+                        aria-hidden="true"
+                      />
                       {year}
                     </span>
                   ))}

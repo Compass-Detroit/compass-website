@@ -35,6 +35,7 @@ import MemberDirectoryPage from '@/pages/MemberDirectoryPage'
 import SpeakerSubmissionPage from '@/pages/SpeakerSubmissionPage'
 import GalleryManagerPage from '@/pages/GalleryManagerPage'
 import AnalyticsDashboardPage from '@/pages/AnalyticsDashboardPage'
+import BrandKitPage from '@/pages/BrandKitPage'
 import TelemetryProvider from '@/components/TelemetryProvider'
 import WebVitalsOverlay from '@/components/WebVitalsOverlay'
 
@@ -93,6 +94,8 @@ function App() {
                 path="/tools/analytics"
                 element={<AnalyticsDashboardPage />}
               />
+              <Route path="/brand" element={<BrandKitPage />} />
+              <Route path="/tools/brand-kit" element={<BrandKitPage />} />
               <Route path="/submit-talk" element={<SpeakerSubmissionPage />} />
               <Route path="/members" element={<MemberDirectoryPage />} />
 

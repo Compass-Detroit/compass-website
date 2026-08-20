@@ -137,7 +137,7 @@ export default function ImpactReportPage() {
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-4 py-1.5">
             <span className="size-2 rounded-full bg-primary" />
             <span className="text-xs font-semibold text-primary">
-              Impact Report 2023–2026
+              Community Impact Report · 2023–2026 Final
             </span>
           </div>
           <h1 className="mb-6 text-5xl font-extrabold leading-[1.06] tracking-tight md:text-7xl">
@@ -147,17 +147,46 @@ export default function ImpactReportPage() {
             </span>{' '}
             that didn&apos;t exist.
           </h1>
-          <p className="mx-auto mb-10 max-w-[600px] text-lg leading-relaxed text-gray-500">
+          <p className="mx-auto mb-8 max-w-screen-sm text-lg leading-relaxed text-gray-500">
             COMPASS — Collective of Minority Professionals and STEAM Societies —
             is a 501(c)(3) nonprofit creating career infrastructure for
             underrepresented tech talent in Michigan.
           </p>
+          <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
+            <a
+              href="/documents/COMPASS_Community_Impact_Report_2023-2026.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-black shadow-lg shadow-primary/20 transition-all hover:bg-primary-400 hover:scale-102"
+            >
+              <svg
+                className="size-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              Download Full Impact Report (PDF)
+            </a>
+            <a
+              href="#the-numbers"
+              className="inline-flex items-center gap-2 rounded-xl border border-surface bg-surface-card px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/40"
+            >
+              Explore Impact Data ↓
+            </a>
+          </div>
           <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
             <span>Est. 2023</span>
             <span className="size-1 rounded-full bg-gray-600" />
             <span>Detroit, Michigan</span>
             <span className="size-1 rounded-full bg-gray-600" />
-            <span>501(c)(3)</span>
+            <span>501(c)(3) Nonprofit</span>
           </div>
         </div>
       </section>
