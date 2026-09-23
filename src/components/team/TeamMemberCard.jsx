@@ -88,36 +88,53 @@ export default function TeamMemberCard({
     )
   }
 
+  const subtitle = member.role || member.position || ''
+  const socials = [
+    member.github && {
+      href: member.github,
+      label: 'GitHub',
+      Icon: GitHubIcon,
+    },
+    member.linkedin && {
+      href: member.linkedin,
+      label: 'LinkedIn',
+      Icon: LinkedInIcon,
+    },
+    member.twitter && {
+      href: `https://twitter.com/${member.twitter}`,
+      label: 'X (Twitter)',
+      Icon: TwitterIcon,
+    },
+  ].filter(Boolean)
+
   return (
-    <article className="group overflow-hidden rounded-2xl border border-surface bg-surface-card transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5">
-      {/* Top Image area */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-gradient-to-br from-surface-card to-[var(--surface-card)]">
+    <article className="group relative flex flex-col rounded-2xl border border-surface bg-surface-card p-2 transition-colors duration-300 hover:border-primary/35 focus-within:border-primary/35">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-elevated">
         {member.avatar ? (
           <img
             src={member.avatar}
-            alt={member.name}
-            className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+            alt=""
+            className="size-full object-cover object-top saturate-[0.85] transition-[transform,filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:saturate-100 motion-safe:group-hover:scale-[1.03]"
             loading="lazy"
           />
         ) : (
-          <div className="flex size-full items-center justify-center bg-gradient-to-br from-primary/10 to-violet-500/5 text-5xl font-extrabold text-primary/40">
+          <div className="flex size-full items-center justify-center bg-gradient-to-br from-primary/15 to-violet-500/10 text-5xl font-extrabold text-primary/50">
             {getInitials(member.name)}
           </div>
         )}
 
-        {/* Overlay gradient for readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-card)] via-[var(--surface-card)] to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+        {/* Soft scrim so badges stay legible on bright photos */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/25 to-transparent" />
 
-        {/* Badges positioned over image */}
         {badges.length > 0 && (
-          <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-            {badges.map((badge, i) => (
+          <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+            {badges.map((badge) => (
               <span
-                key={i}
+                key={badge}
                 className={
                   badge === 'Lead'
-                    ? 'rounded-full bg-primary/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-black shadow-lg backdrop-blur-md'
-                    : 'rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg backdrop-blur-md'
+                    ? 'rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-black shadow-sm'
+                    : 'rounded-full border border-white/25 bg-black/40 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-sm'
                 }
               >
                 {badge}
@@ -127,59 +144,38 @@ export default function TeamMemberCard({
         )}
       </div>
 
-      {/* Content */}
-      <div className="relative -mt-16 p-5 pt-0">
-        <div className="mb-4">
-          <h3 className="truncate text-xl font-bold text-white transition-colors group-hover:text-primary">
-            {member.name}
-          </h3>
-          <p className="truncate text-[13px] font-medium text-primary">
-            {member.role || member.position || ''}
+      <div className="flex grow flex-col px-3 pb-2 pt-4">
+        <h3 className="truncate text-lg font-bold leading-tight text-theme-primary">
+          {member.name}
+        </h3>
+        {subtitle && (
+          <p className="mt-1 truncate text-[13px] font-semibold text-primary">
+            {subtitle}
           </p>
-        </div>
-
+        )}
         {member.organization && (
-          <p className="mb-5 truncate text-[13px] text-gray-400">
+          <p className="mt-1 line-clamp-2 text-[13px] leading-snug text-theme-muted">
             {member.organization}
           </p>
         )}
 
-        {/* Social links */}
-        <div className="flex items-center gap-3 border-t border-white/5 pt-4">
-          {member.github && (
-            <a
-              href={member.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 transition-colors hover:text-primary"
-              aria-label={`${member.name} on GitHub`}
-            >
-              <GitHubIcon className="size-4" />
-            </a>
-          )}
-          {member.linkedin && (
-            <a
-              href={member.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 transition-colors hover:text-primary"
-              aria-label={`${member.name} on LinkedIn`}
-            >
-              <LinkedInIcon className="size-4" />
-            </a>
-          )}
-          {member.twitter && (
-            <a
-              href={`https://twitter.com/${member.twitter}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 transition-colors hover:text-primary"
-              aria-label={`${member.name} on X (Twitter)`}
-            >
-              <TwitterIcon className="size-4" />
-            </a>
-          )}
-        </div>
+        {socials.length > 0 && (
+          <ul className="mt-auto flex gap-1.5 pt-4">
+            {socials.map(({ href, label, Icon }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${member.name} on ${label}`}
+                  className="flex size-8 items-center justify-center rounded-full bg-surface-elevated text-theme-muted transition-colors hover:bg-primary/15 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                >
+                  <Icon className="size-3.5" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </article>
   )
