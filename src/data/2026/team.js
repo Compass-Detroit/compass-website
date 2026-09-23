@@ -2,22 +2,18 @@
 import AaronAmano from '@/data/2026/assets/images/team/aaron_amano.webp'
 import AliElSharif from '@/data/2026/assets/images/team/ali_elsharif.webp'
 import BrandonWelch from '@/data/2026/assets/images/team/brandon_welch.webp'
-import DaveKoziol from '@/data/2026/assets/images/team/dav_koziol.webp'
 import DeAndreBoston from '@/data/2026/assets/images/team/DeAndre_Boston.png'
+import KateShenton from '@/data/2026/assets/images/team/kate_shenton.webp'
+import DaveKoziol from '@/data/2026/assets/images/team/dav_koziol.webp'
 import GregMiller from '@/data/2026/assets/images/team/greg_miller.webp'
 import HernandoMalabet from '@/data/2026/assets/images/team/hernando_malabet.webp'
 import HodaSolati from '@/data/2026/assets/images/team/hoda_solati.webp'
-import HudaHussaini from '@/data/2026/assets/images/team/huda_hussaini.webp'
-import IdaByrdHill from '@/data/2026/assets/images/team/IdaByrd-Hill.webp'
 import JennaRitten from '@/data/2026/assets/images/team/jenna_ritten.webp'
 import JeseekiaVaughn from '@/data/2026/assets/images/team/jeseekia_vaughn.webp'
 import JingranWang from '@/data/2026/assets/images/team/Jingran_Wang-x96.webp'
 import JustinBeaudry from '@/data/2026/assets/images/team/justin_beaudry.webp'
-import KakoozaHarunah from '@/data/2026/assets/images/team/Kakooza_Harunah.png'
-import KateShenton from '@/data/2026/assets/images/team/kate_shenton.webp'
 import KayleeBusenbark from '@/data/2026/assets/images/team/kaylee_busenbark.webp'
 import MaridyMazaira from '@/data/2026/assets/images/team/maridy_mazaira.webp'
-import NisaSolano from '@/data/2026/assets/images/team/nisa_solano.webp'
 import RaquelEstrada from '@/data/2026/assets/images/team/raquel_estrada.webp'
 import Rehanashri from '@/data/2026/assets/images/team/rehanashri.webp'
 import RishirajSarkar from '@/data/2026/assets/images/team/rishiraj_sarkar.webp'
@@ -26,7 +22,6 @@ import ShimaSolati from '@/data/2026/assets/images/team/shima_solati.webp'
 import ShugmiShumunov from '@/data/2026/assets/images/team/shugmi_shumunov.png'
 import SohamMhatre from '@/data/2026/assets/images/team/soham_mhatre.webp'
 import SohanKetireddy from '@/data/2026/assets/images/team/sohan_ketireddy.webp'
-import SumiaSaleh from '@/data/2026/assets/images/team/Sumia_Saleh-x96.webp'
 import TerrellMcKinney from '@/data/2026/assets/images/team/Terrell_McKinney.webp'
 import TylerMcBeath from '@/data/2026/assets/images/team/tyler_mcbeath.webp'
 import UmeloOnyejiaka from '@/data/2026/assets/images/team/UmeloOnyejiaka.webp'
@@ -58,46 +53,6 @@ export const teamData = [
     organization: 'Little Caesars',
     role: 'Secretary and GDG Chair',
     avatar: DaveKoziol,
-  },
-  {
-    id: 3,
-    name: 'Ida Byrd-Hill',
-    linkedin: 'https://www.linkedin.com/in/idabyrdhill/',
-    github: '',
-    devfest: 'organizer',
-    star: false,
-    university: '',
-    organization: 'Automation Workz',
-    role: 'Treasurer and Automation Workz Chair',
-    avatar: IdaByrdHill,
-  },
-  {
-    id: 4,
-    name: 'Huda Hussaini',
-    twitter: '',
-    linkedin: 'https://www.linkedin.com/in/huda-hussaini/',
-    github: '',
-    devfest: 'organizer',
-    star: false,
-    university: '',
-    bio: `Have done a few cool AI project like Integrating AI and cybersecurity testing for automotive vehicles, Creating a Gen AI agent for your car and automating contract processing with IDP!`,
-    organization: 'Ally Financial + Women Techmakers',
-    role: 'GenAI Technical Product Owner',
-    avatar: HudaHussaini,
-  },
-  {
-    id: 5,
-    name: 'Sumia Saleh',
-    twitter: '',
-    linkedin: 'https://www.linkedin.com/in/sumia-saleh-163741263/',
-    github: 'https://github.com/Sumias',
-    devfest: 'organizer',
-    star: false,
-    university: 'University Of Michigan Dearborn',
-    bio: ``,
-    organization: '',
-    role: 'GDGC Lead',
-    avatar: SumiaSaleh,
   },
   {
     id: 6,
@@ -235,20 +190,6 @@ export const teamData = [
     avatar: AliElSharif,
   },
   {
-    id: 16,
-    name: 'Nisa Solano',
-    twitter: '',
-    linkedin: 'https://www.linkedin.com/in/nisa-solano/',
-    github: '',
-    devfest: 'organizer',
-    star: false,
-    university: 'Wayne State University',
-    bio: ``,
-    organization: 'GDGC | AWS Cloud Club | SHPE Wayne State',
-    role: 'Senior Computer Science Student',
-    avatar: NisaSolano,
-  },
-  {
     id: 17,
     name: 'Raquel Estrada',
     twitter: '',
@@ -292,45 +233,6 @@ Today, Maridy serves as President of the Society of Hispanic Professional Engine
     organization: 'Hikari Software',
     role: 'President',
     avatar: JingranWang,
-  },
-  {
-    id: 20,
-    name: 'Kate Shenton',
-    twitter: '',
-    linkedin: '',
-    github: '',
-    devfest: 'organizer',
-    star: false,
-    university: '',
-    organization: '',
-    role: 'Community Organizer',
-    avatar: KateShenton,
-  },
-  {
-    id: 21,
-    name: 'DeAndre Boston',
-    twitter: '',
-    linkedin: '',
-    github: '',
-    devfest: 'organizer',
-    star: false,
-    university: '',
-    organization: '',
-    role: 'Community Organizer',
-    avatar: DeAndreBoston,
-  },
-  {
-    id: 22,
-    name: 'Kakooza Harunah',
-    twitter: '',
-    linkedin: '',
-    github: '',
-    devfest: 'organizer',
-    star: false,
-    university: '',
-    organization: '',
-    role: 'Community Organizer',
-    avatar: KakoozaHarunah,
   },
   // ── Dev Team ──
   {
@@ -456,5 +358,45 @@ Today, Maridy serves as President of the Society of Hispanic Professional Engine
     organization: 'Aaron Douglas LLC',
     role: 'Software Engineer',
     avatar: TerrellMcKinney,
+  },
+  {
+    id: 32,
+    name: 'Kate Shenton',
+    twitter: '',
+    linkedin: '',
+    github: 'https://github.com/kateshent',
+    devfest: 'devteam',
+    star: false,
+    university: '',
+    organization: '',
+    role: 'Contributor',
+    avatar: KateShenton,
+  },
+  {
+    id: 33,
+    name: 'DeAndre Boston',
+    twitter: '',
+    linkedin: '',
+    github: 'https://github.com/dboston528',
+    devfest: 'devteam',
+    star: false,
+    university: '',
+    organization: '',
+    role: 'Contributor',
+    avatar: DeAndreBoston,
+  },
+  {
+    id: 34,
+    name: 'Divyalakshmi Varadha Rajan Prem Sudha',
+    twitter: '',
+    linkedin: '',
+    github: 'https://github.com/Divyatech-hub',
+    devfest: 'devteam',
+    star: false,
+    university: '',
+    organization: '',
+    role: 'Contributor',
+    // GitHub profile photo; no local headshot yet
+    avatar: 'https://avatars.githubusercontent.com/u/69458308?v=4&s=480',
   },
 ]

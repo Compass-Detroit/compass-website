@@ -64,7 +64,8 @@ const pathways = [
       'Access talent that reflects the diversity of Detroit',
     ],
     cta: 'Partner as an Employer',
-    ctaHref: 'mailto:jritten@compass-detroit.com?subject=Employer Partnership',
+    ctaHref:
+      'mailto:whatupdoe@compass-detroit.com?subject=Employer Partnership',
   },
   {
     audience: 'Professional Organizations',
@@ -79,7 +80,8 @@ const pathways = [
       'Strengthen the regional ecosystem together',
     ],
     cta: 'Join the Collective',
-    ctaHref: 'mailto:jritten@compass-detroit.com?subject=Coalition Partnership',
+    ctaHref:
+      'mailto:whatupdoe@compass-detroit.com?subject=Coalition Partnership',
   },
   {
     audience: 'Corporate & Foundation Partners',
@@ -94,7 +96,7 @@ const pathways = [
       'Gain meaningful engagement with diverse tech talent',
     ],
     cta: 'Sponsor COMPASS',
-    ctaHref: 'mailto:jritten@compass-detroit.com?subject=Sponsorship Inquiry',
+    ctaHref: 'mailto:whatupdoe@compass-detroit.com?subject=Sponsorship Inquiry',
   },
 ]
 
@@ -215,7 +217,7 @@ export default function GetInvolvedPage() {
             {Array.from({ length: emptySlots }).map((_, i) => (
               <a
                 key={`empty-${i}`}
-                href="mailto:jritten@compass-detroit.com?subject=Partnership Inquiry"
+                href="mailto:whatupdoe@compass-detroit.com?subject=Partnership Inquiry"
                 className="sponsor-slot-empty aspect-[3/2]"
                 aria-label="Become a partner"
               >
@@ -291,7 +293,6 @@ export default function GetInvolvedPage() {
                   'Logo on event website',
                   'Social media recognition',
                   'Recruiting access at events',
-                  'Community newsletter feature',
                 ],
               },
               {
@@ -333,7 +334,7 @@ export default function GetInvolvedPage() {
                   ))}
                 </ul>
                 <a
-                  href={`mailto:jritten@compass-detroit.com?subject=Sponsorship - ${t.tier} Tier`}
+                  href={`mailto:whatupdoe@compass-detroit.com?subject=Sponsorship - ${t.tier} Tier`}
                   className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary/10 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
                 >
                   Become a {t.tier} Partner
@@ -344,7 +345,7 @@ export default function GetInvolvedPage() {
           <p className="mt-8 text-center text-sm text-gray-500">
             Custom partnership packages available.{' '}
             <a
-              href="mailto:jritten@compass-detroit.com?subject=Custom Partnership"
+              href="mailto:whatupdoe@compass-detroit.com?subject=Custom Partnership"
               className="font-semibold text-primary transition-colors hover:text-primary-400"
             >
               Let&apos;s talk →

@@ -1,4 +1,8 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
+
+const ROTATE_MS = 5500
+const EXIT_MS = 400
 
 const quotes = [
   {
@@ -34,25 +38,48 @@ const quotes = [
 export default function CommunityVibes() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [animClass, setAnimClass] = useState('quote-enter')
-
-  const goTo = useCallback(
-    (index) => {
-      if (index === activeIndex) return
-      setAnimClass('quote-exit')
-      setTimeout(() => {
-        setActiveIndex(index)
-        setAnimClass('quote-enter')
-      }, 400)
-    },
-    [activeIndex]
+  // User toggle (WCAG 2.2.2) vs. transient pauses (hover, focus, hidden tab)
+  const [userPaused, setUserPaused] = useState(false)
+  const [hovered, setHovered] = useState(false)
+  const [focusWithin, setFocusWithin] = useState(false)
+  const [pageHidden, setPageHidden] = useState(
+    () => typeof document !== 'undefined' && document.hidden
   )
+  const reducedMotion = usePrefersReducedMotion()
+  const exitTimerRef = useRef(null)
+  const pauseButtonRef = useRef(null)
+  const activeIndexRef = useRef(activeIndex)
+  activeIndexRef.current = activeIndex
+
+  const goTo = useCallback((index) => {
+    if (index === activeIndexRef.current) return
+    clearTimeout(exitTimerRef.current)
+    setAnimClass('quote-exit')
+    exitTimerRef.current = setTimeout(() => {
+      exitTimerRef.current = null
+      setActiveIndex(index)
+      setAnimClass('quote-enter')
+    }, EXIT_MS)
+  }, [])
+
+  useEffect(() => () => clearTimeout(exitTimerRef.current), [])
 
   useEffect(() => {
+    const onVisibility = () => setPageHidden(document.hidden)
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => document.removeEventListener('visibilitychange', onVisibility)
+  }, [])
+
+  const autoRotate =
+    !userPaused && !hovered && !focusWithin && !pageHidden && !reducedMotion
+
+  useEffect(() => {
+    if (!autoRotate) return
     const timer = setInterval(() => {
-      goTo((activeIndex + 1) % quotes.length)
-    }, 5500)
+      goTo((activeIndexRef.current + 1) % quotes.length)
+    }, ROTATE_MS)
     return () => clearInterval(timer)
-  }, [activeIndex, goTo])
+  }, [autoRotate, goTo, activeIndex])
 
   const quote = quotes[activeIndex]
 
@@ -70,8 +97,32 @@ export default function CommunityVibes() {
 
         <div className="grid gap-10 lg:grid-cols-2">
           {/* Quote carousel */}
-          <div className="flex flex-col justify-between">
-            <div className="relative min-h-[180px] md:min-h-[160px]">
+          <div
+            className="flex flex-col justify-between"
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onFocus={(e) => {
+              // Keyboard focus pauses; mouse clicks and the toggle itself don't
+              let keyboardFocus = true
+              try {
+                keyboardFocus = e.target.matches(':focus-visible')
+              } catch {
+                // :focus-visible unsupported — treat as keyboard focus
+              }
+              setFocusWithin(
+                keyboardFocus && e.target !== pauseButtonRef.current
+              )
+            }}
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget)) {
+                setFocusWithin(false)
+              }
+            }}
+          >
+            <div
+              className="relative min-h-[180px] md:min-h-[160px]"
+              aria-live={autoRotate ? 'off' : 'polite'}
+            >
               <div key={activeIndex} className={animClass}>
                 <svg
                   width="32"
@@ -90,12 +141,51 @@ export default function CommunityVibes() {
               </div>
             </div>
 
-            {/* Dots */}
+            {/* Dots + pause control */}
             <div className="mt-6 flex items-center gap-2">
+              {!reducedMotion && (
+                <button
+                  ref={pauseButtonRef}
+                  type="button"
+                  onClick={() => setUserPaused((p) => !p)}
+                  aria-pressed={userPaused}
+                  aria-label={
+                    userPaused
+                      ? 'Resume quote rotation'
+                      : 'Pause quote rotation'
+                  }
+                  className="mr-2 flex size-7 items-center justify-center rounded-full border border-primary/30 text-primary transition-colors hover:bg-primary/10"
+                >
+                  {userPaused ? (
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M2 1l7 4-7 4z" />
+                    </svg>
+                  ) : (
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <rect x="1.5" y="1" width="2.5" height="8" rx="0.5" />
+                      <rect x="6" y="1" width="2.5" height="8" rx="0.5" />
+                    </svg>
+                  )}
+                </button>
+              )}
               {quotes.map((_, i) => (
                 <button
                   key={i}
+                  type="button"
                   onClick={() => goTo(i)}
+                  aria-current={i === activeIndex ? 'true' : undefined}
                   className={`quote-dot ${
                     i === activeIndex ? 'quote-dot-active' : ''
                   }`}
@@ -110,7 +200,7 @@ export default function CommunityVibes() {
             <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-card)] p-6">
               <div className="mb-4 flex items-center gap-3">
                 <span className="relative flex size-3">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="absolute inline-flex size-full motion-safe:animate-ping rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex size-3 rounded-full bg-emerald-500" />
                 </span>
                 <span className="text-sm font-semibold text-emerald-400">

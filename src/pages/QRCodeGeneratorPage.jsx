@@ -26,7 +26,7 @@ const COLOR_PRESETS = [
   { label: 'COMPASS Gold', fg: '#1a1a2e', bg: '#efb403' },
   { label: 'Dark Mode', fg: '#efb403', bg: '#1a1a2e' },
   { label: 'Lime', fg: '#0a3d0a', bg: '#00C605' },
-  { label: 'Indigo', fg: '#ffffff', bg: '#6366f1' },
+  { label: 'Indigo', fg: '#ffffff', bg: '#4f46e5' },
   { label: 'Charcoal', fg: '#efb403', bg: '#111827' },
 ]
 
@@ -262,7 +262,7 @@ export default function QRCodeGeneratorPage() {
             <h1 className="mb-4 font-russell text-4xl font-bold text-gray-900 dark:text-white md:text-5xl">
               QR Code Generator
             </h1>
-            <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-400">
+            <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
               Generate branded QR codes for events, handouts, and social media.
               Customize colors to match COMPASS branding.
             </p>
@@ -322,7 +322,7 @@ export default function QRCodeGeneratorPage() {
                         className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                           url === preset.url
                             ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
                         }`}
                       >
                         {preset.label}
@@ -382,7 +382,7 @@ export default function QRCodeGeneratorPage() {
                         onChange={(e) => setFgColor(e.target.value)}
                         className="size-6 cursor-pointer border-0"
                       />
-                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                      <span className="text-xs text-gray-600 dark:text-gray-300">
                         {fgColor}
                       </span>
                     </div>
@@ -402,7 +402,7 @@ export default function QRCodeGeneratorPage() {
                         onChange={(e) => setBgColor(e.target.value)}
                         className="size-6 cursor-pointer border-0"
                       />
-                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                      <span className="text-xs text-gray-600 dark:text-gray-300">
                         {bgColor}
                       </span>
                     </div>
@@ -423,7 +423,7 @@ export default function QRCodeGeneratorPage() {
                       className={`rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                         size === opt.value
                           ? 'bg-primary text-gray-900 shadow-md'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
                       }`}
                     >
                       {opt.label}
@@ -479,10 +479,10 @@ export default function QRCodeGeneratorPage() {
 
                 {/* URL display */}
                 <div className="mt-4 rounded-lg bg-gray-50 p-3 text-center dark:bg-gray-700">
-                  <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                  <p className="truncate text-xs text-gray-500 dark:text-gray-300">
                     {url || 'Enter a URL above'}
                   </p>
-                  <p className="mt-1 text-xs text-gray-400">
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-300">
                     {size}×{size}px
                   </p>
                 </div>

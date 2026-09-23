@@ -72,7 +72,7 @@ const SpeakersContent = ({ year, defaultExpanded }) => {
   )
 
   const renderSpeakers = (
-    <div className="mx-auto my-8 grid max-w-2xl grid-cols-1 gap-8 text-center sm:grid-cols-2 md:grid-cols-3 lg:mx-0 lg:max-w-none lg:grid-cols-4 xl:grid-cols-5">
+    <div className="mx-auto my-8 grid max-w-2xl grid-cols-1 gap-5 text-left sm:grid-cols-2 md:grid-cols-3 lg:mx-0 lg:max-w-none lg:grid-cols-4">
       {uniqueSpeakersSortedByFirstName.map((speaker, index) => (
         <SpeakerCard
           key={speaker.id || `speaker-${index}`}

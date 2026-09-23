@@ -147,14 +147,16 @@ export const parseICSToEvents = (icsText) => {
   return events
 }
 
-export const fetchCalendarEvents = async (calendarId) => {
-  try {
-    const response = await fetch(`/api/calendar?calendarId=${calendarId}`)
-    if (!response.ok) throw new Error('Failed to fetch calendar events')
-    const icsText = await response.text()
-    return parseICSToEvents(icsText)
-  } catch (error) {
-    console.error('Error fetching calendar events:', error)
-    return []
-  }
+// Throws on failure so useCalendarEvents can fall back to placeholder data.
+export const fetchCalendarEvents = async (calendarId, { signal } = {}) => {
+  const response = await fetch(
+    `/api/calendar?calendarId=${encodeURIComponent(calendarId)}`,
+    { signal }
+  )
+  if (!response.ok) throw new Error('Failed to fetch calendar events')
+  const icsText = await response.text()
+  // Without the serverless function (plain vite dev) /api/* serves index.html
+  if (!icsText.includes('BEGIN:VCALENDAR'))
+    throw new Error('Calendar feed unavailable')
+  return parseICSToEvents(icsText)
 }

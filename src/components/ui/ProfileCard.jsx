@@ -33,7 +33,7 @@ const ProfileCard = ({
       Workshops: 'bg-orange-900',
     }
 
-    if (track) return trackColors[track] || 'bg-sky-400'
+    if (track) return trackColors[track] || 'bg-sky-800'
     return 'bg-gray-600'
   }
 

@@ -1,65 +1,73 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FaArrowUp } from 'react-icons/fa6'
+import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
+
+// SVG circle math: radius 20, circumference = 2 * PI * 20
+const RADIUS = 20
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS
 
 export default function ScrollProgressButton() {
-  const [scrollPercent, setScrollPercent] = useState(0)
+  const [progress, setProgress] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
+  const frame = useRef(0)
+  const reducedMotion = usePrefersReducedMotion()
 
-  const handleScroll = useCallback(() => {
-    const scrollTop = window.scrollY
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight
-    const percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
-    setScrollPercent(Math.min(percent, 100))
-    setIsVisible(scrollTop > 300)
+  // One state update per frame, however fast scroll events arrive
+  useEffect(() => {
+    const measure = () => {
+      frame.current = 0
+      const scrollTop = window.scrollY
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight
+      setProgress(docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0)
+      setIsVisible(scrollTop > 300)
+    }
+    const onScroll = () => {
+      if (!frame.current) frame.current = requestAnimationFrame(measure)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    measure()
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(frame.current)
+    }
   }, [])
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [handleScroll])
-
   const scrollToTop = () => {
-    const startPosition = window.scrollY
+    if (reducedMotion) return window.scrollTo(0, 0)
+    const start = window.scrollY
     const startTime = performance.now()
-    const duration = 1200
-
+    const duration = 700
     const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4)
-
-    const animate = (currentTime) => {
-      const elapsed = currentTime - startTime
-      const progress = Math.min(elapsed / duration, 1)
-      window.scrollTo(0, startPosition * (1 - easeOutQuart(progress)))
-      if (progress < 1) requestAnimationFrame(animate)
+    const animate = (now) => {
+      const t = Math.min((now - startTime) / duration, 1)
+      window.scrollTo(0, start * (1 - easeOutQuart(t)))
+      if (t < 1) requestAnimationFrame(animate)
     }
-
     requestAnimationFrame(animate)
   }
 
-  // SVG circle math: radius 20, circumference = 2 * PI * 20
-  const circumference = 2 * Math.PI * 20
-  const strokeDashoffset = circumference - (scrollPercent / 100) * circumference
-
   return (
     <>
-      {/* Top progress bar */}
+      {/* Top progress bar: scaled, not resized, so it stays on the compositor */}
       <div
-        className="fixed left-0 top-0 z-[60] h-0.5 bg-primary transition-all duration-150"
-        style={{ width: `${scrollPercent}%` }}
+        className="fixed inset-x-0 top-0 z-[60] h-0.5 origin-left bg-primary"
+        style={{ transform: `scaleX(${progress})` }}
         aria-hidden="true"
       />
 
-      {/* Floating button with circular progress */}
+      {/* Solid gold with a dark arrow and ring: >= 7:1 on every theme */}
       <button
+        type="button"
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 z-50 flex size-12 items-center justify-center rounded-full bg-surface-card text-white shadow-lg shadow-black/30 backdrop-blur-md transition-all duration-300 hover:bg-surface-elevated focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-[#0a0a0a] ${
+        className={`fixed bottom-6 right-6 z-50 flex size-12 items-center justify-center rounded-full bg-primary text-gray-950 shadow-lg shadow-black/25 ring-1 ring-black/10 transition-[opacity,transform,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-primary-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-safe:hover:-translate-y-0.5 ${
           isVisible
             ? 'translate-y-0 opacity-100'
             : 'pointer-events-none translate-y-4 opacity-0'
         }`}
         aria-label="Return to top of page"
-        title="Return to top of page"
+        tabIndex={isVisible ? 0 : -1}
       >
-        {/* Circular progress ring */}
         <svg
           className="absolute inset-0 -rotate-90"
           width="48"
@@ -70,25 +78,24 @@ export default function ScrollProgressButton() {
           <circle
             cx="24"
             cy="24"
-            r="20"
+            r={RADIUS}
             fill="none"
-            stroke="#222"
-            strokeWidth="2"
+            stroke="rgba(3, 7, 18, 0.18)"
+            strokeWidth="2.5"
           />
           <circle
             cx="24"
             cy="24"
-            r="20"
+            r={RADIUS}
             fill="none"
-            stroke="#D4A017"
-            strokeWidth="2"
+            stroke="#030712"
+            strokeWidth="2.5"
             strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            className="transition-all duration-150"
+            strokeDasharray={CIRCUMFERENCE}
+            strokeDashoffset={CIRCUMFERENCE * (1 - progress)}
           />
         </svg>
-        <FaArrowUp className="relative z-10 size-4" aria-hidden="true" />
+        <FaArrowUp className="relative size-4" aria-hidden="true" />
       </button>
     </>
   )

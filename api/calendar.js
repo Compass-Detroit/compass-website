@@ -12,8 +12,15 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'calendarId is required' })
   }
 
+  // Google calendar ids are email-shaped; reject anything that could alter the path.
+  if (!/^[\w.+-]+@[\w.-]+$/.test(calendarId)) {
+    return res.status(400).json({ error: 'invalid calendarId' })
+  }
+
   try {
-    const url = `https://calendar.google.com/calendar/ical/${calendarId}/public/basic.ics`
+    const url = `https://calendar.google.com/calendar/ical/${encodeURIComponent(
+      calendarId
+    )}/public/basic.ics`
     const response = await fetch(url)
 
     if (!response.ok) {

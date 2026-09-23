@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
+import GalleryImage from '@/components/ui/GalleryImage'
 
 const MiniCarousel = ({
   photos = [],
@@ -64,9 +65,10 @@ const MiniCarousel = ({
             }`}
             aria-hidden={!isActive}
           >
-            <img
+            <GalleryImage
               src={photo.src}
               alt={photo.alt}
+              sizes="(min-width: 1024px) 50vw, 100vw"
               className="size-full object-cover"
               loading={index === 0 ? 'eager' : 'lazy'}
               decoding="async"

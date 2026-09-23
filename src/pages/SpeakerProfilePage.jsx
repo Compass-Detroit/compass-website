@@ -1,25 +1,31 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import {
   IoChevronBack,
   IoChevronForward,
   IoLinkOutline,
-  IoLogoTwitter,
-  IoLogoGithub,
-  IoLogoLinkedin,
   IoArrowBack,
+  IoArrowDown,
+  IoBusinessOutline,
   IoDocumentTextOutline,
   IoPlayCircleOutline,
   IoCalendarOutline,
   IoChevronDown,
   IoChevronUp,
 } from 'react-icons/io5'
-import { FaMastodon, FaMicrophone } from 'react-icons/fa6'
+import {
+  FaGithub,
+  FaGlobe,
+  FaLinkedinIn,
+  FaMastodon,
+  FaMicrophone,
+  FaXTwitter,
+} from 'react-icons/fa6'
 import colors from 'tailwindcss/colors'
 
 import SiteLayout from '@/layouts/SiteLayout'
-import ProfileCard from '@/components/ui/ProfileCard'
+import SpeakerSpotlightCard from '@/components/speakers/SpeakerSpotlightCard'
 import { getSpeakerBySlug, getAllSpeakers } from '@/utils/speakerRegistry'
 
 import GDEIcon from '@/assets/images/icons/gdge.svg'
@@ -163,35 +169,246 @@ const TRACK_THEMES = {
   },
 }
 
-function ExpandableDescription({ text }) {
-  const [expanded, setExpanded] = useState(false)
-  const maxLength = 250
-  const needsExpansion = text?.length > maxLength
+const EXCERPT_LENGTH = 280
 
-  if (!needsExpansion) {
+const isLinkedInUrl = (url = '') => /linkedin\.com/i.test(url)
+
+const twitterUrl = (handle) =>
+  handle.startsWith('http')
+    ? handle
+    : `https://x.com/${handle.replace(/^@/, '')}`
+
+const twitterHandle = (handle) =>
+  `@${handle
+    .replace(/^https?:\/\/(www\.)?(twitter|x)\.com\//i, '')
+    .replace(/^@/, '')}`
+
+const githubUrl = (handle) =>
+  handle.startsWith('http') ? handle : `https://github.com/${handle}`
+
+// "@user@instance.social" -> https://instance.social/@user
+const mastodonUrl = (handle) => {
+  if (handle.startsWith('http')) return handle
+  const [user, host] = handle.replace(/^@/, '').split('@')
+  return host ? `https://${host}/@${user}` : handle
+}
+
+const hostname = (url) => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return 'Website'
+  }
+}
+
+const initials = (name) =>
+  name
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+
+// Bios arrive with single or double newlines between paragraphs
+const toParagraphs = (text = '') =>
+  text
+    .split(/\n+/)
+    .map((p) => p.replace(/[ \t]{2,}/g, ' ').trim())
+    .filter(Boolean)
+
+// Cut on a word boundary so excerpts never end mid-word
+const excerpt = (text = '', max = EXCERPT_LENGTH) => {
+  const flat = text.replace(/\s+/g, ' ').trim()
+  if (flat.length <= max) return flat
+  const cut = flat.slice(0, max)
+  return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[\s,.;:—-]+$/, '')}…`
+}
+
+// Some sources pack tags into one "A; B; C" string, and casing varies by year
+const normalizeTags = (tags = []) => {
+  const seen = new Map()
+  tags
+    .flatMap((t) => String(t).split(';'))
+    .map((t) => t.trim())
+    .filter(Boolean)
+    .forEach((t) => {
+      const key = t.toLowerCase()
+      if (!seen.has(key)) seen.set(key, t)
+    })
+  return [...seen.values()]
+}
+
+const sessionTracks = (session) =>
+  session.tracks?.length ? session.tracks : session.track ? [session.track] : []
+
+// Only name an event when the data does; otherwise the year says enough
+const talkContext = (session) =>
+  session.event ? `${session.event} ${session.year}` : `${session.year}`
+
+/**
+ * The speaker's own channels, website first. A LinkedIn URL filed as the
+ * speaker's website is shown as LinkedIn, not as a generic "Website".
+ */
+function getSpeakerLinks(speaker) {
+  const linkedIn =
+    speaker.linkedIn || (isLinkedInUrl(speaker.url) ? speaker.url : null)
+  const website =
+    speaker.url && !isLinkedInUrl(speaker.url) ? speaker.url : null
+
+  const links = [
+    website && {
+      key: 'website',
+      href: website,
+      text: hostname(website),
+      label: `${speaker.name}'s website, ${hostname(website)}`,
+      Icon: FaGlobe,
+      primary: true,
+    },
+    linkedIn && {
+      key: 'linkedin',
+      href: linkedIn,
+      text: 'LinkedIn',
+      label: `${speaker.name} on LinkedIn`,
+      Icon: FaLinkedinIn,
+    },
+    speaker.github && {
+      key: 'github',
+      href: githubUrl(speaker.github),
+      text: 'GitHub',
+      label: `${speaker.name} on GitHub`,
+      Icon: FaGithub,
+    },
+    speaker.twitter && {
+      key: 'x',
+      href: twitterUrl(speaker.twitter),
+      text: twitterHandle(speaker.twitter),
+      label: `${speaker.name} on X, ${twitterHandle(speaker.twitter)}`,
+      Icon: FaXTwitter,
+    },
+    speaker.mastodon && {
+      key: 'mastodon',
+      href: mastodonUrl(speaker.mastodon),
+      text: 'Mastodon',
+      label: `${speaker.name} on Mastodon`,
+      Icon: FaMastodon,
+    },
+  ].filter(Boolean)
+
+  return { website, linkedIn, links }
+}
+
+function getRelatedSpeakers(speaker, all, limit = 4) {
+  const myTracks = new Set(speaker.sessions?.flatMap(sessionTracks))
+  const myCategories = new Set(
+    normalizeTags(speaker.categories).map((c) => c.toLowerCase())
+  )
+
+  return all
+    .filter((s) => s.slug !== speaker.slug)
+    .map((s) => {
+      const sharedTracks = new Set(
+        s.sessions?.flatMap(sessionTracks).filter((t) => myTracks.has(t))
+      ).size
+      const sharedCategories = normalizeTags(s.categories).filter((c) =>
+        myCategories.has(c.toLowerCase())
+      ).length
+      return { s, score: sharedTracks * 2 + sharedCategories }
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(({ s }) => s)
+}
+
+function TrackChips({ tracks, size = 'sm' }) {
+  if (!tracks.length) return null
+  return (
+    <ul className="flex flex-wrap gap-2" aria-label="Tracks">
+      {tracks.map((track) => (
+        <li
+          key={track}
+          className={`inline-flex items-center gap-1.5 rounded-full border border-surface bg-surface-elevated font-semibold ${
+            styles.trackBadge
+          } ${size === 'lg' ? 'px-3.5 py-1 text-sm' : 'px-2.5 py-0.5 text-xs'}`}
+        >
+          <span
+            className="size-1.5 rounded-full bg-primary"
+            aria-hidden="true"
+          />
+          {track}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+TrackChips.propTypes = {
+  tracks: PropTypes.arrayOf(PropTypes.string).isRequired,
+  size: PropTypes.oneOf(['sm', 'lg']),
+}
+
+function TagList({ tags }) {
+  const list = normalizeTags(tags)
+  if (!list.length) return null
+  return (
+    <ul className="flex flex-wrap gap-x-3 gap-y-1" aria-label="Topics">
+      {list.map((tag) => (
+        <li
+          key={tag}
+          className={`text-xs font-semibold uppercase tracking-wider ${styles.tagLabel}`}
+        >
+          #{tag}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+TagList.propTypes = {
+  tags: PropTypes.arrayOf(PropTypes.string),
+}
+
+function ExpandableDescription({ text, maxLength = EXCERPT_LENGTH }) {
+  const [expanded, setExpanded] = useState(false)
+  if (!text?.trim()) return null
+
+  const paragraphs = toParagraphs(text)
+  const needsExpansion = text.length > maxLength
+
+  if (!needsExpansion || expanded) {
     return (
-      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{text}</p>
+      <div className="flex flex-col items-start">
+        <div className={styles.prose}>
+          {paragraphs.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
+        {needsExpansion && (
+          <button
+            type="button"
+            onClick={() => setExpanded(false)}
+            aria-expanded="true"
+            className="mt-2 inline-flex items-center rounded text-sm font-semibold text-primary transition-colors hover:underline"
+          >
+            Show less <IoChevronUp className="ml-1" aria-hidden="true" />
+          </button>
+        )}
+      </div>
     )
   }
 
   return (
     <div className="flex flex-col items-start">
-      <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-        {expanded ? text : `${text.slice(0, maxLength)}...`}
+      <p className="leading-relaxed text-theme-secondary">
+        {excerpt(text, maxLength)}
       </p>
       <button
-        onClick={() => setExpanded(!expanded)}
-        className="mt-2 flex items-center text-sm font-semibold text-primary transition-colors hover:text-primary-400 focus:outline-none"
+        type="button"
+        onClick={() => setExpanded(true)}
+        aria-expanded="false"
+        className="mt-2 inline-flex items-center rounded text-sm font-semibold text-primary transition-colors hover:underline"
       >
-        {expanded ? (
-          <>
-            Show less <IoChevronUp className="ml-1" />
-          </>
-        ) : (
-          <>
-            Read more <IoChevronDown className="ml-1" />
-          </>
-        )}
+        Read more <IoChevronDown className="ml-1" aria-hidden="true" />
       </button>
     </div>
   )
@@ -199,79 +416,177 @@ function ExpandableDescription({ text }) {
 
 ExpandableDescription.propTypes = {
   text: PropTypes.string,
+  maxLength: PropTypes.number,
+}
+
+function FeaturedTalk({ session, speaker, gradient, hasHistory }) {
+  const abstract = session.abstract?.trim()
+  const description = session.description?.trim()
+  // With a session history below, the poster stays short and links down to
+  // the full text; otherwise this card is the only place the talk appears.
+  const lede =
+    abstract || (hasHistory && description ? excerpt(description) : null)
+  const details =
+    !hasHistory && description && description !== abstract ? description : null
+  const hasMore =
+    hasHistory && !!description && description.replace(/\s+/g, ' ') !== lede
+
+  return (
+    <section
+      aria-labelledby="featured-talk-heading"
+      className="relative overflow-hidden rounded-3xl border border-surface bg-surface-card shadow-sm"
+    >
+      <div
+        className="h-1.5"
+        style={{ backgroundImage: gradient }}
+        aria-hidden="true"
+      />
+      <FaMicrophone
+        className={`pointer-events-none absolute -right-6 top-6 size-40 ${styles.posterMark}`}
+        aria-hidden="true"
+      />
+
+      <div className="relative p-6 md:p-10">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <h2
+            id="featured-talk-heading"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary"
+          >
+            <FaMicrophone className="size-3.5" aria-hidden="true" />
+            Featured talk
+          </h2>
+          <p className="text-xs font-bold uppercase tracking-widest text-theme-muted">
+            <span aria-hidden="true">· </span>
+            {talkContext(session)}
+          </p>
+        </div>
+
+        <h3 className="mt-4 text-balance text-3xl font-extrabold leading-tight tracking-tight text-theme-primary md:text-4xl">
+          {session.title}
+        </h3>
+
+        <div className="mt-5">
+          <TrackChips tracks={sessionTracks(session)} size="lg" />
+        </div>
+
+        {lede && (
+          <p className="mt-6 text-pretty text-lg leading-relaxed text-theme-secondary">
+            {lede}
+          </p>
+        )}
+        {details && (
+          <div className={lede ? 'mt-4' : 'mt-6 text-lg'}>
+            <ExpandableDescription text={details} />
+          </div>
+        )}
+
+        <div className="mt-6">
+          <TagList tags={session.tags} />
+        </div>
+
+        {(speaker.slidesUrl || speaker.videoUrl || hasMore) && (
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            {speaker.slidesUrl && (
+              <a
+                href={speaker.slidesUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-surface bg-surface-elevated px-4 py-2 text-sm font-semibold text-theme-primary transition-colors hover:border-primary"
+              >
+                <IoDocumentTextOutline className="size-4" aria-hidden="true" />
+                View slides
+              </a>
+            )}
+            {speaker.videoUrl && (
+              <a
+                href={speaker.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-surface bg-surface-elevated px-4 py-2 text-sm font-semibold text-theme-primary transition-colors hover:border-primary"
+              >
+                <IoPlayCircleOutline className="size-4" aria-hidden="true" />
+                Watch recording
+              </a>
+            )}
+            {hasMore && (
+              <a
+                href="#talk-0"
+                className="inline-flex items-center gap-1.5 rounded text-sm font-semibold text-primary hover:underline"
+              >
+                Full session details
+                <IoArrowDown className="size-4" aria-hidden="true" />
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+FeaturedTalk.propTypes = {
+  session: PropTypes.object.isRequired,
+  speaker: PropTypes.object.isRequired,
+  gradient: PropTypes.string,
+  hasHistory: PropTypes.bool,
 }
 
 export default function SpeakerProfilePage() {
   const { slug } = useParams()
-  const navigate = useNavigate()
-  const [speaker, setSpeaker] = useState(null)
-  const [relatedSpeakers, setRelatedSpeakers] = useState([])
-  const [loading, setLoading] = useState(true)
+  const speaker = useMemo(() => getSpeakerBySlug(slug), [slug])
+  const displayName = speaker
+    ? speaker.credentials
+      ? `${speaker.name}, ${speaker.credentials}`
+      : speaker.name
+    : ''
+
+  const relatedSpeakers = useMemo(
+    () => (speaker ? getRelatedSpeakers(speaker, getAllSpeakers()) : []),
+    [speaker]
+  )
+
+  const { prevSpeaker, nextSpeaker } = useMemo(() => {
+    if (!speaker) return {}
+    const all = getAllSpeakers()
+    const i = all.findIndex((s) => s.slug === speaker.slug)
+    return {
+      prevSpeaker: i > 0 ? all[i - 1] : null,
+      nextSpeaker: i >= 0 && i < all.length - 1 ? all[i + 1] : null,
+    }
+  }, [speaker])
 
   useEffect(() => {
-    // Fetch speaker data
-    try {
-      const foundSpeaker = getSpeakerBySlug(slug)
-      if (foundSpeaker) {
-        setSpeaker(foundSpeaker)
-        document.title = `${foundSpeaker.name} — COMPASS Detroit Speaker`
-
-        // Add JSON-LD Person schema
-        const scriptId = 'speaker-json-ld'
-        let script = document.getElementById(scriptId)
-        if (!script) {
-          script = document.createElement('script')
-          script.id = scriptId
-          script.type = 'application/ld+json'
-          document.head.appendChild(script)
-        }
-        script.innerHTML = JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'Person',
-          name: foundSpeaker.name,
-          jobTitle: foundSpeaker.position,
-          worksFor: {
-            '@type': 'Organization',
-            name: foundSpeaker.organization,
-          },
-          url: window.location.href,
-          image: foundSpeaker.avatar,
-          description: foundSpeaker.bio,
-        })
-
-        // Find related speakers (shared categories or tracks)
-        const all = getAllSpeakers()
-        const related = all
-          .filter((s) => {
-            if (s.slug === foundSpeaker.slug) return false
-            const sharedCategories = s.categories?.some((c) =>
-              foundSpeaker.categories?.includes(c)
-            )
-            const sharedTracks = s.sessions?.some((s1) =>
-              foundSpeaker.sessions?.some((s2) => s1.track === s2.track)
-            )
-            return sharedCategories || sharedTracks
-          })
-          .slice(0, 6)
-
-        setRelatedSpeakers(related)
-      }
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
+    // Profile-to-profile links reuse this route; start each profile at the top
+    window.scrollTo(0, 0)
   }, [slug])
 
-  if (loading) {
-    return (
-      <SiteLayout>
-        <div className="flex min-h-[50vh] items-center justify-center">
-          <div className="size-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-        </div>
-      </SiteLayout>
-    )
-  }
+  useEffect(() => {
+    if (!speaker) return undefined
+    document.title = `${displayName} — COMPASS Detroit Speaker`
+
+    const { links } = getSpeakerLinks(speaker)
+    const script = document.createElement('script')
+    script.id = 'speaker-json-ld'
+    script.type = 'application/ld+json'
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: speaker.name,
+      ...(speaker.credentials && { honorificSuffix: speaker.credentials }),
+      jobTitle: speaker.position,
+      worksFor: {
+        '@type': 'Organization',
+        name: speaker.organization,
+      },
+      url: window.location.href,
+      image: speaker.avatar,
+      description: speaker.bio,
+      ...(links.length && { sameAs: links.map((l) => l.href) }),
+    })
+    document.getElementById(script.id)?.remove()
+    document.head.appendChild(script)
+    return () => script.remove()
+  }, [speaker, displayName])
 
   if (!speaker) {
     return (
@@ -280,14 +595,14 @@ export default function SpeakerProfilePage() {
           <h1 className="mb-6 text-4xl font-extrabold tracking-tight md:text-5xl">
             Speaker Not Found
           </h1>
-          <p className="mb-8 text-lg text-gray-500">
+          <p className="mb-8 text-lg text-theme-muted">
             We couldn&apos;t find the speaker profile you&apos;re looking for.
           </p>
           <Link
             to="/speakers"
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-black transition-colors hover:bg-primary-400"
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-gray-950 transition-colors hover:bg-primary-400"
           >
-            <IoArrowBack className="size-4" />
+            <IoArrowBack className="size-4" aria-hidden="true" />
             Back to Speakers
           </Link>
         </div>
@@ -295,9 +610,21 @@ export default function SpeakerProfilePage() {
     )
   }
 
-  // Use the most recent session's track for theme, or default
-  const primaryTrack = speaker.sessions?.[0]?.track
-  const trackTheme = TRACK_THEMES[primaryTrack] ?? TRACK_THEMES.default
+  const firstName = speaker.name.split(' ')[0]
+  const sessions = speaker.sessions ?? []
+  const featured = sessions[0]
+  const hasHistory = sessions.length > 1
+  const bioParagraphs = toParagraphs(speaker.bio ?? '')
+  const categories = normalizeTags(speaker.categories)
+  const { website, linkedIn, links } = getSpeakerLinks(speaker)
+  const bookingUrl = website || linkedIn
+  const allTracks = [...new Set(sessions.flatMap(sessionTracks))]
+
+  // Theme the hero from the most recent talk's first themed track
+  const themedTrack = featured
+    ? sessionTracks(featured).find((t) => TRACK_THEMES[t])
+    : null
+  const trackTheme = TRACK_THEMES[themedTrack] ?? TRACK_THEMES.default
 
   const heroStyle = {
     backgroundImage: [trackTheme.pattern, trackTheme.gradient].join(', '),
@@ -310,283 +637,266 @@ export default function SpeakerProfilePage() {
 
   return (
     <SiteLayout>
-      {/* 1. Hero Section */}
-      <section className="relative w-full pt-16">
+      {/* 1. Hero — intentionally dark on every theme; scrims keep white text AA on bright track colours */}
+      <section className="dark-surface relative w-full">
         <div
-          className="relative px-6 py-20 text-white lg:py-24"
+          className="relative overflow-hidden pb-16 pt-10 text-white lg:pb-20 lg:pt-12"
           style={heroStyle}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/10 to-transparent mix-blend-soft-light"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/20 to-transparent"></div>
+          <div
+            className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/5 to-transparent mix-blend-soft-light"
+            aria-hidden="true"
+          ></div>
+          <div className="absolute inset-0 bg-black/45" aria-hidden="true" />
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"
+            aria-hidden="true"
+          ></div>
 
-          <div className="mx-auto max-w-[1200px] relative z-20">
-            {/* Breadcrumbs / Back */}
-            <div className="mb-8 flex items-center gap-2 text-sm text-white/80 font-medium">
-              <Link
-                to="/"
-                className="hover:text-white hover:underline transition-colors"
-              >
-                Home
-              </Link>
-              <span>›</span>
-              <Link
-                to="/speakers"
-                className="hover:text-white hover:underline transition-colors"
-              >
-                Speakers
-              </Link>
-              <span>›</span>
-              <span className="text-white">{speaker.name}</span>
-            </div>
+          <div className="relative z-20 mx-auto max-w-[1200px] px-6">
+            <nav aria-label="Breadcrumb" className="mb-8">
+              <ol className="flex flex-wrap items-center gap-2 text-sm font-medium text-white/90">
+                <li>
+                  <Link
+                    to="/"
+                    className="rounded hover:text-white hover:underline"
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li aria-hidden="true">›</li>
+                <li>
+                  <Link
+                    to="/speakers"
+                    className="rounded hover:text-white hover:underline"
+                  >
+                    Speakers
+                  </Link>
+                </li>
+                <li aria-hidden="true">›</li>
+                <li aria-current="page" className="text-white">
+                  {speaker.name}
+                </li>
+              </ol>
+            </nav>
 
-            <div className="flex flex-col items-center text-center lg:flex-row lg:text-left lg:items-end gap-10">
-              <div className="relative">
-                <div className="size-48 md:size-56 lg:size-64 rounded-full bg-black/30 p-2 border-4 border-white/20 shadow-2xl backdrop-blur-sm">
-                  <img
-                    src={
-                      speaker.avatar ||
-                      `https://placehold.co/600x400/0F9D58/FFFFFF?text=${speaker.name.charAt(
-                        0
-                      )}`
-                    }
-                    alt={`${speaker.name}`}
-                    className="size-full rounded-full object-cover"
-                  />
-                </div>
-                {/* Badges positioning */}
-                <div className="absolute -bottom-2 right-4 flex gap-2">
-                  {speaker.isGDE && (
+            <div className="flex flex-col items-center gap-10 text-center lg:flex-row lg:items-center lg:text-left">
+              <div className="shrink-0">
+                <div className="size-48 rounded-full border-4 border-white/20 bg-black/30 p-2 shadow-2xl backdrop-blur-sm md:size-56 lg:size-64">
+                  {speaker.avatar ? (
+                    <img
+                      src={speaker.avatar}
+                      alt={`Portrait of ${displayName}`}
+                      className="size-full rounded-full object-cover object-top"
+                    />
+                  ) : (
                     <div
-                      className="rounded-full bg-white p-1.5 shadow-lg"
-                      title="Google Developer Expert"
+                      role="img"
+                      aria-label={`${displayName} (initials)`}
+                      className="flex size-full items-center justify-center rounded-full bg-black/40 text-6xl font-black text-white"
                     >
-                      <img src={GDEIcon} alt="GDE" className="size-6" />
-                    </div>
-                  )}
-                  {speaker.isWTM && (
-                    <div
-                      className="rounded-full bg-white p-1.5 shadow-lg"
-                      title="Women Techmakers Ambassador"
-                    >
-                      <img src={WTMLogo} alt="WTM" className="size-6" />
+                      {initials(speaker.name)}
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="flex-1 pb-4">
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-3">
+              <div className="min-w-0 flex-1">
+                <ul
+                  className="mb-4 flex flex-wrap items-center justify-center gap-2 lg:justify-start"
+                  aria-label="Speaker highlights"
+                >
+                  {speaker.isGDE && (
+                    <li className="inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-white/15 px-3 py-1 text-xs font-bold text-white shadow backdrop-blur-sm">
+                      <img src={GDEIcon} alt="" className="size-4" />
+                      Google Developer Expert
+                    </li>
+                  )}
+                  {speaker.isWTM && (
+                    <li className="inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-white/15 px-3 py-1 text-xs font-bold text-white shadow backdrop-blur-sm">
+                      <img src={WTMLogo} alt="" className="size-4" />
+                      Women Techmakers Ambassador
+                    </li>
+                  )}
                   {speaker.yearsActive?.map((year) => (
-                    <span
+                    <li
                       key={year}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide border border-white/20"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/30 px-3 py-1 text-xs font-semibold uppercase tracking-wide"
                     >
                       <FaMicrophone
                         className="size-3 text-primary"
                         aria-hidden="true"
                       />
+                      <span className="sr-only">Spoke in </span>
                       {year}
-                    </span>
+                    </li>
                   ))}
-                </div>
+                </ul>
 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-2">
+                <h1 className="mb-3 text-balance text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl">
                   {speaker.name}
+                  {speaker.credentials && (
+                    <span className="font-semibold text-white/85">
+                      , {speaker.credentials}
+                    </span>
+                  )}
                 </h1>
 
-                <p className="text-xl md:text-2xl text-white/90 font-medium mb-1">
-                  {speaker.position}
-                </p>
+                {speaker.position && (
+                  <p className="text-xl font-medium text-white/90 md:text-2xl">
+                    {speaker.position}
+                  </p>
+                )}
                 {speaker.organization && (
-                  <p className="text-lg text-white/80">
-                    {speaker.organization}
+                  <p className="mt-2 inline-flex items-center gap-2 text-lg font-bold text-white md:text-xl">
+                    <IoBusinessOutline
+                      className="size-5 shrink-0 text-primary"
+                      aria-hidden="true"
+                    />
+                    <span className="border-b-2 border-primary-400 pb-0.5">
+                      {speaker.organization}
+                    </span>
                   </p>
                 )}
 
-                {/* Social links */}
-                <div className="mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                  {speaker.twitter && (
-                    <a
-                      href={`https://twitter.com/${speaker.twitter}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
-                    >
-                      <IoLogoTwitter className="mr-2 size-4" /> @
-                      {speaker.twitter}
-                    </a>
-                  )}
-                  {speaker.linkedIn && (
-                    <a
-                      href={speaker.linkedIn}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
-                    >
-                      <IoLogoLinkedin className="mr-2 size-4" /> LinkedIn
-                    </a>
-                  )}
-                  {speaker.github && (
-                    <a
-                      href={speaker.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
-                    >
-                      <IoLogoGithub className="mr-2 size-4" /> GitHub
-                    </a>
-                  )}
-                  {speaker.mastodon && (
-                    <a
-                      href={speaker.mastodon}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
-                    >
-                      <FaMastodon className="mr-2 size-4" /> Mastodon
-                    </a>
-                  )}
-                  {speaker.url && (
-                    <a
-                      href={speaker.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-2 text-sm font-medium transition-colors border border-white/20 backdrop-blur-md"
-                    >
-                      <IoLinkOutline className="mr-2 size-4" /> Website
-                    </a>
-                  )}
-                </div>
+                {links.length > 0 && (
+                  <ul
+                    className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+                    aria-label={`${speaker.name}'s links`}
+                  >
+                    {links.map(({ key, href, text, label, Icon, primary }) => (
+                      <li key={key}>
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${label} (opens in a new tab)`}
+                          className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-white ${
+                            primary
+                              ? 'border-primary-400 bg-primary text-gray-950 hover:bg-primary-400'
+                              : 'border-white/30 bg-white/10 text-white backdrop-blur-md hover:bg-white hover:text-gray-900'
+                          }`}
+                        >
+                          <Icon className="size-4" aria-hidden="true" />
+                          {text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="mx-auto max-w-[1200px] px-6 py-16">
+      <div className={`mx-auto max-w-[1200px] px-6 py-16 ${styles.content}`}>
         <div className="grid gap-16 lg:grid-cols-3">
           {/* Main Content Column */}
-          <div className="lg:col-span-2 space-y-16">
-            {/* 2. About Section */}
-            <section>
-              <h2 className="mb-6 text-3xl font-bold tracking-tight">
-                About {speaker.name.split(' ')[0]}
-              </h2>
-              <div className="prose prose-lg dark:prose-invert max-w-prose">
-                <p className="whitespace-pre-line leading-relaxed text-gray-700 dark:text-gray-300">
-                  {speaker.bio}
-                </p>
-              </div>
+          <div className="space-y-16 lg:col-span-2">
+            {/* 2. Featured talk */}
+            {featured && (
+              <FeaturedTalk
+                session={featured}
+                gradient={trackTheme.gradient}
+                speaker={speaker}
+                hasHistory={hasHistory}
+              />
+            )}
 
-              {speaker.categories && speaker.categories.length > 0 && (
-                <div className="mt-8">
-                  <h3
-                    className={`mb-3 text-sm font-bold uppercase tracking-wide ${styles.sectionHeader}`}
-                  >
-                    Expertise
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {speaker.categories.map((cat, i) => (
-                      <Link
-                        key={i}
-                        to={`/speakers?category=${encodeURIComponent(cat)}`}
-                        className="rounded-full bg-surface-card border border-surface px-4 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors hover:border-primary hover:text-primary"
-                      >
-                        {cat}
-                      </Link>
+            {/* 3. About */}
+            {(bioParagraphs.length > 0 || categories.length > 0) && (
+              <section aria-labelledby="about-heading">
+                <h2
+                  id="about-heading"
+                  className="mb-6 text-3xl font-bold tracking-tight"
+                >
+                  About {firstName}
+                </h2>
+                {bioParagraphs.length > 0 && (
+                  <div className={`max-w-prose text-lg ${styles.prose}`}>
+                    {bioParagraphs.map((p, i) => (
+                      <p key={i}>{p}</p>
                     ))}
                   </div>
-                </div>
-              )}
-            </section>
+                )}
 
-            {/* 3. Talk History Timeline */}
-            {speaker.sessions && speaker.sessions.length > 0 && (
-              <section>
-                <h2 className="mb-8 text-3xl font-bold tracking-tight">
-                  Session History
-                </h2>
-                <div className="relative border-l-2 border-gray-200 dark:border-gray-700 ml-4 md:ml-6 space-y-12">
-                  {speaker.sessions
-                    .sort((a, b) => b.year - a.year)
-                    .map((session, idx) => (
-                      <div key={idx} className="relative pl-8 md:pl-10">
-                        {/* Timeline dot */}
-                        <div
-                          className="absolute left-[-11px] top-1 size-5 rounded-full border-4 border-[var(--surface)] bg-primary"
-                          aria-hidden="true"
-                        ></div>
-
-                        <div className="mb-1 flex flex-wrap items-center gap-3">
-                          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">
-                            {session.year}
-                          </span>
-                          {session.track && (
-                            <span
-                              className={`inline-flex items-center rounded-full border border-gray-200 dark:border-gray-700 bg-surface-card px-2.5 py-0.5 text-xs font-medium ${styles.trackBadge}`}
-                            >
-                              {session.track}
-                            </span>
-                          )}
-                        </div>
-
-                        <h3 className="text-xl font-bold tracking-tight mb-2">
-                          {session.title}
-                        </h3>
-
-                        {session.tags && session.tags.length > 0 && (
-                          <div className="mb-4 flex flex-wrap gap-1.5">
-                            {session.tags.map((tag, tIdx) => (
-                              <span
-                                key={tIdx}
-                                className={`text-xs font-medium uppercase tracking-wider ${styles.tagLabel}`}
-                              >
-                                #{tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        <div className="mb-4">
-                          <ExpandableDescription
-                            text={session.abstract || session.description}
-                          />
-                        </div>
-
-                        <div className="flex flex-wrap gap-3 mt-4">
-                          {speaker.slidesUrl && idx === 0 && (
-                            <a
-                              href={speaker.slidesUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-surface-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
-                            >
-                              <IoDocumentTextOutline className="size-4" />
-                              View Slides
-                            </a>
-                          )}
-                          {speaker.videoUrl && idx === 0 && (
-                            <a
-                              href={speaker.videoUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-surface-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
-                            >
-                              <IoPlayCircleOutline className="size-4" />
-                              Watch Recording
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                </div>
+                {categories.length > 0 && (
+                  <div className="mt-8">
+                    <h3
+                      className={`mb-3 text-sm font-bold uppercase tracking-wide ${styles.sectionHeader}`}
+                    >
+                      Expertise
+                    </h3>
+                    <ul className="flex flex-wrap gap-2">
+                      {categories.map((cat) => (
+                        <li key={cat}>
+                          <Link
+                            to={`/speakers?category=${encodeURIComponent(cat)}`}
+                            className="inline-block rounded-full border border-surface bg-surface-card px-4 py-1.5 text-sm font-medium text-theme-secondary transition-colors hover:border-primary hover:text-primary"
+                          >
+                            {cat}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </section>
             )}
 
-            {/* 4. Resources Section */}
+            {/* 4. Session history — one entry per talk, all of its tracks */}
+            {hasHistory && (
+              <section aria-labelledby="history-heading">
+                <h2
+                  id="history-heading"
+                  className="mb-8 text-3xl font-bold tracking-tight"
+                >
+                  Session History
+                </h2>
+                <ol className="relative ml-4 space-y-12 border-l-2 border-surface md:ml-6">
+                  {sessions.map((session, idx) => (
+                    <li
+                      key={`${session.year}-${session.title}`}
+                      id={`talk-${idx}`}
+                      className="relative scroll-mt-24 pl-8 md:pl-10"
+                    >
+                      <div
+                        className={`absolute left-[-11px] top-1 size-5 rounded-full border-4 bg-primary ${styles.timelineDot}`}
+                        aria-hidden="true"
+                      ></div>
+
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">
+                          {talkContext(session)}
+                        </span>
+                        <TrackChips tracks={sessionTracks(session)} />
+                      </div>
+
+                      <h3 className="mb-2 text-xl font-bold tracking-tight text-theme-primary">
+                        {session.title}
+                      </h3>
+
+                      <div className="mb-4">
+                        <TagList tags={session.tags} />
+                      </div>
+
+                      <ExpandableDescription
+                        text={session.description || session.abstract}
+                      />
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
+
+            {/* 5. Resources */}
             {speaker.resources && speaker.resources.length > 0 && (
-              <section>
-                <h2 className="mb-6 text-2xl font-bold tracking-tight">
+              <section aria-labelledby="resources-heading">
+                <h2
+                  id="resources-heading"
+                  className="mb-6 text-2xl font-bold tracking-tight"
+                >
                   Resources &amp; Links
                 </h2>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -598,16 +908,16 @@ export default function SpeakerProfilePage() {
                       rel="noopener noreferrer"
                       className="group flex items-start gap-4 rounded-xl border border-surface bg-surface-card p-5 transition-all hover:border-primary/50 hover:shadow-md"
                     >
-                      <div className="mt-0.5 rounded-lg bg-primary/10 p-2 text-primary group-hover:bg-primary group-hover:text-black transition-colors">
-                        <IoLinkOutline className="size-5" />
+                      <div className="mt-0.5 rounded-lg bg-primary/10 p-2 text-primary transition-colors group-hover:bg-primary group-hover:text-gray-950">
+                        <IoLinkOutline className="size-5" aria-hidden="true" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                        <h3 className="font-semibold text-theme-primary transition-colors group-hover:text-primary">
                           {resource.title}
                         </h3>
                         {resource.description && (
                           <p
-                            className={`mt-1 text-sm line-clamp-2 ${styles.resourceDescription}`}
+                            className={`mt-1 line-clamp-2 text-sm ${styles.resourceDescription}`}
                           >
                             {resource.description}
                           </p>
@@ -621,23 +931,32 @@ export default function SpeakerProfilePage() {
           </div>
 
           {/* Sidebar Column */}
-          <div className="lg:col-span-1 space-y-12">
-            {/* 5. Talk Photos Gallery */}
+          <aside
+            className="space-y-12 lg:col-span-1"
+            aria-label={`More about ${speaker.name}`}
+          >
             {speaker.talkPhotos && speaker.talkPhotos.length > 0 && (
-              <section className="rounded-2xl border border-surface bg-surface-card p-6">
-                <h3 className="mb-4 text-lg font-bold">In Action</h3>
+              <section
+                aria-labelledby="photos-heading"
+                className="rounded-2xl border border-surface bg-surface-card p-6"
+              >
+                <h2 id="photos-heading" className="mb-4 text-lg font-bold">
+                  In Action
+                </h2>
                 <div className="grid grid-cols-2 gap-2">
                   {speaker.talkPhotos.map((photo, idx) => (
                     <div
                       key={idx}
-                      className={`relative overflow-hidden rounded-lg bg-gray-100 ${
+                      className={`relative overflow-hidden rounded-lg bg-surface-elevated ${
                         idx === 0 ? 'col-span-2 aspect-video' : 'aspect-square'
                       }`}
                     >
                       <img
                         src={photo}
-                        alt={`${speaker.name} speaking`}
-                        className="size-full object-cover transition-transform duration-500 hover:scale-105"
+                        alt={`${speaker.name} speaking (${idx + 1} of ${
+                          speaker.talkPhotos.length
+                        })`}
+                        className="size-full object-cover transition-transform duration-500 motion-safe:hover:scale-105"
                         loading="lazy"
                       />
                     </div>
@@ -646,133 +965,164 @@ export default function SpeakerProfilePage() {
               </section>
             )}
 
-            <section className="rounded-2xl border border-surface bg-primary/5 p-6 text-center">
-              <IoCalendarOutline className="mx-auto mb-3 size-8 text-primary" />
-              <h3 className="mb-2 text-lg font-bold">
-                Book {speaker.name.split(' ')[0]}
-              </h3>
-              <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                Interested in having {speaker.name.split(' ')[0]} speak at your
-                next event?
-              </p>
-              {speaker.url ? (
-                <a
-                  href={speaker.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-black transition-colors hover:bg-primary-400"
+            <div className="space-y-6 lg:sticky lg:top-24">
+              <section
+                aria-labelledby="snapshot-heading"
+                className="rounded-2xl border border-surface bg-surface-card p-6"
+              >
+                <h2
+                  id="snapshot-heading"
+                  className={`mb-4 text-sm font-bold uppercase tracking-wide ${styles.sectionHeader}`}
                 >
-                  Visit Website
-                </a>
-              ) : speaker.twitter ? (
-                <a
-                  href={`https://twitter.com/${speaker.twitter}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-black transition-colors hover:bg-primary-400"
+                  At a glance
+                </h2>
+                <dl className="grid grid-cols-2 gap-4">
+                  <div>
+                    <dt className="text-xs font-semibold text-theme-muted">
+                      {sessions.length === 1 ? 'Talk' : 'Talks'}
+                    </dt>
+                    <dd className="text-3xl font-extrabold tabular-nums text-theme-primary">
+                      {sessions.length}
+                    </dd>
+                  </div>
+                  {speaker.yearsActive?.length > 0 && (
+                    <div>
+                      <dt className="text-xs font-semibold text-theme-muted">
+                        Speaking since
+                      </dt>
+                      <dd className="text-3xl font-extrabold tabular-nums text-theme-primary">
+                        {speaker.yearsActive[0]}
+                      </dd>
+                    </div>
+                  )}
+                </dl>
+                {allTracks.length > 0 && (
+                  <div className="mt-5">
+                    <p
+                      className="mb-2 text-xs font-semibold text-theme-muted"
+                      aria-hidden="true"
+                    >
+                      Tracks
+                    </p>
+                    <TrackChips tracks={allTracks} />
+                  </div>
+                )}
+              </section>
+
+              {/* No website or LinkedIn means nowhere to send a booking: skip the card */}
+              {bookingUrl && (
+                <section
+                  aria-labelledby="book-heading"
+                  className="rounded-2xl border border-surface bg-primary/5 p-6 text-center"
                 >
-                  Contact via X
-                </a>
-              ) : speaker.linkedIn ? (
-                <a
-                  href={speaker.linkedIn}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-black transition-colors hover:bg-primary-400"
-                >
-                  Contact via LinkedIn
-                </a>
-              ) : null}
-            </section>
-          </div>
+                  <IoCalendarOutline
+                    className="mx-auto mb-3 size-8 text-primary"
+                    aria-hidden="true"
+                  />
+                  <h2 id="book-heading" className="mb-2 text-lg font-bold">
+                    Book {firstName}
+                  </h2>
+                  <p className="mb-4 text-sm text-theme-secondary">
+                    Interested in having {firstName} speak at your next event?
+                  </p>
+                  <a
+                    href={bookingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-gray-950 transition-colors hover:bg-primary-400"
+                  >
+                    {website ? 'Visit Website' : 'Connect on LinkedIn'}
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                </section>
+              )}
+            </div>
+          </aside>
         </div>
 
         {/* 6. Related Speakers */}
         {relatedSpeakers.length > 0 && (
-          <section className="mt-24 border-t border-surface pt-16">
-            <div className="mb-8 flex items-center justify-between">
-              <h2 className="text-2xl font-bold tracking-tight">
+          <section
+            aria-labelledby="related-heading"
+            className="mt-24 border-t border-surface pt-16"
+          >
+            <div className="mb-8 flex items-center justify-between gap-4">
+              <h2
+                id="related-heading"
+                className="text-2xl font-bold tracking-tight"
+              >
                 Similar Speakers
               </h2>
               <Link
                 to="/speakers"
-                className="text-sm font-semibold text-primary hover:underline"
+                className="rounded text-sm font-semibold text-primary hover:underline"
               >
-                View all speakers →
+                View all speakers <span aria-hidden="true">→</span>
               </Link>
             </div>
 
-            {/* Horizontal scroll container */}
-            <div className="flex snap-x snap-mandatory overflow-x-auto pb-8 -mx-6 px-6 gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:overflow-visible md:pb-0 md:mx-0 md:px-0">
+            <ul className="-mx-6 flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-8 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
               {relatedSpeakers.map((rs) => (
-                <div
+                <li
                   key={rs.slug}
-                  className="min-w-[280px] snap-start md:min-w-0"
+                  className="w-64 shrink-0 snap-start sm:w-auto"
                 >
-                  <Link
+                  <SpeakerSpotlightCard
+                    speaker={rs}
                     to={`/speakers/${rs.slug}`}
-                    className="block h-full transition-transform hover:-translate-y-1"
-                  >
-                    <ProfileCard
-                      avatar={
-                        rs.avatar ||
-                        `https://placehold.co/600x400/0F9D58/FFFFFF?text=${rs.name.charAt(
-                          0
-                        )}`
-                      }
-                      name={rs.name}
-                      organization={rs.organization}
-                      position={rs.position}
-                      track={rs.sessions?.[0]?.track}
-                      isGDE={rs.isGDE}
-                      isWTM={rs.isWTM}
-                      twitter={rs.twitter}
-                      linkedin={rs.linkedIn}
-                      github={rs.github}
-                      mastodon={rs.mastodon}
-                    />
-                  </Link>
-                </div>
+                  />
+                </li>
               ))}
-            </div>
+            </ul>
           </section>
         )}
 
-        {/* 8. Bottom Navigation */}
-        <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-surface-card p-6 border border-surface">
-          <button
-            onClick={() => {
-              const all = getAllSpeakers()
-              const currentIndex = all.findIndex((s) => s.slug === speaker.slug)
-              if (currentIndex > 0) {
-                navigate(`/speakers/${all[currentIndex - 1].slug}`)
-              }
-            }}
-            className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-surface px-4 py-2.5 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
-          >
-            <IoChevronBack /> Previous Speaker
-          </button>
+        {/* 7. Bottom Navigation */}
+        <nav
+          aria-label="Browse speakers"
+          className="mt-16 grid items-center gap-4 rounded-2xl border border-surface bg-surface-card p-6 sm:grid-cols-3"
+        >
+          <div className="sm:justify-self-start">
+            {prevSpeaker && (
+              <Link
+                to={`/speakers/${prevSpeaker.slug}`}
+                className="flex items-center gap-2 rounded-lg border border-surface px-4 py-2.5 text-sm font-medium text-theme-primary transition-colors hover:border-primary"
+              >
+                <IoChevronBack aria-hidden="true" />
+                <span>
+                  <span className="block text-xs text-theme-muted">
+                    Previous speaker
+                  </span>
+                  {prevSpeaker.name}
+                </span>
+              </Link>
+            )}
+          </div>
 
           <Link
             to="/speakers"
-            className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="justify-self-center rounded text-sm font-bold text-theme-muted transition-colors hover:text-theme-primary"
           >
             All Speakers
           </Link>
 
-          <button
-            onClick={() => {
-              const all = getAllSpeakers()
-              const currentIndex = all.findIndex((s) => s.slug === speaker.slug)
-              if (currentIndex < all.length - 1) {
-                navigate(`/speakers/${all[currentIndex + 1].slug}`)
-              }
-            }}
-            className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-surface px-4 py-2.5 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
-          >
-            Next Speaker <IoChevronForward />
-          </button>
-        </div>
+          <div className="sm:justify-self-end">
+            {nextSpeaker && (
+              <Link
+                to={`/speakers/${nextSpeaker.slug}`}
+                className="flex items-center justify-end gap-2 rounded-lg border border-surface px-4 py-2.5 text-right text-sm font-medium text-theme-primary transition-colors hover:border-primary"
+              >
+                <span>
+                  <span className="block text-xs text-theme-muted">
+                    Next speaker
+                  </span>
+                  {nextSpeaker.name}
+                </span>
+                <IoChevronForward aria-hidden="true" />
+              </Link>
+            )}
+          </div>
+        </nav>
       </div>
     </SiteLayout>
   )

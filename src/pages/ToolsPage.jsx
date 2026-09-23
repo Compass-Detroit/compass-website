@@ -10,9 +10,17 @@ import {
   FaQrcode,
   FaPen,
   FaShapes,
+  FaPlug,
 } from 'react-icons/fa6'
 
 const tools = [
+  {
+    name: 'Platform Preview',
+    icon: FaPlug,
+    status: 'Active',
+    route: '/platform',
+    description: 'Live connector status, CMS content, and member journeys',
+  },
   {
     name: 'DevFest Brand Kit',
     icon: FaShapes,

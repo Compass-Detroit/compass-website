@@ -13,7 +13,7 @@ const programs = [
   {
     title: 'Innovation Summits',
     tagline: 'Quarterly cultural celebrations of tech excellence',
-    desc: "Each Innovation Summit is tied to a cultural heritage month — Black History Month, International Women's Day, Hispanic Heritage Month — and brings together 200+ Navigators, employers, and community partners for a day of keynotes, workshops, career panels, and networking.",
+    desc: "Each Innovation Summit is tied to a cultural heritage month — Black History Month, International Women's Day, Pride, Latin Heritage Month — and brings together 200+ Navigators, employers, and community partners for a day of keynotes, workshops, career panels, and networking.",
     details: [
       'Full-day programming with keynote speakers from major tech companies',
       'Technical workshops and hands-on learning sessions',

@@ -69,4 +69,23 @@ describe('speakerRegistry', () => {
     expect(range).toHaveProperty('earliest')
     expect(range).toHaveProperty('latest')
   })
+
+  it('merges a speaker listed with and without credentials', () => {
+    expect(generateSlug('Ali El-Sharif, Ph.D.')).toBe('ali-el-sharif')
+    const ali = getAllSpeakers().filter((s) => s.slug === 'ali-el-sharif')
+    expect(ali).toHaveLength(1)
+    expect(ali[0].credentials).toBe('Ph.D.')
+    expect(ali[0].yearsActive).toEqual([2023, 2024])
+  })
+
+  it('resolves slugs that included credentials', () => {
+    expect(getSpeakerBySlug('ali-el-sharif-phd')?.slug).toBe('ali-el-sharif')
+  })
+
+  it('lists a talk run in several tracks once', () => {
+    const ben = getSpeakerBySlug('ben-jacques')
+    const titles = ben.sessions.map((s) => `${s.year} ${s.title}`)
+    expect(new Set(titles).size).toBe(titles.length)
+    expect(ben.sessions.some((s) => s.tracks.length > 1)).toBe(true)
+  })
 })

@@ -1,35 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-
-function useCounter(target, duration = 1600) {
-  const [count, setCount] = useState(0)
-  const [hasAnimated, setHasAnimated] = useState(false)
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true)
-          const startTime = performance.now()
-          const animate = (now) => {
-            const elapsed = now - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            const eased = 1 - Math.pow(1 - progress, 3)
-            setCount(Math.floor(eased * target))
-            if (progress < 1) requestAnimationFrame(animate)
-          }
-          requestAnimationFrame(animate)
-        }
-      },
-      { threshold: 0.3 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [hasAnimated, target, duration])
-
-  return { ref, count }
-}
+import useCountUp from '@/hooks/useCountUp'
 
 export function AnimatedCounter({
   value,
@@ -39,7 +9,7 @@ export function AnimatedCounter({
   className = '',
   duration = 1600,
 }) {
-  const { ref, count } = useCounter(value, duration)
+  const { ref, count } = useCountUp(value, { duration })
 
   const displayValue = value >= 1000 ? count.toLocaleString() : count
 
@@ -51,7 +21,7 @@ export function AnimatedCounter({
             {prefix}
           </span>
         )}
-        <span className="bg-gradient-to-r from-primary via-primary-400 to-amber-300 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-primary via-primary-400 to-amber-300 bg-clip-text text-transparent tabular-nums">
           {displayValue}
         </span>
         {suffix && (

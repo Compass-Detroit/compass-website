@@ -125,7 +125,7 @@ const PLACEHOLDER_EVENTS = [
     time: '5:00 PM - 6:30 PM',
     location: 'Virtual',
     category: 'Summit',
-    desc: 'Planning committee meeting for the upcoming Hispanic Heritage Month Summit.',
+    desc: 'Planning committee meeting for the upcoming Latin Heritage Month Summit.',
   },
   {
     name: 'LinkedIn Optimization Workshop',
@@ -231,7 +231,7 @@ const PLACEHOLDER_EVENTS = [
     time: '6:00 PM - 7:00 PM',
     location: 'Virtual',
     category: 'Community',
-    desc: 'September community standup — Hispanic Heritage Month programming preview.',
+    desc: 'September community standup — Latin Heritage Month Summit preview.',
   },
   {
     name: 'Code & Coffee',
@@ -250,12 +250,12 @@ const PLACEHOLDER_EVENTS = [
     desc: 'Resume workshop — fall hiring season prep.',
   },
   {
-    name: 'Hispanic Heritage Innovation Summit',
-    date: '2026-09-12',
-    time: '9:00 AM - 5:00 PM',
-    location: 'IBM Detroit',
+    name: 'Latin Heritage Month Innovation Summit',
+    date: '2026-09-19',
+    time: '8:00 AM - 6:00 PM',
+    location: 'WSU Anderson Engineering Building',
     category: 'Summit',
-    desc: 'Full-day innovation summit celebrating Hispanic and Latinx contributions to technology.',
+    desc: 'Full-day innovation summit at Wayne State celebrating Latin contributions to technology, closing with a fiesta.',
   },
   {
     name: 'Career Panel: Cloud Careers',

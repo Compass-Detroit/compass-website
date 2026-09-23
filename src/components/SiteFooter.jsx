@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { ReactComponent as CompassLogo } from '@/assets/images/compass-logo.svg'
-import NewsletterSignup from '@/components/newsletter/NewsletterSignup'
 import styles from './SiteFooter.module.css'
 
 const footerPrograms = [
@@ -109,18 +108,6 @@ export default function SiteFooter() {
               <span className={`${styles.contactInfo} text-[13px]`}>
                 Detroit, Michigan
               </span>
-            </div>
-          </div>
-
-          {/* Newsletter */}
-          <div className="sm:col-span-2 lg:col-span-4">
-            <div className="mt-6">
-              <NewsletterSignup
-                variant="footer"
-                showInterests={false}
-                title="Stay in the loop"
-                subtitle="Monthly updates on events, opportunities, and community wins."
-              />
             </div>
           </div>
         </div>

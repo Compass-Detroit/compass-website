@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { useContext, useEffect, useRef } from 'react'
 
 import SpeakerDetails from '@/components/speakers/SpeakerDetails'
-import ProfileCard from '@/components/ui/ProfileCard'
+import SpeakerSpotlightCard from '@/components/speakers/SpeakerSpotlightCard'
 import { SpeakerContext } from './SpeakerContext'
 
 const SpeakerCard = ({
@@ -87,20 +87,24 @@ const SpeakerCard = ({
 
   return (
     <>
-      <ProfileCard
-        avatar={avatar}
-        github={github}
-        instagram={instagram}
-        isGDE={isGDE}
-        isWTM={isWTM}
-        linkedin={linkedin}
-        mastodon={mastodon}
-        name={name}
-        onViewDetails={open}
-        organization={organization}
-        position={position}
-        track={track}
-        twitter={twitter}
+      <SpeakerSpotlightCard
+        speaker={{
+          name,
+          avatar,
+          organization,
+          position,
+          isGDE,
+          isWTM,
+          linkedIn: linkedin,
+          github,
+          twitter,
+          mastodon,
+          url: Array.isArray(url) ? url[0] : url,
+          sessions: [
+            { title: sessionTitle, track, tracks: track ? [track] : [] },
+          ],
+        }}
+        onSelect={open}
       />
 
       {isModalOpen && id === speakerID && (

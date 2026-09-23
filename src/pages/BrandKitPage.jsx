@@ -56,7 +56,7 @@ export default function BrandKitPage() {
         <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           {/* Header Banner */}
           <div className="mb-12 text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-devfest-blue/30 bg-devfest-pastel-blue/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-devfest-blue dark:bg-devfest-blue/10 dark:text-devfest-ht-blue">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-devfest-blue/30 bg-devfest-pastel-blue/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-devfest-blue-ink dark:bg-devfest-blue/10 dark:text-devfest-ht-blue">
               <span className="size-2 rounded-full bg-devfest-blue animate-pulse" />
               Official 2026 Brand Design System
             </div>
@@ -95,7 +95,7 @@ export default function BrandKitPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all ${
                     isActive
-                      ? 'bg-devfest-blue text-white shadow-lg shadow-devfest-blue/25 scale-105'
+                      ? 'bg-devfest-blue-ink text-white shadow-lg shadow-devfest-blue/25 scale-105'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
                   }`}
                 >
@@ -133,7 +133,7 @@ export default function BrandKitPage() {
                       >
                         <button
                           onClick={() => copyToClipboard(color.hex)}
-                          className="rounded-lg bg-black/40 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur-md transition-opacity hover:bg-black/60 flex items-center gap-1.5"
+                          className="rounded-lg bg-black/70 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur-md transition-opacity hover:bg-black/60 flex items-center gap-1.5"
                           title="Copy Hex Code"
                         >
                           {copiedHex === color.hex ? (
@@ -186,7 +186,7 @@ export default function BrandKitPage() {
                       >
                         <button
                           onClick={() => copyToClipboard(color.hex)}
-                          className="rounded-lg bg-black/40 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur-md transition-opacity hover:bg-black/60 flex items-center gap-1.5"
+                          className="rounded-lg bg-black/70 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur-md transition-opacity hover:bg-black/60 flex items-center gap-1.5"
                         >
                           {copiedHex === color.hex ? (
                             <>
@@ -237,7 +237,7 @@ export default function BrandKitPage() {
                       >
                         <button
                           onClick={() => copyToClipboard(color.hex)}
-                          className="rounded-lg bg-black/40 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur-md transition-opacity hover:bg-black/60 flex items-center gap-1.5"
+                          className="rounded-lg bg-black/70 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur-md transition-opacity hover:bg-black/60 flex items-center gap-1.5"
                         >
                           {copiedHex === color.hex ? (
                             <>
@@ -367,7 +367,7 @@ export default function BrandKitPage() {
                     </div>
                     <div className="flex items-center justify-between p-5 border-t border-gray-100 dark:border-gray-800">
                       <div>
-                        <span className="inline-block rounded-full bg-devfest-pastel-blue px-2.5 py-0.5 text-xs font-medium text-devfest-blue dark:bg-devfest-blue/20 dark:text-devfest-ht-blue">
+                        <span className="inline-block rounded-full bg-devfest-pastel-blue px-2.5 py-0.5 text-xs font-medium text-devfest-blue-ink dark:bg-devfest-blue/20 dark:text-devfest-ht-blue">
                           {logo.tag}
                         </span>
                         <h3 className="mt-1 text-base font-bold text-gray-900 dark:text-white">
@@ -377,7 +377,7 @@ export default function BrandKitPage() {
                       <a
                         href={logo.url}
                         download={`${logo.id}-lockup.png`}
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-devfest-blue px-3.5 py-2 text-xs font-semibold text-white transition-transform hover:scale-105"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-devfest-blue-ink px-3.5 py-2 text-xs font-semibold text-white transition-transform hover:scale-105"
                       >
                         <FaDownload className="size-3" /> Download
                       </a>
@@ -408,7 +408,7 @@ export default function BrandKitPage() {
                       onClick={() => setStickerFilter(cat)}
                       className={`rounded-lg px-3 py-1.5 text-xs font-semibold capitalize transition-all ${
                         stickerFilter === cat
-                          ? 'bg-devfest-blue text-white'
+                          ? 'bg-devfest-blue-ink text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'
                       }`}
                     >
@@ -422,7 +422,7 @@ export default function BrandKitPage() {
                 {filteredGlyphs.map((glyph) => (
                   <div
                     key={glyph.id}
-                    className="group flex flex-col items-center rounded-2xl border border-gray-200 bg-white p-4 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-devfest-blue hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
+                    className="group flex flex-col items-center rounded-2xl border border-gray-200 bg-white p-4 text-center shadow-sm transition-all hover:-translate-y-1 hover:border-devfest-blue-ink hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
                   >
                     <div className="flex size-20 items-center justify-center rounded-xl bg-gray-50 p-2 transition-transform group-hover:scale-110 dark:bg-gray-950">
                       <img
@@ -437,7 +437,7 @@ export default function BrandKitPage() {
                     <a
                       href={glyph.url}
                       download={`devfest-glyph-${glyph.id}.png`}
-                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-medium text-devfest-blue hover:underline dark:text-devfest-ht-blue"
+                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-medium text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
                     >
                       <FaDownload className="size-2.5" /> PNG
                     </a>
@@ -479,7 +479,7 @@ export default function BrandKitPage() {
                     <a
                       href={badge.url}
                       download={`role-${badge.id}.png`}
-                      className="mt-2 inline-flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 hover:bg-devfest-blue hover:text-white dark:bg-gray-800 dark:text-gray-300 transition-colors"
+                      className="mt-2 inline-flex items-center gap-1 rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 hover:bg-devfest-blue-ink hover:text-white dark:bg-gray-800 dark:text-gray-300 transition-colors"
                     >
                       <FaDownload className="size-2.5" /> Download
                     </a>
@@ -527,7 +527,7 @@ export default function BrandKitPage() {
                       <a
                         href={banner.url}
                         download={`${banner.id}.png`}
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-devfest-blue px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-600"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-devfest-blue-ink px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-800"
                       >
                         <FaDownload className="size-3" /> Download
                       </a>
@@ -566,7 +566,7 @@ export default function BrandKitPage() {
                     </div>
                     <div className="p-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
                       <div>
-                        <span className="text-xs text-devfest-blue dark:text-devfest-ht-blue font-medium">
+                        <span className="text-xs text-devfest-blue-ink dark:text-devfest-ht-blue font-medium">
                           {anim.type}
                         </span>
                         <h3 className="text-xs font-bold text-gray-900 dark:text-white">
@@ -576,7 +576,7 @@ export default function BrandKitPage() {
                       <a
                         href={anim.url}
                         download={`${anim.id}.gif`}
-                        className="rounded-lg bg-gray-100 p-2 text-gray-700 hover:bg-devfest-blue hover:text-white dark:bg-gray-800 dark:text-gray-300"
+                        className="rounded-lg bg-gray-100 p-2 text-gray-700 hover:bg-devfest-blue-ink hover:text-white dark:bg-gray-800 dark:text-gray-300"
                       >
                         <FaDownload className="size-3.5" />
                       </a>
@@ -604,7 +604,7 @@ export default function BrandKitPage() {
                 {OFFICIAL_TEMPLATE_LINKS.map((item, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-devfest-blue hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
+                    className="flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-devfest-blue-ink hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
                   >
                     <div>
                       <span className="inline-block rounded-full bg-devfest-pastel-yellow px-2.5 py-1 text-xs font-semibold text-gray-900 dark:bg-devfest-yellow/20 dark:text-devfest-ht-yellow">
@@ -621,7 +621,7 @@ export default function BrandKitPage() {
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-devfest-blue px-4 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-102"
+                      className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-devfest-blue-ink px-4 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-102"
                     >
                       Open in Drive{' '}
                       <FaArrowUpRightFromSquare className="size-3.5" />

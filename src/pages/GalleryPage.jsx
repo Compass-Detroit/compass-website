@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
+import GalleryImage from '@/components/ui/GalleryImage'
 import { CATALOG_PHOTOS } from '@/data/galleryData'
+import { LHM_CATALOG_PHOTOS } from '@/data/2026/lhmGallery'
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -15,7 +17,7 @@ import {
 
 const ALL_GALLERY_PHOTOS =
   CATALOG_PHOTOS && CATALOG_PHOTOS.length > 0
-    ? CATALOG_PHOTOS
+    ? [...LHM_CATALOG_PHOTOS, ...CATALOG_PHOTOS]
     : [
         {
           id: 'img-1',
@@ -86,18 +88,10 @@ const SPOTLIGHT_SLIDES = [
   },
 ]
 
+// Only categories that have photos; empty event folders would show a blank grid
 const CATEGORIES = [
   'All',
-  'IWD Summit 2026',
-  'DevFest 2025',
-  'IWD Summit 2025',
-  'DevFest 2024',
-  'IWD Summit 2024',
-  'BHM Summit 2024',
-  'Level Up 2024',
-  'Winter Mixer 2023',
-  'COMPES PDC 2023',
-  'COMPES PDC Channel 4',
+  ...new Set(ALL_GALLERY_PHOTOS.map((photo) => photo.category)),
 ]
 
 export default function GalleryPage() {
@@ -198,9 +192,10 @@ export default function GalleryPage() {
                     : 'z-0 opacity-0 scale-105'
                 }`}
               >
-                <img
+                <GalleryImage
                   src={slide.src}
                   alt={slide.title}
+                  sizes="100vw"
                   className="size-full object-cover"
                 />
                 {/* Strong gradient for text contrast */}
@@ -397,9 +392,10 @@ export default function GalleryPage() {
                         : 'pointer-events-none scale-105 opacity-0'
                     }`}
                   >
-                    <img
+                    <GalleryImage
                       src={slide.src}
                       alt={slide.title}
+                      sizes="(min-width: 1200px) 1200px, 100vw"
                       className="size-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/10" />
@@ -473,11 +469,13 @@ export default function GalleryPage() {
                   }}
                   className="relative h-44 w-64 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-surface bg-surface-card transition-transform hover:scale-105 hover:border-primary/40"
                 >
-                  <img
+                  <GalleryImage
                     src={photo.src}
                     alt={photo.title}
+                    sizes="320px"
                     className="size-full object-cover"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity hover:opacity-100">
                     <FaExpand className="size-5 text-white drop-shadow-lg" />
@@ -538,9 +536,10 @@ export default function GalleryPage() {
                   containIntrinsicSize: '0 225px',
                 }}
               >
-                <img
+                <GalleryImage
                   src={img.src}
                   alt={img.title}
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                   width={400}
                   height={300}
                   decoding="async"
@@ -620,9 +619,10 @@ export default function GalleryPage() {
           </button>
 
           <div className="relative z-10 max-h-[85vh] max-w-[90vw] overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
-            <img
+            <GalleryImage
               src={filteredPhotos[lightboxIndex].src}
               alt={filteredPhotos[lightboxIndex].title}
+              sizes="90vw"
               className="max-h-[75vh] w-auto object-contain"
             />
             <div className="bg-black/80 p-4 text-center backdrop-blur-md">

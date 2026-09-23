@@ -77,7 +77,7 @@ const collective = [
 ]
 
 const communityStats = [
-  { num: '4,111', label: 'Community members' },
+  { num: '5,000+', label: 'Community members' },
   { num: '52%', label: 'Black/African-American' },
   { num: '75%', label: 'Women' },
   { num: '6+', label: 'Coalition organizations' },
@@ -250,7 +250,7 @@ export default function CommunityPage() {
               </p>
               <Link
                 to="/get-involved"
-                className="inline-flex items-center gap-2 rounded-lg border border-surface px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-gray-500"
+                className="inline-flex items-center gap-2 rounded-lg border border-surface px-6 py-3 text-sm font-semibold text-theme-primary transition-colors hover:border-gray-500"
               >
                 Partner as an Employer
               </Link>

@@ -1,121 +1,24 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 import { Link, useLocation } from 'react-router-dom'
-import { FaBars, FaXmark } from 'react-icons/fa6'
-import { IoColorPaletteOutline } from 'react-icons/io5'
+import { FaBars, FaChevronDown, FaXmark } from 'react-icons/fa6'
 import { ReactComponent as CompassLogo } from '@/assets/images/compass-logo.svg'
 import SettingsDrawer from '@/components/ui/SettingsDrawer'
-import { useTheme, THEME_VARIANTS } from '@/components/ThemeProvider'
 
-const THEME_SWATCHES = {
-  midnight: { bg: '#0a0a0a', border: '#efb403' },
-  daylight: { bg: '#ffffff', border: '#a16207' },
-  'motor-city': { bg: '#0a1322', border: '#3b82f6' },
-  campus: { bg: '#faf7f2', border: '#047857' },
-  neon: { bg: '#050505', border: '#22c55e' },
-  ember: { bg: '#120c08', border: '#f97316' },
-  cyber: { bg: '#010c04', border: '#4ade80' },
-}
+// The logo artwork sits in a 508x116 band of a 512x512 canvas; crop to it so
+// the mark can render at nav height instead of needing a 112px box.
+const LOGO_VIEWBOX = '0 190 512 122'
 
-function ThemePicker() {
-  const { variant, setVariant } = useTheme()
-  const [open, setOpen] = useState(false)
-  const menuRef = useRef(null)
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setOpen(false)
-      }
-    }
-    if (open) {
-      window.addEventListener('keydown', handleKeyDown)
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [open])
-
-  return (
-    <div className="relative" ref={menuRef}>
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center justify-center rounded-full p-2 text-[var(--text-muted)] transition-colors hover:bg-[var(--card-hover-bg)] hover:text-[var(--text-primary)] focus-visible:ring-2 focus-visible:ring-primary"
-        aria-label="Theme selector"
-        aria-expanded={open}
-        aria-haspopup="listbox"
-        title="Change theme"
-      >
-        <IoColorPaletteOutline size={20} />
-      </button>
-
-      {open && (
-        <div
-          role="listbox"
-          aria-label="Theme options"
-          className="absolute right-0 z-50 mt-2 w-52 rounded-2xl border border-[var(--border)] bg-[var(--surface-card)] p-2 shadow-2xl backdrop-blur-xl"
-        >
-          <div className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
-            Theme Palette
-          </div>
-          {THEME_VARIANTS.map((v) => {
-            const swatch = THEME_SWATCHES[v.id] || {
-              bg: '#0a0a0a',
-              border: '#efb403',
-            }
-            const isSelected = variant === v.id
-            return (
-              <button
-                key={v.id}
-                role="option"
-                aria-selected={isSelected}
-                onClick={() => {
-                  setVariant(v.id)
-                  setOpen(false)
-                }}
-                className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition-colors ${
-                  isSelected
-                    ? 'bg-[var(--card-hover-bg)] font-semibold text-[var(--text-primary)]'
-                    : 'text-[var(--text-secondary)] hover:bg-[var(--card-hover-bg)] hover:text-[var(--text-primary)]'
-                }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <span
-                    className="size-3.5 rounded-full border-2"
-                    style={{
-                      backgroundColor: swatch.bg,
-                      borderColor: swatch.border,
-                    }}
-                    aria-hidden="true"
-                  />
-                  <span>{v.label}</span>
-                </div>
-                {isSelected && (
-                  <span
-                    className="size-1.5 rounded-full bg-primary"
-                    aria-hidden="true"
-                  />
-                )}
-              </button>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
-
-const navLinks = [
+const primaryLinks = [
   { to: '/about', label: 'About' },
   { to: '/programs', label: 'Programs' },
   { to: '/events', label: 'Events' },
-  { to: '/community', label: 'Community' },
   { to: '/speakers', label: 'Speakers' },
+  { to: '/community', label: 'Community' },
   { to: '/impact', label: 'Impact' },
+]
+
+const moreLinks = [
   { to: '/gallery', label: 'Gallery' },
   { to: '/news', label: 'News' },
   { to: '/team', label: 'Team' },
@@ -123,10 +26,107 @@ const navLinks = [
   { to: '/get-involved', label: 'Get Involved' },
 ]
 
+const isActive = (pathname, to) =>
+  pathname === to || pathname.startsWith(`${to}/`)
+
+const HeartIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+  </svg>
+)
+
+const linkClass = (active) =>
+  `rounded-full px-3 py-1.5 text-sm transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${
+    active
+      ? 'bg-[var(--card-hover-bg)] font-semibold text-[var(--text-primary)]'
+      : 'text-[var(--text-muted)] hover:bg-[var(--card-hover-bg)] hover:text-[var(--text-primary)]'
+  }`
+
+function MoreMenu({ pathname }) {
+  const [open, setOpen] = useState(false)
+  const rootRef = useRef(null)
+  const buttonRef = useRef(null)
+  const menuId = useId()
+  const hasActive = moreLinks.some((l) => isActive(pathname, l.to))
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return
+      setOpen(false)
+      buttonRef.current?.focus()
+    }
+    const onPointer = (e) => {
+      if (!rootRef.current?.contains(e.target)) setOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    document.addEventListener('pointerdown', onPointer)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.removeEventListener('pointerdown', onPointer)
+    }
+  }, [open])
+
+  return (
+    <div className="relative" ref={rootRef}>
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-controls={menuId}
+        className={`${linkClass(hasActive)} inline-flex items-center gap-1.5`}
+      >
+        More
+        <FaChevronDown
+          className={`size-2.5 transition-transform duration-200 ${
+            open ? 'rotate-180' : ''
+          }`}
+          aria-hidden="true"
+        />
+      </button>
+      <ul
+        id={menuId}
+        hidden={!open}
+        className="absolute right-0 top-full z-50 mt-2 w-48 rounded-2xl border border-[var(--border)] bg-[var(--surface-card)] p-1.5 shadow-xl shadow-black/20"
+      >
+        {moreLinks.map((link) => (
+          <li key={link.to}>
+            <Link
+              to={link.to}
+              onClick={() => setOpen(false)}
+              aria-current={isActive(pathname, link.to) ? 'page' : undefined}
+              className={`block rounded-xl px-3 py-2 text-sm transition-colors ${
+                isActive(pathname, link.to)
+                  ? 'bg-[var(--card-hover-bg)] font-semibold text-[var(--text-primary)]'
+                  : 'text-[var(--text-secondary)] hover:bg-[var(--card-hover-bg)] hover:text-[var(--text-primary)]'
+              }`}
+            >
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+MoreMenu.propTypes = {
+  pathname: PropTypes.string.isRequired,
+}
+
 export default function SiteNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const location = useLocation()
-  const { variant, setVariant } = useTheme()
+  const { pathname } = useLocation()
+
+  // Any navigation closes the mobile menu
+  useEffect(() => setMobileOpen(false), [pathname])
 
   return (
     <nav
@@ -134,142 +134,83 @@ export default function SiteNavbar() {
       style={{
         background: 'color-mix(in srgb, var(--surface) 85%, transparent)',
       }}
-      role="navigation"
       aria-label="Main navigation"
     >
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-5">
-        {/* Logo */}
+      <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-4 px-6">
         <Link
           to="/"
-          className="flex items-center gap-2"
+          className="shrink-0 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
           aria-label="COMPASS home"
         >
           <CompassLogo
-            className="h-28 w-auto"
-            aria-label="Compass Detroit logo"
+            viewBox={LOGO_VIEWBOX}
+            className="h-7 w-auto"
+            aria-hidden="true"
           />
         </Link>
 
         {/* Desktop links */}
-        <div className="hidden items-center gap-6 lg:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`text-sm transition-colors duration-200 ${
-                location.pathname === link.to
-                  ? 'font-semibold text-[var(--text-primary)]'
-                  : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              {link.label}
-            </Link>
+        <ul className="ml-auto hidden items-center gap-0.5 lg:flex">
+          {primaryLinks.map((link) => (
+            <li key={link.to}>
+              <Link
+                to={link.to}
+                aria-current={isActive(pathname, link.to) ? 'page' : undefined}
+                className={linkClass(isActive(pathname, link.to))}
+              >
+                {link.label}
+              </Link>
+            </li>
           ))}
-          <ThemePicker />
-          <SettingsDrawer />
-          <a href="/get-involved" className="btn-donate">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
-            Support Us
-          </a>
-        </div>
+          <li>
+            <MoreMenu pathname={pathname} />
+          </li>
+        </ul>
 
-        {/* Mobile toggle */}
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="ml-auto flex items-center gap-2 lg:ml-2">
           <SettingsDrawer />
+          <Link to="/get-involved" className="btn-donate px-3 py-1.5 sm:px-4">
+            <HeartIcon />
+            <span className="max-sm:sr-only">Support Us</span>
+          </Link>
           <button
-            className="text-[var(--text-primary)]"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            type="button"
+            className="flex size-9 items-center justify-center rounded-full text-[var(--text-primary)] hover:bg-[var(--card-hover-bg)] lg:hidden"
+            onClick={() => setMobileOpen((o) => !o)}
             aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
-            {mobileOpen ? <FaXmark size={22} /> : <FaBars size={22} />}
+            {mobileOpen ? <FaXmark size={18} /> : <FaBars size={18} />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="border-t border-[var(--border)] bg-[var(--surface)] px-6 pb-6 lg:hidden">
-          <div className="flex flex-col gap-1 pt-4">
-            {/* Mobile Theme Picker */}
-            <div className="mb-4 rounded-xl border border-[var(--border)] p-3">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-                Theme Palette
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {THEME_VARIANTS.map((v) => {
-                  const swatch = THEME_SWATCHES[v.id] || {
-                    bg: '#0a0a0a',
-                    border: '#efb403',
+        <div
+          id="mobile-nav"
+          className="border-t border-[var(--border)] bg-[var(--surface)] px-6 pb-5 pt-3 lg:hidden"
+        >
+          <ul className="grid grid-cols-2 gap-1">
+            {[...primaryLinks, ...moreLinks].map((link) => (
+              <li key={link.to}>
+                <Link
+                  to={link.to}
+                  aria-current={
+                    isActive(pathname, link.to) ? 'page' : undefined
                   }
-                  const isSelected = variant === v.id
-                  return (
-                    <button
-                      key={v.id}
-                      onClick={() => {
-                        setVariant(v.id)
-                        setMobileOpen(false)
-                      }}
-                      className={`flex items-center gap-2 rounded-lg p-2 text-sm transition-colors ${
-                        isSelected
-                          ? 'bg-[var(--card-hover-bg)] font-semibold text-[var(--text-primary)]'
-                          : 'text-[var(--text-secondary)] hover:bg-[var(--card-hover-bg)] hover:text-[var(--text-primary)]'
-                      }`}
-                    >
-                      <span
-                        className="size-3 shrink-0 rounded-full border-2"
-                        style={{
-                          backgroundColor: swatch.bg,
-                          borderColor: swatch.border,
-                        }}
-                        aria-hidden="true"
-                      />
-                      <span className="truncate">{v.label}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            <a
-              href="/get-involved"
-              className="btn-donate mb-3 w-full justify-center py-3 text-base"
-              onClick={() => setMobileOpen(false)}
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-              </svg>
-              Support Us
-            </a>
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMobileOpen(false)}
-                className={`rounded-lg px-4 py-3 text-sm transition-colors ${
-                  location.pathname === link.to
-                    ? 'bg-primary/10 font-semibold text-primary'
-                    : 'text-[var(--text-muted)] hover:bg-[var(--card-hover-bg)] hover:text-[var(--text-primary)]'
-                }`}
-              >
-                {link.label}
-              </Link>
+                  className={`block rounded-xl px-3 py-2.5 text-sm transition-colors ${
+                    isActive(pathname, link.to)
+                      ? 'bg-primary/10 font-semibold text-[var(--text-primary)]'
+                      : 'text-[var(--text-secondary)] hover:bg-[var(--card-hover-bg)] hover:text-[var(--text-primary)]'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       )}
     </nav>

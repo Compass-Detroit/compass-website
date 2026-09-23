@@ -14,6 +14,8 @@ import WelcomeBanner from '@/components/WelcomeBanner'
 import FirstVisitGuide from '@/components/FirstVisitGuide'
 import CommunityVibes from '@/components/CommunityVibes'
 import EventSpotlightSection from '@/components/events/EventSpotlightSection'
+import useCountUp from '@/hooks/useCountUp'
+import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
 import styles from './HomePage.module.css'
 import {
   communityPhotos,
@@ -21,46 +23,6 @@ import {
   innovationSummitPhotos,
   careerMentorshipPhotos,
 } from '@/data/galleryPhotos'
-
-// Scroll reveal hook — applies IntersectionObserver to add 'revealed' class
-function useScrollReveal() {
-  const observersRef = useRef(new Map())
-
-  const observe = useCallback((node) => {
-    if (!node) {
-      observersRef.current.forEach((observer) => observer.disconnect())
-      observersRef.current.clear()
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed')
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
-    )
-
-    // Observe the node and any children with .reveal or .reveal-stagger
-    if (
-      node.classList.contains('reveal') ||
-      node.classList.contains('reveal-stagger')
-    ) {
-      observer.observe(node)
-    }
-    node
-      .querySelectorAll('.reveal, .reveal-stagger')
-      .forEach((el) => observer.observe(el))
-
-    observersRef.current.set(node, observer)
-  }, [])
-
-  return observe
-}
 
 // Partner & sponsor logos — Row 1
 import GoogleLogo from '@/assets/images/sponsors/Google_logo.webp'
@@ -87,8 +49,8 @@ import RebusLogo from '@/assets/images/sponsors/rebus_blue70_on_blue20-260h.webp
 
 const stats = [
   {
-    value: 4111,
-    suffix: '',
+    value: 5000,
+    suffix: '+',
     label: 'Community Members',
     sub: '324% growth over 3 years',
   },
@@ -197,14 +159,23 @@ const allEvents = [
     accent: 'pride',
   },
   {
-    name: 'Hispanic Heritage Month Innovation Summit',
-    date: 'September 2026',
-    location: 'Detroit, MI',
+    name: 'Latin Heritage Month Innovation Summit',
+    date: 'September 19, 2026',
+    endDate: '2026-09-19',
+    location: 'WSU Anderson Engineering Building',
     type: 'Innovation Summit',
+  },
+  {
+    name: 'Michigan DevFest 2026',
+    date: 'November 2026',
+    location: 'MotorCity Casino Hotel',
+    type: 'Industry Event',
   },
 ]
 
-function isUpcoming(dateStr) {
+function isUpcoming(dateStr, endDate) {
+  // An exact end date wins over the month-level label
+  if (endDate) return new Date(`${endDate}T23:59:59`) >= new Date()
   const parsed = new Date(`1 ${dateStr}`)
   const now = new Date()
   // Compare by month: event is upcoming if its month-end hasn't passed
@@ -212,7 +183,7 @@ function isUpcoming(dateStr) {
   return parsed >= now
 }
 
-const upcomingEvents = allEvents.filter((ev) => isUpcoming(ev.date))
+const upcomingEvents = allEvents.filter((ev) => isUpcoming(ev.date, ev.endDate))
 
 function CalendarIcon() {
   return (
@@ -237,33 +208,7 @@ function CalendarIcon() {
 
 // Animated stat counter using intersection observer
 function AnimatedStat({ stat }) {
-  const [count, setCount] = useState(0)
-  const [hasAnimated, setHasAnimated] = useState(false)
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true)
-          const target = stat.value
-          const duration = 1600
-          const startTime = performance.now()
-          const animate = (now) => {
-            const elapsed = now - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            const eased = 1 - Math.pow(1 - progress, 3)
-            setCount(Math.floor(eased * target))
-            if (progress < 1) requestAnimationFrame(animate)
-          }
-          requestAnimationFrame(animate)
-        }
-      },
-      { threshold: 0.3 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [hasAnimated, stat.value])
+  const { ref, count } = useCountUp(stat.value)
 
   const formatted =
     stat.value >= 1000
@@ -276,11 +221,13 @@ function AnimatedStat({ stat }) {
       className="rounded-xl border border-surface bg-surface-card p-6 text-center"
     >
       <div
-        className={`mb-2 text-3xl font-extrabold tracking-tight md:text-4xl ${styles.statValue}`}
+        className={`mb-2 text-3xl font-extrabold tracking-tight tabular-nums md:text-4xl ${styles.statValue}`}
       >
         {formatted}
       </div>
-      <div className="mb-1 text-sm font-semibold text-white">{stat.label}</div>
+      <div className="mb-1 text-sm font-semibold text-theme-primary">
+        {stat.label}
+      </div>
       <div className={`text-xs ${styles.cardLabel}`}>{stat.sub}</div>
     </div>
   )
@@ -327,7 +274,7 @@ function TalentGapViz() {
       >
         Michigan Talent Pipeline
       </p>
-      <p className="mb-5 text-sm font-semibold text-white">
+      <p className="mb-5 text-sm font-semibold text-theme-primary">
         The gap isn&apos;t skills — it&apos;s infrastructure
       </p>
       <div className="flex flex-col gap-4">
@@ -338,9 +285,12 @@ function TalentGapViz() {
               <span className="font-semibold text-gray-300">{bar.pct}%</span>
             </div>
             <div className="h-3 overflow-hidden rounded-full bg-white/5">
+              {/* Transform-only fill: slides in from the left, clipped by the track */}
               <div
-                className={`h-full rounded-full ${bar.color} transition-all duration-1000 ease-out`}
-                style={{ width: visible ? `${bar.pct}%` : '0%' }}
+                className={`size-full rounded-full ${bar.color} transition-transform duration-1000 ease-out will-change-transform motion-reduce:transition-none`}
+                style={{
+                  transform: `translateX(${visible ? bar.pct - 100 : -100}%)`,
+                }}
               />
             </div>
           </div>
@@ -359,7 +309,7 @@ function PipelineViz() {
       >
         The COMPASS Model
       </p>
-      <p className="mb-5 text-sm font-semibold text-white">
+      <p className="mb-5 text-sm font-semibold text-theme-primary">
         From community to career
       </p>
       <div className="flex flex-col gap-2">
@@ -368,30 +318,30 @@ function PipelineViz() {
             step: 'Engage',
             desc: 'Innovation Summits & events',
             width: 'w-full',
-            opacity: 'opacity-100',
+            tint: 'bg-primary/[0.06]',
           },
           {
             step: 'Build',
             desc: 'Skills, confidence & network',
             width: 'w-[85%]',
-            opacity: 'opacity-90',
+            tint: 'bg-primary/[0.09]',
           },
           {
             step: 'Connect',
             desc: 'Employers meet Navigators',
             width: 'w-[70%]',
-            opacity: 'opacity-80',
+            tint: 'bg-primary/[0.12]',
           },
           {
             step: 'Hire',
             desc: 'Co-ops, roles & careers',
             width: 'w-[55%]',
-            opacity: 'opacity-100',
+            tint: 'bg-primary/[0.16]',
           },
         ].map((item) => (
           <div key={item.step} className={`${item.width} mx-auto`}>
             <div
-              className={`${item.opacity} rounded-lg border border-primary/20 bg-primary/[0.08] px-4 py-2.5`}
+              className={`${item.tint} rounded-lg border border-primary/25 px-4 py-2.5`}
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm font-bold text-primary">
@@ -411,22 +361,16 @@ function PipelineViz() {
 
 // Retention radial gauge
 function RetentionGauge() {
-  const [visible, setVisible] = useState(false)
-  const ref = useRef(null)
   const pct = 78
   const r = 52
   const circ = 2 * Math.PI * r
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setVisible(true)
-      },
-      { threshold: 0.3 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
+  // Label counts up on the same clock as the ring (1.4s easeOutCubic, 0.2s delay)
+  const {
+    ref,
+    count,
+    started: visible,
+  } = useCountUp(pct, { duration: 1400, delay: 200 })
+  const reducedMotion = usePrefersReducedMotion()
 
   return (
     <div
@@ -438,7 +382,7 @@ function RetentionGauge() {
       >
         Navigator Retention
       </p>
-      <p className="mb-5 text-sm font-semibold text-white">
+      <p className="mb-5 text-sm font-semibold text-theme-primary">
         Return rate across events
       </p>
       <div className="flex items-center gap-6">
@@ -467,7 +411,11 @@ function RetentionGauge() {
             strokeLinecap="round"
             strokeDasharray={circ}
             strokeDashoffset={visible ? circ - (pct / 100) * circ : circ}
-            style={{ transition: 'stroke-dashoffset 1.4s ease-out 0.2s' }}
+            style={{
+              transition: reducedMotion
+                ? 'none'
+                : 'stroke-dashoffset 1.4s cubic-bezier(0.33, 1, 0.68, 1) 0.2s',
+            }}
           />
           <text
             x="65"
@@ -479,7 +427,7 @@ function RetentionGauge() {
             fontWeight="800"
             transform="rotate(90 65 65)"
           >
-            {visible ? `${pct}%` : '0%'}
+            {`${count}%`}
           </text>
         </svg>
         <div className="flex flex-col gap-2">
@@ -545,7 +493,8 @@ function useKonamiCode(callback) {
   }, [callback])
 }
 
-function triggerConfetti() {
+// Returns a cleanup so pending removal can be cancelled on unmount
+function triggerConfetti(onDone) {
   const colors = [
     '#D4A017',
     '#efb403',
@@ -580,17 +529,45 @@ function triggerConfetti() {
     '<div style="margin-bottom:0.75rem;display:flex;justify-content:center"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#D4A017" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" opacity="0.3"/><circle cx="12" cy="12" r="7" opacity="0.15"/><polygon points="12,2.5 14,10 12,8 10,10" fill="#D4A017" stroke="none"/><polygon points="12,21.5 14,14 12,16 10,14" fill="#9ca3af" stroke="none" opacity="0.5"/><polygon points="2.5,12 10,10 8,12 10,14" fill="#9ca3af" stroke="none" opacity="0.5"/><polygon points="21.5,12 14,10 16,12 14,14" fill="#9ca3af" stroke="none" opacity="0.5"/><circle cx="12" cy="12" r="2" fill="#D4A017" stroke="none"/></svg></div><div style="font-size:1.125rem;font-weight:700;margin-bottom:0.5rem">You found it!</div><div style="font-size:0.875rem;color:#9ca3af">This is the kind of curiosity we love.<br/>Welcome to COMPASS.</div>'
   document.body.appendChild(msg)
 
-  setTimeout(() => {
+  const remove = () => {
     container.remove()
     msg.remove()
+  }
+  const timer = setTimeout(() => {
+    remove()
+    onDone?.()
   }, 5000)
+
+  return () => {
+    clearTimeout(timer)
+    remove()
+  }
+}
+
+function useConfetti() {
+  const activeRef = useRef(new Set())
+
+  useEffect(() => {
+    const active = activeRef.current
+    return () => {
+      active.forEach((cleanup) => cleanup())
+      active.clear()
+    }
+  }, [])
+
+  return useCallback(() => {
+    const active = activeRef.current
+    const cleanup = triggerConfetti(() => active.delete(cleanup))
+    active.add(cleanup)
+  }, [])
 }
 
 export default function HomePage() {
-  const revealRef = useScrollReveal()
   const [sceneIndex, setSceneIndex] = useState(0)
 
-  useKonamiCode(triggerConfetti)
+  const launchConfetti = useConfetti()
+
+  useKonamiCode(launchConfetti)
 
   return (
     <SiteLayout>
@@ -610,7 +587,7 @@ export default function HomePage() {
             {/* Hero Text — bold, direct */}
             <div className="max-w-2xl text-center md:text-left">
               <div className="hero-stagger mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 shimmer">
-                <span className="size-2 animate-pulse rounded-full bg-primary" />
+                <span className="size-2 motion-safe:animate-pulse rounded-full bg-primary" />
                 <span className="text-xs font-extrabold uppercase tracking-wider text-primary">
                   Now Building · Detroit&apos;s Tech Future
                 </span>
@@ -648,14 +625,14 @@ export default function HomePage() {
               <div className="hero-stagger mt-10 flex items-center justify-center gap-6 border-t border-[var(--border)] pt-8 md:justify-start">
                 <div className="flex -space-x-2">
                   {[
-                    'bg-primary',
-                    'bg-emerald-500',
-                    'bg-indigo-500',
-                    'bg-rose-400',
+                    'bg-primary text-slate-900',
+                    'bg-emerald-500 text-slate-900',
+                    'bg-indigo-600 text-white',
+                    'bg-rose-400 text-slate-900',
                   ].map((bg, i) => (
                     <div
                       key={i}
-                      className={`flex size-8 items-center justify-center rounded-full border-2 border-[var(--surface)] text-[10px] font-black text-white ${bg}`}
+                      className={`flex size-8 items-center justify-center rounded-full border-2 border-[var(--surface)] text-[10px] font-black ${bg}`}
                     >
                       {['JR', 'MK', 'AS', 'TL'][i]}
                     </div>
@@ -678,11 +655,14 @@ export default function HomePage() {
       {/* Hero Section 2 — Animated Detroit skyline scene */}
       <section className="relative h-[50vh] min-h-[320px] overflow-hidden md:h-[60vh]">
         <TechHeroCanvas onSceneChange={setSceneIndex} />
-        {/* Top fade from hero text section */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-24 bg-gradient-to-b from-[#081a10] to-transparent" />
-        {/* Bottom fade to next section */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-24 bg-gradient-to-t from-[var(--surface)] to-transparent" />
+        {/* Top fade from hero text section — blends into the theme surface */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-24 bg-gradient-to-b from-[var(--surface)] to-transparent" />
+        {/* Bottom fade into the Event Spotlight, which always starts at black */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-24 bg-gradient-to-t from-black to-transparent" />
       </section>
+
+      {/* Event Spotlight — DevFest 2026 sign-up & LHM recap, right after the heroes */}
+      <EventSpotlightSection />
 
       {/* Welcome Banner for newcomers */}
       <div className="py-8">
@@ -920,9 +900,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Event Spotlight — Michigan DevFest 2026 & HHM */}
-      <EventSpotlightSection />
-
       {/* Your First Visit Guide */}
       <FirstVisitGuide />
 
@@ -981,7 +958,7 @@ export default function HomePage() {
       </section>
 
       {/* Pride Innovation Summit Spotlight */}
-      <section className="border-y border-surface" ref={revealRef}>
+      <section className="border-y border-surface">
         <div className="reveal mx-auto max-w-[1200px] px-6 py-20">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
@@ -1115,7 +1092,7 @@ export default function HomePage() {
       </section>
 
       {/* Dev Team & Open Source */}
-      <section ref={revealRef}>
+      <section>
         <DevTeamShowcase />
       </section>
 
@@ -1238,7 +1215,7 @@ export default function HomePage() {
           </div>
           <div className="mt-10 text-center">
             <a
-              href="mailto:jritten@compass-detroit.com?subject=Sponsorship Inquiry"
+              href="mailto:whatupdoe@compass-detroit.com?subject=Sponsorship Inquiry"
               className="group relative inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
             >
               <span className="relative z-10">
@@ -1258,8 +1235,8 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-violet-500/[0.04]" />
             <div className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
             <div className="absolute bottom-0 left-1/2 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-            <div className="absolute -right-20 -top-20 size-60 animate-[hero-orb-1_12s_ease-in-out_infinite] rounded-full bg-primary/[0.04] blur-3xl" />
-            <div className="absolute -bottom-20 -left-20 size-60 animate-[hero-orb-2_14s_ease-in-out_infinite] rounded-full bg-violet-500/[0.04] blur-3xl" />
+            <div className="absolute -right-20 -top-20 size-60 rounded-full bg-primary/[0.04] blur-3xl will-change-transform motion-safe:animate-[hero-orb_12s_ease-in-out_infinite]" />
+            <div className="absolute -bottom-20 -left-20 size-60 rounded-full bg-violet-500/[0.04] blur-3xl will-change-transform motion-safe:animate-[hero-orb_14s_ease-in-out_2s_infinite]" />
           </div>
           <div className="relative">
             <div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-2xl border border-primary/20 bg-primary/[0.08]">

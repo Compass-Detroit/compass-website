@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
+import LhmSummitRecap from '@/components/events/LhmSummitRecap'
 import {
   EVENT_TYPES,
   previousEvents,
@@ -58,6 +59,19 @@ const renderTypeIcon = (iconType) => {
           <path d="M12 2L9.19 8.63 2 12l7.19 3.37L12 22l2.81-6.63L22 12l-7.19-3.37z" />
         </svg>
       )
+    case 'sun':
+      return (
+        <svg
+          className="size-3.5 text-amber-300"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      )
     case 'code':
       return (
         <svg
@@ -87,12 +101,16 @@ const renderTypeIcon = (iconType) => {
 }
 
 export default function PreviousEventsPage() {
-  const [filterType, setFilterType] = useState('all')
-  const [selectedYear, setSelectedYear] = useState('all')
-  const [searchQuery, setSearchQuery] = useState('')
-
+  const [searchParams] = useSearchParams()
   const availableYears = getAvailableYears()
   const availableTypes = getAvailableTypes()
+
+  const [filterType, setFilterType] = useState(() => {
+    const type = searchParams.get('type')
+    return availableTypes.includes(type) ? type : 'all'
+  })
+  const [selectedYear, setSelectedYear] = useState('all')
+  const [searchQuery, setSearchQuery] = useState('')
 
   // Aggregate stats
   const totalEvents = previousEvents.length
@@ -109,7 +127,7 @@ export default function PreviousEventsPage() {
   return (
     <SiteLayout>
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-black">
+      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-surface">
         {/* Decorations */}
         <div className="hero-orb-1 absolute top-0 left-1/4" />
         <div className="hero-orb-2 absolute bottom-0 right-1/4" />
@@ -121,7 +139,7 @@ export default function PreviousEventsPage() {
               History &amp; Archive
             </span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6">
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-theme-primary mb-6">
             <span className="bg-gradient-to-r from-primary via-primary-400 to-amber-300 bg-clip-text text-transparent">
               Our Event Legacy
             </span>
@@ -136,7 +154,7 @@ export default function PreviousEventsPage() {
               className="rounded-xl border border-surface bg-surface-card p-6 reveal-stagger"
               style={{ '--stagger': 1 }}
             >
-              <div className="text-3xl font-bold text-white mb-1">
+              <div className="text-3xl font-bold text-theme-primary mb-1">
                 {totalSpeakers}+
               </div>
               <div className="text-sm text-gray-500 uppercase tracking-wider font-semibold">
@@ -147,7 +165,7 @@ export default function PreviousEventsPage() {
               className="rounded-xl border border-surface bg-surface-card p-6 reveal-stagger"
               style={{ '--stagger': 2 }}
             >
-              <div className="text-3xl font-bold text-white mb-1">
+              <div className="text-3xl font-bold text-theme-primary mb-1">
                 {totalSessions}+
               </div>
               <div className="text-sm text-gray-500 uppercase tracking-wider font-semibold">
@@ -158,7 +176,7 @@ export default function PreviousEventsPage() {
               className="rounded-xl border border-surface bg-surface-card p-6 reveal-stagger"
               style={{ '--stagger': 3 }}
             >
-              <div className="text-3xl font-bold text-white mb-1">
+              <div className="text-3xl font-bold text-theme-primary mb-1">
                 {totalEvents}
               </div>
               <div className="text-sm text-gray-500 uppercase tracking-wider font-semibold">
@@ -169,7 +187,7 @@ export default function PreviousEventsPage() {
               className="rounded-xl border border-surface bg-surface-card p-6 reveal-stagger"
               style={{ '--stagger': 4 }}
             >
-              <div className="text-3xl font-bold text-white mb-1">
+              <div className="text-3xl font-bold text-theme-primary mb-1">
                 {yearsActive}
               </div>
               <div className="text-sm text-gray-500 uppercase tracking-wider font-semibold">
@@ -181,7 +199,7 @@ export default function PreviousEventsPage() {
       </section>
 
       {/* Filter & Search Bar */}
-      <section className="sticky top-16 z-40 border-t border-surface bg-black/90 py-4 shadow-2xl backdrop-blur-md md:top-20">
+      <section className="sticky top-16 z-40 border-t border-surface bg-surface py-4 shadow-lg md:top-20">
         <div className="mx-auto max-w-[1200px] px-6 flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="flex overflow-x-auto gap-2 w-full md:w-auto pb-1 no-scrollbar items-center">
             <button
@@ -212,7 +230,7 @@ export default function PreviousEventsPage() {
               onClick={() => setFilterType('all')}
               className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold transition-colors ${
                 filterType === 'all'
-                  ? 'bg-white/20 text-white'
+                  ? 'bg-primary/15 border border-primary/50 text-theme-primary'
                   : 'border border-surface text-gray-400 hover:border-primary/40'
               }`}
             >
@@ -224,7 +242,7 @@ export default function PreviousEventsPage() {
                 onClick={() => setFilterType(type)}
                 className={`whitespace-nowrap px-4 py-1.5 rounded-full text-xs font-bold transition-colors flex items-center gap-1.5 ${
                   filterType === type
-                    ? 'bg-white/20 text-white border border-primary/50'
+                    ? 'bg-primary/15 text-theme-primary border border-primary/50'
                     : 'border border-surface text-gray-400 hover:border-primary/40'
                 }`}
               >
@@ -240,7 +258,7 @@ export default function PreviousEventsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search past events..."
-              className="w-full rounded-full border border-surface bg-surface-card py-2 pl-9 pr-4 text-xs font-medium text-white placeholder:text-gray-500 focus:border-primary focus:outline-none"
+              className="w-full rounded-full border border-surface bg-surface-card py-2 pl-9 pr-4 text-xs font-medium text-theme-primary placeholder:text-gray-500 focus:border-primary focus:outline-none"
             />
             <svg
               className="absolute left-3 top-2.5 size-3.5 text-gray-500"
@@ -258,7 +276,7 @@ export default function PreviousEventsPage() {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-2.5 text-xs text-gray-500 hover:text-white"
+                className="absolute right-3 top-2.5 text-xs text-gray-500 hover:text-theme-primary"
               >
                 ✕
               </button>
@@ -267,8 +285,13 @@ export default function PreviousEventsPage() {
         </div>
       </section>
 
+      {(filterType === 'all' || filterType === 'lhm') &&
+        (selectedYear === 'all' || selectedYear === '2026') && (
+          <LhmSummitRecap />
+        )}
+
       {/* Timeline Section */}
-      <section className="bg-black py-20 pb-32">
+      <section className="bg-surface py-20 pb-32">
         <div className="mx-auto max-w-[1200px] px-6">
           {availableYears
             .filter(
@@ -294,7 +317,7 @@ export default function PreviousEventsPage() {
               return (
                 <div key={year} className="mb-24 last:mb-0 relative">
                   <div className="flex items-center gap-4 mb-10">
-                    <h2 className="text-5xl md:text-6xl font-extrabold text-white tracking-tight">
+                    <h2 className="text-5xl md:text-6xl font-extrabold text-theme-primary tracking-tight">
                       {year}
                     </h2>
                     <div className="h-px bg-surface grow"></div>
@@ -316,12 +339,12 @@ export default function PreviousEventsPage() {
                         >
                           <div className="p-6 grow flex flex-col">
                             <div className="mb-4">
-                              <span className="inline-flex items-center gap-1.5 rounded-full bg-surface/50 border border-surface px-2.5 py-1 text-xs font-semibold text-white">
+                              <span className="inline-flex items-center gap-1.5 rounded-full bg-surface/50 border border-surface px-2.5 py-1 text-xs font-semibold text-theme-primary">
                                 {renderTypeIcon(eventType.icon)}
                                 {eventType.label}
                               </span>
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2">
+                            <h3 className="text-xl font-bold text-theme-primary mb-2">
                               {event.name}
                             </h3>
                             <div className="text-sm text-gray-400 mb-4 flex flex-col gap-1">
@@ -371,7 +394,7 @@ export default function PreviousEventsPage() {
 
                             <div className="grid grid-cols-3 gap-2 border-y border-surface py-3 mb-6">
                               <div className="text-center">
-                                <div className="text-lg font-bold text-white">
+                                <div className="text-lg font-bold text-theme-primary">
                                   {event.speakers}
                                 </div>
                                 <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
@@ -379,7 +402,7 @@ export default function PreviousEventsPage() {
                                 </div>
                               </div>
                               <div className="text-center border-x border-surface">
-                                <div className="text-lg font-bold text-white">
+                                <div className="text-lg font-bold text-theme-primary">
                                   {event.sessions || event.tracks}
                                 </div>
                                 <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
@@ -387,7 +410,7 @@ export default function PreviousEventsPage() {
                                 </div>
                               </div>
                               <div className="text-center">
-                                <div className="text-lg font-bold text-white">
+                                <div className="text-lg font-bold text-theme-primary">
                                   {event.attendees}
                                 </div>
                                 <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
@@ -397,10 +420,17 @@ export default function PreviousEventsPage() {
                             </div>
 
                             <div className="mt-auto">
-                              {event.hasSpeakerData ? (
+                              {event.recapAnchor ? (
+                                <a
+                                  href={`#${event.recapAnchor}`}
+                                  className="block w-full rounded-lg border border-surface bg-surface/50 px-4 py-2.5 text-center text-sm font-semibold text-theme-primary transition-colors hover:bg-surface hover:text-primary"
+                                >
+                                  View Speakers &amp; Sessions
+                                </a>
+                              ) : event.hasSpeakerData ? (
                                 <Link
                                   to={`/previous-events/${event.year}`}
-                                  className="block w-full text-center rounded-lg bg-surface/50 border border-surface px-4 py-2.5 text-sm font-semibold text-white hover:bg-surface hover:text-primary transition-colors"
+                                  className="block w-full text-center rounded-lg bg-surface/50 border border-surface px-4 py-2.5 text-sm font-semibold text-theme-primary hover:bg-surface hover:text-primary transition-colors"
                                 >
                                   View Speakers &amp; Sessions
                                 </Link>
@@ -409,7 +439,7 @@ export default function PreviousEventsPage() {
                                   href={event.externalUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-surface bg-surface/50 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-surface hover:text-primary"
+                                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-surface bg-surface/50 px-4 py-2.5 text-center text-sm font-semibold text-theme-primary transition-colors hover:bg-surface hover:text-primary"
                                 >
                                   Visit Event Site
                                   <svg
@@ -450,7 +480,7 @@ export default function PreviousEventsPage() {
       <section className="border-t border-surface bg-surface-card py-20 relative overflow-hidden">
         <div className="hero-orb-2 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-30 pointer-events-none" />
         <div className="relative mx-auto max-w-[800px] px-6 text-center z-10">
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-6">
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-theme-primary mb-6">
             Keep exploring our community
           </h2>
           <p className="text-gray-400 mb-10 max-w-xl mx-auto">
@@ -466,7 +496,7 @@ export default function PreviousEventsPage() {
             </Link>
             <Link
               to="/gallery"
-              className="rounded-full bg-surface border border-surface-border px-8 py-3.5 text-sm font-bold text-white hover:border-primary/50 transition-colors"
+              className="rounded-full bg-surface border border-surface-border px-8 py-3.5 text-sm font-bold text-theme-primary hover:border-primary/50 transition-colors"
             >
               Browse Photo Gallery
             </Link>
