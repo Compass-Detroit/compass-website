@@ -120,6 +120,8 @@ export default {
         },
         devfest: {
           blue: '#4285f4',
+          // Text/button blue that meets 4.5:1 on white (brand blue is 3.56:1)
+          'blue-ink': '#1967d2',
           green: '#34a853',
           yellow: '#f9ab00',
           red: '#ea4335',

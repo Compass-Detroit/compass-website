@@ -757,7 +757,7 @@ export default function NewsletterStudioPage() {
               }`}
             >
               {blocks.length === 0 ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-600">
                   <FaEnvelope className="size-16 mb-4 opacity-20" />
                   <p>Drag or click blocks from the left to start building</p>
                 </div>

@@ -85,7 +85,7 @@ const PhotographerPage = () => {
             </span>
           </div>
 
-          <h1 className="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl text-white">
+          <h1 className="mb-4 text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl text-theme-primary">
             <span className="bg-gradient-to-r from-primary via-primary-400 to-amber-300 bg-clip-text text-transparent">
               Heart of the City Photography
             </span>
@@ -122,7 +122,7 @@ const PhotographerPage = () => {
             <span className="text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
               About the Studio
             </span>
-            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-white md:text-4xl">
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-theme-primary md:text-4xl">
               Shawn & Tay Lee
             </h2>
           </div>
@@ -146,7 +146,7 @@ const PhotographerPage = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-xl border border-surface bg-surface-card p-6 flex flex-col justify-center items-center text-center">
-                <div className="text-3xl font-extrabold text-white mb-2">
+                <div className="text-3xl font-extrabold text-theme-primary mb-2">
                   28+
                 </div>
                 <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
@@ -154,7 +154,7 @@ const PhotographerPage = () => {
                 </div>
               </div>
               <div className="rounded-xl border border-surface bg-surface-card p-6 flex flex-col justify-center items-center text-center">
-                <div className="text-3xl font-extrabold text-white mb-2">
+                <div className="text-3xl font-extrabold text-theme-primary mb-2">
                   250+
                 </div>
                 <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
@@ -162,13 +162,17 @@ const PhotographerPage = () => {
                 </div>
               </div>
               <div className="rounded-xl border border-surface bg-surface-card p-6 flex flex-col justify-center items-center text-center">
-                <div className="text-3xl font-extrabold text-white mb-2">6</div>
+                <div className="text-3xl font-extrabold text-theme-primary mb-2">
+                  6
+                </div>
                 <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
                   Group Photo Sessions
                 </div>
               </div>
               <div className="rounded-xl border border-surface bg-surface-card p-6 flex flex-col justify-center items-center text-center">
-                <div className="text-3xl font-extrabold text-white mb-2">1</div>
+                <div className="text-3xl font-extrabold text-theme-primary mb-2">
+                  1
+                </div>
                 <div className="text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
                   Amazing Partnership
                 </div>
@@ -185,7 +189,7 @@ const PhotographerPage = () => {
             <span className="text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
               IWD Summit Photography
             </span>
-            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-white md:text-4xl">
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-theme-primary md:text-4xl">
               Moments that matter
             </h2>
           </div>
@@ -211,7 +215,7 @@ const PhotographerPage = () => {
       {/* 4. Big Thank You Section */}
       <section className="bg-gradient-to-b from-primary/[0.06] to-transparent border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20 text-center">
-          <h2 className="mb-6 text-4xl font-extrabold tracking-tight text-white md:text-5xl flex items-center justify-center gap-3">
+          <h2 className="mb-6 text-4xl font-extrabold tracking-tight text-theme-primary md:text-5xl flex items-center justify-center gap-3">
             Thank you, Shawn & Tay <HeartIcon />
           </h2>
           <p className="mx-auto max-w-2xl text-lg leading-relaxed text-gray-400 mb-10">
@@ -234,7 +238,7 @@ const PhotographerPage = () => {
             </a>
             <Link
               to="/gallery"
-              className="inline-flex items-center gap-2 rounded-lg border border-surface bg-surface-card px-6 py-3 font-semibold text-white transition-colors hover:border-primary/30 hover:bg-surface hover-lift"
+              className="inline-flex items-center gap-2 rounded-lg border border-surface bg-surface-card px-6 py-3 font-semibold text-theme-primary transition-colors hover:border-primary/30 hover:bg-surface hover-lift"
             >
               View Full Gallery
               <ArrowRightIcon />
@@ -249,14 +253,14 @@ const PhotographerPage = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link
               to="/gallery"
-              className="group inline-flex items-center gap-2 text-sm font-semibold text-gray-400 transition-colors hover:text-white"
+              className="group inline-flex items-center gap-2 text-sm font-semibold text-gray-400 transition-colors hover:text-theme-primary"
             >
               <ArrowLeftIcon />
               Back to Gallery
             </Link>
             <Link
               to="/events"
-              className="group inline-flex items-center gap-2 text-sm font-semibold text-gray-400 transition-colors hover:text-white"
+              className="group inline-flex items-center gap-2 text-sm font-semibold text-gray-400 transition-colors hover:text-theme-primary"
             >
               View Upcoming Events
               <ArrowRightIcon />

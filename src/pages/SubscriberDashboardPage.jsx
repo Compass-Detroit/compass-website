@@ -142,7 +142,9 @@ const SubscriberDashboardPage = () => {
       headers.join(','),
       ...filteredSubscribers.map(
         (s) =>
-          `"${s.name}","${s.email}","${s.status}","${new Date(s.subscribedAt).toLocaleDateString()}","${s.interests.join('; ')}"`
+          `"${s.name}","${s.email}","${s.status}","${new Date(
+            s.subscribedAt
+          ).toLocaleDateString()}","${s.interests.join('; ')}"`
       ),
     ].join('\n')
 
@@ -294,7 +296,7 @@ const SubscriberDashboardPage = () => {
 
                 <div className="overflow-x-auto">
                   <table className="w-full whitespace-nowrap text-left text-sm">
-                    <thead className="border-b border-gray-200 bg-gray-50 text-gray-500 dark:border-gray-700 dark:bg-gray-750 dark:text-gray-400">
+                    <thead className="border-b border-gray-200 bg-gray-50 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
                       <tr>
                         <th className="px-4 py-3 font-medium">Name & Email</th>
                         <th className="px-4 py-3 font-medium">Interests</th>

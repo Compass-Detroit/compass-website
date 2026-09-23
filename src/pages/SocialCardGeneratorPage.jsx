@@ -250,7 +250,7 @@ const SocialCardGeneratorPage = () => {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-devfest-blue/30 bg-devfest-pastel-blue/40 px-3.5 py-1 text-xs font-semibold text-devfest-blue dark:bg-devfest-blue/10 dark:text-devfest-ht-blue mb-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-devfest-blue/30 bg-devfest-pastel-blue/40 px-3.5 py-1 text-xs font-semibold text-devfest-blue-ink dark:bg-devfest-blue/10 dark:text-devfest-ht-blue mb-3">
               <FaPalette className="size-3" />
               DevFest 2026 Social Studio
             </div>
@@ -269,7 +269,7 @@ const SocialCardGeneratorPage = () => {
               {/* Template Format */}
               <div>
                 <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
-                  <FaSliders className="size-3.5 text-devfest-blue" />
+                  <FaSliders className="size-3.5 text-devfest-blue-ink" />
                   Card Format
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -279,12 +279,12 @@ const SocialCardGeneratorPage = () => {
                       onClick={() => setTemplate(t)}
                       className={`rounded-xl border p-2.5 text-left text-xs font-medium transition-all ${
                         template.id === t.id
-                          ? 'border-devfest-blue bg-devfest-pastel-blue/30 text-devfest-blue font-bold dark:border-devfest-ht-blue dark:bg-devfest-blue/20 dark:text-devfest-ht-blue'
+                          ? 'border-devfest-blue-ink bg-devfest-pastel-blue/30 text-devfest-blue-ink font-bold dark:border-devfest-ht-blue dark:bg-devfest-blue/20 dark:text-devfest-ht-blue'
                           : 'border-gray-200 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
                       }`}
                     >
                       <div>{t.name}</div>
-                      <div className="text-[11px] text-gray-500 dark:text-gray-400">
+                      <div className="text-[11px] text-gray-600 dark:text-gray-300">
                         {t.width}×{t.height}
                       </div>
                     </button>
@@ -326,7 +326,7 @@ const SocialCardGeneratorPage = () => {
                       onClick={() => setSelectedRole(role)}
                       className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
                         selectedRole.id === role.id
-                          ? 'border-devfest-blue bg-devfest-blue text-white'
+                          ? 'border-devfest-blue-ink bg-devfest-blue-ink text-white'
                           : 'border-gray-200 bg-gray-50 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300'
                       }`}
                     >
@@ -354,7 +354,7 @@ const SocialCardGeneratorPage = () => {
                       onClick={() => setSelectedGlyph(glyph)}
                       className={`size-10 rounded-xl border p-1.5 transition-all ${
                         selectedGlyph.id === glyph.id
-                          ? 'border-devfest-blue bg-devfest-pastel-blue/40 ring-2 ring-devfest-blue dark:bg-devfest-blue/20'
+                          ? 'border-devfest-blue-ink bg-devfest-pastel-blue/40 ring-2 ring-devfest-blue dark:bg-devfest-blue/20'
                           : 'border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800'
                       }`}
                       title={glyph.name}
@@ -377,7 +377,7 @@ const SocialCardGeneratorPage = () => {
                   </span>
                   <button
                     onClick={() => setManualMode(!manualMode)}
-                    className="text-xs font-semibold text-devfest-blue hover:underline"
+                    className="text-xs font-semibold text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
                   >
                     {manualMode ? 'Choose from Directory' : 'Custom Entry'}
                   </button>
@@ -475,7 +475,7 @@ const SocialCardGeneratorPage = () => {
               <button
                 onClick={handleDownload}
                 disabled={isExporting}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-devfest-blue py-3.5 text-sm font-bold text-white shadow-lg shadow-devfest-blue/30 transition-all hover:bg-blue-600 hover:scale-102"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-devfest-blue-ink py-3.5 text-sm font-bold text-white shadow-lg shadow-devfest-blue/30 transition-all hover:bg-blue-600 hover:scale-102"
               >
                 {isExporting ? (
                   <>

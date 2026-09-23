@@ -187,8 +187,9 @@ export default function ResourcesPage() {
             <p className="mx-auto mb-6 max-w-lg leading-relaxed text-gray-400">
               The resources below represent topics our community has expressed
               interest in. Nothing here is final — everything is driven by what{' '}
-              <strong className="text-white">you</strong> tell us matters most.
-              Help us prioritize by sharing what you&apos;d find most valuable.
+              <strong className="text-theme-primary">you</strong> tell us
+              matters most. Help us prioritize by sharing what you&apos;d find
+              most valuable.
             </p>
             <a
               href="mailto:jritten@compass-detroit.com?subject=Resource%20Suggestion&body=Hi%20COMPASS%20team%2C%0A%0AI'd%20love%20to%20see%20resources%20on%3A%0A%0A"

@@ -192,13 +192,13 @@ export default function DevTeamShowcase() {
         </div>
 
         {/* Decorative code block */}
-        <div className="mb-12 overflow-hidden rounded-xl border border-surface bg-[#0d0d0d]">
+        <div className="dark-surface mb-12 overflow-hidden rounded-xl border border-surface bg-[#0d0d0d]">
           {/* Terminal chrome */}
           <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-3">
             <span className="size-3 rounded-full bg-[#ff5f57]" />
             <span className="size-3 rounded-full bg-[#febc2e]" />
             <span className="size-3 rounded-full bg-[#28c840]" />
-            <span className="ml-3 text-[11px] text-gray-600">
+            <span className="ml-3 text-[11px] text-gray-400">
               CompassApp.jsx
             </span>
           </div>
@@ -206,7 +206,7 @@ export default function DevTeamShowcase() {
           <div className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
             {codeLines.map((line, i) => (
               <div key={i} style={{ paddingLeft: `${line.indent * 20}px` }}>
-                <span className="mr-4 inline-block w-5 select-none text-right text-gray-700">
+                <span className="mr-4 inline-block w-5 select-none text-right text-gray-500">
                   {i + 1}
                 </span>
                 {line.tokens.map((token, j) => (
