@@ -15,8 +15,8 @@ const eventSites = [
     accent: 'bg-blue-500/10 text-blue-400',
     tag: '12th Annual',
     description:
-      "Michigan's premier developer conference featuring AI/ML, cloud, mobile, and full-stack tracks",
-    date: 'November 2026 · 1,000+ Attendees',
+      "Michigan's premier developer conference: AI Hackathon Nov 13, conference Nov 14, tracks to be announced",
+    date: 'November 13–14, 2026 · 300+ Attendees',
     photos: devfestPhotos,
     live: true,
   },
