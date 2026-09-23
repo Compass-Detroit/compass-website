@@ -27,7 +27,7 @@ const WORKING_GROUPS = [
     id: 'ai-ml',
     title: 'AI & Machine Learning Guild',
     icon: FaCode,
-    badgeColor: 'bg-devfest-blue text-white',
+    badgeColor: 'bg-devfest-blue-ink text-white',
     lead: 'Dr. Kimberly Vance (GDG Detroit / Google)',
     membersCount: 340,
     meetingSchedule: 'Every 2nd Tuesday @ 6:30 PM EST',
@@ -194,8 +194,6 @@ export default function CommunityHubPage() {
   const [speakers, setSpeakers] = useState([])
   const [speakerFilter, setSpeakerFilter] = useState('')
   const [joinedGroups, setJoinedGroups] = useState({})
-  const [email, setEmail] = useState('')
-  const [subscribed, setSubscribed] = useState(false)
   const [selectedTrack, setSelectedTrack] = useState(null)
   const [matchSubmitted, setMatchSubmitted] = useState(false)
 
@@ -208,15 +206,6 @@ export default function CommunityHubPage() {
       ...prev,
       [groupId]: !prev[groupId],
     }))
-  }
-
-  const handleSubscribe = (e) => {
-    e.preventDefault()
-    if (email) {
-      localStorage.setItem('compass_community_early_access', email)
-      setSubscribed(true)
-      setEmail('')
-    }
   }
 
   const filteredSpeakers = speakerFilter
@@ -289,7 +278,7 @@ export default function CommunityHubPage() {
                     onClick={() => setActivePhase(tab.id)}
                     className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
                       isActive
-                        ? 'bg-devfest-blue text-white shadow-lg shadow-devfest-blue/25 scale-105'
+                        ? 'bg-devfest-blue-ink text-white shadow-lg shadow-devfest-blue/25 scale-105'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
                     }`}
                   >
@@ -310,7 +299,7 @@ export default function CommunityHubPage() {
             <section id="speakers" className="animate-fade-in-up">
               <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 pb-6 dark:border-gray-800">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-devfest-blue dark:text-devfest-ht-blue mb-1">
+                  <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-devfest-blue-ink dark:text-devfest-ht-blue mb-1">
                     <FaCircleCheck className="size-3.5" /> Phase 1 · Live
                     Feature
                   </div>
@@ -331,12 +320,12 @@ export default function CommunityHubPage() {
                       placeholder="Search speakers or topics..."
                       value={speakerFilter}
                       onChange={(e) => setSpeakerFilter(e.target.value)}
-                      className="rounded-xl border border-gray-300 bg-white pl-9 pr-4 py-2 text-xs shadow-sm focus:border-devfest-blue dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                      className="rounded-xl border border-gray-300 bg-white pl-9 pr-4 py-2 text-xs shadow-sm focus:border-devfest-blue-ink dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                     />
                   </div>
                   <Link
                     to="/speakers"
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-devfest-blue px-4 py-2 text-xs font-bold text-white hover:bg-blue-600 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-devfest-blue-ink px-4 py-2 text-xs font-bold text-white hover:bg-blue-800 transition-colors"
                   >
                     Full Directory <FaArrowRight className="size-3" />
                   </Link>
@@ -347,7 +336,7 @@ export default function CommunityHubPage() {
                 {filteredSpeakers.map((sp) => (
                   <div
                     key={sp.slug}
-                    className="group relative flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-devfest-blue hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
+                    className="group relative flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-devfest-blue-ink hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
                   >
                     <div>
                       <div className="flex items-center gap-4 mb-4">
@@ -361,7 +350,7 @@ export default function CommunityHubPage() {
                           loading="lazy"
                         />
                         <div>
-                          <h3 className="text-base font-bold text-gray-900 dark:text-white group-hover:text-devfest-blue transition-colors">
+                          <h3 className="text-base font-bold text-gray-900 dark:text-white group-hover:text-devfest-blue-ink transition-colors">
                             {sp.name}
                           </h3>
                           <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
@@ -386,12 +375,12 @@ export default function CommunityHubPage() {
                     </div>
 
                     <div className="flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-800">
-                      <span className="rounded-md bg-devfest-pastel-blue/60 px-2 py-0.5 text-[11px] font-semibold text-devfest-blue dark:bg-devfest-blue/20 dark:text-devfest-ht-blue">
+                      <span className="rounded-md bg-devfest-pastel-blue/60 px-2 py-0.5 text-[11px] font-semibold text-devfest-blue-ink dark:bg-devfest-blue/20 dark:text-devfest-ht-blue">
                         {sp.sessions?.[0]?.track || 'Keynote Speaker'}
                       </span>
                       <Link
                         to={`/speakers/${sp.slug}`}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-devfest-blue hover:underline dark:text-devfest-ht-blue"
+                        className="inline-flex items-center gap-1 text-xs font-bold text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
                       >
                         View Profile <FaArrowRight className="size-2.5" />
                       </Link>
@@ -436,7 +425,7 @@ export default function CommunityHubPage() {
                   </h3>
                   <Link
                     to="/members"
-                    className="text-xs font-bold text-devfest-blue hover:underline dark:text-devfest-ht-blue"
+                    className="text-xs font-bold text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
                   >
                     Browse All Members →
                   </Link>
@@ -502,7 +491,7 @@ export default function CommunityHubPage() {
 
                         <div className="mt-4 space-y-2 border-t border-gray-100 pt-3 dark:border-gray-800">
                           <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                            <FaCalendarDays className="size-3.5 text-devfest-blue" />
+                            <FaCalendarDays className="size-3.5 text-devfest-blue-ink" />
                             <span>{group.meetingSchedule}</span>
                           </div>
                           <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
@@ -734,50 +723,6 @@ export default function CommunityHubPage() {
               </div>
             </section>
           )}
-
-          {/* ========================================================================= */}
-          {/* COMMUNITY WAITLIST / NEWSLETTER */}
-          {/* ========================================================================= */}
-          <section className="rounded-3xl border border-gray-200 bg-gray-50 p-8 sm:p-12 text-center dark:border-gray-800 dark:bg-gray-900/50">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white font-orbitron">
-              Stay Connected with Detroit&apos;s Tech Scene
-            </h2>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-gray-600 dark:text-gray-400">
-              Get invitations to technical working groups, CFS announcements,
-              and career opportunities directly in your inbox.
-            </p>
-
-            <div className="mt-8 mx-auto max-w-md">
-              {subscribed ? (
-                <div className="rounded-2xl bg-green-50 p-4 border border-green-200 dark:bg-green-950/30 dark:border-green-800">
-                  <p className="text-sm font-semibold text-green-800 dark:text-green-300">
-                    Thank you for joining! You&apos;ll receive updates for all 4
-                    community phases.
-                  </p>
-                </div>
-              ) : (
-                <form
-                  onSubmit={handleSubscribe}
-                  className="flex flex-col gap-2 sm:flex-row"
-                >
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email address"
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 text-xs sm:text-sm focus:border-devfest-blue dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                  />
-                  <button
-                    type="submit"
-                    className="rounded-xl bg-devfest-blue px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-blue-600 transition-all shrink-0"
-                  >
-                    Join Platform
-                  </button>
-                </form>
-              )}
-            </div>
-          </section>
         </div>
       </div>
     </PageLayout>

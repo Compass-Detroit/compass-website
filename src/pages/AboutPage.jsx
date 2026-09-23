@@ -213,7 +213,7 @@ function DiversityDonut() {
       <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-gray-600">
         Community Breakdown
       </p>
-      <p className="mb-5 text-sm font-semibold text-white">
+      <p className="mb-5 text-sm font-semibold text-theme-primary">
         Racial & ethnic diversity
       </p>
       <div className="flex items-center gap-8">
@@ -334,7 +334,7 @@ export default function AboutPage() {
               Our Community
             </p>
             <h2 className="text-2xl font-bold tracking-tight">
-              4,111 Members and Growing
+              5,000+ Members and Growing
             </h2>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
@@ -374,7 +374,7 @@ export default function AboutPage() {
               every DevFest — these are bridges, not destinations.
               <br />
               <br />
-              With 4,111 Navigators and growing, we&apos;re proving that when
+              With 5,000+ Navigators and growing, we&apos;re proving that when
               you invest in pathways, talent stays. Careers launch. Communities
               thrive. Join us.&rdquo;
             </blockquote>
@@ -691,7 +691,7 @@ export default function AboutPage() {
                 },
                 {
                   year: '2026',
-                  title: '4,111 Navigators',
+                  title: '5,000+ Navigators',
                   desc: '324% community growth. Hack Michigan, expanded programming, and a coalition of 20+ organizations.',
                 },
               ].map((m, i) => (

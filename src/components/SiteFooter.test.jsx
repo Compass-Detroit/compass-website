@@ -7,10 +7,6 @@ vi.mock('@/assets/images/compass-logo.svg', () => ({
   ReactComponent: (props) => <svg data-testid="compass-logo" {...props} />,
 }))
 
-vi.mock('@/components/newsletter/NewsletterSignup', () => ({
-  default: () => <div data-testid="newsletter-signup" />,
-}))
-
 const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>)
 
 describe('SiteFooter', () => {
