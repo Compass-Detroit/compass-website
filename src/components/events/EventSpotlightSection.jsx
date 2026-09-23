@@ -7,6 +7,7 @@ import {
   SpeakersData as lhmSpeakers,
 } from '@/data/2026/lhmSummit'
 import { sanityImage } from '@/services/sanity'
+import { DEVFEST_2026 } from '@/data/2026/devfest'
 
 const devfestQr = '/assets/qr/devfest-qr.png'
 const devfestCfsQr = '/assets/qr/devfest-cfs-qr.png'
@@ -48,10 +49,10 @@ export default function EventSpotlightSection() {
             <div>
               <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <span className="rounded-full border border-blue-400/30 bg-blue-500/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-blue-300">
-                  Nov 2026 · MotorCity Casino Hotel
+                  Nov 13–14 · Little Caesars HQ
                 </span>
                 <span className="rounded-full border border-emerald-400/30 bg-emerald-500/20 px-3 py-1 text-[11px] font-bold text-emerald-300 motion-safe:animate-pulse">
-                  Lineup To Be Announced Soon!
+                  Registration Open
                 </span>
               </div>
               <div className="mb-4 flex items-center gap-2">
@@ -79,9 +80,9 @@ export default function EventSpotlightSection() {
               <p className="text-sm leading-relaxed text-gray-300 mb-6">
                 Michigan&apos;s 12th annual flagship developer conference —
                 co-produced by <strong>GDG Detroit</strong> &{' '}
-                <strong>Compass Detroit</strong>. Featuring 50+ speakers across
-                6 cutting-edge tracks: Cloud, AI/ML, Mobile, Web, Leadership,
-                and Tech Innovation.
+                <strong>Compass Detroit</strong>. Featuring 30+ speakers, an AI
+                Hackathon on Nov 13 and a full conference on Nov 14. Tracks to
+                be announced.
               </p>
 
               {/* Highlights & Partners */}
@@ -113,21 +114,19 @@ export default function EventSpotlightSection() {
 
               <div className="grid grid-cols-3 gap-3 text-center border-t border-surface pt-4 mb-6">
                 <div>
-                  <div className="text-xl font-black text-[#FFD700]">
-                    1,000+
-                  </div>
+                  <div className="text-xl font-black text-[#FFD700]">300+</div>
                   <div className="text-[10px] uppercase font-bold text-gray-500">
                     Attendees
                   </div>
                 </div>
                 <div className="border-x border-surface">
-                  <div className="text-xl font-black text-[#FFD700]">50+</div>
+                  <div className="text-xl font-black text-[#FFD700]">30+</div>
                   <div className="text-[10px] uppercase font-bold text-gray-500">
                     Speakers
                   </div>
                 </div>
                 <div>
-                  <div className="text-xl font-black text-[#FFD700]">6</div>
+                  <div className="text-xl font-black text-[#FFD700]">TBD</div>
                   <div className="text-[10px] uppercase font-bold text-gray-500">
                     Tracks
                   </div>
@@ -137,12 +136,12 @@ export default function EventSpotlightSection() {
 
             <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-surface">
               <a
-                href="https://midevfest26.vercel.app/"
+                href={DEVFEST_2026.registerUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto flex-1 text-center rounded-xl bg-gradient-to-r from-[#1a73e8] to-[#CD7F32] px-6 py-3 text-sm font-bold text-white shadow-lg hover:from-blue-600 hover:to-[#b8732d] transition-all hover:scale-[1.02]"
               >
-                Visit DevFest 2026 Site →
+                Register for DevFest 2026 →
               </a>
               <button
                 onClick={() => setActiveModal('devfest-cfs')}
@@ -279,8 +278,8 @@ export default function EventSpotlightSection() {
         onClose={() => setActiveModal(null)}
         eventName="Michigan DevFest 2026"
         qrImage={devfestQr}
-        qrLink="https://midevfest26.vercel.app/"
-        subtext="Scan to visit the official Michigan DevFest 2026 site and stay tuned for the exciting lineup announcement!"
+        qrLink={DEVFEST_2026.cfsUrl}
+        subtext="Scan to open the Michigan DevFest 2026 call for speakers — Nov 13 AI Hackathon, Nov 14 Conference at Little Caesars HQ."
       />
 
       <QRCodeModal
@@ -288,8 +287,8 @@ export default function EventSpotlightSection() {
         onClose={() => setActiveModal(null)}
         eventName="DevFest 2026 — Call for Speakers"
         qrImage={devfestCfsQr}
-        qrLink="https://midevfest26.vercel.app/"
-        subtext="Scan to submit your talk proposal for Michigan DevFest 2026. We're looking for speakers across Cloud, AI/ML, Mobile, Web, Leadership, and Innovation tracks!"
+        qrLink={DEVFEST_2026.cfsUrl}
+        subtext="Scan to submit your talk proposal for Michigan DevFest 2026. Tracks are still being shaped, so pitch the talk you want to give!"
       />
     </section>
   )

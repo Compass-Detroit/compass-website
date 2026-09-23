@@ -282,6 +282,9 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  /* clip, unlike hidden, doesn't make body a scroll container, so the sticky
+     nav keeps working; hidden stays as the fallback for older browsers */
+  overflow-x: clip;
 }
 
 :root {

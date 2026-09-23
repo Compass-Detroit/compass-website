@@ -21,7 +21,7 @@ const ALL_GALLERY_PHOTOS =
     : [
         {
           id: 'img-1',
-          src: '/assets/gallery/iwd26/image0.jpeg',
+          src: '/assets/gallery/iwd26/iwd26-group-01.jpeg',
           title: 'IWD Summit 2026 Group Photo',
           category: 'IWD Summit 2026',
           photographer: 'Heart of the City Photography',
@@ -31,38 +31,32 @@ const ALL_GALLERY_PHOTOS =
 // Hero showcase slides — large cinematic carousel
 const HERO_SLIDES = [
   {
-    src: '/assets/gallery/iwd26/image0.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-01.jpeg',
     title: 'IWD Innovation Summit 2026',
     subtitle:
       "Celebrating inclusion, empowerment, and Detroit's tech community",
     credit: 'Heart of the City Photography x Shawn Lee Studios',
   },
   {
-    src: '/assets/gallery/iwd26/image1.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-02.jpeg',
     title: 'Navigators & Mentors Circle',
     subtitle: 'Connecting students directly to corporate tech leaders',
     credit: 'Heart of the City Photography x Shawn Lee Studios',
   },
   {
-    src: '/assets/gallery/iwd26/image2.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-03.jpeg',
     title: 'Community in Action',
     subtitle: 'Building pathways through shared purpose and collaboration',
     credit: 'Heart of the City Photography x Shawn Lee Studios',
   },
   {
-    src: '/assets/gallery/iwd26/image3.jpeg',
-    title: 'IWD Group Celebration',
-    subtitle: '250+ attendees, 40 speakers, 8 tracks of innovation',
-    credit: 'Heart of the City Photography x Shawn Lee Studios',
-  },
-  {
-    src: '/assets/gallery/iwd26/image4.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-04.jpeg',
     title: 'Tech Leaders Unite',
     subtitle: '120+ companies represented at Google Detroit',
     credit: 'Heart of the City Photography x Shawn Lee Studios',
   },
   {
-    src: '/assets/gallery/iwd26/image5.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-05.jpeg',
     title: 'The COMPASS Community',
     subtitle:
       "Every face, every story — building Michigan's inclusive tech future",
@@ -81,7 +75,7 @@ const SPOTLIGHT_SLIDES = [
   },
   {
     id: 'iwd26-group',
-    src: '/assets/gallery/iwd26/image0.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-01.jpeg',
     title: 'IWD Summit 2026 Group Showcase',
     subtitle: 'Captured by Heart of the City Photography x Shawn Lee Studios',
     tag: 'IWD 2026',

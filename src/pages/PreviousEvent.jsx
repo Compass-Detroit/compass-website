@@ -82,31 +82,44 @@ const PreviousEvent = () => {
           </h1>
 
           <div className="mb-12 flex flex-wrap justify-center gap-4 reveal-stagger">
-            <div className="trust-badge flex items-center gap-2 rounded-xl border border-surface bg-surface-card px-4 py-2">
-              <span className="font-bold text-primary">
-                {eventMetadata.speakerCount}
-              </span>
-              <span className="text-sm text-gray-400">
-                Speaker{eventMetadata.speakerCount !== 1 ? 's' : ''}
-              </span>
-            </div>
-            <div className="trust-badge flex items-center gap-2 rounded-xl border border-surface bg-surface-card px-4 py-2">
-              <span className="font-bold text-primary">
-                {eventMetadata.sessionCount}
-              </span>
-              <span className="text-sm text-gray-400">
-                Session{eventMetadata.sessionCount !== 1 ? 's' : ''}
-              </span>
-            </div>
-            {eventMetadata.tracks.length > 0 && (
-              <div className="trust-badge flex items-center gap-2 rounded-xl border border-surface bg-surface-card px-4 py-2">
-                <span className="font-bold text-primary">
-                  {eventMetadata.tracks.length}
-                </span>
-                <span className="text-sm text-gray-400">
-                  Track{eventMetadata.tracks.length !== 1 ? 's' : ''}
-                </span>
-              </div>
+            {eventMetadata.summary ? (
+              Object.values(eventMetadata.summary).map((label) => (
+                <div
+                  key={label}
+                  className="trust-badge rounded-xl border border-surface bg-surface-card px-4 py-2 text-sm font-bold text-primary"
+                >
+                  {label}
+                </div>
+              ))
+            ) : (
+              <>
+                <div className="trust-badge flex items-center gap-2 rounded-xl border border-surface bg-surface-card px-4 py-2">
+                  <span className="font-bold text-primary">
+                    {eventMetadata.speakerCount}
+                  </span>
+                  <span className="text-sm text-gray-400">
+                    Speaker{eventMetadata.speakerCount !== 1 ? 's' : ''}
+                  </span>
+                </div>
+                <div className="trust-badge flex items-center gap-2 rounded-xl border border-surface bg-surface-card px-4 py-2">
+                  <span className="font-bold text-primary">
+                    {eventMetadata.sessionCount}
+                  </span>
+                  <span className="text-sm text-gray-400">
+                    Session{eventMetadata.sessionCount !== 1 ? 's' : ''}
+                  </span>
+                </div>
+                {eventMetadata.tracks.length > 0 && (
+                  <div className="trust-badge flex items-center gap-2 rounded-xl border border-surface bg-surface-card px-4 py-2">
+                    <span className="font-bold text-primary">
+                      {eventMetadata.tracks.length}
+                    </span>
+                    <span className="text-sm text-gray-400">
+                      Track{eventMetadata.tracks.length !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                )}
+              </>
             )}
           </div>
 

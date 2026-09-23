@@ -2,7 +2,7 @@
 export const CATALOG_PHOTOS = [
   {
     id: 'iwd26-group-0',
-    src: '/assets/gallery/iwd26/image0.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-01.jpeg',
     title: 'IWD Innovation Summit 2026 — Group Photo',
     category: 'IWD Summit 2026',
     folder: 'iwd26',
@@ -12,7 +12,7 @@ export const CATALOG_PHOTOS = [
   },
   {
     id: 'iwd26-group-1',
-    src: '/assets/gallery/iwd26/image1.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-02.jpeg',
     title: 'IWD Innovation Summit 2026 — Group Photo',
     category: 'IWD Summit 2026',
     folder: 'iwd26',
@@ -22,17 +22,7 @@ export const CATALOG_PHOTOS = [
   },
   {
     id: 'iwd26-group-2',
-    src: '/assets/gallery/iwd26/image2.jpeg',
-    title: 'IWD Innovation Summit 2026 — Group Photo',
-    category: 'IWD Summit 2026',
-    folder: 'iwd26',
-    photographer: 'Heart of the City Photography x Shawn Lee Studios',
-    photographerUrl: 'https://www.hocxsls.com/',
-    featured: true,
-  },
-  {
-    id: 'iwd26-group-3',
-    src: '/assets/gallery/iwd26/image3.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-03.jpeg',
     title: 'IWD Innovation Summit 2026 — Group Photo',
     category: 'IWD Summit 2026',
     folder: 'iwd26',
@@ -42,7 +32,7 @@ export const CATALOG_PHOTOS = [
   },
   {
     id: 'iwd26-group-4',
-    src: '/assets/gallery/iwd26/image4.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-04.jpeg',
     title: 'IWD Innovation Summit 2026 — Group Photo',
     category: 'IWD Summit 2026',
     folder: 'iwd26',
@@ -52,7 +42,7 @@ export const CATALOG_PHOTOS = [
   },
   {
     id: 'iwd26-group-5',
-    src: '/assets/gallery/iwd26/image5.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-05.jpeg',
     title: 'IWD Innovation Summit 2026 — Group Photo',
     category: 'IWD Summit 2026',
     folder: 'iwd26',

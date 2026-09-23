@@ -12,7 +12,7 @@ export const communityPhotos = [
     alt: 'Panel discussion at COMPASS event',
   },
   {
-    src: '/assets/gallery/iwd26/image0.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-01.jpeg',
     alt: 'IWD Innovation Summit 2026 group photo',
   },
   {
@@ -80,19 +80,15 @@ export const careerMentorshipPhotos = [
 
 export const prideSummitPhotos = [
   {
-    src: '/assets/gallery/iwd26/image1.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-02.jpeg',
     alt: 'COMPASS community celebration',
   },
   {
-    src: '/assets/gallery/iwd26/image2.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-03.jpeg',
     alt: 'Inclusive tech summit speakers',
   },
   {
-    src: '/assets/gallery/iwd26/image3.jpeg',
-    alt: 'Community leaders at innovation event',
-  },
-  {
-    src: '/assets/gallery/iwd26/image4.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-04.jpeg',
     alt: 'Tech professionals networking',
   },
 ]
@@ -130,7 +126,7 @@ export const womenInTechPhotos = [
     alt: 'IWD Innovation Summit workshop',
   },
   {
-    src: '/assets/gallery/iwd26/image5.jpeg',
+    src: '/assets/gallery/iwd26/iwd26-group-05.jpeg',
     alt: 'Women leading tech innovation',
   },
 ]
