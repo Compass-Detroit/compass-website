@@ -1,48 +1,48 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useId, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
+import {
+  DETROIT_POINT,
+  MICHIGAN_LOWER_PENINSULA,
+  MICHIGAN_UPPER_PENINSULA,
+} from '@/constants/michigan'
 
 // Crisp, snappy motion: strong ease-out, tiny overshoot only where it reads
 const EASE_OUT = 'cubic-bezier(0.22, 1, 0.36, 1)'
 const SPIN_MS = 1400
 const TWITCH_MS = 420
 
-// Theme-aware palette. Dark values are the default; every light theme
-// (Daylight, Campus) also carries the `light` class on <html>.
-// Contrast, worst case against the rendered hero background:
-//  - dark themes: letters 7.5:1+, coords 6:1+, ring / needle shades 3.3:1+
-//  - light themes: letters 5.8:1+, coords 6:1+, ring 3.1:1+,
-//    Michigan outline 4.3:1+, needle outline #713f12 7.4:1+
+// Theme-aware palette, taken from the COMPASS logo mark: green gear
+// (#00c605), orange needle (#ee7d33) and amber wordmark (#ffa706).
+// Dark values are the default; every light theme also carries `light` on <html>.
+// Contrast against the hero background (graphics need 3:1, text 4.5:1):
+//  - dark themes: gear 8:1, needle 6.7:1+, letters 9.5:1
+//  - light themes: gear 3.7:1, needle 3.6:1+, letters 5:1, Michigan 4.5:1
 const COMPASS_STYLES = `
   .animated-compass-wrap {
-    --compass-letter: #efb403;
-    --compass-needle-n: #efb403;
-    --compass-needle-n-shade: #b88703;
-    --compass-needle-s: #a1a1aa;
-    --compass-needle-s-shade: #7c7c86;
-    --compass-needle-edge: transparent;
-    --compass-ring: #9a760b;
-    --compass-ring-soft: rgba(239, 180, 3, 0.28);
+    --compass-gear: #00c605;
+    --compass-letter: #ffa706;
+    --compass-needle-n: #ee7d33;
+    --compass-needle-s: #ffa706;
     --compass-hub: var(--surface, #0a0a0a);
     --compass-accent: #00c605;
-    --compass-accent-fill: rgba(0, 198, 5, 0.1);
+    --compass-accent-fill: rgba(0, 198, 5, 0.12);
     --compass-accent-text: #00c605;
+    --compass-detroit: #ee7d33;
   }
   .light .animated-compass-wrap {
-    --compass-letter: #854d0e;
-    --compass-needle-n: #ca8a04;
-    --compass-needle-n-shade: #a16207;
-    --compass-needle-s: #94a3b8;
-    --compass-needle-s-shade: #64748b;
-    --compass-needle-edge: #713f12;
-    --compass-ring: #b7791f;
-    --compass-ring-soft: rgba(133, 77, 14, 0.22);
+    --compass-gear: #009a04;
+    --compass-letter: #b45309;
+    --compass-needle-n: #c2410c;
+    --compass-needle-s: #d9651a;
     --compass-hub: #ffffff;
-    --compass-accent: #15803d;
-    --compass-accent-fill: rgba(21, 128, 61, 0.1);
+    --compass-accent: #008a04;
+    --compass-accent-fill: rgba(0, 138, 4, 0.1);
     --compass-accent-text: #166534;
+    --compass-detroit: #c2410c;
   }
 
+  .compass-gear,
   .compass-needle-wrapper,
   .compass-twitch-layer {
     transform-origin: 90px 90px;
@@ -56,6 +56,9 @@ const COMPASS_STYLES = `
   @media (prefers-reduced-motion: no-preference) {
     .compass-animate .compass-needle-wrapper {
       animation: compass-spin ${SPIN_MS}ms ${EASE_OUT} both;
+    }
+    .compass-animate .compass-gear {
+      animation: gear-turn ${SPIN_MS}ms ${EASE_OUT} both;
     }
     /* Twitch lives on its own layer so it never restarts the mount spin */
     .compass-twitch-layer.compass-twitch {
@@ -85,6 +88,12 @@ const COMPASS_STYLES = `
     100% { transform: rotate(720deg); }
   }
 
+  /* The gear advances one tooth while the needle finds north */
+  @keyframes gear-turn {
+    from { transform: rotate(-45deg); }
+    to { transform: rotate(0deg); }
+  }
+
   @keyframes compass-twitch {
     0% { transform: rotate(0deg); }
     20% { transform: rotate(-10deg); }
@@ -101,10 +110,52 @@ const COMPASS_STYLES = `
   }
 `
 
-// Ordinal ticks sit between the two rings (r 52 → 62)
-const ORDINALS = [45, 135, 225, 315]
-// Cardinal ticks are short and heavy, just inside the outer ring
-const CARDINALS = [0, 90, 180, 270]
+// Logo gear: 8 rounded teeth around a hollow face, centred on the rose (90,90)
+const GEAR = { teeth: 8, outer: 64, root: 53, hole: 42, tip: 0.14, base: 0.26 }
+
+const smoothstep = (x) => x * x * (3 - 2 * x)
+
+// Sampled outline; smoothstep flanks give the logo's soft tooth corners
+function gearPath({ teeth, outer, root, hole, tip, base }, cx = 90, cy = 90) {
+  const steps = teeth * 32
+  const points = []
+  for (let i = 0; i < steps; i++) {
+    const t = i / steps
+    const phase = (t * teeth) % 1
+    const d = Math.min(phase, 1 - phase)
+    const lift =
+      d <= tip ? 1 : d >= base ? 0 : smoothstep((base - d) / (base - tip))
+    const r = root + (outer - root) * lift
+    const a = t * 2 * Math.PI - Math.PI / 2
+    points.push(
+      `${(cx + r * Math.cos(a)).toFixed(2)} ${(cy + r * Math.sin(a)).toFixed(
+        2
+      )}`
+    )
+  }
+  // Second subpath punches the face out (evenodd)
+  const face = `M${cx + hole} ${cy}A${hole} ${hole} 0 1 0 ${
+    cx - hole
+  } ${cy}A${hole} ${hole} 0 1 0 ${cx + hole} ${cy}Z`
+  return `M${points.join('L')}Z${face}`
+}
+
+const GEAR_PATH = gearPath(GEAR)
+
+// Connector runs from just outside the gear toward Detroit
+const CONNECTOR = (() => {
+  const dx = DETROIT_POINT.x - 90
+  const dy = DETROIT_POINT.y - 90
+  const len = Math.hypot(dx, dy)
+  const ux = dx / len
+  const uy = dy / len
+  return {
+    x1: 90 + ux * (GEAR.outer + 6),
+    y1: 90 + uy * (GEAR.outer + 6),
+    x2: DETROIT_POINT.x - ux * 9,
+    y2: DETROIT_POINT.y - uy * 9,
+  }
+})()
 
 // Letters sit outside the outer ring (r = 78) so they never collide with it
 const LETTERS = [
@@ -124,6 +175,7 @@ export default function AnimatedCompass({ sceneIndex = 0 }) {
   const pointerRef = useRef(null)
   const rafRef = useRef(null)
   const reducedMotion = usePrefersReducedMotion()
+  const needleMaskId = `compass-needle-cut-${useId().replace(/:/g, '')}`
 
   useEffect(() => {
     // Slight delay to ensure smooth start of mount animation
@@ -220,23 +272,21 @@ export default function AnimatedCompass({ sceneIndex = 0 }) {
         onMouseLeave={handleMouseLeave}
       >
         <g className={mounted ? 'compass-animate' : ''}>
-          {/* Michigan Lower Peninsula Outline */}
-          <path
-            d="M 240 170 L 305 170 L 315 155 L 318 140 L 325 125 L 328 105 L 320 85 L 305 105 L 315 80 L 310 50 L 295 25 L 280 20 L 265 30 L 255 50 L 245 40 L 240 60 L 235 85 L 235 120 L 230 150 Z"
+          {/* Michigan, both peninsulas */}
+          <g
             fill="var(--compass-accent-fill)"
             stroke="var(--compass-accent)"
-            strokeWidth="2.5"
+            strokeWidth="1.5"
             strokeLinejoin="round"
-            strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
-          />
+          >
+            <path d={MICHIGAN_UPPER_PENINSULA} />
+            <path d={MICHIGAN_LOWER_PENINSULA} />
+          </g>
 
-          {/* Connector: outer ring edge → Detroit (never crosses the needle) */}
+          {/* Connector: gear edge → Detroit (never crosses the needle) */}
           <line
-            x1="152"
-            y1="105"
-            x2="308"
-            y2="143"
+            {...CONNECTOR}
             stroke="var(--compass-accent)"
             strokeWidth="1.5"
             strokeDasharray="5 5"
@@ -246,82 +296,35 @@ export default function AnimatedCompass({ sceneIndex = 0 }) {
           />
 
           {/* Detroit Pulse Dot & Rings */}
+          {['', ' pulse-circle-delayed'].map((extra) => (
+            <circle
+              key={extra}
+              className={`pulse-circle${extra}`}
+              cx={DETROIT_POINT.x}
+              cy={DETROIT_POINT.y}
+              r="7"
+              fill="none"
+              stroke="var(--compass-detroit)"
+              strokeWidth="1.5"
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
           <circle
-            className="pulse-circle"
-            cx="315"
-            cy="145"
-            r="7"
-            fill="none"
-            stroke="var(--compass-accent)"
-            strokeWidth="1.5"
-            vectorEffect="non-scaling-stroke"
-          />
-          <circle
-            className="pulse-circle pulse-circle-delayed"
-            cx="315"
-            cy="145"
-            r="7"
-            fill="none"
-            stroke="var(--compass-accent)"
-            strokeWidth="1.5"
-            vectorEffect="non-scaling-stroke"
-          />
-          <circle
-            cx="315"
-            cy="145"
+            cx={DETROIT_POINT.x}
+            cy={DETROIT_POINT.y}
             r="5"
-            fill="var(--compass-accent)"
+            fill="var(--compass-detroit)"
             stroke="var(--compass-hub)"
             strokeWidth="2"
           />
 
-          {/* Compass Rose Rings */}
-          <circle
-            cx="90"
-            cy="90"
-            r="62"
-            stroke="var(--compass-ring)"
-            strokeWidth="2.5"
-            fill="none"
-            vectorEffect="non-scaling-stroke"
+          {/* Logo gear */}
+          <path
+            className="compass-gear"
+            d={GEAR_PATH}
+            fill="var(--compass-gear)"
+            fillRule="evenodd"
           />
-          <circle
-            cx="90"
-            cy="90"
-            r="52"
-            stroke="var(--compass-ring-soft)"
-            strokeWidth="1"
-            fill="none"
-            vectorEffect="non-scaling-stroke"
-          />
-
-          {/* Cardinal + Ordinal Tick Marks */}
-          {CARDINALS.map((angle) => (
-            <line
-              key={`c${angle}`}
-              x1="90"
-              y1="28"
-              x2="90"
-              y2="38"
-              stroke="var(--compass-letter)"
-              strokeWidth="3"
-              strokeLinecap="round"
-              transform={`rotate(${angle} 90 90)`}
-            />
-          ))}
-          {ORDINALS.map((angle) => (
-            <line
-              key={`o${angle}`}
-              x1="90"
-              y1="31"
-              x2="90"
-              y2="37"
-              stroke="var(--compass-ring)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              transform={`rotate(${angle} 90 90)`}
-            />
-          ))}
 
           {/* Cardinal Directions */}
           {LETTERS.map(({ label, x, y }) => (
@@ -340,7 +343,21 @@ export default function AnimatedCompass({ sceneIndex = 0 }) {
             </text>
           ))}
 
-          {/* Needle Group */}
+          {/* Logo needle: split diamond with a cut through the hub */}
+          <defs>
+            <mask
+              id={needleMaskId}
+              maskUnits="userSpaceOnUse"
+              x="0"
+              y="0"
+              width="180"
+              height="180"
+            >
+              <rect width="180" height="180" fill="white" />
+              <rect x="74" y="88.2" width="32" height="3.6" fill="black" />
+              <circle cx="90" cy="90" r="5" fill="black" />
+            </mask>
+          </defs>
           <g className="compass-needle-wrapper">
             <g
               className={`compass-twitch-layer ${
@@ -353,37 +370,17 @@ export default function AnimatedCompass({ sceneIndex = 0 }) {
                   transformOrigin: '90px 90px',
                   transition: `transform 0.2s ${EASE_OUT}`,
                 }}
-                stroke="var(--compass-needle-edge)"
-                strokeWidth="1"
-                strokeLinejoin="round"
               >
-                {/* South half — split shading gives a hard, readable edge */}
-                <polygon
-                  points="90,90 83,90 90,142"
-                  fill="var(--compass-needle-s)"
-                />
-                <polygon
-                  points="90,90 97,90 90,142"
-                  fill="var(--compass-needle-s-shade)"
-                />
-                {/* North half */}
-                <polygon
-                  points="90,90 83,90 90,34"
-                  fill="var(--compass-needle-n)"
-                />
-                <polygon
-                  points="90,90 97,90 90,34"
-                  fill="var(--compass-needle-n-shade)"
-                />
-                {/* Center pivot */}
-                <circle
-                  cx="90"
-                  cy="90"
-                  r="6"
-                  fill="var(--compass-hub)"
-                  stroke="var(--compass-needle-n)"
-                  strokeWidth="2.5"
-                />
+                <g mask={`url(#${needleMaskId})`}>
+                  <polygon
+                    points="90,52 103,90 77,90"
+                    fill="var(--compass-needle-n)"
+                  />
+                  <polygon
+                    points="90,128 103,90 77,90"
+                    fill="var(--compass-needle-s)"
+                  />
+                </g>
               </g>
             </g>
           </g>
