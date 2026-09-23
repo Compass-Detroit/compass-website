@@ -1,19 +1,25 @@
 import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { useTheme, FONT_OPTIONS } from '@/components/ThemeProvider'
 import {
-  FaXmark,
-  FaGear,
-  FaSun,
-  FaMoon,
-  FaCheck,
-  FaRotateLeft,
-} from 'react-icons/fa6'
+  useTheme,
+  FONT_OPTIONS,
+  THEME_VARIANTS,
+} from '@/components/ThemeProvider'
+import { FaXmark, FaGear, FaCheck, FaRotateLeft } from 'react-icons/fa6'
 
 export default function SettingsDrawer() {
-  const { mode, toggle, font, setFont } = useTheme()
+  const { variant, setVariant, font, setFont } = useTheme()
   const [isOpen, setIsOpen] = useState(false)
   const drawerRef = useRef(null)
+  const triggerRef = useRef(null)
+  const closeRef = useRef(null)
+
+  // Focus the drawer on open; hand focus back to the trigger on close
+  useEffect(() => {
+    if (isOpen) closeRef.current?.focus()
+    else if (document.activeElement === document.body)
+      triggerRef.current?.focus()
+  }, [isOpen])
 
   // Lock body scroll when drawer is open
   useEffect(() => {
@@ -40,19 +46,19 @@ export default function SettingsDrawer() {
 
   const handleResetDefaults = () => {
     setFont('montserrat')
-    if (mode !== 'dark') {
-      toggle()
-    }
+    setVariant('midnight')
   }
 
   return (
     <>
       {/* Settings Gear Button in Nav */}
       <button
+        ref={triggerRef}
+        type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="relative flex size-9 items-center justify-center rounded-xl border border-primary/40 bg-primary/10 text-primary transition-all hover:border-primary hover:bg-primary/20 hover:shadow-lg hover:shadow-primary/20"
-        aria-label="Open Display Settings"
-        title="Display & Font Settings"
+        className="flex size-9 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:bg-[var(--card-hover-bg)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+        aria-label="Theme and display settings"
+        aria-expanded={isOpen}
       >
         <FaGear
           className={`size-4 transition-transform duration-300 ${
@@ -88,7 +94,7 @@ export default function SettingsDrawer() {
                   </div>
                   <div>
                     <h2 className="text-sm font-bold text-[var(--text-primary)]">
-                      Display &amp; Theme
+                      Theme &amp; Display
                     </h2>
                     <p className="text-[11px] text-[var(--text-muted)]">
                       Customize site appearance
@@ -96,6 +102,8 @@ export default function SettingsDrawer() {
                   </div>
                 </div>
                 <button
+                  ref={closeRef}
+                  type="button"
                   onClick={() => setIsOpen(false)}
                   className="flex size-8 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)] transition-colors hover:border-primary/40 hover:text-[var(--text-primary)]"
                   aria-label="Close Settings Drawer"
@@ -107,38 +115,52 @@ export default function SettingsDrawer() {
               {/* Drawer Scrollable Content */}
               <div className="flex-1 overflow-y-auto p-6">
                 <div className="flex flex-col gap-6">
-                  {/* Appearance Mode Section */}
+                  {/* Theme Palette Section */}
                   <div>
                     <span
                       className="mb-3 block text-xs font-bold uppercase tracking-wider text-primary"
                       role="heading"
                       aria-level="3"
                     >
-                      Appearance Mode
+                      Theme Palette
                     </span>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => mode !== 'dark' && toggle()}
-                        className={`flex items-center justify-center gap-2.5 rounded-xl border py-3.5 text-xs font-bold uppercase tracking-wider transition-all ${
-                          mode === 'dark'
-                            ? 'border-primary bg-primary text-black shadow-lg shadow-primary/20'
-                            : 'border-[var(--border)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-primary/40 hover:text-[var(--text-primary)]'
-                        }`}
-                      >
-                        <FaMoon className="size-4" />
-                        Dark Mode
-                      </button>
-                      <button
-                        onClick={() => mode !== 'light' && toggle()}
-                        className={`flex items-center justify-center gap-2.5 rounded-xl border py-3.5 text-xs font-bold uppercase tracking-wider transition-all ${
-                          mode === 'light'
-                            ? 'border-primary bg-primary text-black shadow-lg shadow-primary/20'
-                            : 'border-[var(--border)] bg-[var(--surface-card)] text-[var(--text-muted)] hover:border-primary/40 hover:text-[var(--text-primary)]'
-                        }`}
-                      >
-                        <FaSun className="size-4" />
-                        Light Mode
-                      </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      {THEME_VARIANTS.map((v) => {
+                        const isSelected = variant === v.id
+                        return (
+                          <button
+                            key={v.id}
+                            type="button"
+                            onClick={() => setVariant(v.id)}
+                            aria-pressed={isSelected}
+                            className={`flex items-center gap-3 rounded-xl border p-2.5 text-left transition-colors ${
+                              isSelected
+                                ? 'border-primary bg-primary/15'
+                                : 'border-[var(--border)] bg-[var(--surface-card)] hover:border-primary/40'
+                            }`}
+                          >
+                            {/* Mini preview: the palette's surface with its accent */}
+                            <span
+                              className="flex size-9 shrink-0 items-end justify-end rounded-lg border border-black/10 p-1"
+                              style={{ backgroundColor: v.swatch.bg }}
+                              aria-hidden="true"
+                            >
+                              <span
+                                className="size-3 rounded-full"
+                                style={{ backgroundColor: v.swatch.accent }}
+                              />
+                            </span>
+                            <span className="min-w-0">
+                              <span className="block truncate text-sm font-semibold text-[var(--text-primary)]">
+                                {v.label}
+                              </span>
+                              <span className="block text-[11px] capitalize text-[var(--text-muted)]">
+                                {v.base}
+                              </span>
+                            </span>
+                          </button>
+                        )
+                      })}
                     </div>
                   </div>
 

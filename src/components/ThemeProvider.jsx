@@ -8,19 +8,57 @@ const THEME_KEY = 'compass-theme'
 const VARIANT_KEY = 'compass-theme-variant'
 const FONT_KEY = 'compass-font'
 
+// `swatch` previews each palette in the settings drawer (surface + accent)
 export const THEME_VARIANTS = [
-  { id: 'midnight', label: 'Midnight', cssClass: 'dark', base: 'dark' },
-  { id: 'daylight', label: 'Daylight', cssClass: 'light', base: 'light' },
+  {
+    id: 'midnight',
+    label: 'Midnight',
+    cssClass: 'dark',
+    base: 'dark',
+    swatch: { bg: '#0a0a0a', accent: '#efb403' },
+  },
+  {
+    id: 'daylight',
+    label: 'Daylight',
+    cssClass: 'light',
+    base: 'light',
+    swatch: { bg: '#ffffff', accent: '#a16207' },
+  },
   {
     id: 'motor-city',
     label: 'Motor City',
     cssClass: 'theme-motor-city',
     base: 'dark',
+    swatch: { bg: '#0a1322', accent: '#3b82f6' },
   },
-  { id: 'campus', label: 'Campus', cssClass: 'theme-campus', base: 'light' },
-  { id: 'neon', label: 'Neon', cssClass: 'theme-neon', base: 'dark' },
-  { id: 'ember', label: 'Ember', cssClass: 'theme-ember', base: 'dark' },
-  { id: 'cyber', label: 'Cyber Matrix', cssClass: 'theme-cyber', base: 'dark' },
+  {
+    id: 'campus',
+    label: 'Campus',
+    cssClass: 'theme-campus',
+    base: 'light',
+    swatch: { bg: '#faf7f2', accent: '#047857' },
+  },
+  {
+    id: 'neon',
+    label: 'Neon',
+    cssClass: 'theme-neon',
+    base: 'dark',
+    swatch: { bg: '#050505', accent: '#22c55e' },
+  },
+  {
+    id: 'ember',
+    label: 'Ember',
+    cssClass: 'theme-ember',
+    base: 'dark',
+    swatch: { bg: '#120c08', accent: '#f97316' },
+  },
+  {
+    id: 'cyber',
+    label: 'Cyber Matrix',
+    cssClass: 'theme-cyber',
+    base: 'dark',
+    swatch: { bg: '#010c04', accent: '#4ade80' },
+  },
 ]
 
 export const FONT_OPTIONS = [
