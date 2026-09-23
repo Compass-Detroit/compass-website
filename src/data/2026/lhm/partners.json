@@ -1,0 +1,140 @@
+{
+  "source": "sanity",
+  "sponsors": [
+    {
+      "id": "dte-sponsor",
+      "name": "DTE",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/54177530ed1b036e1acbf259ead11665dc8e1b80-111x38.png",
+      "logoAlt": "",
+      "desc": "A diversified energy company providing electric and natural gas service while investing in cleaner energy and grid modernization.",
+      "url": "https://www.dteenergy.com/",
+      "tier": "gold"
+    },
+    {
+      "id": "ibm-sponsor",
+      "name": "IBM",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/74855d0fad91380876787dce60cfaab4b10b6c9e-2500x1000.png",
+      "logoAlt": "",
+      "desc": "    A global technology company specializing in hybrid cloud, artificial intelligence, consulting, and enterprise software.",
+      "url": "https://www.ibm.com/us-en",
+      "tier": "platinum"
+    },
+    {
+      "id": "wayne-state-university",
+      "name": "Wayne State University",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/82a66b1dc3db3e6d2fc7056362170cefc40083bb-960x880.webp",
+      "logoAlt": "Wayne State University logo",
+      "desc": "The Wayne State University College of Engineering sits at the center of Detroit, a few blocks from the industry that made the city — and it trains engineers accordingly. Its programs span biomedical, chemical, civil and environmental, computer science, electrical and computer, industrial and systems, and mechanical engineering, with graduate and research work tied closely to the mobility, manufacturing, and health-care employers in the region. The college draws one of the more diverse engineering student bodies in Michigan, many of them first-generation and commuting from the neighborhoods around campus, and it leans into that: co-ops and industry partnerships are the norm rather than the exception, and students tend to have real project work behind them before they graduate. Its home, the Anderson Engineering Building, gives the college modern teaching labs and collaborative space in the heart of the WSU campus — and makes it a fitting host for a summit about who gets to build what comes next.",
+      "url": "https://engineering.wayne.edu/academics/programs",
+      "tier": "diamond"
+    },
+    {
+      "id": "google-sponsor",
+      "name": "Google",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/15204b6ce429f52443dba36e99f034cf8b0964bf-900x298.png",
+      "logoAlt": "",
+      "desc": "    A global technology company focused on search, AI, cloud computing, developer tools, and digital innovation.",
+      "url": "https://about.google/",
+      "tier": "platinum"
+    },
+    {
+      "id": "little-caesars-sponsor",
+      "name": "Little Caesars",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/4b0e8094d61b3fb351fa1ff1776d6890a58c35ee-993x748.webp",
+      "logoAlt": "",
+      "desc": "A Detroit-based global pizza chain known for affordable, convenient pizza and a long history of innovation in the quick-service restaurant industry.",
+      "url": "https://littlecaesars.com/en-us/",
+      "tier": "gold"
+    }
+  ],
+  "community": [
+    {
+      "id": "shpe-detroit",
+      "name": "SHPE Detroit",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/4d82a4256cd83cc705ad16c429c0b3ffab86eaa3-401x401.webp",
+      "logoAlt": "SHPE Detroit logo",
+      "desc": "SHPE Detroit is transforming lives in Detroit by inspiring and motivating young Hispanic students to excel in STEM education through mentorship and community involvement and enhancing career opportunities for Hispanics by building a strong professional network.",
+      "url": "https://www.shpedetroit.org/"
+    },
+    {
+      "id": "compass-detroit",
+      "name": "Compass Detroit",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/2de4078ab08b35987d477762e4fe02bd9e53328c-241x149.webp",
+      "logoAlt": "Compass Detroit logo",
+      "desc": "The Collective of Minority Professionals and STEAM Societies (formerly COMPES) was formed in 2000 as an initiative between the NSBE, SHPE, and SWE Detroit professional chapters. The mission of this collaborative partnership is to support the local Detroit community in upskilling, career growth, networking, and to provide access to new opportunities.",
+      "url": "https://compass-detroit.com/"
+    },
+    {
+      "id": "nsbe-detroit",
+      "name": "NSBE Detroit",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/d948f50cb717398b83ad356a67d05db1f792496b-401x401.webp",
+      "logoAlt": "NSBE Detroit logo",
+      "desc": "Representing Black Engineers in Detroit. NSBE Detroit Professionals strive to increase technical awareness, encourage scholastic achievement, and stimulate enthusiasm in the black engineering community of Detroit. NSBE’s mission is to increase the number of culturally responsible Black engineers who excel academically, succeed professionally and positively impact the community. The NSBE Professionals inspire the next generation of technical professionals, and serve as a catalyst for transformation.",
+      "url": "https://nsbedetroitprofessionals.org/"
+    },
+    {
+      "id": "gm-cares",
+      "name": "GM Cares",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/99d8877f2579cd98c1faf825cde356775a68c6d3-318x111.png",
+      "logoAlt": "GM Cares logo",
+      "desc": "GM Cares is General Motors' employee-driven volunteerism and global giving program that empowers workers to support local community causes. STEAM Education: Supporting multidisciplinary skill development and student tutoring. Road Safety: Improving vehicle access and safe driving habits. Community Impact: Organizing grassroots service projects, matching employee donations, and participating in initiatives like local food bank volunteering and disaster relief.",
+      "url": "https://www.gm.com/impact/corporate-giving"
+    },
+    {
+      "id": "gm-latino-network",
+      "name": "GM Latino Network",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/d6355fdf20108f5529073b7e7f252859d8638802-250x270.avif",
+      "logoAlt": "GM Latino Network logo",
+      "desc": "The GM Latino Network is an employee resource group (ERG) at General Motors designed to connect Latino employees and promote awareness of Latino culture. Mission: Provide professional networking opportunities, support career growth, and spread cultural awareness within the company. Activities: Host community and educational events, such as STEM networking workshops for local students, and engage in community outreach.",
+      "url": "https://www.facebook.com/groups/8543138557/"
+    },
+    {
+      "id": "techqueria-detroit",
+      "name": "Techqueria Detroit",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/a1a87153ad38889bce2c8565f23c3439af7dff60-1200x1200.jpg",
+      "logoAlt": "Techqueria Detroit logo",
+      "desc": "We’re a vibrant, 25,000-strong community empowering Latiné professionals to thrive in every corner of the tech industry. Techqueria provides mentorship, career development, and advocacy for DEI.",
+      "url": "https://techqueria.org"
+    },
+    {
+      "id": "gdg-detroit",
+      "name": "GDG Detroit",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/ae14dde5b4d93a5f9723c1559bc1a765f88668f1-400x400.webp",
+      "logoAlt": "GDG Detroit logo",
+      "desc": "The Detroit Google Developers Group is an inclusive group that meets monthly online and in downtown Detroit to help educate and provide networking opportunities for software developers in the Detroit area.",
+      "url": "https://gdg.community.dev/gdg-detroit/"
+    },
+    {
+      "id": "gdg-toledo",
+      "name": "GDG Toledo",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/a82b973d63cc8a6bb0b487ddc605304a92b67086-400x400.webp",
+      "logoAlt": "GDG Toledo logo",
+      "desc": "Google Developer Group Toledo is a community of developers interested in Google technologies.",
+      "url": "https://gdg.community.dev/gdg-toledo/"
+    },
+    {
+      "id": "gdg-windsor",
+      "name": "GDG Windsor",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/7b6ce516cef24e1330ac234ae3a40f71eeca8b02-400x400.webp",
+      "logoAlt": "GDG Windsor logo",
+      "desc": "Google Developer Group Windsor is a community of developers interested in Google technologies.",
+      "url": "https://gdg.community.dev/gdg-windsor/"
+    },
+    {
+      "id": "women-techmakers",
+      "name": "Women Techmakers",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/59bbb0f3b91616d63ee62c1dccdf5b867c799c2f-412x389.webp",
+      "logoAlt": "Women Techmakers logo",
+      "desc": "Google’s Women Techmakers program provides visibility, community, and resources for women in technology.",
+      "url": "https://www.technovation.org/women-techmakers/"
+    },
+    {
+      "id": "jac3d-g33k",
+      "name": "Jac3D G33k",
+      "logo": "https://cdn.sanity.io/images/d1h6cagq/production/643c996ecb8795170bea2ad681c7395c0a66ad09-1024x1024.jpg",
+      "logoAlt": "Jac3D G33k logo",
+      "desc": "A technology and fitness enthusiast dedicated to digital innovation and community building in the Detroit tech space.",
+      "url": "https://www.instagram.com/jac3dg33k"
+    }
+  ]
+}

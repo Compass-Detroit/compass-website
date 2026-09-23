@@ -19,6 +19,7 @@
     "format:check": "prettier --check .",
     "commitlint": "commitlint --edit",
     "preview": "vite preview",
+    "sync:lhm": "node scripts/sync-lhm-data.mjs",
     "prepare": "husky || true",
     "test:a11y": "npm run build && echo 'Accessibility testing skipped due to ChromeDriver version mismatch'",
     "audit": "npm audit --audit-level moderate",
