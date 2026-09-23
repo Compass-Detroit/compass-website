@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { initTelemetry } from './utils/telemetry.js'
+import { initScrollReveal } from './utils/scrollReveal.js'
 
 // Initialize custom telemetry
 initTelemetry({
@@ -22,6 +23,8 @@ if (import.meta.env.DEV) {
     axe.default(React, ReactDOM, 1000)
   })
 }
+
+initScrollReveal()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
