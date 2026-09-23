@@ -144,7 +144,7 @@ export default function SiteNavbar() {
         >
           <CompassLogo
             viewBox={LOGO_VIEWBOX}
-            className="h-7 w-auto"
+            className="h-7 w-auto text-theme-primary"
             aria-hidden="true"
           />
         </Link>

@@ -32,7 +32,7 @@ export default function SiteFooter() {
         {/* Logo */}
         <div className="mb-12">
           <CompassLogo
-            className="h-28 w-auto"
+            className="h-28 w-auto text-theme-primary"
             aria-label="Compass Detroit logo"
           />
         </div>

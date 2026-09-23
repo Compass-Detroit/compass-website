@@ -8,7 +8,7 @@ function LandingSection() {
       <div className="mx-auto flex max-w-[1554px] flex-wrap">
         <div className="mx-auto mt-4 flex w-full items-center justify-center p-12 lg:mt-0 lg:w-1/2">
           <EventLogoSvg
-            className="mx-auto h-auto w-full max-w-screen-xs"
+            className="mx-auto h-auto w-full max-w-screen-xs text-white"
             aria-label="Compass Detroit 2026 logo"
           />
         </div>
