@@ -14,6 +14,7 @@ import WelcomeBanner from '@/components/WelcomeBanner'
 import FirstVisitGuide from '@/components/FirstVisitGuide'
 import CommunityVibes from '@/components/CommunityVibes'
 import EventSpotlightSection from '@/components/events/EventSpotlightSection'
+import DevFestHero from '@/components/events/DevFestHero'
 import useCountUp from '@/hooks/useCountUp'
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
 import styles from './HomePage.module.css'
@@ -167,8 +168,9 @@ const allEvents = [
   },
   {
     name: 'Michigan DevFest 2026',
-    date: 'November 2026',
-    location: 'MotorCity Casino Hotel',
+    date: 'November 13–14, 2026',
+    endDate: '2026-11-14',
+    location: 'Little Caesars HQ',
     type: 'Industry Event',
   },
 ]
@@ -571,7 +573,10 @@ export default function HomePage() {
 
   return (
     <SiteLayout>
-      {/* Hero Section 1 — Mission-focused with animated compass */}
+      {/* Lead hero — Michigan DevFest '26 registration & call for speakers */}
+      <DevFestHero />
+
+      {/* Mission hero with animated compass */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[var(--surface)] via-[var(--surface-elevated)] to-[var(--surface)] border-b border-[var(--border)]">
         {/* Background orbs */}
         <div className="hero-orb-1 absolute -right-24 -top-24 size-[600px] rounded-full bg-gradient-to-br from-emerald-500/[0.06] via-primary/[0.03] to-transparent blur-3xl" />
@@ -592,13 +597,13 @@ export default function HomePage() {
                   Now Building · Detroit&apos;s Tech Future
                 </span>
               </div>
-              <h1 className="hero-stagger mb-6 text-5xl font-black leading-[1.04] tracking-tight text-[var(--text-primary)] md:text-6xl lg:text-7xl">
+              <h2 className="hero-stagger mb-6 text-5xl font-black leading-[1.04] tracking-tight text-[var(--text-primary)] md:text-6xl lg:text-7xl">
                 Detroit has the talent.{' '}
                 <span className="relative inline-block text-primary">
                   We build the bridge.
                   <span className="hero-underline absolute -bottom-1 left-0 h-1 rounded-full bg-primary/60" />
                 </span>
-              </h1>
+              </h2>
               <p className="hero-stagger mx-auto mb-10 max-w-[540px] text-lg font-medium leading-relaxed text-[var(--text-secondary)] md:mx-0 md:text-xl">
                 5,000+ underrepresented technologists. Zero gatekeeping. Real
                 careers launched. This is what happens when community becomes

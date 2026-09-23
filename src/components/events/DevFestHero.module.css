@@ -1,0 +1,607 @@
+/* Michigan DevFest '26 hero — palette pulled from the event + CFS flyers.
+   Always dark: this is a brand moment, not a themed surface. */
+.hero {
+  --df-navy: #060b1d;
+  --df-navy-2: #0b1633;
+  --df-blue: #0a84ff;
+  --df-violet: #c4a5ff;
+  --df-cyan: #7dd3fc;
+  --df-gold: #fec405;
+  --df-ink: #f8fafc;
+  --df-muted: #b6c2d9;
+  --df-line: rgba(255, 255, 255, 0.12);
+
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--df-ink);
+  background: radial-gradient(
+      60% 55% at 8% 0%,
+      rgba(10, 132, 255, 0.38),
+      transparent 70%
+    ),
+    radial-gradient(
+      45% 50% at 95% 100%,
+      rgba(254, 196, 5, 0.22),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 40% at 60% 35%,
+      rgba(196, 165, 255, 0.14),
+      transparent 70%
+    ),
+    linear-gradient(180deg, var(--df-navy-2), var(--df-navy));
+  border-bottom: 1px solid var(--df-line);
+}
+
+/* Halftone dot field, echoing the event flyer */
+.halftone {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.14) 1px,
+    transparent 1.4px
+  );
+  background-size: 14px 14px;
+  mask-image: radial-gradient(70% 60% at 75% 20%, #000, transparent 75%);
+  -webkit-mask-image: radial-gradient(
+    70% 60% at 75% 20%,
+    #000,
+    transparent 75%
+  );
+}
+
+/* Oversized MIDF ring mark drifting behind the flyers */
+.ring {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: -12rem;
+  width: min(900px, 120vw);
+  translate: 0 -50%;
+  opacity: 0.08;
+  pointer-events: none;
+  animation: df-spin 120s linear infinite;
+}
+
+@keyframes df-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* ---------- Copy column ---------- */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid rgba(254, 196, 5, 0.4);
+  border-radius: 999px;
+  background: rgba(254, 196, 5, 0.1);
+  color: var(--df-gold);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.liveDot {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--df-gold);
+}
+
+.liveDot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: df-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes df-ping {
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.kicker {
+  margin-bottom: 0.5rem;
+  color: var(--df-muted);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.plus {
+  color: var(--df-gold);
+  font-weight: 900;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+  color: var(--df-ink);
+  font-size: clamp(3.25rem, 9vw, 6.5rem);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+}
+
+.titleGradient {
+  background: linear-gradient(
+    90deg,
+    var(--df-violet) 0%,
+    #8fb4ff 45%,
+    var(--df-cyan) 80%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-bottom: 0.08em;
+  white-space: nowrap;
+}
+
+.titleYear {
+  color: var(--df-ink);
+  -webkit-text-fill-color: var(--df-ink);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  margin-bottom: 1.25rem;
+  color: var(--df-ink);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.metaDivider {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--df-gold);
+}
+
+@media (max-width: 639px) {
+  .meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .metaDivider {
+    display: none;
+  }
+}
+
+.lede {
+  max-width: 36rem;
+  margin-bottom: 2rem;
+  color: var(--df-muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+.days {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  list-style: none;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .days {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.day {
+  display: flex;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--df-line);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(6px);
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.day:hover {
+  border-color: rgba(254, 196, 5, 0.45);
+  transform: translateY(-2px);
+}
+
+.dayIndex {
+  color: var(--df-gold);
+  font-size: 0.8rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.dayDate {
+  color: var(--df-cyan);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dayTitle {
+  margin: 0.15rem 0 0.25rem;
+  color: var(--df-ink);
+  font-size: 1.125rem;
+  font-weight: 900;
+}
+
+.dayDesc {
+  color: var(--df-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* ---------- CTAs ---------- */
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 2.25rem;
+}
+
+.ctaPrimary,
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.75rem;
+  border-radius: 0.85rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.ctaPrimary {
+  background: var(--df-gold);
+  color: #0a0a0a;
+  box-shadow: 0 12px 36px -10px rgba(254, 196, 5, 0.65);
+}
+
+.ctaPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 44px -10px rgba(254, 196, 5, 0.8);
+}
+
+.ctaSecondary {
+  border: 1px solid rgba(125, 211, 252, 0.5);
+  background: rgba(10, 132, 255, 0.14);
+  color: var(--df-ink);
+}
+
+.ctaSecondary:hover {
+  transform: translateY(-2px);
+  background: rgba(10, 132, 255, 0.26);
+}
+
+.ctaGhost {
+  color: var(--df-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(182, 194, 217, 0.4);
+  text-underline-offset: 4px;
+}
+
+.ctaGhost:hover {
+  color: var(--df-ink);
+}
+
+.ctaPrimary:focus-visible,
+.ctaSecondary:focus-visible,
+.ctaGhost:focus-visible,
+.flyerButton:focus-visible,
+.dialogLink:focus-visible,
+.dialogClose:focus-visible {
+  outline: 3px solid var(--df-cyan);
+  outline-offset: 3px;
+}
+
+/* ---------- Countdown + stats ---------- */
+.footerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.5rem 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--df-line);
+}
+
+.countdownLabel,
+.statLabel {
+  margin-bottom: 0.4rem;
+  color: var(--df-muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.countdownClock {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.countdownCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 3.4rem;
+  padding: 0.5rem 0.4rem;
+  border: 1px solid var(--df-line);
+  border-radius: 0.7rem;
+  background: rgba(6, 11, 29, 0.6);
+}
+
+.countdownValue {
+  color: var(--df-ink);
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdownUnit {
+  margin-top: 0.3rem;
+  color: var(--df-muted);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.stats {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.stats > div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.statValue {
+  color: var(--df-gold);
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* ---------- Flyer fan ---------- */
+.flyerStage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flyers {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  width: 100%;
+  max-width: 34rem;
+  list-style: none;
+  padding: 0;
+}
+
+@media (min-width: 1024px) {
+  .flyers {
+    display: block;
+    height: 32rem;
+  }
+
+  .flyerItem {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* Scale with the column so the fan never spills into the copy */
+    width: min(18.5rem, 56%);
+    transition:
+      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+      z-index 0s 0.2s;
+  }
+
+  .flyerItem[data-index='0'] {
+    z-index: 2;
+    transform: translate(-72%, -50%) rotate(-6deg);
+  }
+
+  .flyerItem[data-index='1'] {
+    z-index: 1;
+    transform: translate(-22%, -46%) rotate(7deg);
+  }
+
+  .flyers:hover .flyerItem[data-index='0'] {
+    transform: translate(-86%, -52%) rotate(-9deg);
+  }
+
+  .flyers:hover .flyerItem[data-index='1'] {
+    transform: translate(-10%, -48%) rotate(10deg);
+  }
+
+  .flyerItem:hover,
+  .flyerItem:focus-within {
+    z-index: 3;
+    transition:
+      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+      z-index 0s;
+  }
+}
+
+.flyerButton {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0.9rem;
+  background: none;
+  cursor: zoom-in;
+}
+
+.flyerImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.9rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 30px 60px -20px rgba(0, 0, 0, 0.8),
+    0 0 50px -10px rgba(10, 132, 255, 0.35);
+  transition: box-shadow 0.3s ease;
+}
+
+.flyerButton:hover .flyerImage {
+  box-shadow:
+    0 0 0 1px rgba(254, 196, 5, 0.6),
+    0 36px 70px -20px rgba(0, 0, 0, 0.85),
+    0 0 60px -10px rgba(254, 196, 5, 0.4);
+}
+
+.flyerHint {
+  margin-top: 1.25rem;
+  color: var(--df-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.presented {
+  margin-top: 0.4rem;
+  color: var(--df-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.presented strong {
+  color: var(--df-ink);
+}
+
+/* ---------- Ticker ---------- */
+.ticker {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  border-top: 1px solid rgba(254, 196, 5, 0.3);
+  background: var(--df-gold);
+  color: #0a0a0a;
+}
+
+.tickerTrack {
+  display: flex;
+  width: max-content;
+  animation-duration: 36s;
+}
+
+.tickerItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.7rem 0 0.7rem 1.5rem;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tickerStar {
+  font-size: 0.9rem;
+}
+
+/* ---------- Lightbox ---------- */
+.dialog {
+  max-width: min(92vw, 44rem);
+  max-height: 92vh;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 1rem;
+  background: transparent;
+  overflow: visible;
+}
+
+.dialog::backdrop {
+  background: rgba(3, 6, 18, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.dialogFigure {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dialogImage {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: calc(92vh - 4rem);
+  margin: 0 auto;
+  border-radius: 0.9rem;
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.dialogLink,
+.dialogClose {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dialogLink {
+  background: #fec405;
+  color: #0a0a0a;
+}
+
+.dialogClose {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring,
+  .liveDot::after {
+    animation: none;
+  }
+
+  .day,
+  .ctaPrimary,
+  .ctaSecondary,
+  .flyerItem,
+  .flyerImage {
+    transition: none;
+  }
+}
