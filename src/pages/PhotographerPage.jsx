@@ -49,12 +49,11 @@ import SiteLayout from '@/layouts/SiteLayout'
 import hocLogo from '@/assets/images/sponsors/heartofthecity.jpg'
 
 const photos = [
-  '/assets/gallery/iwd26/image0.jpeg',
-  '/assets/gallery/iwd26/image1.jpeg',
-  '/assets/gallery/iwd26/image2.jpeg',
-  '/assets/gallery/iwd26/image3.jpeg',
-  '/assets/gallery/iwd26/image4.jpeg',
-  '/assets/gallery/iwd26/image5.jpeg',
+  '/assets/gallery/iwd26/iwd26-group-01.jpeg',
+  '/assets/gallery/iwd26/iwd26-group-02.jpeg',
+  '/assets/gallery/iwd26/iwd26-group-03.jpeg',
+  '/assets/gallery/iwd26/iwd26-group-04.jpeg',
+  '/assets/gallery/iwd26/iwd26-group-05.jpeg',
 ]
 
 const HeartIcon = () => (
