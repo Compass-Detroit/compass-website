@@ -36,6 +36,7 @@ import SpeakerSubmissionPage from '@/pages/SpeakerSubmissionPage'
 import GalleryManagerPage from '@/pages/GalleryManagerPage'
 import AnalyticsDashboardPage from '@/pages/AnalyticsDashboardPage'
 import BrandKitPage from '@/pages/BrandKitPage'
+import PlatformPage from '@/pages/PlatformPage'
 import TelemetryProvider from '@/components/TelemetryProvider'
 import WebVitalsOverlay from '@/components/WebVitalsOverlay'
 
@@ -85,6 +86,7 @@ function App() {
                 element={<SocialCardGeneratorPage />}
               />
               <Route path="/tools/qr" element={<QRCodeGeneratorPage />} />
+              <Route path="/platform" element={<PlatformPage />} />
               <Route
                 path="/tools/subscribers"
                 element={<SubscriberDashboardPage />}
