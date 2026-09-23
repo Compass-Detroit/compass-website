@@ -1,15 +1,21 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import QRCodeModal from './QRCodeModal'
+import {
+  LHM_EVENT,
+  LHM_SESSIONS,
+  SpeakersData as lhmSpeakers,
+} from '@/data/2026/lhmSummit'
+import { sanityImage } from '@/services/sanity'
 
 const devfestQr = '/assets/qr/devfest-qr.png'
 const devfestCfsQr = '/assets/qr/devfest-cfs-qr.png'
-const compassQr = '/assets/qr/compass-qr.png'
 
 export default function EventSpotlightSection() {
   const [activeModal, setActiveModal] = useState(null)
 
   return (
-    <section className="relative overflow-hidden border-y border-surface bg-gradient-to-b from-black via-surface-card/40 to-black py-20">
+    <section className="dark-surface relative overflow-hidden border-b border-white/10 bg-gradient-to-b from-black via-surface-card/40 to-black py-20">
       {/* Subtle Background Glows */}
       <div className="pointer-events-none absolute -left-20 top-1/4 size-96 rounded-full bg-blue-600/[0.07] blur-3xl" />
       <div className="pointer-events-none absolute -right-20 bottom-1/4 size-96 rounded-full bg-amber-500/[0.07] blur-3xl" />
@@ -17,20 +23,20 @@ export default function EventSpotlightSection() {
       <div className="relative mx-auto max-w-[1200px] px-6">
         <div className="mb-14 text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 backdrop-blur-md">
-            <span className="size-2 animate-ping rounded-full bg-primary" />
+            <span className="size-2 rounded-full bg-primary motion-safe:animate-ping" />
             <span className="text-xs font-extrabold uppercase tracking-wider text-primary">
               2026 Featured Events Spotlight
             </span>
           </div>
           <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white">
-            Upcoming Flagship{' '}
+            Flagship{' '}
             <span className="bg-gradient-to-r from-primary via-amber-300 to-sky-400 bg-clip-text text-transparent">
               Gatherings
             </span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-gray-400">
-            Join thousands of developers, designers, and innovators in Detroit.
-            Save the dates and scan QR codes for direct access!
+            Up next: Michigan DevFest 2026. Just wrapped: our Latin Heritage
+            Month Innovation Summit at Wayne State.
           </p>
         </div>
 
@@ -44,7 +50,7 @@ export default function EventSpotlightSection() {
                 <span className="rounded-full border border-blue-400/30 bg-blue-500/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-blue-300">
                   Nov 2026 · MotorCity Casino Hotel
                 </span>
-                <span className="rounded-full border border-emerald-400/30 bg-emerald-500/20 px-3 py-1 text-[11px] font-bold text-emerald-300 animate-pulse">
+                <span className="rounded-full border border-emerald-400/30 bg-emerald-500/20 px-3 py-1 text-[11px] font-bold text-emerald-300 motion-safe:animate-pulse">
                   Lineup To Be Announced Soon!
                 </span>
               </div>
@@ -168,93 +174,100 @@ export default function EventSpotlightSection() {
             </div>
           </div>
 
-          {/* Hispanic Heritage Month (HHM) Card */}
-          <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/20 via-surface-card to-black p-8 shadow-2xl transition-all duration-300 hover:border-amber-400/60 hover:shadow-amber-500/10">
-            <div className="absolute right-0 top-0 size-32 bg-amber-500/10 blur-2xl group-hover:bg-amber-500/20 transition-all" />
+          {/* LHM Innovation Summit 2026 — just wrapped */}
+          <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/60 via-stone-950 to-black p-8 shadow-2xl transition-[border-color,box-shadow] duration-300 hover:border-amber-400/60 hover:shadow-amber-500/10">
+            <div className="absolute right-0 top-0 size-32 bg-amber-500/10 blur-2xl transition-colors group-hover:bg-amber-500/20" />
 
             <div>
-              <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <span className="rounded-full border border-amber-400/30 bg-amber-500/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-amber-300">
-                  Sept 2026 · Detroit, MI
+                  Sept 19, 2026 · Wayne State
                 </span>
-                <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[11px] font-bold text-amber-300">
-                  More Info Coming Soon for HHM!
+                <span className="rounded-full border border-emerald-400/30 bg-emerald-500/15 px-3 py-1 text-[11px] font-bold text-emerald-300">
+                  Just Wrapped — Gracias, Detroit!
                 </span>
               </div>
 
-              <h3 className="text-3xl font-black text-white mb-3 tracking-tight group-hover:text-amber-200 transition-colors">
-                Hispanic Heritage Month Innovation Summit (HHM)
+              <h3 className="mb-3 text-3xl font-black tracking-tight text-white transition-colors group-hover:text-amber-200">
+                {LHM_EVENT.name}
               </h3>
 
-              <p className="text-sm leading-relaxed text-gray-300 mb-6">
-                Honoring Hispanic and Latinx contributions to technology with
-                career-focused programming, mentorship, DEI advocacy, and direct
-                employer networking in partnership with{' '}
-                <strong>SHPE Detroit</strong> and{' '}
-                <strong>Techqueria Detroit</strong>.
+              <p className="mb-6 text-sm leading-relaxed text-gray-300">
+                A full day of talks, a SHPE Detroit lunch talk, an industry
+                panel, Engineering Lotería and a fiesta at the WSU Anderson
+                Engineering Building — with <strong>SHPE Detroit</strong>,{' '}
+                <strong>Techqueria Detroit</strong> and{' '}
+                <strong>Wayne State College of Engineering</strong>.
               </p>
 
-              {/* Highlights & Focus */}
               <div className="mb-6 rounded-xl border border-surface bg-black/60 p-4">
-                <div className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-2">
-                  Summit Features
+                <div className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-400">
+                  On Stage
                 </div>
-                <div className="flex flex-wrap gap-2 text-xs font-medium text-gray-300">
-                  <span className="rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2.5 py-1">
-                    Career Mentorship
-                  </span>
-                  <span className="rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2.5 py-1">
-                    Tech Keynotes
-                  </span>
-                  <span className="rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2.5 py-1">
-                    SHPE & Techqueria
-                  </span>
-                  <span className="rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2.5 py-1">
-                    Employer Connections
-                  </span>
-                </div>
+                <ul className="flex -space-x-3" aria-label="Summit speakers">
+                  {lhmSpeakers.slice(0, 8).map((speaker) => (
+                    <li key={speaker.name}>
+                      <img
+                        src={sanityImage(speaker.avatar, { w: 96, h: 96 })}
+                        alt={speaker.name}
+                        title={speaker.name}
+                        width="40"
+                        height="40"
+                        loading="lazy"
+                        className="size-10 rounded-full border-2 border-black object-cover transition-transform duration-200 hover:z-10 hover:-translate-y-1"
+                      />
+                    </li>
+                  ))}
+                  {lhmSpeakers.length > 8 && (
+                    <li className="flex size-10 items-center justify-center rounded-full border-2 border-black bg-amber-500/20 text-xs font-bold text-amber-200">
+                      +{lhmSpeakers.length - 8}
+                    </li>
+                  )}
+                </ul>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 text-center border-t border-surface pt-4 mb-6">
+              <div className="mb-6 grid grid-cols-3 gap-3 border-t border-surface pt-4 text-center">
                 <div>
-                  <div className="text-xl font-black text-white">300+</div>
-                  <div className="text-[10px] uppercase font-bold text-gray-500">
-                    Navigators
+                  <div className="text-xl font-black text-white">
+                    {lhmSpeakers.length}
                   </div>
-                </div>
-                <div className="border-x border-surface">
-                  <div className="text-xl font-black text-white">30+</div>
-                  <div className="text-[10px] uppercase font-bold text-gray-500">
+                  <div className="text-[10px] font-bold uppercase text-gray-500">
                     Speakers
                   </div>
                 </div>
+                <div className="border-x border-surface">
+                  <div className="text-xl font-black text-white">
+                    {LHM_SESSIONS.length}
+                  </div>
+                  <div className="text-[10px] font-bold uppercase text-gray-500">
+                    Sessions
+                  </div>
+                </div>
                 <div>
-                  <div className="text-xl font-black text-white">5</div>
-                  <div className="text-[10px] uppercase font-bold text-gray-500">
-                    Tracks
+                  <div className="text-xl font-black text-white">20+</div>
+                  <div className="text-[10px] font-bold uppercase text-gray-500">
+                    Orgs Represented
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-surface">
-              <button
-                disabled
-                className="w-full sm:w-auto flex-1 text-center rounded-xl bg-gray-800/50 border border-gray-700 px-6 py-3 text-sm font-bold text-gray-500 cursor-not-allowed"
+            <div className="flex flex-col items-center gap-4 border-t border-surface pt-4 sm:flex-row">
+              <Link
+                to="/events/previous?type=lhm"
+                className="w-full flex-1 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-6 py-3 text-center text-sm font-bold text-black shadow-lg transition-transform hover:scale-[1.02] sm:w-auto"
               >
-                Stay Tuned — Details Coming Soon
-              </button>
-              <button
-                onClick={() => setActiveModal('compass')}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-amber-400/40 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-300 hover:bg-amber-500/20 transition-all"
+                Relive the Summit →
+              </Link>
+              <a
+                href={LHM_EVENT.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-amber-400/40 bg-amber-500/10 px-4 py-3 text-sm font-bold text-amber-300 transition-colors hover:bg-amber-500/20 sm:w-auto"
               >
-                <img
-                  src={compassQr}
-                  alt="Compass QR"
-                  className="size-6 rounded"
-                />
-                Join COMPASS
-              </button>
+                Summit Site
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
             </div>
           </div>
         </div>
@@ -277,15 +290,6 @@ export default function EventSpotlightSection() {
         qrImage={devfestCfsQr}
         qrLink="https://midevfest26.vercel.app/"
         subtext="Scan to submit your talk proposal for Michigan DevFest 2026. We're looking for speakers across Cloud, AI/ML, Mobile, Web, Leadership, and Innovation tracks!"
-      />
-
-      <QRCodeModal
-        isOpen={activeModal === 'compass'}
-        onClose={() => setActiveModal(null)}
-        eventName="COMPASS Detroit Community Access"
-        qrImage={compassQr}
-        qrLink="https://compass-detroit.com/get-involved"
-        subtext="Scan to join COMPASS Detroit, access technical workshops, and connect with career opportunities."
       />
     </section>
   )

@@ -1,18 +1,26 @@
+import {
+  LHM_EVENT,
+  LHM_SESSIONS,
+  SpeakersData as LHM_SPEAKERS,
+} from '@/data/2026/lhmSummit'
+
 export const EVENT_TYPES = {
   devfest: { label: 'Michigan DevFest', color: 'blue', icon: 'mic' },
   iwd: { label: 'IWD Innovation Summit', color: 'purple', icon: 'heart' },
   bhm: { label: 'BHM Innovation Summit', color: 'orange', icon: 'fist' },
   pride: { label: 'Pride Innovation Summit', color: 'rose', icon: 'sparkle' },
+  lhm: { label: 'LHM Innovation Summit', color: 'amber', icon: 'sun' },
   hackathon: { label: 'Hack Michigan', color: 'emerald', icon: 'code' },
 }
 
-export const previousEvents = [
+const allEvents = [
   // 2026
   {
     year: 2026,
     type: 'devfest',
     name: 'Michigan DevFest 2026',
     date: 'November 2026',
+    endDate: '2026-11-30',
     location: 'MotorCity Casino Hotel, Detroit',
     speakers: 50,
     sessions: 45,
@@ -23,6 +31,23 @@ export const previousEvents = [
       "Michigan's 12th annual flagship developer conference — 1,000+ attendees, technical training, hands-on AI workshops, and industry tracks.",
     externalUrl: 'https://midevfest26.vercel.app/',
     photoCategory: 'DevFest 2026',
+  },
+  {
+    year: 2026,
+    type: 'lhm',
+    name: LHM_EVENT.name,
+    date: 'September 19, 2026',
+    endDate: LHM_EVENT.date,
+    location: 'WSU Anderson Engineering Building, Detroit',
+    speakers: LHM_SPEAKERS.length,
+    sessions: LHM_SESSIONS.length,
+    tracks: 1,
+    attendees: '20+ orgs',
+    recapAnchor: 'lhm-recap',
+    description:
+      'Our first Latin Heritage Month Innovation Summit at Wayne State — talks on AI, accessibility and Hispanic leadership in tech, a SHPE Detroit lunch talk, an industry panel, Engineering Lotería, and a fiesta.',
+    externalUrl: LHM_EVENT.url,
+    photoCategory: 'LHM Summit 2026',
   },
   {
     year: 2026,
@@ -169,6 +194,12 @@ export const previousEvents = [
     photoCategory: 'DevFest 2023',
   },
 ]
+
+// Entries with a future endDate are scheduled, not yet part of the archive.
+const isPast = ({ endDate }) =>
+  !endDate || new Date(`${endDate}T23:59:59`) < new Date()
+
+export const previousEvents = allEvents.filter(isPast)
 
 export const getEventsByYear = (year) =>
   previousEvents.filter((e) => e.year === year)

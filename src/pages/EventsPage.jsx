@@ -46,7 +46,9 @@ const journeyStages = [
   },
 ]
 
-function isUpcoming(dateStr) {
+function isUpcoming(dateStr, endDate) {
+  // An exact end date wins over the month-level label
+  if (endDate) return new Date(`${endDate}T23:59:59`) >= new Date()
   // Handle year-only format like "2026"
   if (/^\d{4}$/.test(dateStr)) return true
   const parsed = new Date(`1 ${dateStr}`)
@@ -87,15 +89,21 @@ const allEvents = [
     speakers: ['Greg Miller', 'Shugmi Shumunov'],
   },
   {
-    name: 'Hispanic Heritage Month Innovation Summit (HHM)',
+    name: 'Latin Heritage Month Innovation Summit',
     date: 'September 2026',
+    endDate: '2026-09-19',
     month: 'SEP',
-    location: 'Detroit, MI',
+    location: 'WSU Anderson Engineering Building, Detroit',
     type: 'Innovation Summit',
     stages: ['engage', 'connect'],
-    statusBadge: 'More Info Coming Soon for HHM!',
-    desc: 'Highlighting Hispanic and Latinx contributions to technology with career-focused programming, mentorship, and community building in partnership with SHPE Detroit and Techqueria Detroit.',
-    hasQr: true,
+    desc: 'Talks on AI, accessibility and Hispanic leadership in tech, a SHPE Detroit lunch talk, an industry panel, Engineering Lotería and a fiesta — with SHPE Detroit, Techqueria Detroit and Wayne State College of Engineering.',
+    url: 'https://hhmsummit.com',
+    speakers: [
+      'Andre Arbelaez',
+      'Greg Miller',
+      'Shugmi Shumunov',
+      'Umelo Onyejiaka',
+    ],
   },
   {
     name: 'Hack Michigan',
@@ -120,8 +128,8 @@ const allEvents = [
   },
 ]
 
-const pastEvents = allEvents.filter((ev) => !isUpcoming(ev.date))
-const events = allEvents.filter((ev) => isUpcoming(ev.date))
+const pastEvents = allEvents.filter((ev) => !isUpcoming(ev.date, ev.endDate))
+const events = allEvents.filter((ev) => isUpcoming(ev.date, ev.endDate))
 
 const programs = [
   {
@@ -167,12 +175,17 @@ const programs = [
 ]
 
 const legacyColorMap = {
-  blue: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  orange: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-  purple: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  cyan: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
-  rose: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
-  emerald: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  blue: 'bg-blue-500/10 text-blue-800 dark:text-blue-400 border-blue-500/20',
+  orange:
+    'bg-orange-500/10 text-orange-800 dark:text-orange-400 border-orange-500/20',
+  purple:
+    'bg-purple-500/10 text-purple-800 dark:text-purple-400 border-purple-500/20',
+  cyan: 'bg-cyan-500/10 text-cyan-800 dark:text-cyan-400 border-cyan-500/20',
+  rose: 'bg-rose-500/10 text-rose-800 dark:text-rose-400 border-rose-500/20',
+  emerald:
+    'bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 border-emerald-500/20',
+  amber:
+    'bg-amber-500/10 text-amber-800 dark:text-amber-400 border-amber-500/20',
 }
 
 const eventLegacy = [
@@ -222,6 +235,15 @@ const eventLegacy = [
     stats: { speakers: '20+', attendees: '150+', tracks: '3' },
   },
   {
+    name: 'LHM Innovation Summit',
+    year: 2026,
+    edition: '1st Annual',
+    color: 'amber',
+    desc: 'Celebrating Latin innovators and allies at Wayne State — talks, a panel, SHPE Detroit, Lotería and a fiesta.',
+    link: 'https://hhmsummit.com',
+    stats: { speakers: '9', attendees: '20+ orgs', tracks: '1' },
+  },
+  {
     name: 'Hack Michigan',
     year: 2026,
     edition: '3rd Annual',
@@ -269,7 +291,7 @@ export default function EventsPage() {
         </div>
       </section>
 
-      {/* Featured Event Spotlight — Michigan DevFest 2026 & HHM */}
+      {/* Featured Event Spotlight — Michigan DevFest 2026 & LHM recap */}
       <EventSpotlightSection />
 
       {/* Navigator Journey Flow — how events connect */}
@@ -310,7 +332,7 @@ export default function EventsPage() {
                   >
                     {stage.label}
                   </span>
-                  <span className="text-[11px] text-gray-500">
+                  <span className="text-[11px] text-theme-muted">
                     {stage.desc}
                   </span>
                 </div>
@@ -383,7 +405,7 @@ export default function EventsPage() {
                               Placeholder Date
                             </span>
                           </span>
-                          <span className="flex items-center gap-1 text-[13px] text-gray-600">
+                          <span className="flex items-center gap-1 text-[13px] text-gray-500">
                             <MapPinIcon /> {ev.location}
                           </span>
                         </div>
@@ -459,7 +481,7 @@ export default function EventsPage() {
                 </p>
                 <div className="mb-6 grid grid-cols-3 gap-2 border-y border-surface py-4">
                   <div className="flex flex-col">
-                    <span className="text-lg font-bold text-gray-200">
+                    <span className="text-lg font-bold text-theme-primary">
                       {ev.stats.speakers}
                     </span>
                     <span className="text-[10px] uppercase text-gray-500">
@@ -467,7 +489,7 @@ export default function EventsPage() {
                     </span>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-lg font-bold text-gray-200">
+                    <span className="text-lg font-bold text-theme-primary">
                       {ev.stats.attendees}
                     </span>
                     <span className="text-[10px] uppercase text-gray-500">
@@ -475,7 +497,7 @@ export default function EventsPage() {
                     </span>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-lg font-bold text-gray-200">
+                    <span className="text-lg font-bold text-theme-primary">
                       {ev.stats.tracks}
                     </span>
                     <span className="text-[10px] uppercase text-gray-500">
@@ -559,7 +581,7 @@ export default function EventsPage() {
               {pastEvents.map((ev) => (
                 <div
                   key={ev.name}
-                  className="flex flex-col gap-3 rounded-xl border border-surface bg-surface-card p-5 opacity-70 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-3 rounded-xl border border-surface bg-surface-card p-5 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04]">
@@ -568,14 +590,14 @@ export default function EventsPage() {
                       </span>
                     </div>
                     <div>
-                      <div className="text-[15px] font-semibold text-gray-400">
+                      <div className="text-[15px] font-semibold text-theme-secondary">
                         {ev.name}
                       </div>
                       <div className="mt-1 flex flex-wrap gap-4">
-                        <span className="text-[13px] text-gray-600">
+                        <span className="text-[13px] text-gray-500">
                           {ev.date}
                         </span>
-                        <span className="flex items-center gap-1 text-[13px] text-gray-600">
+                        <span className="flex items-center gap-1 text-[13px] text-gray-500">
                           <MapPinIcon /> {ev.location}
                         </span>
                       </div>
@@ -609,7 +631,7 @@ export default function EventsPage() {
                         href={ev.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[13px] font-semibold text-primary/60 transition-colors hover:text-primary"
+                        className="text-[13px] font-semibold text-primary transition-colors hover:underline"
                         aria-label={`Visit ${ev.name} website`}
                       >
                         Website →

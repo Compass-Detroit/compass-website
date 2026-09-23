@@ -203,7 +203,7 @@ export default function ImpactReportPage() {
           </h2>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="rounded-xl border border-surface bg-surface-card p-8">
-              <div className="mb-3 text-4xl font-extrabold text-red-400">
+              <div className="mb-3 text-4xl font-extrabold text-red-700 dark:text-red-400">
                 71%
               </div>
               <p className="text-sm font-semibold">
@@ -212,7 +212,7 @@ export default function ImpactReportPage() {
               </p>
             </div>
             <div className="rounded-xl border border-surface bg-surface-card p-8">
-              <div className="mb-3 text-4xl font-extrabold text-amber-400">
+              <div className="mb-3 text-4xl font-extrabold text-amber-700 dark:text-amber-400">
                 11%
               </div>
               <p className="text-sm font-semibold">
@@ -537,12 +537,12 @@ export default function ImpactReportPage() {
             The 2026–2027 season
           </h2>
           <p className="mx-auto mb-12 max-w-[700px] text-center text-lg leading-relaxed text-gray-500">
-            Beginning with the Hispanic Heritage Month Innovation Summit in
-            September 2026, COMPASS will continue expanding pathways through
-            flagship Innovation Summits, Michigan DevFest, and Hack Michigan —
-            while launching career opportunity resources and investing in
-            community partner organizations across Detroit&apos;s tech
-            ecosystem.
+            Opening with the Latin Heritage Month Innovation Summit at Wayne
+            State in September 2026, COMPASS continues expanding pathways
+            through flagship Innovation Summits, Michigan DevFest, and Hack
+            Michigan — while launching career opportunity resources and
+            investing in community partner organizations across Detroit&apos;s
+            tech ecosystem.
           </p>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-xl border border-surface bg-surface-card p-8">
@@ -602,7 +602,7 @@ export default function ImpactReportPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
-              href="mailto:jritten@compass-detroit.com?subject=Partnership Inquiry"
+              href="mailto:whatupdoe@compass-detroit.com?subject=Partnership Inquiry"
               className="group relative overflow-hidden rounded-lg bg-primary px-8 py-4 text-base font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
             >
               <span className="relative z-10">Partner with COMPASS</span>
