@@ -59,6 +59,16 @@ export const getTeamData = (year) => {
   return eventData?.team || null
 }
 
+// Upcoming years show placeholder copy until the lineup is final, instead of
+// counts derived from a partial speaker list
+const UPCOMING_SUMMARY = {
+  2026: {
+    speakers: '30+ Speakers',
+    sessions: 'Sessions TBA',
+    tracks: 'Tracks TBD',
+  },
+}
+
 export const getEventMetadata = (year) => {
   const speakers = getSpeakersData(year)
   const sponsors = getSponsorsData(year)
@@ -92,6 +102,7 @@ export const getEventMetadata = (year) => {
     teamCount: team ? team.length : 0,
     tracks,
     year,
+    summary: UPCOMING_SUMMARY[year] ?? null,
   }
 }
 

@@ -395,7 +395,7 @@ export default function PreviousEventsPage() {
                             <div className="grid grid-cols-3 gap-2 border-y border-surface py-3 mb-6">
                               <div className="text-center">
                                 <div className="text-lg font-bold text-theme-primary">
-                                  {event.speakers}
+                                  {event.speakersLabel ?? event.speakers}
                                 </div>
                                 <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
                                   Speakers

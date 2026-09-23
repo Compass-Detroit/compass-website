@@ -23,7 +23,7 @@ const allEvents = [
     endDate: '2026-11-14',
     location: 'Little Caesars HQ, Detroit',
     speakers: 30,
-    sessions: 45,
+    speakersLabel: '30+',
     tracks: 'TBD',
     attendees: '300+',
     hasSpeakerData: true,

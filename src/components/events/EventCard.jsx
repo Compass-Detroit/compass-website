@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 const EventCard = ({ eventMetadata }) => {
-  const { year, speakerCount, sessionCount, tracks, available } = eventMetadata
+  const { year, speakerCount, sessionCount, tracks, available, summary } =
+    eventMetadata
 
   if (!available) {
     return (
@@ -24,15 +25,22 @@ const EventCard = ({ eventMetadata }) => {
         </h3>
         <div className="flex flex-wrap gap-2">
           <span className="rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-800">
-            {speakerCount} Speaker{speakerCount !== 1 ? 's' : ''}
+            {summary?.speakers ??
+              `${speakerCount} Speaker${speakerCount !== 1 ? 's' : ''}`}
           </span>
           <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
-            {sessionCount} Session{sessionCount !== 1 ? 's' : ''}
+            {summary?.sessions ??
+              `${sessionCount} Session${sessionCount !== 1 ? 's' : ''}`}
           </span>
+          {summary && (
+            <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
+              {summary.tracks}
+            </span>
+          )}
         </div>
       </div>
 
-      {tracks.length > 0 && (
+      {!summary && tracks.length > 0 && (
         <div className="mb-4">
           <h4 className="mb-2 text-sm font-semibold text-gray-700">Tracks</h4>
           <div className="flex flex-wrap gap-1">
@@ -80,6 +88,11 @@ EventCard.propTypes = {
     sessionCount: PropTypes.number.isRequired,
     tracks: PropTypes.arrayOf(PropTypes.string).isRequired,
     available: PropTypes.bool.isRequired,
+    summary: PropTypes.shape({
+      speakers: PropTypes.string,
+      sessions: PropTypes.string,
+      tracks: PropTypes.string,
+    }),
   }).isRequired,
 }
 
