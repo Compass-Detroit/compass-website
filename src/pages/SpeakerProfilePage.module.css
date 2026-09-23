@@ -13,3 +13,31 @@
 .resourceDescription {
   color: var(--text-muted);
 }
+
+/* Bios and abstracts: real paragraphs instead of one collapsed block */
+.prose {
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.prose > p + p {
+  margin-top: 1.1em;
+}
+
+/* Ring the timeline dot in the page colour so it reads as cut into the line */
+.timelineDot {
+  border-color: var(--surface);
+}
+
+/* Oversized watermark behind the featured talk */
+.posterMark {
+  color: var(--text-primary);
+  opacity: 0.05;
+}
+
+/* The site-wide gold focus ring is ~1.9:1 on light surfaces; darken it so
+   keyboard focus stays visible (>= 3:1) below the hero */
+:global(.light) .content :focus-visible,
+:global(.theme-campus) .content :focus-visible {
+  outline-color: #a16207;
+}

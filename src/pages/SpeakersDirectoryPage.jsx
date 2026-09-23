@@ -1,8 +1,7 @@
-import { useState, useMemo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { FaMagnifyingGlass, FaGrip, FaList, FaFilter } from 'react-icons/fa6'
-import { PageLayout } from '@/layouts/PageLayout'
-import ProfileCard from '@/components/ui/ProfileCard'
+import { useMemo, useState } from 'react'
+import { FaMagnifyingGlass, FaXmark } from 'react-icons/fa6'
+import SiteLayout from '@/layouts/SiteLayout'
+import SpeakerSpotlightCard from '@/components/speakers/SpeakerSpotlightCard'
 import {
   getAllSpeakers,
   getAllTracks,
@@ -10,375 +9,256 @@ import {
   getYearRange,
   getTotalSpeakerCount,
 } from '@/utils/speakerRegistry'
-import styles from './SpeakersDirectoryPage.module.css'
+
+const YEARS = [2026, 2025, 2024, 2023]
+
+const SORTS = {
+  recent: {
+    label: 'Most recent',
+    compare: (a, b) =>
+      Math.max(...b.yearsActive) - Math.max(...a.yearsActive) ||
+      a.name.localeCompare(b.name),
+  },
+  talks: {
+    label: 'Most talks',
+    compare: (a, b) =>
+      b.sessions.length - a.sessions.length || a.name.localeCompare(b.name),
+  },
+  name: { label: 'Name A–Z', compare: (a, b) => a.name.localeCompare(b.name) },
+}
+
+const chipClass = (active) =>
+  `whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${
+    active
+      ? 'border-primary bg-primary text-gray-950'
+      : 'border-surface bg-surface-card text-theme-secondary hover:border-primary/50'
+  }`
 
 export default function SpeakersDirectoryPage() {
-  const navigate = useNavigate()
   const allSpeakers = useMemo(() => getAllSpeakers(), [])
   const allTracks = useMemo(() => getAllTracks(), [])
   const allCategories = useMemo(() => getAllCategories(), [])
-  const stats = useMemo(
-    () => ({
-      count: getTotalSpeakerCount(),
-      range: getYearRange(),
-    }),
-    []
-  )
+  const stats = useMemo(() => {
+    const range = getYearRange()
+    return {
+      speakers: getTotalSpeakerCount(),
+      talks: allSpeakers.reduce((n, s) => n + s.sessions.length, 0),
+      returning: allSpeakers.filter((s) => s.yearsActive.length > 1).length,
+      range: `${range.earliest}–${range.latest}`,
+    }
+  }, [allSpeakers])
 
-  const years = [2026, 2025, 2024, 2023]
+  const [query, setQuery] = useState('')
+  const [years, setYears] = useState([])
+  const [tracks, setTracks] = useState([])
+  const [category, setCategory] = useState('')
+  const [sort, setSort] = useState('recent')
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedYears, setSelectedYears] = useState([])
-  const [selectedTracks, setSelectedTracks] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState('')
-  const [viewMode, setViewMode] = useState('grid') // 'grid' | 'list'
-
-  const toggleYear = (year) => {
-    setSelectedYears((prev) =>
-      prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]
+  const toggle = (setter) => (value) =>
+    setter((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
     )
+  const toggleYear = toggle(setYears)
+  const toggleTrack = toggle(setTracks)
+  const hasFilters = query || years.length || tracks.length || category
+  const clearFilters = () => {
+    setQuery('')
+    setYears([])
+    setTracks([])
+    setCategory('')
   }
 
-  const toggleTrack = (track) => {
-    setSelectedTracks((prev) =>
-      prev.includes(track) ? prev.filter((t) => t !== track) : [...prev, track]
-    )
-  }
-
-  const filteredSpeakers = useMemo(() => {
-    return allSpeakers.filter((speaker) => {
-      // Search
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase()
-        const matchesName = speaker.name.toLowerCase().includes(q)
-        const matchesOrg = speaker.organization?.toLowerCase().includes(q)
-        if (!matchesName && !matchesOrg) return false
-      }
-      // Year
-      if (selectedYears.length > 0) {
-        const hasYear = selectedYears.some((y) =>
-          speaker.yearsActive.includes(y)
-        )
-        if (!hasYear) return false
-      }
-      // Track
-      if (selectedTracks.length > 0) {
-        const hasTrack = selectedTracks.some((t) =>
-          speaker.sessions.some((s) => s.track === t)
-        )
-        if (!hasTrack) return false
-      }
-      // Category
-      if (selectedCategory) {
-        if (!speaker.categories.includes(selectedCategory)) return false
-      }
-      return true
-    })
-  }, [
-    allSpeakers,
-    searchQuery,
-    selectedYears,
-    selectedTracks,
-    selectedCategory,
-  ])
+  const speakers = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return allSpeakers
+      .filter(
+        (s) =>
+          (!q ||
+            s.name.toLowerCase().includes(q) ||
+            s.organization?.toLowerCase().includes(q) ||
+            s.sessions.some((t) => t.title?.toLowerCase().includes(q))) &&
+          (!years.length || years.some((y) => s.yearsActive.includes(y))) &&
+          (!tracks.length ||
+            tracks.some((t) =>
+              s.sessions.some((sess) => (sess.tracks ?? []).includes(t))
+            )) &&
+          (!category || s.categories.includes(category))
+      )
+      .sort(SORTS[sort].compare)
+  }, [allSpeakers, query, years, tracks, category, sort])
 
   return (
-    <PageLayout>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gray-900 py-20 dark:bg-black">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/30 via-gray-900 to-gray-900 dark:from-indigo-900/20 dark:to-black"></div>
-          {/* Particle effect simulation via CSS background */}
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage:
-                'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)',
-              backgroundSize: '24px 24px',
-            }}
-          ></div>
-        </div>
-
-        <div className="container relative z-10 mx-auto px-4 text-center">
-          <h1
-            className="mb-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
-            style={{ fontFamily: 'var(--font-heading)' }}
-          >
-            Speakers <span className="text-primary-500">Directory</span>
-          </h1>
-          <p className="mx-auto max-w-2xl text-xl text-gray-300">
-            Discover the amazing voices that have shaped COMPASS Detroit.
+    <SiteLayout>
+      <section className="relative overflow-hidden bg-surface pb-12 pt-16 md:pt-24">
+        <div className="hero-grid-pattern pointer-events-none absolute inset-0 opacity-40" />
+        <div className="relative mx-auto max-w-[1200px] px-6">
+          <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+            Speakers
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm font-semibold text-gray-400">
-            <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur-md">
-              {stats.count} Unique Speakers
+          <h1 className="max-w-3xl text-4xl font-extrabold tracking-tight text-theme-primary md:text-6xl">
+            The voices behind{' '}
+            <span className="bg-gradient-to-r from-primary via-amber-400 to-orange-500 bg-clip-text text-transparent">
+              COMPASS Detroit
             </span>
-            <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur-md">
-              {stats.range.earliest} - {stats.range.latest}
-            </span>
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg text-theme-secondary">
+            Engineers, founders, designers and leaders who took the stage at
+            Michigan DevFest and our Innovation Summits to share what they know.
+          </p>
+          <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-4">
+            {[
+              [stats.speakers, 'Speakers'],
+              [stats.talks, 'Talks'],
+              [stats.returning, 'Returning speakers'],
+              [stats.range, 'Years'],
+            ].map(([value, label]) => (
+              <div key={label}>
+                <dt className="text-xs font-semibold uppercase tracking-wider text-theme-muted">
+                  {label}
+                </dt>
+                <dd className="text-3xl font-extrabold tabular-nums text-theme-primary">
+                  {value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* Filters */}
+      <section
+        aria-label="Filter speakers"
+        className="sticky top-16 z-30 border-y border-surface backdrop-blur-md"
+        style={{
+          background: 'color-mix(in srgb, var(--surface) 92%, transparent)',
+        }}
+      >
+        <div className="mx-auto flex max-w-[1200px] flex-col gap-3 px-6 py-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <label className="relative flex-1">
+              <span className="sr-only">Search speakers</span>
+              <FaMagnifyingGlass
+                className="pointer-events-none absolute left-4 top-1/2 size-3.5 -translate-y-1/2 text-theme-muted"
+                aria-hidden="true"
+              />
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search by name, company or talk…"
+                className="w-full rounded-full border border-surface bg-surface-card py-2.5 pl-10 pr-4 text-sm text-theme-primary placeholder:text-theme-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+              />
+            </label>
+            <div className="flex gap-2">
+              <label className="sr-only" htmlFor="speaker-category">
+                Topic
+              </label>
+              <select
+                id="speaker-category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="min-w-0 flex-1 rounded-full border border-surface bg-surface-card px-4 py-2.5 text-sm text-theme-primary focus:border-primary focus:outline-none sm:flex-none"
+              >
+                <option value="">All topics</option>
+                {allCategories.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+              <label className="sr-only" htmlFor="speaker-sort">
+                Sort
+              </label>
+              <select
+                id="speaker-sort"
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="min-w-0 flex-1 rounded-full border border-surface bg-surface-card px-4 py-2.5 text-sm text-theme-primary focus:border-primary focus:outline-none sm:flex-none"
+              >
+                {Object.entries(SORTS).map(([id, { label }]) => (
+                  <option key={id} value={id}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="-mx-6 flex items-center gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none]">
+            {YEARS.map((y) => (
+              <button
+                key={y}
+                type="button"
+                aria-pressed={years.includes(y)}
+                onClick={() => toggleYear(y)}
+                className={chipClass(years.includes(y))}
+              >
+                {y}
+              </button>
+            ))}
+            <span className="mx-1 h-5 w-px shrink-0 bg-[var(--border)]" />
+            {allTracks.map((t) => (
+              <button
+                key={t}
+                type="button"
+                aria-pressed={tracks.includes(t)}
+                onClick={() => toggleTrack(t)}
+                className={chipClass(tracks.includes(t))}
+              >
+                {t}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Main Content */}
-      <section className="bg-gray-50 py-12 dark:bg-gray-900 min-h-screen">
-        <div className="container mx-auto px-4">
-          {/* Filters & Search */}
-          <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div className="flex-1 space-y-6">
-              {/* Search Bar */}
-              <div className="relative max-w-md">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                  <FaMagnifyingGlass className="text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  className="w-full rounded-2xl border border-gray-200 bg-white/50 py-3 pl-11 pr-4 text-gray-900 shadow-sm backdrop-blur-md transition-colors focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800/50 dark:text-white"
-                  placeholder="Search by name or organization..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-
-              {/* Year Filters */}
-              <div className="flex flex-wrap items-center gap-3">
-                <span
-                  className={`text-sm font-semibold uppercase tracking-wider flex items-center gap-2 ${styles.metaText}`}
-                >
-                  <FaFilter /> Years
-                </span>
-                {years.map((year) => (
-                  <button
-                    key={year}
-                    onClick={() => toggleYear(year)}
-                    className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                      selectedYears.includes(year)
-                        ? `${styles.filterButtonActive} shadow-md`
-                        : styles.filterButtonInactive
-                    }`}
-                  >
-                    {year}
-                  </button>
-                ))}
-              </div>
-
-              {/* Track Filters */}
-              <div className="flex flex-wrap items-center gap-3">
-                <span
-                  className={`text-sm font-semibold uppercase tracking-wider ${styles.metaText}`}
-                >
-                  Tracks
-                </span>
-                {allTracks.map((track) => (
-                  <button
-                    key={track}
-                    onClick={() => toggleTrack(track)}
-                    className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                      selectedTracks.includes(track)
-                        ? `${styles.trackButtonActive} shadow-md`
-                        : styles.filterButtonInactive
-                    }`}
-                  >
-                    {track}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* View Toggles & Category Select */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 lg:items-end">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full sm:w-auto rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-700 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-              >
-                <option value="">All Categories</option>
-                {allCategories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
-
-              <div className="flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`rounded-lg p-2 transition-colors ${
-                    viewMode === 'grid'
-                      ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                  }`}
-                  aria-label="Grid View"
-                >
-                  <FaGrip />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`rounded-lg p-2 transition-colors ${
-                    viewMode === 'list'
-                      ? 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
-                  }`}
-                  aria-label="List View"
-                >
-                  <FaList />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Results Info */}
-          <div className={`mb-6 text-sm ${styles.bodyText}`}>
-            Showing{' '}
-            <span className="font-bold text-gray-900 dark:text-white">
-              {filteredSpeakers.length}
-            </span>{' '}
-            speakers
-          </div>
-
-          {/* Speakers Grid / List */}
-          {filteredSpeakers.length === 0 ? (
-            <div className="flex min-h-[40vh] flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-white/50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-              <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
-                No speakers found
-              </h3>
-              <p className={styles.bodyText}>
-                Try adjusting your filters or search query.
-              </p>
+      <section className="bg-surface py-10 pb-24">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <p className="text-sm text-theme-secondary" role="status">
+              Showing{' '}
+              <strong className="text-theme-primary">{speakers.length}</strong>{' '}
+              of {allSpeakers.length} speakers
+            </p>
+            {hasFilters && (
               <button
-                onClick={() => {
-                  setSearchQuery('')
-                  setSelectedYears([])
-                  setSelectedTracks([])
-                  setSelectedCategory('')
-                }}
-                className="mt-6 rounded-lg bg-primary-500 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
+                type="button"
+                onClick={clearFilters}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
               >
-                Clear Filters
+                <FaXmark className="size-3" aria-hidden="true" />
+                Clear filters
               </button>
-            </div>
-          ) : viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {filteredSpeakers.map((speaker) => (
-                <div
-                  key={speaker.slug}
-                  className="group relative flex h-full flex-col"
-                >
-                  {/* Subtle hover effect background */}
-                  <div className="absolute -inset-2 rounded-3xl bg-gray-200/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-gray-700/50"></div>
-                  <div className="relative z-10 flex h-full flex-col">
-                    <ProfileCard
-                      avatar={speaker.avatar}
-                      name={speaker.name}
-                      organization={speaker.organization}
-                      position={speaker.position}
-                      track={speaker.sessions[0]?.track}
-                      twitter={speaker.twitter}
-                      linkedin={speaker.linkedIn}
-                      github={speaker.github}
-                      mastodon={speaker.mastodon}
-                      isGDE={speaker.isGDE}
-                      isWTM={speaker.isWTM}
-                      onViewDetails={() =>
-                        navigate(`/speakers/${speaker.slug}`)
-                      }
-                    />
-                    {/* Years Badges Overlay */}
-                    <div className="mt-2 flex flex-wrap gap-1 px-1">
-                      {speaker.yearsActive.map((y) => (
-                        <span
-                          key={y}
-                          className="rounded bg-lime-100 px-1.5 py-0.5 text-xs font-semibold text-lime-800 dark:bg-lime-900/30 dark:text-lime-400"
-                        >
-                          {y}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+            )}
+          </div>
+
+          {speakers.length ? (
+            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {speakers.map((speaker) => (
+                <li key={speaker.slug}>
+                  <SpeakerSpotlightCard
+                    speaker={speaker}
+                    to={`/speakers/${speaker.slug}`}
+                  />
+                </li>
               ))}
-            </div>
+            </ul>
           ) : (
-            <div className="flex flex-col gap-4">
-              {filteredSpeakers.map((speaker) => (
-                <div
-                  key={speaker.slug}
-                  className="flex flex-col sm:flex-row overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
-                >
-                  <div className="h-48 sm:h-auto sm:w-48 shrink-0 relative">
-                    <img
-                      src={speaker.avatar}
-                      alt={speaker.name}
-                      className="size-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col justify-between p-6">
-                    <div>
-                      <div className="flex flex-wrap items-center justify-between gap-4">
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                          <Link
-                            to={`/speakers/${speaker.slug}`}
-                            className="hover:text-primary-500 transition-colors"
-                          >
-                            {speaker.name}
-                          </Link>
-                        </h3>
-                        <div className="flex gap-2">
-                          {speaker.yearsActive.map((y) => (
-                            <span
-                              key={y}
-                              className="rounded-full bg-lime-100 px-2.5 py-0.5 text-xs font-semibold text-lime-800 dark:bg-lime-900/30 dark:text-lime-400"
-                            >
-                              {y}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className={`mt-2 text-base ${styles.bodyText}`}>
-                        {speaker.position && (
-                          <span className="font-medium">
-                            {speaker.position}
-                          </span>
-                        )}
-                        {speaker.position && speaker.organization && (
-                          <span> at </span>
-                        )}
-                        {speaker.organization && (
-                          <span className="font-semibold text-indigo-600 dark:text-indigo-400">
-                            {speaker.organization}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {speaker.sessions.slice(0, 2).map((s, idx) => (
-                          <span
-                            key={idx}
-                            className="rounded-lg bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-200"
-                          >
-                            {s.track}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="mt-6 flex items-center justify-between">
-                      <Link
-                        to={`/speakers/${speaker.slug}`}
-                        className="inline-flex items-center text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-                      >
-                        View Profile →
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="rounded-3xl border border-dashed border-surface bg-surface-card p-12 text-center">
+              <h2 className="text-xl font-semibold text-theme-primary">
+                No speakers match those filters
+              </h2>
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="mt-6 rounded-full bg-primary px-6 py-2 text-sm font-semibold text-gray-950 hover:bg-primary-400"
+              >
+                Clear filters
+              </button>
             </div>
           )}
         </div>
       </section>
-    </PageLayout>
+    </SiteLayout>
   )
 }

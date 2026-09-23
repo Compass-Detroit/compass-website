@@ -2,6 +2,7 @@ import { SpeakersData as Speakers2023 } from '../data/2023/speakers.js'
 import { SpeakersData as Speakers2024 } from '../data/2024/speakers.js'
 import { SpeakersData as Speakers2025 } from '../data/2025/speakers.js'
 import { SpeakersData as Speakers2026 } from '../data/2026/speakers.js'
+import { SpeakersData as SpeakersLHM2026 } from '../data/2026/lhmSummit.js'
 
 // Canonical aliases for known spelling variations across years
 const KNOWN_ALIASES = {
@@ -10,11 +11,34 @@ const KNOWN_ALIASES = {
   'w-scott-richardson': 'scott-richardson',
 }
 
+// Slugs that existed before credential stripping; kept so old links resolve
+const LEGACY_SLUGS = {
+  'ali-el-sharif-phd': 'ali-el-sharif',
+  'bernadette-atanga-md': 'bernadette-atanga',
+}
+
+// Post-nominal credentials ("Ali El-Sharif, Ph.D.") are part of how a
+// speaker presents themselves, not of who they are: one person, one profile.
+const CREDENTIALS = /,\s*(Ph\.?\s?D\.?|M\.?D\.?|MBA|M\.?S\.?|P\.?E\.?|CPA)\s*$/i
+
+export function splitCredentials(name = '') {
+  const match = name.match(CREDENTIALS)
+  return match
+    ? { name: name.slice(0, match.index).trim(), credentials: match[1] }
+    : { name: name.trim(), credentials: null }
+}
+
+const normalizeTitle = (title = '') =>
+  title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+
 export function generateSlug(name) {
   if (!name) return ''
-  // Normalize name by removing titles (Dr., Mr., Ms., etc.) and middle initials
-  const normalized = name
-    .replace(/^(Dr\.|Mr\.|Ms\.|Mrs\.|Prof\.)\s+/i, '')
+  // Normalize name by removing titles (Dr., Mr., Ms., etc.), credentials and middle initials
+  const normalized = splitCredentials(name)
+    .name.replace(/^(Dr\.|Mr\.|Ms\.|Mrs\.|Prof\.)\s+/i, '')
     .replace(/\s+[A-Z]\.\s+/g, ' ')
     .trim()
 
@@ -33,6 +57,7 @@ const rawData = [
   { year: 2024, data: Speakers2024 },
   { year: 2025, data: Speakers2025 },
   { year: 2026, data: Speakers2026 },
+  { year: 2026, data: SpeakersLHM2026 },
 ]
 
 function buildRegistry() {
@@ -44,13 +69,15 @@ function buildRegistry() {
     data.forEach((speaker) => {
       if (!speaker || !speaker.name) return
       const slug = generateSlug(speaker.name)
+      const { name: baseName, credentials } = splitCredentials(
+        speaker.name.replace(/^(Dr\.|Mr\.|Ms\.|Mrs\.|Prof\.)\s+/i, '')
+      )
 
       if (!registry.has(slug)) {
         registry.set(slug, {
           slug,
-          name: speaker.name
-            .replace(/^(Dr\.|Mr\.|Ms\.|Mrs\.|Prof\.)\s+/i, '')
-            .trim(),
+          name: baseName,
+          credentials,
           avatar: speaker.avatar || null,
           avatarHistory: [],
           bio: speaker.bio || null,
@@ -77,16 +104,16 @@ function buildRegistry() {
       const profile = registry.get(slug)
 
       // Prefer longer full name if present
-      if (
-        speaker.name &&
-        speaker.name.length > profile.name.length &&
-        !speaker.name.includes('.')
-      ) {
-        profile.name = speaker.name
+      if (baseName.length > profile.name.length && !baseName.includes('.')) {
+        profile.name = baseName
       }
+      if (credentials) profile.credentials = credentials
 
-      // Record avatar in history if available
-      if (speaker.avatar) {
+      // Record avatar in history if available; generated placeholder images
+      // (placehold.co) never replace a real photo and count as no photo
+      const isPlaceholder = /placehold\.co/.test(speaker.avatar ?? '')
+      if (isPlaceholder && !profile.avatarHistory.length) profile.avatar = null
+      if (speaker.avatar && !isPlaceholder) {
         profile.avatar = speaker.avatar
         const exists = profile.avatarHistory.some((h) => h.year === year)
         if (!exists) {
@@ -117,22 +144,40 @@ function buildRegistry() {
 
       sessions.forEach((sess) => {
         if (sess) {
-          const sessionObj = {
-            year,
-            title: sess.title,
-            track: sess.track,
-            tags: sess.tags || [],
-            abstract: sess.abstract,
-            description: sess.description,
-            time: sess.time,
-            room: sess.room,
-          }
-          profile.sessions.push(sessionObj)
-
-          if (Array.isArray(sess.tags)) {
-            sess.tags.forEach((tag) => {
-              if (tag) profile.categories.add(tag.trim())
+          // A talk offered in several tracks is one talk: merge the tracks
+          const existing = profile.sessions.find(
+            (s) =>
+              s.year === year &&
+              normalizeTitle(s.title) === normalizeTitle(sess.title)
+          )
+          if (existing) {
+            if (sess.track && !existing.tracks.includes(sess.track))
+              existing.tracks.push(sess.track)
+            existing.tags = [
+              ...new Set([...existing.tags, ...(sess.tags || [])]),
+            ]
+          } else {
+            profile.sessions.push({
+              year,
+              title: sess.title,
+              track: sess.track,
+              tracks: sess.track ? [sess.track] : [],
+              tags: sess.tags || [],
+              abstract: sess.abstract,
+              description: sess.description,
+              time: sess.time,
+              room: sess.room,
+              event: sess.event,
             })
+          }
+
+          // Some sources pack several topics into one "A; B; C" string
+          if (Array.isArray(sess.tags)) {
+            sess.tags
+              .flatMap((tag) => String(tag ?? '').split(/\s*[;|]\s*/))
+              .forEach((tag) => {
+                if (tag.trim()) profile.categories.add(tag.trim())
+              })
           }
         }
       })
@@ -158,7 +203,8 @@ export function getAllSpeakers() {
 }
 
 export function getSpeakerBySlug(slug) {
-  return allSpeakers.find((s) => s.slug === slug) || null
+  const canonical = LEGACY_SLUGS[slug] || slug
+  return allSpeakers.find((s) => s.slug === canonical) || null
 }
 
 export function getSpeakersByCategory(category) {
@@ -173,7 +219,7 @@ export function getSpeakersByYear(year) {
 
 export function getSpeakersByTrack(track) {
   return allSpeakers.filter((s) =>
-    s.sessions.some((sess) => sess.track === track)
+    s.sessions.some((sess) => sess.tracks.includes(track))
   )
 }
 
@@ -187,7 +233,7 @@ export function getAllTracks() {
   const tracks = new Set()
   allSpeakers.forEach((s) =>
     s.sessions.forEach((sess) => {
-      if (sess.track) tracks.add(sess.track)
+      sess.tracks.forEach((t) => tracks.add(t))
     })
   )
   return Array.from(tracks).sort((a, b) => a.localeCompare(b))
