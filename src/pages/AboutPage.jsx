@@ -339,7 +339,7 @@ export default function AboutPage() {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
             <GrowthRing label="Black / African-American" pct={52} delay={0} />
-            <GrowthRing label="Women" pct={75} delay={0.15} />
+            <GrowthRing label="Women" pct={60} delay={0.15} />
             <GrowthRing label="Actively Job-Seeking" pct={51} delay={0.3} />
             <GrowthRing label="3-Yr Growth (234%)" pct={100} delay={0.45} />
           </div>

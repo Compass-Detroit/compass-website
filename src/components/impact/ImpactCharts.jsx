@@ -292,12 +292,12 @@ export function GenderBar({ className = '' }) {
         <span className="text-[13px] font-semibold uppercase tracking-[0.08em] text-gray-400">
           Women
         </span>
-        <span className="text-xl font-bold text-white">75%</span>
+        <span className="text-xl font-bold text-white">60%</span>
       </div>
       <div className="h-3 w-full bg-surface-card rounded-full overflow-hidden border border-surface">
         <div
           className="h-full bg-gradient-to-r from-violet-600 to-indigo-400 rounded-full transition-all duration-[1500ms] ease-out"
-          style={{ width: isVisible ? '75%' : '0%' }}
+          style={{ width: isVisible ? '60%' : '0%' }}
         />
       </div>
     </div>

@@ -62,7 +62,7 @@ const stats = [
     sub: 'Underrepresented talent',
   },
   {
-    value: 75,
+    value: 60,
     suffix: '%',
     label: 'Women',
     sub: 'Leading our community',

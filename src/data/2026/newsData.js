@@ -93,7 +93,7 @@ export const newsArticles = [
     source: 'Compass Detroit',
     date: '2026-05-15',
     excerpt:
-      'Compass Detroit community continues to grow with 4,111+ members, 52% Black/African American, 75% women, and partnerships with 120+ companies across Michigan.',
+      'Compass Detroit community continues to grow with 4,111+ members, 52% Black/African American, 60% women, and partnerships with 120+ companies across Michigan.',
     url: '/community',
     image: null,
     category: 'Milestones',
