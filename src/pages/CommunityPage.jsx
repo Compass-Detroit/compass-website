@@ -79,7 +79,7 @@ const collective = [
 const communityStats = [
   { num: '5,000+', label: 'Community members' },
   { num: '52%', label: 'Black/African-American' },
-  { num: '75%', label: 'Women' },
+  { num: '60%', label: 'Women' },
   { num: '6+', label: 'Coalition organizations' },
 ]
 

@@ -258,7 +258,7 @@ export default function ImpactReportPage() {
               suffix="%"
               label="Black / African-American"
             />
-            <ImpactNumber value={75} suffix="%" label="Women" />
+            <ImpactNumber value={60} suffix="%" label="Women" />
             <ImpactNumber value={91} suffix="%" label="Metro Detroit" />
           </div>
           <div className="mt-16 grid gap-4 md:grid-cols-3">

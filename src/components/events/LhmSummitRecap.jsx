@@ -20,6 +20,14 @@ const formatTime = (hhmm) => {
   }`
 }
 
+const initials = (name) =>
+  name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+
 const sponsors = [...LHM_PARTNERS.sponsors].sort(
   (a, b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier)
 )
@@ -108,14 +116,23 @@ export default function LhmSummitRecap() {
                 to={`/speakers/${generateSlug(speaker.name)}`}
                 className="group block h-full rounded-xl border border-surface bg-surface-card p-3 transition-[border-color,transform] duration-200 hover:-translate-y-1 hover:border-amber-400/50 focus-visible:-translate-y-1"
               >
-                <img
-                  src={sanityImage(speaker.avatar, { w: 240, h: 240 })}
-                  alt=""
-                  width="240"
-                  height="240"
-                  loading="lazy"
-                  className="mb-3 aspect-square w-full rounded-lg object-cover grayscale-[20%] transition-[filter] duration-300 group-hover:grayscale-0"
-                />
+                {speaker.avatar ? (
+                  <img
+                    src={sanityImage(speaker.avatar, { w: 240, h: 240 })}
+                    alt=""
+                    width="240"
+                    height="240"
+                    loading="lazy"
+                    className="mb-3 aspect-square w-full rounded-lg object-cover grayscale-[20%] transition-[filter] duration-300 group-hover:grayscale-0"
+                  />
+                ) : (
+                  <div
+                    aria-hidden="true"
+                    className="mb-3 flex aspect-square w-full items-center justify-center rounded-lg bg-gradient-to-br from-amber-500/25 to-rose-500/15 text-3xl font-black text-amber-200"
+                  >
+                    {initials(speaker.name)}
+                  </div>
+                )}
                 <div className="font-bold leading-tight text-theme-primary group-hover:text-amber-200">
                   {speaker.name}
                 </div>
@@ -158,10 +175,17 @@ export default function LhmSummitRecap() {
                 >
                   {item.title}
                 </div>
-                {item.speakers?.length > 0 && (
+                {item.moderators?.length > 0 ? (
                   <div className="text-sm text-gray-400">
-                    {item.speakers.join(', ')}
+                    {item.panelists.join(', ')} · moderated by{' '}
+                    {item.moderators.join(', ')}
                   </div>
+                ) : (
+                  item.speakers?.length > 0 && (
+                    <div className="text-sm text-gray-400">
+                      {item.speakers.join(', ')}
+                    </div>
+                  )
                 )}
               </li>
             ))}

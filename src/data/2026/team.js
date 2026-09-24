@@ -4,11 +4,13 @@ import AliElSharif from '@/data/2026/assets/images/team/ali_elsharif.webp'
 import BrandonWelch from '@/data/2026/assets/images/team/brandon_welch.webp'
 import DeAndreBoston from '@/data/2026/assets/images/team/DeAndre_Boston.png'
 import KateShenton from '@/data/2026/assets/images/team/kate_shenton.webp'
-import DaveKoziol from '@/data/2026/assets/images/team/dav_koziol.webp'
+import DaveKoziol from '@/data/2026/assets/images/team/dave_koziol-480.webp'
+import ElizabethBadgett from '@/data/2026/assets/images/team/elizabeth_badgett.webp'
 import GregMiller from '@/data/2026/assets/images/team/greg_miller.webp'
 import HernandoMalabet from '@/data/2026/assets/images/team/hernando_malabet.webp'
-import HodaSolati from '@/data/2026/assets/images/team/hoda_solati.webp'
-import JennaRitten from '@/data/2026/assets/images/team/jenna_ritten.webp'
+import HodaSolati from '@/data/2026/assets/images/team/hoda_solati-560.webp'
+import IdaByrdHill from '@/data/2026/assets/images/team/ida_byrd_hill-480.webp'
+import JennaRitten from '@/data/2026/assets/images/team/jenna_ritten-480.webp'
 import JeseekiaVaughn from '@/data/2026/assets/images/team/jeseekia_vaughn.webp'
 import JingranWang from '@/data/2026/assets/images/team/Jingran_Wang-x96.webp'
 import JustinBeaudry from '@/data/2026/assets/images/team/justin_beaudry.webp'
@@ -18,7 +20,7 @@ import RaquelEstrada from '@/data/2026/assets/images/team/raquel_estrada.webp'
 import Rehanashri from '@/data/2026/assets/images/team/rehanashri.webp'
 import RishirajSarkar from '@/data/2026/assets/images/team/rishiraj_sarkar.webp'
 import RolandFrohman from '@/data/2026/assets/images/team/roland_frohman.webp'
-import ShimaSolati from '@/data/2026/assets/images/team/shima_solati.webp'
+import ShimaSolati from '@/data/2026/assets/images/team/shima_solati-560.webp'
 import ShugmiShumunov from '@/data/2026/assets/images/team/shugmi_shumunov.png'
 import SohamMhatre from '@/data/2026/assets/images/team/soham_mhatre.webp'
 import SohanKetireddy from '@/data/2026/assets/images/team/sohan_ketireddy.webp'
@@ -27,14 +29,14 @@ import TylerMcBeath from '@/data/2026/assets/images/team/tyler_mcbeath.webp'
 import UmeloOnyejiaka from '@/data/2026/assets/images/team/UmeloOnyejiaka.webp'
 
 export const teamData = [
-  // ── Compass Board & Organizers ──
+  // ── Compass Board ──
   {
     id: 1,
     name: 'Jenna Ritten',
     twitter: 'jritten',
     linkedin: 'https://www.linkedin.com/in/jritten/',
     github: 'https://github.com/jritten',
-    devfest: 'organizer',
+    devfest: 'board',
     star: true,
     university: '',
     organization: 'IBM',
@@ -47,7 +49,7 @@ export const teamData = [
     twitter: 'davekoziol',
     linkedin: 'https://www.linkedin.com/in/davekoziol/',
     github: '',
-    devfest: 'organizer',
+    devfest: 'board',
     star: true,
     university: '',
     organization: 'Little Caesars',
@@ -55,12 +57,38 @@ export const teamData = [
     avatar: DaveKoziol,
   },
   {
+    id: 3,
+    name: 'Ida Byrd-Hill',
+    linkedin: 'https://www.linkedin.com/in/idabyrdhill/',
+    github: '',
+    devfest: 'board',
+    star: false,
+    university: '',
+    organization: 'Automation Workz',
+    role: 'Treasurer',
+    avatar: IdaByrdHill,
+  },
+  {
+    id: 4,
+    name: 'Elizabeth Badgett',
+    linkedin: 'https://www.linkedin.com/in/elizabeth-badgett-aa5920259',
+    github: '',
+    devfest: 'board',
+    star: false,
+    university: '',
+    bio: `Principal Supervisor of Cost Engineering at DTE Energy and Co-Chair of DTE's Power of Pride ERG.`,
+    organization: 'DTE Energy',
+    role: 'Board Member',
+    avatar: ElizabethBadgett,
+  },
+  // ── Organizers ──
+  {
     id: 6,
     name: 'Hoda Solati',
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/hoda-solati/',
     github: '',
-    devfest: 'organizer',
+    devfest: 'marketing',
     star: false,
     university: '',
     bio: `Hoda Solati is an award-winning UX designer working at BraunAbility blending creativity, technology, and innovation to craft inclusive, user-centered experiences. With advanced degrees in UX Design and Animation, she explores cutting-edge technologies such as VR, AR, and robotics to solve complex design challenges. Recognized at global events including DDX'25 NYC and IEEE Smart Mobility, Hoda is passionate about redefining the future of user experience through innovation and accessibility.`,
@@ -74,7 +102,7 @@ export const teamData = [
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/shima-solati/',
     github: '',
-    devfest: 'organizer',
+    devfest: 'marketing',
     star: false,
     university: '',
     bio: `Shima Solati is an award-winning UX/UI designer and researcher at BraunAbility, leading efforts to advance mobility and accessibility through innovative, user-centered design. With a Master's in User Experience Design from the College for Creative Studies and dual degrees in fashion and textiles, Shima brings a rare multidisciplinary perspective to solving complex challenges. Her expertise spans immersive and assistive technologies, VR, AR, robotics, and her portfolio includes impactful work for KUKA Robotics, the Augmented Reality Center, General Motors, and Ford. Passionate about inclusive design and emerging technologies, Shima is dedicated to creating intuitive, innovative solutions that empower all users.`,
@@ -101,7 +129,7 @@ export const teamData = [
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/risarkar/',
     github: null,
-    devfest: 'organizer',
+    devfest: 'marketing',
     star: false,
     university: 'University of Michigan - Dearborn',
     bio: `Cybersecurity graduate student working with AI privacy and network security`,
@@ -155,7 +183,7 @@ export const teamData = [
     twitter: '',
     linkedin: 'https://www.linkedin.com/in/umelo-onyejiaka-84213524b/',
     github: '',
-    devfest: 'organizer',
+    devfest: 'marketing',
     star: false,
     university: '',
     organization: 'Continental',
