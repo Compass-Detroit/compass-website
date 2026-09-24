@@ -62,6 +62,12 @@ export default function TeamMemberCard({
   const isCompact = variant === 'compact'
 
   if (isCompact) {
+    // Most stored roles are unconfirmed, so the roster shows where people
+    // work or study; only board titles are confirmed
+    const affiliation =
+      member.devfest === 'board'
+        ? member.role
+        : member.organization || member.university
     return (
       <article className="group rounded-xl border border-surface bg-surface-card p-4 transition-colors hover:border-primary/30">
         <div className="flex items-center gap-3">
@@ -79,9 +85,11 @@ export default function TeamMemberCard({
           )}
           <div className="min-w-0">
             <h3 className="truncate text-sm font-semibold">{member.name}</h3>
-            <p className="truncate text-[12px] text-gray-500">
-              {member.role || member.position || ''}
-            </p>
+            {affiliation && (
+              <p className="truncate text-[12px] text-gray-500">
+                {affiliation}
+              </p>
+            )}
           </div>
         </div>
       </article>

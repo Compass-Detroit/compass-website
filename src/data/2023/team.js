@@ -27,7 +27,7 @@ export const teamData = [
   },
   {
     id: 2,
-    name: 'Dave Koziel',
+    name: 'Dave Koziol',
     twitter: 'davekoziol',
     avatar: DaveKoziel,
     organization: 'Little Caesars',
