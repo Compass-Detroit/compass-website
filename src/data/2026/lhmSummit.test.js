@@ -16,10 +16,11 @@ describe('LHM Summit 2026 data', () => {
     expect(getSpeakerBySlug('jordan-mazaira')).not.toBeNull()
   })
 
-  it('opens the day with William Bowen leading yoga at 8:30', () => {
+  it('opens the day with William Bowen leading yoga from 8:00', () => {
     const yoga = LHM_SESSIONS[0]
     expect(yoga.title).toBe('Morning Mindfulness & Meditative Yoga')
-    expect(yoga.time).toBe('08:30')
+    expect(yoga.time).toBe('08:00')
+    expect(yoga.sessionDuration).toBe(45)
     expect(yoga.speakers).toEqual(['William Bowen'])
     const william = SpeakersData.find((s) => s.name === 'William Bowen')
     expect(william.session).toHaveLength(2)
