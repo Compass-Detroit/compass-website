@@ -18,6 +18,7 @@ const TeamSection = ({ teamData, year }) => {
   // Get ribbon color based on role
   const getRibbonColor = (role) => {
     const colors = {
+      board: 'bg-amber-700',
       organizer: 'bg-red-700',
       facilitator: 'bg-green-700',
       devteam: 'bg-sky-700',

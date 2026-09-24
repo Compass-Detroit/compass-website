@@ -8,6 +8,7 @@ import { teamData as team2026 } from '@/data/2026/team'
 import { teamData as team2025 } from '@/data/2025/team'
 import { teamData as team2024 } from '@/data/2024/team'
 import { teamData as team2023 } from '@/data/2023/team'
+import GDGDetroitLogo from '@/assets/images/organizations/org-gdg-detroit.webp'
 
 const yearData = {
   2026: team2026,
@@ -18,6 +19,7 @@ const yearData = {
 
 const years = [2026, 2025, 2024, 2023]
 
+const board = team2026.filter((m) => m.devfest === 'board')
 const organizers = team2026.filter((m) => m.devfest === 'organizer')
 const devTeam = team2026.filter((m) => m.devfest === 'devteam')
 const marketing = team2026.filter((m) => m.devfest === 'marketing')
@@ -59,6 +61,9 @@ GitHubIcon.propTypes = { className: PropTypes.string }
 
 function getBadges(member) {
   const badges = []
+  if (member.devfest === 'board' && member.star) {
+    badges.push('Co-Founder')
+  }
   if (member.name === 'Greg Miller') {
     badges.push('Lead')
   }
@@ -108,6 +113,43 @@ export default function TeamPage() {
         </div>
       </section>
 
+      {/* ─── Compass Board ─── */}
+      <section
+        className="border-t border-surface"
+        aria-labelledby="board-heading"
+      >
+        <div className="mx-auto max-w-[1200px] px-6 py-20">
+          <div className="mx-auto mb-12 max-w-[700px] text-center">
+            <p className="mb-4 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              Board of Directors
+            </p>
+            <h2
+              id="board-heading"
+              className="mb-4 text-3xl font-extrabold tracking-tight md:text-4xl"
+            >
+              The COMPASS{' '}
+              <span className="bg-gradient-to-r from-primary to-primary-400 bg-clip-text text-transparent">
+                Board
+              </span>
+            </h2>
+            <p className="leading-relaxed text-gray-500">
+              The board that sets COMPASS Detroit&apos;s direction, keeps it
+              accountable, and connects it to Detroit&apos;s industry leaders.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {board.map((member) => (
+              <TeamMemberCard
+                key={member.id}
+                member={member}
+                badges={getBadges(member)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── Leadership ─── */}
       <section className="border-t border-surface">
         <div className="mx-auto max-w-[1200px] px-6 py-20">
@@ -116,9 +158,9 @@ export default function TeamPage() {
               Leadership
             </p>
             <h2 className="mb-4 text-3xl font-extrabold tracking-tight md:text-4xl">
-              Organizers &amp;{' '}
+              Our{' '}
               <span className="bg-gradient-to-r from-primary to-primary-400 bg-clip-text text-transparent">
-                Co-Founders
+                Organizers
               </span>
             </h2>
             <p className="leading-relaxed text-gray-500">
@@ -127,6 +169,32 @@ export default function TeamPage() {
             </p>
           </div>
           <LeadershipShowcase members={organizers} />
+
+          <aside className="mx-auto mt-10 flex max-w-2xl flex-col items-center gap-4 rounded-2xl border border-surface bg-surface-card px-6 py-5 text-center sm:flex-row sm:text-left">
+            <img
+              src={GDGDetroitLogo}
+              alt="GDG Detroit"
+              width="56"
+              height="56"
+              loading="lazy"
+              className="size-14 shrink-0 rounded-xl bg-white object-contain p-1.5"
+            />
+            <p className="text-sm leading-relaxed text-theme-secondary">
+              <strong className="text-theme-primary">Jenna Ritten</strong> and{' '}
+              <strong className="text-theme-primary">Dave Koziol</strong> also
+              co-organize{' '}
+              <a
+                href="https://gdg.community.dev/gdg-detroit/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-primary underline-offset-4 hover:underline"
+              >
+                GDG Detroit
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+              , the Google Developer Group behind Michigan DevFest.
+            </p>
+          </aside>
         </div>
       </section>
 
