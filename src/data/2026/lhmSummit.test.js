@@ -7,8 +7,22 @@ describe('LHM Summit 2026 data', () => {
   it('applies program updates to speakers and shared sessions', () => {
     expect(SpeakersData.some((s) => s.name === 'Julea Ferrara')).toBe(false)
     expect(getSpeakerBySlug('julea-ferrara')).toBeNull()
+  })
+
+  it('credits Cindy as panel moderator with Ricardo and Jordan on the panel', () => {
     const panel = LHM_SESSIONS.find((s) => s.title.includes('Panel'))
-    expect(panel.speakers).toEqual(['Ricardo Tapia Vargas'])
+    expect(panel.moderators).toEqual(['Cindy Cruz Rodriguez'])
+    expect(panel.panelists).toEqual(['Ricardo Tapia Vargas', 'Jordan Mazaira'])
+    expect(getSpeakerBySlug('jordan-mazaira')).not.toBeNull()
+  })
+
+  it('opens the day with William Bowen leading yoga at 8:30', () => {
+    const yoga = LHM_SESSIONS[0]
+    expect(yoga.title).toBe('Morning Mindfulness & Meditative Yoga')
+    expect(yoga.time).toBe('08:30')
+    expect(yoga.speakers).toEqual(['William Bowen'])
+    const william = SpeakersData.find((s) => s.name === 'William Bowen')
+    expect(william.session).toHaveLength(2)
   })
 
   it('lists the SHPE Detroit talk at lunch with all three presenters', () => {
@@ -24,6 +38,7 @@ describe('LHM Summit 2026 data', () => {
     const cindy = SpeakersData.find((s) => s.name === 'Cindy Cruz Rodriguez')
     expect(cindy.session.map((s) => s.title)).toEqual([
       'SHPE Detroit Lunch Talk',
+      'Detroit Latin Heritage Month Innovation Summit Panel Discussion',
       'Engineering Lotería',
     ])
   })

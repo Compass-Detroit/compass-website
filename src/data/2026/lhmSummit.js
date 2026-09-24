@@ -26,11 +26,6 @@ export const LHM_EVENT = {
 /** Run-of-show from the summit site (non-speaker blocks). */
 export const LHM_RUN_OF_SHOW = [
   { time: '08:00', timeEnd: '09:00', title: 'Check-In & Breakfast' },
-  {
-    time: '08:15',
-    timeEnd: '08:45',
-    title: 'Morning Mindfulness & Meditative Yoga',
-  },
   { time: '08:45', timeEnd: '09:00', title: 'Welcome & Opening Remarks' },
   { time: '12:15', timeEnd: '13:00', title: 'Lunch Break & Networking' },
   { time: '15:30', timeEnd: '15:45', title: 'Closing Remarks & Prizes' },
@@ -60,6 +55,34 @@ const SESSION_UPDATES = {
 // Engineering Lotería at 2 PM, hosted by two of the SHPE presenters
 const LOTERIA_HOSTS = new Set(['Cindy Cruz Rodriguez', 'Raquel Estrada'])
 
+// Panel as delivered: Cindy moderated in Julea's place and Jordan joined Ricardo
+const PANEL_TITLE =
+  'Detroit Latin Heritage Month Innovation Summit Panel Discussion'
+const PANEL_MODERATOR = 'Cindy Cruz Rodriguez'
+
+// Speakers who joined after the Sanity export was taken
+const JORDAN_MAZAIRA = {
+  id: 'jordan-mazaira',
+  name: 'Jordan Mazaira',
+  avatar: null,
+  bio: 'Jordan Mazaira is Director of Community Engagement with SHPE Detroit and co-directs its Future Engineers program, running STEAM workshops that have introduced 500+ students and families to careers in STEM.',
+  organization: 'SHPE Detroit',
+  position: 'Director of Community Engagement',
+  isWTM: false,
+  isGDE: false,
+  isModerator: false,
+  sortOrder: 0,
+  linkedIn: 'https://www.linkedin.com/in/jordan-mazaira-94058a161/',
+}
+
+const snapshotSpeaker = (name) => {
+  // eslint-disable-next-line no-unused-vars
+  const { session, ...speaker } = rows(speakersSnapshot).find(
+    (row) => row.name === name
+  )
+  return speaker
+}
+
 const present = (names) => rows(names).filter((n) => !OFF_PROGRAM.has(n))
 const hosts = (names) => rows(names).filter((n) => LOTERIA_HOSTS.has(n))
 
@@ -74,18 +97,57 @@ const loteria = (session) => ({
   ),
 })
 
-const correctSession = (session) => ({
-  ...session,
-  ...SESSION_UPDATES[session.title],
-  speakers: present(session.speakers),
-  moderators: present(session.moderators),
-  panelists: present(session.panelists),
-  participants: rows(session.participants).filter(
-    (p) => !OFF_PROGRAM.has(p.name)
-  ),
-})
+const panel = (session) => {
+  const moderator = snapshotSpeaker(PANEL_MODERATOR)
+  const panelists = [...session.panelists, JORDAN_MAZAIRA.name]
+  return {
+    ...session,
+    speakers: [PANEL_MODERATOR, ...panelists],
+    moderators: [PANEL_MODERATOR],
+    panelists,
+    participants: [
+      { name: moderator.name, avatar: moderator.avatar, isModerator: true },
+      ...session.participants.map((p) => ({ ...p, isModerator: false })),
+      { name: JORDAN_MAZAIRA.name, avatar: null, isModerator: false },
+    ].map((p, sortOrder) => ({ ...p, sortOrder })),
+  }
+}
 
-const recapRows = rows(speakersSnapshot)
+const correctSession = (session) => {
+  const corrected = {
+    ...session,
+    ...SESSION_UPDATES[session.title],
+    speakers: present(session.speakers),
+    moderators: present(session.moderators),
+    panelists: present(session.panelists),
+    participants: rows(session.participants).filter(
+      (p) => !OFF_PROGRAM.has(p.name)
+    ),
+  }
+  return session.title === PANEL_TITLE ? panel(corrected) : corrected
+}
+
+// William Bowen opened the day before his Project NOMAD talk
+const yoga = () => {
+  const { name, avatar } = snapshotSpeaker('William Bowen')
+  return {
+    title: 'Morning Mindfulness & Meditative Yoga',
+    abstract: '',
+    description:
+      'A guided mindfulness and meditative yoga session to ground everyone before the program began.',
+    tags: ['Wellness', 'In-person'],
+    track: 'Wellness',
+    time: '08:30',
+    room: 'Main Room',
+    sessionDuration: 15,
+    speakers: [name],
+    moderators: [],
+    panelists: [name],
+    participants: [{ name, avatar, isModerator: false, sortOrder: 0 }],
+  }
+}
+
+const snapshotRows = rows(speakersSnapshot)
   .filter(({ name }) => !OFF_PROGRAM.has(name))
   .flatMap(({ session, ...speaker }) => {
     const corrected = {
@@ -98,6 +160,24 @@ const recapRows = rows(speakersSnapshot)
       : [corrected]
   })
 
+const panelSession = snapshotRows.find(
+  ({ session }) => session?.title === PANEL_TITLE
+)?.session
+
+const recapRows = [
+  ...snapshotRows,
+  { ...snapshotSpeaker('William Bowen'), session: yoga() },
+  ...(panelSession
+    ? [
+        {
+          ...snapshotSpeaker(PANEL_MODERATOR),
+          session: panelSession,
+        },
+        { ...JORDAN_MAZAIRA, session: panelSession },
+      ]
+    : []),
+]
+
 /**
  * One entry per speaker in the shape the speaker registry reads. The Sanity
  * export has one row per (speaker, session) pair, so multi-session speakers
@@ -109,7 +189,10 @@ export const SpeakersData = Object.values(
     if (session) entry.session.push({ ...session, event: LHM_EVENT.shortName })
     return acc
   }, {})
-)
+).map((speaker) => ({
+  ...speaker,
+  session: speaker.session.sort((a, b) => a.time.localeCompare(b.time)),
+}))
 
 /** Unique sessions, ordered by start time, with their participants. */
 export const LHM_SESSIONS = Object.values(
