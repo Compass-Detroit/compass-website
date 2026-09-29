@@ -6,32 +6,32 @@ const EXIT_MS = 400
 
 const quotes = [
   {
-    text: 'I was terrified to walk in alone. Left with three new friends.',
-    author: 'First-time Navigator',
+    text: 'An absolute essential for any tech enthusiast who wants to create connections with driven and highly knowledgeable experts of their fields.',
+    author: 'Cybersecurity Professional',
   },
   {
-    text: 'Nobody asked me to justify my experience level. That was new.',
-    author: 'Career Changer',
+    text: "It's an amazing first experience for a hackathon and networking event.",
+    author: 'CS Student',
   },
   {
-    text: 'I finally found a tech community that looks like Detroit.',
-    author: 'Software Engineer',
+    text: "It's a way to be exposed to cutting-edge tech and professionals working in the space.",
+    author: 'Software Professional',
   },
   {
-    text: 'The Saturday sessions are my favorite part of the week now.',
-    author: 'Junior Developer',
+    text: 'It was fun and full of tools that are beneficial on a personal and professional level.',
+    author: 'Tech Professional',
   },
   {
-    text: 'I learned more in one summit than six months of tutorials.',
-    author: 'Self-taught Developer',
+    text: 'Great topics, great learning and connecting with SMEs.',
+    author: 'Automotive Engineering Professional',
   },
   {
-    text: "They didn't just welcome me — they made space for me to lead.",
-    author: 'Community Organizer',
+    text: 'Great for learning and networking.',
+    author: 'Software Professional',
   },
   {
-    text: 'COMPASS gave me my first tech talk. Now I keynote conferences.',
-    author: 'Senior Engineer',
+    text: 'Lots of great people and interesting topics.',
+    author: 'Software Professional',
   },
 ]
 
@@ -120,7 +120,7 @@ export default function CommunityVibes() {
             }}
           >
             <div
-              className="relative min-h-[180px] md:min-h-[160px]"
+              className="relative min-h-[250px]"
               aria-live={autoRotate ? 'off' : 'polite'}
             >
               <div key={activeIndex} className={animClass}>

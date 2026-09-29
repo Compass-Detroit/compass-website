@@ -953,10 +953,10 @@ export default function HomePage() {
             </div>
           </div>
           <p className="mx-auto max-w-[500px] text-sm italic leading-relaxed text-[var(--text-muted)]">
-            &ldquo;I was terrified to walk in alone. Left with three new friends
-            and a job referral.&rdquo;
+            &ldquo;It&apos;s an amazing first experience for a hackathon and
+            networking event.&rdquo;
             <span className="mt-2 block not-italic font-semibold text-[var(--text-secondary)]">
-              — First-time Navigator, DevFest 2025
+              — CS Student
             </span>
           </p>
         </div>
