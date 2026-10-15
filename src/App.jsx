@@ -38,12 +38,14 @@ import AnalyticsDashboardPage from '@/pages/AnalyticsDashboardPage'
 import BrandKitPage from '@/pages/BrandKitPage'
 import PlatformPage from '@/pages/PlatformPage'
 import TelemetryProvider from '@/components/TelemetryProvider'
+import ScrollToTop from '@/components/ScrollToTop'
 import WebVitalsOverlay from '@/components/WebVitalsOverlay'
 
 function App() {
   return (
     <ThemeProvider>
       <Router>
+        <ScrollToTop />
         <div role="document">
           {/* Skip Link - First element for accessibility */}
           <a
