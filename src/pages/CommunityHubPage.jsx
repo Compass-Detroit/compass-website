@@ -1,730 +1,809 @@
-import { useState, useEffect } from 'react'
+import { useMemo, useState } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { PageLayout } from '@/layouts/PageLayout'
-import ProfileCardBuilder from '@/components/community/ProfileCardBuilder'
-import MemberProfileCard from '@/components/community/MemberProfileCard'
-import { getAllSpeakers } from '@/utils/speakerRegistry'
+import SiteLayout from '@/layouts/SiteLayout'
+import CommunityCalendar from '@/components/events/CommunityCalendar'
+import {
+  getAllSpeakers,
+  getTotalSpeakerCount,
+  getYearRange,
+} from '@/utils/speakerRegistry'
+import { sanityImage } from '@/services/sanity'
+import { DEVFEST_2026 } from '@/data/2026/devfest'
+import { partnersData } from '@/data/2026/partners'
+import { jobBoardData } from '@/data/2026/jobboard'
 import {
   FaMicrophone,
-  FaUser,
   FaUsers,
   FaHandshake,
-  FaRocket,
-  FaGraduationCap,
   FaMagnifyingGlass,
   FaArrowRight,
-  FaCircleCheck,
   FaCalendarDays,
   FaCompass,
-  FaCode,
-  FaCloud,
-  FaMobileScreen,
-  FaShieldHalved,
+  FaBriefcase,
+  FaHandHoldingHeart,
+  FaChalkboardUser,
+  FaXmark,
 } from 'react-icons/fa6'
 
-const WORKING_GROUPS = [
-  {
-    id: 'ai-ml',
-    title: 'AI & Machine Learning Guild',
-    icon: FaCode,
-    badgeColor: 'bg-devfest-blue-ink text-white',
-    lead: 'Dr. Kimberly Vance (GDG Detroit / Google)',
-    membersCount: 340,
-    meetingSchedule: 'Every 2nd Tuesday @ 6:30 PM EST',
-    topics: [
-      'Agentic Workflows',
-      'Gemini & Local LLMs',
-      'Computer Vision',
-      'MLOps on Cloud',
-    ],
-    desc: 'Hands-on AI labs, model fine-tuning discussions, and real-world AI applications in Detroit industry.',
-  },
-  {
-    id: 'cloud-devops',
-    title: 'Cloud & DevOps Circle',
-    icon: FaCloud,
-    badgeColor: 'bg-devfest-green text-white',
-    lead: 'Marcus Thompson (Ally Financial)',
-    membersCount: 285,
-    meetingSchedule: 'Every 3rd Thursday @ 7:00 PM EST',
-    topics: [
-      'Kubernetes',
-      'Terraform CI/CD',
-      'Multi-Cloud Architecture',
-      'Serverless',
-    ],
-    desc: 'Deep dives into scalable infrastructure, observability, cloud security, and automation.',
-  },
-  {
-    id: 'mobile-web',
-    title: 'Modern Web & Mobile Studio',
-    icon: FaMobileScreen,
-    badgeColor: 'bg-devfest-yellow text-gray-950',
-    lead: 'DeShawn Williams (Rocket Companies)',
-    membersCount: 420,
-    meetingSchedule: 'Every 1st Wednesday @ 6:00 PM EST',
-    topics: [
-      'React 19 & Next.js',
-      'Flutter & Android',
-      'Web Performance',
-      'Design Systems',
-    ],
-    desc: 'Collaborative frontend development, mobile UI crafting, accessibility, and modern web standards.',
-  },
-  {
-    id: 'wtm-leadership',
-    title: 'Women in Tech & Leadership',
-    icon: FaUsers,
-    badgeColor: 'bg-devfest-red text-white',
-    lead: 'Fatima Al-Hassan (StockX & WTM)',
-    membersCount: 510,
-    meetingSchedule: 'Monthly 4th Saturday @ 11:00 AM EST',
-    topics: [
-      'Tech Leadership',
-      'Public Speaking CFS',
-      'Executive Presence',
-      'Negotiation',
-    ],
-    desc: 'Empowering women technologists through mentorship, speaker readiness, and executive sponsorship.',
-  },
-  {
-    id: 'career-pathways',
-    title: 'Career Pathways & Mentorship',
-    icon: FaGraduationCap,
-    badgeColor: 'bg-primary text-gray-950',
-    lead: 'Jenna Ritten (COMPASS Detroit)',
-    membersCount: 680,
-    meetingSchedule: 'Weekly Office Hours: Saturday @ 10:00 AM EST',
-    topics: [
-      'Resume Review',
-      'Mock Tech Interviews',
-      'Co-Op Connections',
-      'Portfolio Prep',
-    ],
-    desc: 'Direct employer matching, resume workshops, and mentorship from Detroit tech veterans.',
-  },
-  {
-    id: 'cybersecurity',
-    title: 'Cybersecurity & Defense Lab',
-    icon: FaShieldHalved,
-    badgeColor: 'bg-indigo-600 text-white',
-    lead: 'Aisha Robinson (DTE Energy)',
-    membersCount: 230,
-    meetingSchedule: 'Every 3rd Tuesday @ 6:00 PM EST',
-    topics: ['Zero Trust', 'Threat Hunting', 'AppSec', 'Security Compliance'],
-    desc: 'Security best practices, penetration testing workshops, and defense architecture.',
-  },
+const CONTACT_EMAIL = 'whatupdoe@compass-detroit.com'
+const PAGE_SIZE = 9
+const TOPIC_CHIPS = 10
+
+const SECTIONS = [
+  { id: 'speakers', label: 'Speakers', icon: FaMicrophone },
+  { id: 'communities', label: 'Communities', icon: FaUsers },
+  { id: 'events', label: 'Events', icon: FaCalendarDays },
+  { id: 'get-involved', label: 'Get involved', icon: FaHandHoldingHeart },
+  { id: 'careers', label: 'Careers', icon: FaBriefcase },
 ]
 
-const SAMPLE_COMMUNITY_MEMBERS = [
-  {
-    name: 'Maya Chen',
-    title: 'Senior ML Engineer',
-    organization: 'Ford Motor Company',
-    bio: 'Building autonomous vehicle models and passionate about AI ethics in Detroit.',
-    skills: ['Python', 'TensorFlow', 'MLOps', 'PyTorch'],
-    role: 'Mentor',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-  },
-  {
-    name: 'DeShawn Williams',
-    title: 'Full-Stack Developer',
-    organization: 'Rocket Companies',
-    bio: 'React and Node enthusiast. DevFest speaker and mentor for Detroit high school coders.',
-    skills: ['React', 'Node.js', 'AWS', 'TypeScript'],
-    role: 'Speaker',
-    github: 'https://github.com',
-    twitter: 'https://twitter.com',
-  },
-  {
-    name: 'Fatima Al-Hassan',
-    title: 'UX Research Lead',
-    organization: 'StockX',
-    bio: 'Making e-commerce accessible, inclusive, and delightful for everyone.',
-    skills: ['User Research', 'Figma', 'Design Systems', 'A/B Testing'],
-    role: 'Organizer',
-    linkedin: 'https://linkedin.com',
-  },
-  {
-    name: 'Marcus Thompson',
-    title: 'DevOps Architect',
-    organization: 'Ally Financial',
-    bio: 'Automating everything. Cloud infrastructure specialist and open-source contributor.',
-    skills: ['Kubernetes', 'Terraform', 'CI/CD', 'Docker'],
-    role: 'Navigator',
-    github: 'https://github.com',
-    website: 'https://example.com',
-  },
+const speakers = getAllSpeakers()
+const yearRange = getYearRange()
+const talkCount = speakers.reduce((n, s) => n + s.sessions.length, 0)
+const years = Array.from(
+  { length: yearRange.latest - yearRange.earliest + 1 },
+  (_, i) => yearRange.latest - i
+)
+
+// Default order surfaces the most active returning speakers, not the A-names
+const byActivity = [...speakers].sort(
+  (a, b) =>
+    b.sessions.length - a.sessions.length ||
+    b.yearsActive.length - a.yearsActive.length ||
+    Number(Boolean(b.avatar)) - Number(Boolean(a.avatar)) ||
+    a.name.localeCompare(b.name)
+)
+
+// Most-used session topics become quick filter chips; tags vary in case
+// across years ("Leadership" / "leadership"), so count them case-insensitively
+// Session formats aren't topics
+const NOT_TOPICS = new Set(['in-person', 'virtual', 'hybrid'])
+const capitals = (str) => str.replace(/[^A-Z]/g, '').length
+const topicCounts = new Map()
+speakers
+  .flatMap((s) => s.categories)
+  .forEach((c) => {
+    const key = c.toLowerCase()
+    if (NOT_TOPICS.has(key)) return
+    const entry = topicCounts.get(key) ?? { label: c, count: 0 }
+    // Show the best-cased spelling ("DevOps" over "devops")
+    if (capitals(c) > capitals(entry.label)) entry.label = c
+    entry.count += 1
+    topicCounts.set(key, entry)
+  })
+const topTopics = [...topicCounts.values()]
+  .sort((a, b) => b.count - a.count)
+  .slice(0, TOPIC_CHIPS)
+  .map((t) => t.label)
+
+const hasTopic = (speaker, topic) =>
+  speaker.categories.some((c) => c.toLowerCase() === topic.toLowerCase())
+
+const searchText = (s) =>
+  [
+    s.name,
+    s.organization,
+    s.position,
+    ...s.categories,
+    ...s.sessions.map((sess) => sess.title),
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+
+const SEARCH_INDEX = new Map(byActivity.map((s) => [s.slug, searchText(s)]))
+
+const COMMUNITIES = partnersData.organizations
+
+const initials = (name) =>
+  name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase()
+
+function SectionHeader({ id, eyebrow, title, children }) {
+  return (
+    <div className="mb-8 border-b border-gray-200 pb-6 dark:border-gray-800">
+      <p className="mb-1 text-xs font-bold uppercase tracking-wider text-devfest-blue-ink dark:text-devfest-ht-blue">
+        {eyebrow}
+      </p>
+      <h2
+        id={`${id}-title`}
+        className="font-orbitron text-2xl font-extrabold text-gray-900 dark:text-white sm:text-3xl"
+      >
+        {title}
+      </h2>
+      {children && (
+        <p className="mt-2 max-w-2xl text-base text-gray-600 dark:text-gray-300">
+          {children}
+        </p>
+      )}
+    </div>
+  )
+}
+
+SectionHeader.propTypes = {
+  id: PropTypes.string.isRequired,
+  eyebrow: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node,
+}
+
+function SpeakerCard({ speaker }) {
+  const latest = speaker.sessions[0]
+  return (
+    <li className="group flex flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-devfest-blue-ink hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:border-gray-800 dark:bg-gray-900">
+      <div className="mb-4 flex items-center gap-4">
+        {speaker.avatar ? (
+          <img
+            src={sanityImage(speaker.avatar, { w: 128, h: 128 })}
+            alt=""
+            className="size-16 shrink-0 rounded-2xl bg-gray-200 object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <span
+            aria-hidden="true"
+            className="grid size-16 shrink-0 place-items-center rounded-2xl bg-devfest-pastel-blue font-bold text-devfest-blue-ink dark:bg-devfest-blue/20 dark:text-devfest-ht-blue"
+          >
+            {initials(speaker.name)}
+          </span>
+        )}
+        <div className="min-w-0">
+          <h3 className="text-base font-bold text-gray-900 dark:text-white">
+            {speaker.name}
+          </h3>
+          {speaker.position && (
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              {speaker.position}
+            </p>
+          )}
+          {speaker.organization && (
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              {speaker.organization}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {latest && (
+        <p className="mb-4 rounded-xl bg-gray-50 p-3 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+          <span className="mb-0.5 block text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            Latest talk · {latest.year}
+          </span>
+          &ldquo;{latest.title}&rdquo;
+        </p>
+      )}
+
+      <div className="mt-auto flex items-center justify-between gap-2 border-t border-gray-100 pt-3 dark:border-gray-800">
+        <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+          {speaker.sessions.length} talk
+          {speaker.sessions.length === 1 ? '' : 's'} ·{' '}
+          {speaker.yearsActive.join(', ')}
+        </span>
+        <Link
+          to={`/speakers/${speaker.slug}`}
+          className="inline-flex items-center gap-1 text-sm font-bold text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
+        >
+          Profile
+          <span className="sr-only"> for {speaker.name}</span>
+          <FaArrowRight className="size-3" aria-hidden="true" />
+        </Link>
+      </div>
+    </li>
+  )
+}
+
+SpeakerCard.propTypes = {
+  speaker: PropTypes.shape({
+    slug: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    avatar: PropTypes.string,
+    position: PropTypes.string,
+    organization: PropTypes.string,
+    sessions: PropTypes.arrayOf(
+      PropTypes.shape({ title: PropTypes.string, year: PropTypes.number })
+    ).isRequired,
+    yearsActive: PropTypes.arrayOf(PropTypes.number).isRequired,
+  }).isRequired,
+}
+
+function SpeakerDirectory() {
+  const [query, setQuery] = useState('')
+  const [topic, setTopic] = useState('')
+  const [year, setYear] = useState('')
+  const [visible, setVisible] = useState(PAGE_SIZE)
+
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return byActivity.filter(
+      (s) =>
+        (!q || SEARCH_INDEX.get(s.slug).includes(q)) &&
+        (!topic || hasTopic(s, topic)) &&
+        (!year || s.yearsActive.includes(Number(year)))
+    )
+  }, [query, topic, year])
+
+  const filtered = query || topic || year
+  const reset = () => {
+    setQuery('')
+    setTopic('')
+    setYear('')
+    setVisible(PAGE_SIZE)
+  }
+
+  return (
+    <>
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row">
+        <div className="relative flex-1">
+          <label htmlFor="speaker-search" className="sr-only">
+            Search speakers, companies or talks
+          </label>
+          <FaMagnifyingGlass
+            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-500"
+            aria-hidden="true"
+          />
+          <input
+            id="speaker-search"
+            type="search"
+            placeholder="Search speakers, companies or talks"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value)
+              setVisible(PAGE_SIZE)
+            }}
+            className="w-full rounded-xl border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-base shadow-sm focus:border-devfest-blue-ink dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+        <div className="flex gap-3">
+          <label htmlFor="speaker-year" className="sr-only">
+            Filter by year
+          </label>
+          <select
+            id="speaker-year"
+            value={year}
+            onChange={(e) => {
+              setYear(e.target.value)
+              setVisible(PAGE_SIZE)
+            }}
+            className="flex-1 rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-base dark:border-gray-700 dark:bg-gray-800 dark:text-white sm:flex-none"
+          >
+            <option value="">All years</option>
+            {years.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </select>
+          <Link
+            to="/speakers"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-devfest-blue-ink px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-blue-800"
+          >
+            Full directory{' '}
+            <FaArrowRight className="size-3" aria-hidden="true" />
+          </Link>
+        </div>
+      </div>
+
+      <div
+        className="mb-6 flex flex-wrap gap-2"
+        role="group"
+        aria-label="Filter by topic"
+      >
+        {topTopics.map((t) => (
+          <button
+            key={t}
+            type="button"
+            aria-pressed={topic === t}
+            onClick={() => {
+              setTopic(topic === t ? '' : t)
+              setVisible(PAGE_SIZE)
+            }}
+            className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors ${
+              topic === t
+                ? 'border-devfest-blue-ink bg-devfest-blue-ink text-white'
+                : 'border-gray-300 bg-white text-gray-700 hover:border-devfest-blue-ink dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200'
+            }`}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <p
+          className="text-sm text-gray-600 dark:text-gray-300"
+          aria-live="polite"
+        >
+          {filtered
+            ? `${results.length} of ${speakers.length} speakers match`
+            : `Most active of ${speakers.length} speakers`}
+        </p>
+        {filtered && (
+          <button
+            type="button"
+            onClick={reset}
+            className="inline-flex items-center gap-1 text-sm font-bold text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
+          >
+            <FaXmark className="size-3" aria-hidden="true" /> Clear filters
+          </button>
+        )}
+      </div>
+
+      {results.length ? (
+        <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {results.slice(0, visible).map((s) => (
+            <SpeakerCard key={s.slug} speaker={s} />
+          ))}
+        </ul>
+      ) : (
+        <div className="rounded-2xl border border-dashed border-gray-300 p-10 text-center dark:border-gray-700">
+          <p className="font-bold text-gray-900 dark:text-white">
+            No speakers match those filters
+          </p>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
+            Try a broader search or another topic.
+          </p>
+          <button
+            type="button"
+            onClick={reset}
+            className="mt-4 rounded-xl border border-gray-300 px-4 py-2 text-sm font-bold text-gray-900 hover:border-devfest-blue-ink dark:border-gray-700 dark:text-white"
+          >
+            Clear filters
+          </button>
+        </div>
+      )}
+
+      {visible < results.length && (
+        <div className="mt-8 text-center">
+          <button
+            type="button"
+            onClick={() => setVisible((v) => v + PAGE_SIZE)}
+            className="rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-sm font-bold text-gray-900 hover:border-devfest-blue-ink dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+          >
+            Show more speakers ({results.length - visible} left)
+          </button>
+        </div>
+      )}
+    </>
+  )
+}
+
+const GOALS = [
+  'Find a mentor',
+  'Become a mentor',
+  'Volunteer at an event',
+  'Speak at a future event',
 ]
 
-const CAREER_TRACKS = [
+// No backend yet: the request opens the visitor's email app, prefilled
+function InvolvementForm() {
+  const [opened, setOpened] = useState(false)
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    const data = new FormData(e.currentTarget)
+    const goal = data.get('goal')
+    const body = [
+      `Name: ${data.get('name')}`,
+      `Email: ${data.get('email')}`,
+      `Interested in: ${goal}`,
+      '',
+      data.get('note') || '',
+    ].join('\n')
+    window.location.href = `mailto:${CONTACT_EMAIL}?${new URLSearchParams({
+      subject: `Community Hub: ${goal}`,
+      body,
+    })
+      .toString()
+      .replace(/\+/g, '%20')}`
+    setOpened(true)
+  }
+
+  return (
+    <form
+      onSubmit={onSubmit}
+      className="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900"
+      aria-labelledby="involve-form-title"
+    >
+      <h3
+        id="involve-form-title"
+        className="text-lg font-bold text-gray-900 dark:text-white"
+      >
+        Tell us how you want to help
+      </h3>
+      <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
+        This opens your email app with your note filled in, addressed to the
+        Compass Detroit organizers.
+      </p>
+
+      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label
+            htmlFor="involve-name"
+            className="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200"
+          >
+            Name
+          </label>
+          <input
+            id="involve-name"
+            name="name"
+            required
+            autoComplete="name"
+            className="w-full rounded-xl border border-gray-300 bg-gray-50 p-2.5 text-base dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="involve-email"
+            className="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200"
+          >
+            Email
+          </label>
+          <input
+            id="involve-email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            className="w-full rounded-xl border border-gray-300 bg-gray-50 p-2.5 text-base dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+        <div className="sm:col-span-2">
+          <label
+            htmlFor="involve-goal"
+            className="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200"
+          >
+            I&apos;d like to
+          </label>
+          <select
+            id="involve-goal"
+            name="goal"
+            className="w-full rounded-xl border border-gray-300 bg-gray-50 p-2.5 text-base dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          >
+            {GOALS.map((g) => (
+              <option key={g}>{g}</option>
+            ))}
+          </select>
+        </div>
+        <div className="sm:col-span-2">
+          <label
+            htmlFor="involve-note"
+            className="mb-1 block text-sm font-semibold text-gray-800 dark:text-gray-200"
+          >
+            Anything we should know?{' '}
+            <span className="font-normal">(optional)</span>
+          </label>
+          <textarea
+            id="involve-note"
+            name="note"
+            rows={3}
+            className="w-full rounded-xl border border-gray-300 bg-gray-50 p-2.5 text-base dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        className="mt-5 w-full rounded-xl bg-primary px-5 py-3 text-sm font-bold text-gray-950 shadow transition-colors hover:bg-primary-400 sm:w-auto"
+      >
+        Open email to send
+      </button>
+      <p
+        className="mt-3 text-sm text-gray-600 dark:text-gray-300"
+        aria-live="polite"
+      >
+        {opened && (
+          <>
+            Your email app should have opened. If it didn&apos;t, write to{' '}
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="font-semibold text-devfest-blue-ink underline dark:text-devfest-ht-blue"
+            >
+              {CONTACT_EMAIL}
+            </a>
+            .
+          </>
+        )}
+      </p>
+    </form>
+  )
+}
+
+const WAYS_TO_HELP = [
   {
-    id: 'se',
-    title: 'Software Engineering',
-    opportunities: 'Full-Stack, Backend, Systems',
-    partners: ['Little Caesars', 'IBM', 'Rocket Companies'],
-    mentorsAvailable: 24,
+    icon: FaHandHoldingHeart,
+    title: 'Volunteer at DevFest',
+    desc: `Help run check-in, rooms and the hackathon on ${DEVFEST_2026.shortDateLabel} in Greektown.`,
   },
   {
-    id: 'ai',
-    title: 'AI & Data Science',
-    opportunities: 'MLOps, LLM Engineering, Data Analytics',
-    partners: ['Google', 'Ford Motor Company', 'StockX'],
-    mentorsAvailable: 18,
+    icon: FaChalkboardUser,
+    title: 'Mentor or find a mentor',
+    desc: 'We pair people across our partner communities for career and technical guidance.',
   },
   {
-    id: 'cloud',
-    title: 'Cloud & Infrastructure',
-    opportunities: 'DevOps, SRE, Cloud Architecture',
-    partners: ['DTE Energy', 'General Motors', 'Ally Financial'],
-    mentorsAvailable: 15,
+    icon: FaMicrophone,
+    title: 'Speak at a future event',
+    desc: 'The DevFest 2026 call for speakers has closed. Tell us your topic for the next one.',
   },
   {
-    id: 'security',
-    title: 'Cybersecurity',
-    opportunities: 'Security Analysis, Threat Intel, AppSec',
-    partners: ['DTE Energy', 'Blue Cross Blue Shield'],
-    mentorsAvailable: 12,
+    icon: FaHandshake,
+    title: 'Partner with us',
+    desc: 'Sponsor an event, host a meetup or bring your community into the network.',
+    href: 'mailto:sponsors@midevfest.com',
+    cta: 'Email the partnerships team',
   },
 ]
 
 export default function CommunityHubPage() {
-  const [activePhase, setActivePhase] = useState('all')
-  const [speakers, setSpeakers] = useState([])
-  const [speakerFilter, setSpeakerFilter] = useState('')
-  const [joinedGroups, setJoinedGroups] = useState({})
-  const [selectedTrack, setSelectedTrack] = useState(null)
-  const [matchSubmitted, setMatchSubmitted] = useState(false)
-
-  useEffect(() => {
-    setSpeakers(getAllSpeakers())
-  }, [])
-
-  const handleJoinGroup = (groupId) => {
-    setJoinedGroups((prev) => ({
-      ...prev,
-      [groupId]: !prev[groupId],
-    }))
-  }
-
-  const filteredSpeakers = speakerFilter
-    ? speakers.filter(
-        (s) =>
-          s.name?.toLowerCase().includes(speakerFilter.toLowerCase()) ||
-          s.organization?.toLowerCase().includes(speakerFilter.toLowerCase()) ||
-          s.position?.toLowerCase().includes(speakerFilter.toLowerCase())
-      )
-    : speakers.slice(0, 6)
+  const stats = [
+    { value: getTotalSpeakerCount(), label: 'Speakers' },
+    { value: talkCount, label: 'Talks' },
+    { value: COMMUNITIES.length, label: 'Partner communities' },
+    {
+      value: yearRange.latest - yearRange.earliest + 1,
+      label: `Years (${yearRange.earliest}–${yearRange.latest})`,
+    },
+  ]
 
   return (
-    <PageLayout>
-      <div className="relative min-h-screen bg-white transition-colors duration-200 dark:bg-gray-950">
-        {/* Subtle grid background */}
-        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-devfest-blue/5 to-transparent opacity-70" />
+    <SiteLayout>
+      <div className="relative bg-white dark:bg-gray-950">
         <div
-          className="pointer-events-none absolute inset-0 z-0 opacity-[0.03] dark:opacity-10"
-          style={{
-            backgroundImage: 'radial-gradient(#4285f4 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-          }}
+          className="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-primary/10 via-devfest-blue/5 to-transparent"
+          aria-hidden="true"
         />
 
-        {/* HERO SECTION */}
-        <section className="relative z-10 pt-24 pb-16 text-center">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold text-primary dark:text-primary">
-              <FaCompass className="size-3.5 text-primary" />
-              COMPASS Detroit Community Hub
-            </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl font-orbitron">
-              The Detroit Tech <br className="hidden sm:block" />
-              <span className="bg-gradient-to-r from-primary via-devfest-yellow to-devfest-blue bg-clip-text text-transparent">
-                Community Platform
-              </span>
+        <section className="relative pb-12 pt-20 text-center sm:pt-24">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-semibold text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200">
+              <FaCompass
+                className="size-4 text-devfest-blue-ink dark:text-devfest-ht-blue"
+                aria-hidden="true"
+              />
+              Compass Detroit Community Hub
+            </p>
+            <h1 className="font-orbitron text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+              Detroit&apos;s tech community, in one place
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-300">
-              Connecting 5,000+ Navigators across Detroit. Explore our Speaker
-              Network, build your Verified Profile Card, join Tech Working
-              Groups, and match with Mentorship Pathways.
+              Find speakers and their talks, meet the communities behind our
+              events, see what&apos;s coming up and pick a way to get involved.
             </p>
 
-            {/* Phase Navigation Bar */}
-            <div className="mt-10 flex flex-wrap justify-center gap-2">
-              {[
-                { id: 'all', label: 'All Features', icon: FaCompass },
-                {
-                  id: 'phase1',
-                  label: 'Phase 1: Speaker Network',
-                  icon: FaMicrophone,
-                },
-                { id: 'phase2', label: 'Phase 2: Profile Cards', icon: FaUser },
-                {
-                  id: 'phase3',
-                  label: 'Phase 3: Working Spaces',
-                  icon: FaUsers,
-                },
-                {
-                  id: 'phase4',
-                  label: 'Phase 4: Career Pathways',
-                  icon: FaRocket,
-                },
-              ].map((tab) => {
-                const Icon = tab.icon
-                const isActive = activePhase === tab.id
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActivePhase(tab.id)}
-                    className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all ${
-                      isActive
-                        ? 'bg-devfest-blue-ink text-white shadow-lg shadow-devfest-blue/25 scale-105'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    <Icon className="size-3.5" />
-                    {tab.label}
-                  </button>
-                )
-              })}
-            </div>
+            <dl className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+              {stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="flex flex-col-reverse rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900"
+                >
+                  <dt className="mt-1 text-sm text-gray-600 dark:text-gray-300">
+                    {s.label}
+                  </dt>
+                  <dd className="text-3xl font-extrabold text-gray-900 dark:text-white">
+                    {s.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <nav aria-label="Community Hub sections" className="mt-10">
+              <ul className="flex flex-wrap justify-center gap-2">
+                {SECTIONS.map(({ id, label, icon: Icon }) => (
+                  <li key={id}>
+                    <a
+                      href={`#${id}`}
+                      className="inline-flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2.5 text-sm font-semibold text-gray-800 transition-colors hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
+                    >
+                      <Icon className="size-4" aria-hidden="true" />
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <a
+              href={DEVFEST_2026.registerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-auto mt-8 flex max-w-xl flex-col items-center justify-between gap-2 rounded-2xl bg-[#0b1633] px-5 py-4 text-left text-white transition-transform hover:-translate-y-0.5 motion-reduce:transition-none sm:flex-row"
+            >
+              <span>
+                <span className="block text-xs font-bold uppercase tracking-wider text-primary">
+                  {DEVFEST_2026.shortDateLabel} · {DEVFEST_2026.venue}
+                </span>
+                <span className="font-bold">
+                  Michigan DevFest &apos;26 tickets are on sale
+                </span>
+              </span>
+              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-gray-950">
+                Get tickets{' '}
+                <FaArrowRight className="size-3" aria-hidden="true" />
+              </span>
+            </a>
           </div>
         </section>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8 space-y-24">
-          {/* ========================================================================= */}
-          {/* PHASE 1: SPEAKER NETWORK */}
-          {/* ========================================================================= */}
-          {(activePhase === 'all' || activePhase === 'phase1') && (
-            <section id="speakers" className="animate-fade-in-up">
-              <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 pb-6 dark:border-gray-800">
-                <div>
-                  <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-devfest-blue-ink dark:text-devfest-ht-blue mb-1">
-                    <FaCircleCheck className="size-3.5" /> Phase 1 · Live
-                    Feature
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white font-orbitron">
-                    Speaker Network & Knowledge Base
-                  </h2>
-                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-xl">
-                    Discover and learn from 120+ industry leaders, GDG experts,
-                    and innovators who headline our Innovation Summits and
-                    DevFest.
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 size-3.5" />
-                    <input
-                      type="text"
-                      placeholder="Search speakers or topics..."
-                      value={speakerFilter}
-                      onChange={(e) => setSpeakerFilter(e.target.value)}
-                      className="rounded-xl border border-gray-300 bg-white pl-9 pr-4 py-2 text-xs shadow-sm focus:border-devfest-blue-ink dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+        <div className="relative mx-auto max-w-7xl space-y-24 px-4 pb-24 sm:px-6 lg:px-8">
+          <section
+            id="speakers"
+            aria-labelledby="speakers-title"
+            className="scroll-mt-24"
+          >
+            <SectionHeader
+              id="speakers"
+              eyebrow="Speaker network"
+              title="Learn from people who've taken the stage"
+            >
+              Everyone who has spoken at Compass Detroit events since{' '}
+              {yearRange.earliest}. Search by name, company, talk title or
+              topic.
+            </SectionHeader>
+            <SpeakerDirectory />
+          </section>
+
+          <section
+            id="communities"
+            aria-labelledby="communities-title"
+            className="scroll-mt-24"
+          >
+            <SectionHeader
+              id="communities"
+              eyebrow="Partner communities"
+              title="The groups that make it happen"
+            >
+              Meetups, student chapters and professional societies that
+              co-organize our events. Visit one to find their next meetup.
+            </SectionHeader>
+            <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+              {COMMUNITIES.map((c) => (
+                <li key={c.id}>
+                  <a
+                    href={c.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-full flex-col items-center gap-3 rounded-2xl border border-gray-200 bg-white p-5 text-center transition-all hover:-translate-y-1 hover:border-devfest-blue-ink motion-reduce:transition-none motion-reduce:hover:translate-y-0 dark:border-gray-800 dark:bg-gray-900"
+                  >
+                    <span
+                      className={`grid size-16 place-items-center rounded-full p-2 ${
+                        c.darkLogo
+                          ? 'bg-[#0b1633]'
+                          : 'bg-white ring-1 ring-gray-200 dark:ring-gray-700'
+                      }`}
+                    >
+                      <img
+                        src={c.logo}
+                        alt=""
+                        loading="lazy"
+                        className="size-full object-contain"
+                      />
+                    </span>
+                    <span className="text-sm font-bold text-gray-900 dark:text-white">
+                      {c.name}
+                    </span>
+                    <span className="sr-only">(opens in a new tab)</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section
+            id="events"
+            aria-labelledby="events-title"
+            className="scroll-mt-24"
+          >
+            <SectionHeader
+              id="events"
+              eyebrow="Upcoming"
+              title="What's on the calendar"
+            >
+              Meetups, workshops and summits from across the network.
+            </SectionHeader>
+            <CommunityCalendar />
+          </section>
+
+          <section
+            id="get-involved"
+            aria-labelledby="get-involved-title"
+            className="scroll-mt-24"
+          >
+            <SectionHeader
+              id="get-involved"
+              eyebrow="Get involved"
+              title="Find your way in"
+            >
+              Compass Detroit runs on volunteers, mentors and partners. Pick
+              what fits and we&apos;ll follow up by email.
+            </SectionHeader>
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+              <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-6">
+                {WAYS_TO_HELP.map(({ icon: Icon, title, desc, href, cta }) => (
+                  <li
+                    key={title}
+                    className="flex flex-col rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900"
+                  >
+                    <Icon
+                      className="mb-3 size-6 text-devfest-blue-ink dark:text-devfest-ht-blue"
+                      aria-hidden="true"
                     />
-                  </div>
-                  <Link
-                    to="/speakers"
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-devfest-blue-ink px-4 py-2 text-xs font-bold text-white hover:bg-blue-800 transition-colors"
-                  >
-                    Full Directory <FaArrowRight className="size-3" />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {filteredSpeakers.map((sp) => (
-                  <div
-                    key={sp.slug}
-                    className="group relative flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-devfest-blue-ink hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
-                  >
-                    <div>
-                      <div className="flex items-center gap-4 mb-4">
-                        <img
-                          src={
-                            sp.avatar ||
-                            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face'
-                          }
-                          alt={sp.name}
-                          className="size-16 rounded-2xl border-2 border-primary/40 object-cover shadow bg-gray-200"
-                          loading="lazy"
-                        />
-                        <div>
-                          <h3 className="text-base font-bold text-gray-900 dark:text-white group-hover:text-devfest-blue-ink transition-colors">
-                            {sp.name}
-                          </h3>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-                            {sp.position}
-                          </p>
-                          {sp.organization && (
-                            <span className="mt-1 inline-block text-[11px] font-semibold text-primary">
-                              {sp.organization}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {sp.sessions?.[0] && (
-                        <div className="mb-4 rounded-xl bg-gray-50 p-3 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                          <span className="font-bold text-gray-900 dark:text-white block mb-0.5">
-                            Featured Talk:
-                          </span>
-                          &ldquo;{sp.sessions[0].title}&rdquo;
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-800">
-                      <span className="rounded-md bg-devfest-pastel-blue/60 px-2 py-0.5 text-[11px] font-semibold text-devfest-blue-ink dark:bg-devfest-blue/20 dark:text-devfest-ht-blue">
-                        {sp.sessions?.[0]?.track || 'Keynote Speaker'}
-                      </span>
-                      <Link
-                        to={`/speakers/${sp.slug}`}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
+                    <h3 className="font-bold text-gray-900 dark:text-white">
+                      {title}
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
+                      {desc}
+                    </p>
+                    {href && (
+                      <a
+                        href={href}
+                        className="mt-3 text-sm font-bold text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
                       >
-                        View Profile <FaArrowRight className="size-2.5" />
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* ========================================================================= */}
-          {/* PHASE 2: PROFILE CARDS & MEMBER DIRECTORY */}
-          {/* ========================================================================= */}
-          {(activePhase === 'all' || activePhase === 'phase2') && (
-            <section id="profile-builder" className="animate-fade-in-up">
-              <div className="mb-8 border-b border-gray-200 pb-6 dark:border-gray-800">
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-devfest-green dark:text-devfest-ht-green mb-1">
-                  <FaCircleCheck className="size-3.5" /> Phase 2 · Interactive
-                  Member Cards
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white font-orbitron">
-                  Build & Verify Your Community Profile
-                </h2>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-2xl">
-                  Establish your professional identity in Detroit. Choose your
-                  skills, showcase your role badge, and preview your custom
-                  community profile card.
-                </p>
-              </div>
-
-              {/* Profile Card Builder Interactive Component */}
-              <div className="rounded-3xl border border-gray-200 bg-gray-50/50 p-6 md:p-10 dark:border-gray-800 dark:bg-gray-900/50 shadow-inner">
-                <ProfileCardBuilder />
-              </div>
-
-              {/* Verified Community Members Preview */}
-              <div className="mt-16">
-                <div className="mb-6 flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                    <FaUsers className="size-5 text-primary" /> Verified
-                    Navigators & Members
-                  </h3>
-                  <Link
-                    to="/members"
-                    className="text-xs font-bold text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
-                  >
-                    Browse All Members →
-                  </Link>
-                </div>
-
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  {SAMPLE_COMMUNITY_MEMBERS.map((member, idx) => (
-                    <div key={idx} className="flex justify-center">
-                      <MemberProfileCard {...member} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* ========================================================================= */}
-          {/* PHASE 3: COMMUNITY WORKING SPACES */}
-          {/* ========================================================================= */}
-          {(activePhase === 'all' || activePhase === 'phase3') && (
-            <section id="spaces" className="animate-fade-in-up">
-              <div className="mb-8 border-b border-gray-200 pb-6 dark:border-gray-800">
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-devfest-yellow dark:text-devfest-ht-yellow mb-1">
-                  <FaCircleCheck className="size-3.5" /> Phase 3 · Working
-                  Groups & Hubs
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white font-orbitron">
-                  Technical Working Groups & Hubs
-                </h2>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-2xl">
-                  Collaborate in active guilds across AI, Cloud, Frontend, and
-                  Leadership. Join monthly meetups, collaborate on real-world
-                  projects, and lead community initiatives.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {WORKING_GROUPS.map((group) => {
-                  const Icon = group.icon
-                  const isJoined = joinedGroups[group.id]
-                  return (
-                    <div
-                      key={group.id}
-                      className="group flex flex-col justify-between rounded-3xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-primary hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
-                    >
-                      <div>
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary dark:bg-primary/20">
-                            <Icon className="size-6" />
-                          </div>
-                          <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                            <FaUsers className="size-3" /> {group.membersCount}{' '}
-                            Navigators
-                          </span>
-                        </div>
-
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors">
-                          {group.title}
-                        </h3>
-                        <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                          {group.desc}
-                        </p>
-
-                        <div className="mt-4 space-y-2 border-t border-gray-100 pt-3 dark:border-gray-800">
-                          <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                            <FaCalendarDays className="size-3.5 text-devfest-blue-ink" />
-                            <span>{group.meetingSchedule}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                            <FaCompass className="size-3.5 text-primary" />
-                            <span>Lead: {group.lead}</span>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 flex flex-wrap gap-1.5">
-                          {group.topics.map((t, i) => (
-                            <span
-                              key={i}
-                              className="rounded-md bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300"
-                            >
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800">
-                        <button
-                          onClick={() => handleJoinGroup(group.id)}
-                          className={`w-full inline-flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-bold transition-all ${
-                            isJoined
-                              ? 'bg-green-600 text-white shadow'
-                              : 'bg-gray-900 text-white hover:bg-primary hover:text-black dark:bg-gray-800 dark:hover:bg-primary dark:hover:text-black'
-                          }`}
-                        >
-                          {isJoined ? (
-                            <>
-                              <FaCircleCheck className="size-3.5" /> Working
-                              Group Joined!
-                            </>
-                          ) : (
-                            <>
-                              <FaUsers className="size-3.5" /> Join Working
-                              Group
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </section>
-          )}
-
-          {/* ========================================================================= */}
-          {/* PHASE 4: CAREER PATHWAYS & MENTORSHIP MATCHER */}
-          {/* ========================================================================= */}
-          {(activePhase === 'all' || activePhase === 'phase4') && (
-            <section id="pathways" className="animate-fade-in-up">
-              <div className="mb-8 border-b border-gray-200 pb-6 dark:border-gray-800">
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary mb-1">
-                  <FaCircleCheck className="size-3.5" /> Phase 4 · Career &
-                  Mentorship Infrastructure
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white font-orbitron">
-                  Career Matcher & Employer Pathways
-                </h2>
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 max-w-2xl">
-                  Over 51% of our community is actively looking for
-                  opportunities. We match prepared Navigators directly to
-                  co-ops, apprenticeships, and hiring partners.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-                {/* Career Track Selector */}
-                <div className="lg:col-span-7 space-y-4">
-                  <h3 className="text-base font-bold text-gray-900 dark:text-white mb-2">
-                    Select Your Pathway to View Matching Partners & Mentors
-                  </h3>
-
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    {CAREER_TRACKS.map((track) => {
-                      const isSelected = selectedTrack?.id === track.id
-                      return (
-                        <button
-                          type="button"
-                          key={track.id}
-                          onClick={() => setSelectedTrack(track)}
-                          className={`w-full text-left cursor-pointer rounded-2xl border p-5 transition-all ${
-                            isSelected
-                              ? 'border-primary bg-primary/10 shadow-md ring-2 ring-primary'
-                              : 'border-gray-200 bg-white hover:border-gray-300 dark:border-gray-800 dark:bg-gray-900'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-gray-900 dark:text-white">
-                              {track.title}
-                            </span>
-                            <span className="rounded-full bg-devfest-pastel-yellow px-2 py-0.5 text-[10px] font-bold text-gray-900">
-                              {track.mentorsAvailable} Mentors
-                            </span>
-                          </div>
-                          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                            {track.opportunities}
-                          </p>
-                          <div className="mt-3 flex flex-wrap gap-1">
-                            {track.partners.map((p, i) => (
-                              <span
-                                key={i}
-                                className="rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                              >
-                                {p}
-                              </span>
-                            ))}
-                          </div>
-                        </button>
-                      )
-                    })}
-                  </div>
-
-                  {/* Mentorship Intake Form */}
-                  <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-                    <h4 className="text-sm font-bold text-gray-900 dark:text-white mb-2">
-                      Get Matched for the 2026–2027 Cohort
-                    </h4>
-                    {matchSubmitted ? (
-                      <div className="rounded-xl bg-green-50 p-4 text-xs font-semibold text-green-800 dark:bg-green-950/30 dark:text-green-300 border border-green-200 dark:border-green-800 flex items-center gap-2">
-                        <FaCircleCheck className="size-4 text-green-600" />
-                        Application received! A COMPASS Pathway Lead will
-                        contact you within 48 hours.
-                      </div>
-                    ) : (
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault()
-                          setMatchSubmitted(true)
-                        }}
-                        className="space-y-3"
-                      >
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                          <input
-                            type="text"
-                            required
-                            placeholder="Your Name"
-                            className="rounded-xl border border-gray-300 bg-gray-50 p-2.5 text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                          />
-                          <input
-                            type="email"
-                            required
-                            placeholder="Email Address"
-                            className="rounded-xl border border-gray-300 bg-gray-50 p-2.5 text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                          />
-                        </div>
-                        <div className="flex gap-2">
-                          <select className="flex-1 rounded-xl border border-gray-300 bg-gray-50 p-2.5 text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-white">
-                            <option>Goal: Seeking Job / Apprenticeship</option>
-                            <option>Goal: Seeking 1-on-1 Mentorship</option>
-                            <option>Goal: Volunteer as Mentor</option>
-                          </select>
-                          <button
-                            type="submit"
-                            className="rounded-xl bg-primary px-5 py-2.5 text-xs font-bold text-gray-950 hover:bg-primary-400 transition-colors shadow"
-                          >
-                            Submit Application
-                          </button>
-                        </div>
-                      </form>
+                        {cta}
+                      </a>
                     )}
-                  </div>
-                </div>
-
-                {/* Outcome Proof & Ecosystem Highlights */}
-                <div className="lg:col-span-5 rounded-3xl border border-gray-200 bg-gradient-to-br from-gray-900 to-gray-950 p-8 text-white shadow-xl">
-                  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/20 px-3 py-1 text-xs font-bold text-primary">
-                    <FaHandshake className="size-3.5" /> Verified Hires & Impact
-                  </div>
-                  <h3 className="text-xl font-bold font-orbitron mb-3">
-                    Navigators Are Getting Hired
-                  </h3>
-                  <p className="text-xs text-gray-300 leading-relaxed mb-6">
-                    Our corporate partners don&apos;t just sponsor events — they
-                    hire the talent they meet on our platform.
-                  </p>
-
-                  <div className="space-y-4">
-                    <div className="rounded-xl bg-white/5 p-4 border border-white/10">
-                      <span className="text-xs font-bold text-primary">
-                        DTE Energy
-                      </span>
-                      <p className="text-xs font-medium text-white">
-                        Co-Op Placement (2+ Semesters)
-                      </p>
-                      <p className="text-[11px] text-gray-400 mt-1">
-                        Hired after connecting at a 2025 Innovation Summit.
-                      </p>
-                    </div>
-
-                    <div className="rounded-xl bg-white/5 p-4 border border-white/10">
-                      <span className="text-xs font-bold text-primary">
-                        Little Caesars
-                      </span>
-                      <p className="text-xs font-medium text-white">
-                        Software Engineer (Full-Time)
-                      </p>
-                      <p className="text-[11px] text-gray-400 mt-1">
-                        Hired directly after portfolio review session.
-                      </p>
-                    </div>
-
-                    <div className="rounded-xl bg-white/5 p-4 border border-white/10">
-                      <span className="text-xs font-bold text-primary">
-                        IBM
-                      </span>
-                      <p className="text-xs font-medium text-white">
-                        Product Manager (Full-Time)
-                      </p>
-                      <p className="text-[11px] text-gray-400 mt-1">
-                        Built network through COMPASS, WTM & GDG Detroit.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-white/10 text-center">
-                    <Link
-                      to="/impact"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline"
-                    >
-                      Read Full 2023–2026 Impact Report{' '}
-                      <FaArrowRight className="size-3" />
-                    </Link>
-                  </div>
-                </div>
+                  </li>
+                ))}
+              </ul>
+              <div className="lg:col-span-6">
+                <InvolvementForm />
               </div>
-            </section>
-          )}
+            </div>
+          </section>
+
+          <section
+            id="careers"
+            aria-labelledby="careers-title"
+            className="scroll-mt-24"
+          >
+            <SectionHeader
+              id="careers"
+              eyebrow="Careers"
+              title="Openings from our partners"
+            >
+              Partners who share their openings with our community.
+            </SectionHeader>
+            <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {jobBoardData.map((job) => (
+                <li key={job.id}>
+                  <a
+                    href={job.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-full flex-col items-center gap-3 rounded-2xl border border-gray-200 bg-white p-5 text-center transition-colors hover:border-devfest-blue-ink dark:border-gray-800 dark:bg-gray-900"
+                  >
+                    <img
+                      src={job.logo}
+                      alt=""
+                      loading="lazy"
+                      className="h-12 w-full object-contain"
+                    />
+                    <span className="text-sm font-bold text-gray-900 dark:text-white">
+                      {job.name}
+                    </span>
+                    <span className="text-xs text-gray-600 dark:text-gray-300">
+                      View openings
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 text-center">
+              <Link
+                to="/careers-hub"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-devfest-blue-ink hover:underline dark:text-devfest-ht-blue"
+              >
+                Explore the Careers Hub{' '}
+                <FaArrowRight className="size-3" aria-hidden="true" />
+              </Link>
+            </div>
+          </section>
         </div>
       </div>
-    </PageLayout>
+    </SiteLayout>
   )
 }
