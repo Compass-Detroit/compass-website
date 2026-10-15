@@ -69,7 +69,7 @@ export default function TeamMemberCard({
         ? member.role
         : member.organization || member.university
     return (
-      <article className="group rounded-xl border border-surface bg-surface-card p-4 transition-colors hover:border-primary/30">
+      <article className="group min-w-0 rounded-xl border border-surface bg-surface-card p-4 transition-colors hover:border-primary/30">
         <div className="flex items-center gap-3">
           {member.avatar ? (
             <img
@@ -116,7 +116,7 @@ export default function TeamMemberCard({
   ].filter(Boolean)
 
   return (
-    <article className="group relative flex flex-col rounded-2xl border border-surface bg-surface-card p-2 transition-colors duration-300 hover:border-primary/35 focus-within:border-primary/35">
+    <article className="group relative flex min-w-0 flex-col rounded-2xl border border-surface bg-surface-card p-2 transition-colors duration-300 hover:border-primary/35 focus-within:border-primary/35">
       <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-surface-elevated">
         {member.avatar ? (
           <img
