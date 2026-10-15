@@ -15,6 +15,7 @@ import FirstVisitGuide from '@/components/FirstVisitGuide'
 import CommunityVibes from '@/components/CommunityVibes'
 import EventSpotlightSection from '@/components/events/EventSpotlightSection'
 import DevFestHero from '@/components/events/DevFestHero'
+import DevFestPortal from '@/components/events/DevFestPortal'
 import useCountUp from '@/hooks/useCountUp'
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
 import styles from './HomePage.module.css'
@@ -170,7 +171,7 @@ const allEvents = [
     name: 'Michigan DevFest 2026',
     date: 'November 13–14, 2026',
     endDate: '2026-11-14',
-    location: 'Little Caesars HQ',
+    location: 'Hollywood Casino at Greektown',
     type: 'Industry Event',
   },
 ]
@@ -573,8 +574,9 @@ export default function HomePage() {
 
   return (
     <SiteLayout>
-      {/* Lead hero — Michigan DevFest '26 registration & call for speakers */}
+      {/* Lead hero — Michigan DevFest '26 tickets */}
       <DevFestHero />
+      <DevFestPortal />
 
       {/* Mission hero with animated compass */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[var(--surface)] via-[var(--surface-elevated)] to-[var(--surface)] border-b border-[var(--border)]">
