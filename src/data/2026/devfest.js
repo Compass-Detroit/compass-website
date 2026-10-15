@@ -9,10 +9,29 @@ export const DEVFEST_2026 = {
   // Kickoff for the countdown; Detroit is on EST (UTC-5) in November
   startsAt: '2026-11-13T00:00:00-05:00',
   endDate: '2026-11-14',
-  venue: 'Little Caesars HQ',
-  address: '2125 Woodward Ave, Detroit, MI 48201',
-  registerUrl: 'https://www.midevfest.com/',
-  cfsUrl: 'https://bit.ly/compass-speakers-26',
+  venue: 'Hollywood Casino at Greektown',
+  address: '1200 Saint Antoine St, Detroit, MI 48226',
+  registerUrl:
+    'https://gdg.community.dev/events/details/google-gdg-detroit-presents-michigan-devfest-ai-hackathon-2026/',
+  siteUrl: 'https://www.midevfest.com/',
+  // Registrations through this date (inclusive) get a DevFest T-shirt
+  shirtDeadline: '2026-10-30T23:59:59-04:00',
+  shirtDeadlineLabel: 'October 30',
+  // Check-in is at the conference center entrance, not the hotel address
+  checkIn:
+    'Check-in at the Conference Center, 555 E. Lafayette St · doors open 8:00 AM',
+  parking: [
+    {
+      name: 'Greektown Self-Park Garage',
+      detail:
+        '1211 Crysler Dr. Enter from the I-375 Lafayette ramp; pay by card at the kiosk.',
+    },
+    {
+      name: 'MGM Grand Garage (free)',
+      detail: 'Free parking at MGM Grand Detroit, across town from Greektown.',
+    },
+  ],
+  comingSoon: ['Speaker lineup', 'Full schedule', 'Session tracks'],
   days: [
     {
       date: 'Fri · Nov 13',
@@ -32,28 +51,15 @@ export const DEVFEST_2026 = {
   ],
   logoWhite: `${ASSETS}/midevfest-logo-white.svg`,
   logoBlack: `${ASSETS}/midevfest-logo-black.svg`,
-  flyers: [
-    {
-      id: 'event',
-      title: 'Michigan DevFest ’26 event flyer',
-      alt: 'Michigan DevFest ’26 flyer: Tech Conference plus AI Hackathon, November 13–14 at Little Caesars HQ, 2125 Woodward Ave, Detroit. The 12th annual Michigan DevFest, powered by Compass Detroit and Little Caesars HQ.',
-      src: `${ASSETS}/midevfest26-event-flyer-640.webp`,
-      srcSet: `${ASSETS}/midevfest26-event-flyer-640.webp 640w, ${ASSETS}/midevfest26-event-flyer-898.webp 898w`,
-      full: `${ASSETS}/midevfest26-event-flyer.png`,
-      width: 898,
-      height: 1250,
-    },
-    {
-      id: 'cfs',
-      title: 'Michigan DevFest 2026 call for speakers flyer',
-      alt: 'Michigan DevFest 2026 Call for Speakers flyer: venue Little Caesars HQ, 13–14 November 2026, with a QR code to midevfest.com. Presented by Compass Detroit and GDG Detroit.',
-      src: `${ASSETS}/midevfest26-call-for-speakers-flyer-640.webp`,
-      srcSet: `${ASSETS}/midevfest26-call-for-speakers-flyer-640.webp 640w, ${ASSETS}/midevfest26-call-for-speakers-flyer-1200.webp 1200w`,
-      full: `${ASSETS}/midevfest26-call-for-speakers-flyer.png`,
-      width: 1545,
-      height: 1999,
-    },
-  ],
+  flyer: {
+    title: 'Michigan DevFest ’26 event flyer',
+    alt: 'Michigan DevFest ’26 flyer: Tech Conference plus AI Hackathon, November 13–14 at Hollywood Casino Hotel, Greektown, 1200 Saint Antoine Street, Detroit. The 12th annual Michigan DevFest Conference, powered by Google and Compass Detroit.',
+    src: `${ASSETS}/midevfest26-event-flyer-640.webp`,
+    srcSet: `${ASSETS}/midevfest26-event-flyer-640.webp 640w, ${ASSETS}/midevfest26-event-flyer-898.webp 898w`,
+    full: `${ASSETS}/midevfest26-event-flyer.png`,
+    width: 898,
+    height: 1250,
+  },
 }
 
 // All-day Google Calendar link (dates end is exclusive)
