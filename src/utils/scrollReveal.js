@@ -32,7 +32,7 @@ export function initScrollReveal(root = document.body) {
             io.unobserve(entry.target)
           }
         },
-        { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+        { threshold: 0, rootMargin: '0px 0px -60px 0px' }
       )
 
   const track = (node) => {
