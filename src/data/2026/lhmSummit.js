@@ -8,6 +8,7 @@
  */
 import speakersSnapshot from './lhm/speakers.json'
 import partnersSnapshot from './lhm/partners.json'
+import JordanMazaira from '@/data/2026/assets/images/speakers/jordan_mazaira.webp'
 
 export const LHM_EVENT = {
   slug: 'lhm-summit-2026',
@@ -64,10 +65,11 @@ const PANEL_MODERATOR = 'Cindy Cruz Rodriguez'
 const JORDAN_MAZAIRA = {
   id: 'jordan-mazaira',
   name: 'Jordan Mazaira',
-  avatar: null,
-  bio: 'Jordan Mazaira is Director of Community Engagement with SHPE Detroit and co-directs its Future Engineers program, running STEAM workshops that have introduced 500+ students and families to careers in STEM.',
-  organization: 'SHPE Detroit',
-  position: 'Director of Community Engagement',
+  avatar: JordanMazaira,
+  bio: 'Jordan Mazaira is a Systems and Controls Engineer at Ford Motor Company. He is also Director of Community Engagement with SHPE Detroit and co-directs its Future Engineers program, running STEAM workshops that have introduced 500+ students and families to careers in STEM.',
+  organization: 'Ford Motor Company · SHPE Detroit',
+  position:
+    'Systems and Controls Engineer, Ford · Director of Community Engagement, SHPE Detroit',
   isWTM: false,
   isGDE: false,
   isModerator: false,
@@ -108,7 +110,11 @@ const panel = (session) => {
     participants: [
       { name: moderator.name, avatar: moderator.avatar, isModerator: true },
       ...session.participants.map((p) => ({ ...p, isModerator: false })),
-      { name: JORDAN_MAZAIRA.name, avatar: null, isModerator: false },
+      {
+        name: JORDAN_MAZAIRA.name,
+        avatar: JORDAN_MAZAIRA.avatar,
+        isModerator: false,
+      },
     ].map((p, sortOrder) => ({ ...p, sortOrder })),
   }
 }

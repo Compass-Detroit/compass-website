@@ -66,10 +66,6 @@ const codeLines = [
   { indent: 0, tokens: [{ text: '}', color: 'text-gray-400' }] },
 ]
 
-function isLead(member) {
-  return member.name === 'Greg Miller'
-}
-
 function GitHubIcon({ className = 'size-5' }) {
   return (
     <svg
@@ -222,11 +218,7 @@ export default function DevTeamShowcase() {
         {/* Dev team grid */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {devTeam.map((member) => (
-            <TeamMemberCard
-              key={member.id}
-              member={member}
-              badges={isLead(member) ? ['Lead'] : []}
-            />
+            <TeamMemberCard key={member.id} member={member} />
           ))}
         </div>
 

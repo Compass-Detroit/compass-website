@@ -1,17 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
+import DevFestShare from '@/components/events/DevFestShare'
+import { FaShirt } from 'react-icons/fa6'
 import { DEVFEST_2026, devfestCalendarUrl } from '@/data/2026/devfest'
 import styles from './DevFestHero.module.css'
 
 const KICKOFF = new Date(DEVFEST_2026.startsAt).getTime()
+const SHIRT_DEADLINE = new Date(DEVFEST_2026.shirtDeadline).getTime()
+
+const DIRECTIONS_URL = `https://www.google.com/maps/search/?${new URLSearchParams(
+  { api: '1', query: `${DEVFEST_2026.venue}, ${DEVFEST_2026.address}` }
+)}`
 
 const TICKER = [
   'AI Hackathon · Nov 13',
   'Conference · Nov 14',
-  'Call for Speakers open',
-  'Little Caesars HQ · Detroit',
+  'Tickets on sale',
+  'Hollywood Casino · Greektown',
   '12th annual Michigan DevFest',
+  'Powered by Google + Compass Detroit',
 ]
 
 function useCountdown(target) {
@@ -72,8 +80,18 @@ function FlyerDialog({ flyer, onClose }) {
   useEffect(() => {
     if (!flyer) return
     const onKey = (e) => e.key === 'Escape' && onClose()
+    // Backdrop clicks close it as a mouse/touch convenience; keyboard users
+    // already have Esc and the Close button. The flyer and actions don't close it.
+    const onClick = (e) => {
+      if (!e.target.closest('img, a, button')) onClose()
+    }
+    const dialog = ref.current
     document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
+    dialog.addEventListener('click', onClick)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      dialog.removeEventListener('click', onClick)
+    }
   }, [flyer, onClose])
 
   return (
@@ -121,9 +139,29 @@ FlyerDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
 }
 
+// Follows the pointer with a few degrees of tilt; CSS drops it for reduced motion
+function tiltFlyer(e) {
+  if (e.pointerType !== 'mouse') return
+  const el = e.currentTarget
+  const r = el.getBoundingClientRect()
+  el.style.setProperty(
+    '--tilt-x',
+    `${((e.clientX - r.left) / r.width - 0.5) * 10}deg`
+  )
+  el.style.setProperty(
+    '--tilt-y',
+    `${((e.clientY - r.top) / r.height - 0.5) * -10}deg`
+  )
+}
+
+function resetFlyer(e) {
+  e.currentTarget.style.removeProperty('--tilt-x')
+  e.currentTarget.style.removeProperty('--tilt-y')
+}
+
 export default function DevFestHero() {
   const [openFlyer, setOpenFlyer] = useState(null)
-  const { days, stats, flyers } = DEVFEST_2026
+  const { days, stats, flyer } = DEVFEST_2026
 
   return (
     <section
@@ -142,7 +180,7 @@ export default function DevFestHero() {
         <div>
           <p className={styles.eyebrow}>
             <span className={styles.liveDot} aria-hidden="true" />
-            Registration + Call for Speakers open
+            Tickets on sale now
           </p>
 
           <p className={styles.kicker}>
@@ -166,7 +204,8 @@ export default function DevFestHero() {
           <p className={styles.lede}>
             Michigan&apos;s flagship developer festival returns for year 12.
             Build with AI on Friday, level up on Saturday, and meet 300+
-            developers, designers and tech leaders in the heart of Detroit.
+            developers, designers and tech leaders in Greektown, downtown
+            Detroit.
           </p>
 
           <div className={styles.ctas}>
@@ -176,28 +215,36 @@ export default function DevFestHero() {
               rel="noopener noreferrer"
               className={`group ${styles.ctaPrimary}`}
             >
-              Register now
+              Get tickets
               <span className="inline-block transition-transform group-hover:translate-x-0.5">
                 <ArrowRightIcon />
               </span>
             </a>
             <a
-              href={DEVFEST_2026.cfsUrl}
+              href={devfestCalendarUrl}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.ctaSecondary}
             >
-              Submit a talk
+              Add to calendar
             </a>
             <a
-              href={devfestCalendarUrl}
+              href={DIRECTIONS_URL}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.ctaGhost}
             >
-              Add to calendar
+              Get directions
             </a>
           </div>
+
+          {Date.now() <= SHIRT_DEADLINE && (
+            <p className={styles.perk}>
+              <FaShirt className={styles.perkIcon} aria-hidden="true" />
+              Register by <strong>{DEVFEST_2026.shirtDeadlineLabel}</strong> to
+              get a free DevFest T-shirt
+            </p>
+          )}
 
           <ol className={styles.days}>
             {days.map((d, i) => (
@@ -226,31 +273,59 @@ export default function DevFestHero() {
         </div>
 
         <div className={styles.flyerStage}>
-          <ul className={styles.flyers} aria-label="Event flyers">
-            {flyers.map((f, i) => (
-              <li key={f.id} className={styles.flyerItem} data-index={i}>
-                <button
-                  type="button"
-                  className={styles.flyerButton}
-                  onClick={() => setOpenFlyer(f)}
-                  aria-label={`View ${f.title}`}
-                >
-                  <img
-                    src={f.src}
-                    srcSet={f.srcSet}
-                    sizes="(min-width: 1024px) 320px, 45vw"
-                    alt=""
-                    width={f.width}
-                    height={f.height}
-                    className={styles.flyerImage}
+          <div
+            className={styles.flyerFrame}
+            onPointerMove={tiltFlyer}
+            onPointerLeave={resetFlyer}
+          >
+            <div className={styles.flyerGlow} aria-hidden="true" />
+            <button
+              type="button"
+              className={styles.flyerButton}
+              onClick={() => setOpenFlyer(flyer)}
+              aria-label={`View ${flyer.title}`}
+            >
+              <img
+                src={flyer.src}
+                srcSet={flyer.srcSet}
+                sizes="(min-width: 1024px) 400px, 80vw"
+                alt=""
+                width={flyer.width}
+                height={flyer.height}
+                className={styles.flyerImage}
+              />
+            </button>
+            <a
+              href={DEVFEST_2026.registerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.stamp}
+            >
+              <svg
+                viewBox="0 0 120 120"
+                aria-hidden="true"
+                className={styles.stampRing}
+              >
+                <defs>
+                  <path
+                    id="df-stamp-path"
+                    d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"
                   />
-                </button>
-              </li>
-            ))}
-          </ul>
-          <p className={styles.flyerHint}>
-            Tap a flyer to view full size · share it with your crew
-          </p>
+                </defs>
+                <text>
+                  <textPath href="#df-stamp-path">
+                    Get tickets ✦ Nov 13–14 ✦ Greektown ✦
+                  </textPath>
+                </text>
+              </svg>
+              <span className={styles.stampCore}>
+                <ArrowRightIcon size={22} />
+              </span>
+              <span className="sr-only">Get Michigan DevFest tickets</span>
+            </a>
+          </div>
+          <p className={styles.flyerHint}>Tap the flyer to view full size</p>
+          <DevFestShare className="mt-3" />
           <p className={styles.presented}>
             Presented by <strong>Compass Detroit</strong> ×{' '}
             <strong>GDG Detroit</strong>

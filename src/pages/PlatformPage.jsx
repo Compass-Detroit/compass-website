@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import SiteLayout from '@/layouts/SiteLayout'
@@ -6,6 +6,8 @@ import { CONNECTORS } from '@/services/connectors'
 import { groq, LHM_LIVE_QUERY, sanityImage } from '@/services/sanity'
 import { useResource } from '@/hooks/useResource'
 import { LHM_SESSIONS } from '@/data/2026/lhmSummit'
+import speakersExport from '@/data/2026/lhm/speakers.json'
+import { DEVFEST_2026 } from '@/data/2026/devfest'
 import { getAllSpeakers } from '@/utils/speakerRegistry'
 
 const STATUS = {
@@ -69,7 +71,14 @@ function useConnectorStatuses() {
       connector
         .probe(controller.signal)
         .then((result) => ({ status: 'live', result }))
-        .catch((error) => ({ status: 'offline', result: error.message }))
+        .catch((error) => {
+          console.warn(`${connector.name} probe failed:`, error)
+          return {
+            status: 'offline',
+            result:
+              'Couldn’t reach this source just now. Pages fall back to their bundled copy.',
+          }
+        })
         .then((next) => {
           if (!controller.signal.aborted)
             setStatuses((prev) => ({ ...prev, [connector.id]: next }))
@@ -86,7 +95,7 @@ function ConnectorCard({ connector, state }) {
   return (
     <li className="flex h-full flex-col rounded-2xl border border-surface bg-surface-card p-5 transition-colors hover:border-primary/30">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+        <span className="text-xs font-bold uppercase tracking-wider text-theme-muted">
           {connector.kind}
         </span>
         <span
@@ -100,15 +109,15 @@ function ConnectorCard({ connector, state }) {
         </span>
       </div>
       <h3 className="text-lg font-bold text-theme-primary">{connector.name}</h3>
-      <p className="mt-1 text-sm text-gray-400">{connector.detail}</p>
+      <p className="mt-1 text-sm text-theme-secondary">{connector.detail}</p>
       {state.result && (
         <p className="mt-3 font-mono text-xs tabular-nums text-theme-secondary">
           {state.result}
         </p>
       )}
       {state.status !== 'live' && connector.next && (
-        <p className="mt-3 text-xs text-gray-500">
-          <span className="font-semibold text-gray-400">Next:</span>{' '}
+        <p className="mt-3 text-xs text-theme-muted">
+          <span className="font-semibold text-theme-secondary">Next:</span>{' '}
           {connector.next}
         </p>
       )}
@@ -116,7 +125,7 @@ function ConnectorCard({ connector, state }) {
         {connector.feeds.map((feed) => (
           <li
             key={feed}
-            className="rounded-md bg-surface-elevated px-2 py-0.5 text-[11px] text-gray-400"
+            className="rounded-md bg-surface-elevated px-2 py-0.5 text-xs text-theme-secondary"
           >
             {feed}
           </li>
@@ -133,6 +142,32 @@ ConnectorCard.propTypes = {
     result: PropTypes.string,
   }).isRequired,
 }
+
+// Drift is measured against the raw Sanity export, not LHM_SESSIONS, which
+// carries deliberate post-event program edits (see lhmSummit.js)
+const exportTitles = new Set(
+  speakersExport.map((row) => row.session?.title).filter(Boolean)
+)
+
+// Sanity sends ISO datetimes; the snapshot already holds "HH:mm"
+const formatTime = (value) => {
+  if (!value || /^\d{1,2}:\d{2}$/.test(value)) return value
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'America/Detroit',
+  })
+}
+
+const initials = (name = '') =>
+  name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase()
 
 const snapshotSessions = LHM_SESSIONS.map((s) => ({
   title: s.title,
@@ -151,12 +186,13 @@ function LiveContentPreview() {
     { sessions: snapshotSessions, ms: null }
   )
 
-  const snapshotTitles = new Set(snapshotSessions.map((s) => s.title))
-  const drift =
-    status === 'live'
-      ? data.sessions.filter((s) => !snapshotTitles.has(s.title)).length +
-        Math.max(0, snapshotSessions.length - data.sessions.length)
-      : 0
+  let drift = 0
+  if (status === 'live') {
+    const liveTitles = new Set(data.sessions.map((s) => s.title))
+    drift =
+      [...liveTitles].filter((t) => !exportTitles.has(t)).length +
+      [...exportTitles].filter((t) => !liveTitles.has(t)).length
+  }
 
   return (
     <div className="min-w-0 rounded-2xl border border-surface bg-surface-card">
@@ -165,12 +201,14 @@ function LiveContentPreview() {
           <h3 className="font-bold text-theme-primary">
             LHM Summit 2026 · sessions
           </h3>
-          <p className="text-xs text-gray-400" role="status">
+          <p className="text-xs text-theme-secondary" role="status">
             {status === 'loading' && 'Querying Sanity…'}
             {status === 'live' &&
               `Live from Sanity in ${data.ms}ms — ${
                 drift
-                  ? `${drift} change(s) since the site snapshot`
+                  ? `${drift} session change${
+                      drift === 1 ? '' : 's'
+                    } since the last export`
                   : 'snapshot in sync'
               }`}
             {status === 'fallback' &&
@@ -188,26 +226,41 @@ function LiveContentPreview() {
       </div>
       <ol className="divide-y divide-surface">
         {data.sessions.map((session) => (
-          <li key={session.title} className="flex items-center gap-4 p-4">
-            <span className="w-12 shrink-0 font-mono text-xs tabular-nums text-primary">
-              {session.startTime}
+          <li
+            key={session._id ?? `${session.startTime}-${session.title}`}
+            className="flex items-center gap-4 p-4"
+          >
+            <span className="w-16 shrink-0 font-mono text-xs tabular-nums text-primary">
+              {formatTime(session.startTime)}
             </span>
             <span className="min-w-0 grow text-sm text-theme-secondary">
               {session.title}
             </span>
             <span className="flex shrink-0 -space-x-2">
-              {session.speakers?.slice(0, 3).map((speaker) => (
-                <img
-                  key={speaker.name}
-                  src={sanityImage(speaker.avatar, { w: 64, h: 64 })}
-                  alt={speaker.name}
-                  title={speaker.name}
-                  width="28"
-                  height="28"
-                  loading="lazy"
-                  className="size-7 rounded-full border-2 border-[var(--surface-card)] object-cover"
-                />
-              ))}
+              {session.speakers?.slice(0, 3).map((speaker) =>
+                speaker.avatar ? (
+                  <img
+                    key={speaker.name}
+                    src={sanityImage(speaker.avatar, { w: 64, h: 64 })}
+                    alt={speaker.name}
+                    title={speaker.name}
+                    width="28"
+                    height="28"
+                    loading="lazy"
+                    className="size-7 rounded-full border-2 border-[var(--surface-card)] object-cover"
+                  />
+                ) : (
+                  <span
+                    key={speaker.name}
+                    role="img"
+                    aria-label={speaker.name}
+                    title={speaker.name}
+                    className="grid size-7 place-items-center rounded-full border-2 border-[var(--surface-card)] bg-surface-elevated text-[0.625rem] font-bold text-theme-primary"
+                  >
+                    {initials(speaker.name)}
+                  </span>
+                )
+              )}
             </span>
           </li>
         ))}
@@ -216,21 +269,18 @@ function LiveContentPreview() {
   )
 }
 
-function JourneyPreview() {
-  const veterans = useMemo(
-    () =>
-      getAllSpeakers()
-        .filter((s) => s.yearsActive.length > 1)
-        .sort(
-          (a, b) =>
-            b.yearsActive.length - a.yearsActive.length ||
-            b.sessions.length - a.sessions.length
-        ),
-    []
+// Speakers active in more than one year, most seasoned first
+const veterans = getAllSpeakers()
+  .filter((s) => s.yearsActive.length > 1)
+  .sort(
+    (a, b) =>
+      b.yearsActive.length - a.yearsActive.length ||
+      b.sessions.length - a.sessions.length
   )
-  const [slug, setSlug] = useState(() => veterans[0]?.slug ?? '')
+
+function JourneyPreview() {
+  const [slug, setSlug] = useState(() => veterans[0].slug)
   const person = veterans.find((s) => s.slug === slug)
-  if (!person) return null
 
   const byYear = person.yearsActive
     .map((year) => ({
@@ -245,7 +295,7 @@ function JourneyPreview() {
       <div className="rounded-2xl border border-surface bg-surface-card p-6">
         <label
           htmlFor="journey-speaker"
-          className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-400"
+          className="mb-2 block text-xs font-bold uppercase tracking-wider text-theme-secondary"
         >
           Preview as
         </label>
@@ -275,7 +325,7 @@ function JourneyPreview() {
             <div className="text-lg font-bold text-theme-primary">
               {person.name}
             </div>
-            <div className="text-sm text-gray-400">
+            <div className="text-sm text-theme-secondary">
               {[person.position, person.organization]
                 .filter(Boolean)
                 .join(' · ')}
@@ -284,7 +334,7 @@ function JourneyPreview() {
         </div>
         <dl className="mt-6 grid grid-cols-3 gap-2 border-t border-surface pt-4 text-center">
           <div>
-            <dt className="text-[10px] font-bold uppercase text-gray-500">
+            <dt className="text-xs font-bold uppercase text-theme-muted">
               Years
             </dt>
             <dd className="text-xl font-black tabular-nums text-theme-primary">
@@ -292,7 +342,7 @@ function JourneyPreview() {
             </dd>
           </div>
           <div className="border-x border-surface">
-            <dt className="text-[10px] font-bold uppercase text-gray-500">
+            <dt className="text-xs font-bold uppercase text-theme-muted">
               Talks
             </dt>
             <dd className="text-xl font-black tabular-nums text-theme-primary">
@@ -300,7 +350,7 @@ function JourneyPreview() {
             </dd>
           </div>
           <div>
-            <dt className="text-[10px] font-bold uppercase text-gray-500">
+            <dt className="text-xs font-bold uppercase text-theme-muted">
               Topics
             </dt>
             <dd className="text-xl font-black tabular-nums text-theme-primary">
@@ -314,8 +364,8 @@ function JourneyPreview() {
           </div>
           <p className="mt-1 text-sm text-theme-secondary">
             {spokeThisYear
-              ? 'Michigan DevFest 2026 in November — bring a follow-up to this year’s talk.'
-              : 'The DevFest 2026 call for speakers is open — you haven’t spoken this year yet.'}
+              ? `You spoke this year. Catch up with fellow speakers at ${DEVFEST_2026.name}, ${DEVFEST_2026.shortDateLabel} at ${DEVFEST_2026.venue}.`
+              : `${DEVFEST_2026.name} is ${DEVFEST_2026.shortDateLabel} at ${DEVFEST_2026.venue}. Grab a ticket and come connect.`}
           </p>
         </div>
         <Link
@@ -342,10 +392,8 @@ function JourneyPreview() {
                   <div className="text-sm font-semibold text-theme-secondary">
                     {session.title}
                   </div>
-                  <div className="mt-0.5 text-xs text-gray-500">
-                    {[session.event ?? 'Michigan DevFest', session.track]
-                      .filter(Boolean)
-                      .join(' · ')}
+                  <div className="mt-0.5 text-xs text-theme-muted">
+                    {[session.event, session.track].filter(Boolean).join(' · ')}
                   </div>
                 </li>
               ))}
@@ -376,13 +424,13 @@ export default function PlatformPage() {
                 Compass experience
               </span>
             </h1>
-            <p className="mt-6 max-w-2xl text-lg text-gray-400">
+            <p className="mt-6 max-w-2xl text-lg text-theme-secondary">
               Each summit site already publishes to its own Sanity project. This
               page connects to them live, shows what is wired up today, and
               previews what members get once everything flows through one layer.
             </p>
             <p
-              className="mt-4 text-sm tabular-nums text-gray-500"
+              className="mt-4 text-sm tabular-nums text-theme-muted"
               role="status"
             >
               {live} of {CONNECTORS.length} connectors live
@@ -422,7 +470,7 @@ export default function PlatformPage() {
               >
                 Live content, static safety net
               </h2>
-              <p className="mt-3 text-gray-400">
+              <p className="mt-3 text-theme-secondary">
                 Pages render from a bundled snapshot first, then reconcile with
                 the CMS. If Sanity is down the site still works; when organizers
                 edit a session, the change shows up here without a deploy.
@@ -440,22 +488,24 @@ export default function PlatformPage() {
           </div>
         </section>
 
-        <section aria-labelledby="journey-title" className="bg-surface py-12">
-          <div className="mx-auto max-w-[1200px] px-6">
-            <h2
-              id="journey-title"
-              className="text-2xl font-bold text-theme-primary"
-            >
-              Navigator journeys
-            </h2>
-            <p className="mb-8 mt-3 max-w-2xl text-gray-400">
-              Joining speaker data across DevFest and every summit gives each
-              person a history and a next step. With member sign-in, the same
-              view covers attendees, volunteers and mentors.
-            </p>
-            <JourneyPreview />
-          </div>
-        </section>
+        {veterans.length > 0 && (
+          <section aria-labelledby="journey-title" className="bg-surface py-12">
+            <div className="mx-auto max-w-[1200px] px-6">
+              <h2
+                id="journey-title"
+                className="text-2xl font-bold text-theme-primary"
+              >
+                Navigator journeys
+              </h2>
+              <p className="mb-8 mt-3 max-w-2xl text-theme-secondary">
+                Joining speaker data across DevFest and every summit gives each
+                person a history and a next step. With member sign-in, the same
+                view covers attendees, volunteers and mentors.
+              </p>
+              <JourneyPreview />
+            </div>
+          </section>
+        )}
 
         <section
           aria-labelledby="arch-title"
@@ -482,7 +532,7 @@ export default function PlatformPage() {
                   </h3>
                   <ul className="space-y-2">
                     {layer.items.map((item) => (
-                      <li key={item} className="text-sm text-gray-400">
+                      <li key={item} className="text-sm text-theme-secondary">
                         {item}
                       </li>
                     ))}

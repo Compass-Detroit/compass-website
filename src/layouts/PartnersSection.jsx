@@ -3,8 +3,23 @@ import PropTypes from 'prop-types'
 import Kite from '@/assets/images/icn-kite.png'
 import CTAButton from '@/components/ui/CTAButton'
 
+const TIER_LABELS = {
+  diamond: 'Diamond',
+  platinum: 'Platinum',
+  gold: 'Gold',
+}
+
+const tierHeading = (tier, partners = []) =>
+  `${TIER_LABELS[tier]} Sponsor${partners.length === 1 ? '' : 's'}`
+
 const PartnersSection = ({ partnersData = {}, year }) => {
   const isCurrentYear = year === new Date().getFullYear()
+  // Top tier gets its own row; the next two sit side by side
+  const [leadTier, ...pairedTiers] = partnersData.tierOrder ?? [
+    'platinum',
+    'diamond',
+    'gold',
+  ]
 
   // Check if there's any partner data
   const hasPartners =
@@ -102,34 +117,39 @@ const PartnersSection = ({ partnersData = {}, year }) => {
         {hasPartners ? (
           <>
             {renderPartnerTier(
-              'Platinum Sponsor',
-              partnersData.platinum,
+              tierHeading(leadTier, partnersData[leadTier]),
+              partnersData[leadTier],
               false,
               false,
               true
             )}
 
-            {/* Diamond and Gold sponsors side by side */}
+            {/* Second and third tiers side by side */}
 
             <div className="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-2">
               <div className="flex flex-col items-center">
                 {renderPartnerTier(
-                  'Diamond Sponsors',
-                  partnersData.diamond,
+                  tierHeading(pairedTiers[0], partnersData[pairedTiers[0]]),
+                  partnersData[pairedTiers[0]],
                   true
                 )}
               </div>
               <div className="flex flex-col items-center">
                 {renderPartnerTier(
-                  'Gold Sponsors',
-                  partnersData.gold,
+                  tierHeading(pairedTiers[1], partnersData[pairedTiers[1]]),
+                  partnersData[pairedTiers[1]],
                   false,
                   true
                 )}
               </div>
             </div>
 
-            {renderPartnerTier('Organizations', partnersData.organizations)}
+            {renderPartnerTier(
+              partnersData.organizationsLabel ?? 'Organizations',
+              partnersData.organizations
+            )}
+
+            {renderPartnerTier('Fuel Partners', partnersData.fuel)}
 
             <div className="col-span-1 my-8 flex flex-col items-center justify-center space-y-6 text-center text-lg leading-relaxed">
               <p className="text-gray-600">
@@ -197,6 +217,20 @@ PartnersSection.propTypes = {
         tier: PropTypes.string.isRequired,
       })
     ),
+    fuel: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        logo: PropTypes.string,
+        desc: PropTypes.string.isRequired,
+        url: PropTypes.string,
+        tier: PropTypes.string.isRequired,
+      })
+    ),
+    tierOrder: PropTypes.arrayOf(
+      PropTypes.oneOf(['diamond', 'platinum', 'gold'])
+    ),
+    organizationsLabel: PropTypes.string,
     organizations: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,

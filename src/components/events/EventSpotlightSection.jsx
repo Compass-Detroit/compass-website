@@ -10,7 +10,6 @@ import { sanityImage } from '@/services/sanity'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
 
 const devfestQr = '/assets/qr/devfest-qr.png'
-const devfestCfsQr = '/assets/qr/devfest-cfs-qr.png'
 
 export default function EventSpotlightSection() {
   const [activeModal, setActiveModal] = useState(null)
@@ -49,27 +48,10 @@ export default function EventSpotlightSection() {
             <div>
               <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <span className="rounded-full border border-blue-400/30 bg-blue-500/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-blue-300">
-                  Nov 13–14 · Little Caesars HQ
+                  Nov 13–14 · Hollywood Casino at Greektown
                 </span>
                 <span className="rounded-full border border-emerald-400/30 bg-emerald-500/20 px-3 py-1 text-[11px] font-bold text-emerald-300 motion-safe:animate-pulse">
-                  Registration Open
-                </span>
-              </div>
-              <div className="mb-4 flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#CD7F32]/50 bg-[#CD7F32]/15 px-3 py-1 text-[11px] font-bold text-[#FFD700]">
-                  <svg
-                    className="size-3"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                    <line x1="12" y1="19" x2="12" y2="23" />
-                    <line x1="8" y1="23" x2="16" y2="23" />
-                  </svg>
-                  Call for Speakers — Now Open!
+                  Tickets on Sale
                 </span>
               </div>
 
@@ -141,24 +123,8 @@ export default function EventSpotlightSection() {
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto flex-1 text-center rounded-xl bg-gradient-to-r from-[#1a73e8] to-[#CD7F32] px-6 py-3 text-sm font-bold text-white shadow-lg hover:from-blue-600 hover:to-[#b8732d] transition-all hover:scale-[1.02]"
               >
-                Register for DevFest 2026 →
+                Get DevFest 2026 Tickets →
               </a>
-              <button
-                onClick={() => setActiveModal('devfest-cfs')}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-[#CD7F32]/50 bg-[#CD7F32]/10 px-4 py-3 text-sm font-bold text-[#FFD700] hover:bg-[#CD7F32]/20 transition-all"
-              >
-                <svg
-                  className="size-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                </svg>
-                Submit to Speak
-              </button>
               <button
                 onClick={() => setActiveModal('devfest')}
                 className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-blue-400/40 bg-blue-500/10 px-4 py-3 text-sm font-bold text-blue-300 hover:bg-blue-500/20 transition-all"
@@ -278,17 +244,8 @@ export default function EventSpotlightSection() {
         onClose={() => setActiveModal(null)}
         eventName="Michigan DevFest 2026"
         qrImage={devfestQr}
-        qrLink={DEVFEST_2026.cfsUrl}
-        subtext="Scan to open the Michigan DevFest 2026 call for speakers — Nov 13 AI Hackathon, Nov 14 Conference at Little Caesars HQ."
-      />
-
-      <QRCodeModal
-        isOpen={activeModal === 'devfest-cfs'}
-        onClose={() => setActiveModal(null)}
-        eventName="DevFest 2026 — Call for Speakers"
-        qrImage={devfestCfsQr}
-        qrLink={DEVFEST_2026.cfsUrl}
-        subtext="Scan to submit your talk proposal for Michigan DevFest 2026. Tracks are still being shaped, so pitch the talk you want to give!"
+        qrLink={DEVFEST_2026.siteUrl}
+        subtext="Scan to open midevfest.com, the Michigan DevFest 2026 site, for the schedule, venue and travel details. Nov 13 AI Hackathon, Nov 14 Conference at Hollywood Casino at Greektown."
       />
     </section>
   )

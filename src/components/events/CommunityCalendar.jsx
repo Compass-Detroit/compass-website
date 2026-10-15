@@ -667,7 +667,7 @@ export default function CommunityCalendar() {
       {/* Calendar card */}
       <div className="overflow-hidden rounded-2xl border border-surface bg-surface-card">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-surface px-6 py-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-surface px-4 py-5 sm:px-6">
           <div>
             <h3 className="text-xl font-bold tracking-tight">
               {MONTHS[currentMonth]} {currentYear}
@@ -677,7 +677,7 @@ export default function CommunityCalendar() {
               month
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={goToToday}
               className="rounded-lg border border-surface px-3 py-1.5 text-xs font-semibold transition-colors hover:border-primary/40 hover:text-primary"
@@ -688,6 +688,7 @@ export default function CommunityCalendar() {
             <div className="flex items-center rounded-lg border border-surface">
               <button
                 onClick={() => setViewMode('calendar')}
+                aria-pressed={viewMode === 'calendar'}
                 className={`px-3 py-1.5 text-xs font-semibold transition-colors ${
                   viewMode === 'calendar'
                     ? 'bg-primary/10 text-primary'
@@ -698,6 +699,7 @@ export default function CommunityCalendar() {
               </button>
               <button
                 onClick={() => setViewMode('schedule')}
+                aria-pressed={viewMode === 'schedule'}
                 className={`px-3 py-1.5 text-xs font-semibold transition-colors ${
                   viewMode === 'schedule'
                     ? 'bg-primary/10 text-primary'

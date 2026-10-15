@@ -119,10 +119,11 @@ const allEvents = [
     date: 'November 13–14, 2026',
     endDate: '2026-11-14',
     month: 'NOV',
-    location: 'Little Caesars HQ, 2125 Woodward Ave, Detroit, MI',
+    location:
+      'Hollywood Casino at Greektown, 1200 Saint Antoine St, Detroit, MI',
     type: 'Industry Event',
     stages: ['engage', 'build', 'connect'],
-    statusBadge: 'Registration + Call for Speakers Open',
+    statusBadge: 'Tickets on Sale',
     url: 'https://www.midevfest.com/',
     desc: "Michigan's 12th annual flagship developer conference — 300+ attendees and 30+ speakers, tracks to be announced. AI Hackathon Nov 13, Conference Nov 14. Co-produced with GDG Detroit.",
     hasQr: true,

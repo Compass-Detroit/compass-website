@@ -1,4 +1,4 @@
-/* Michigan DevFest '26 hero — palette pulled from the event + CFS flyers.
+/* Michigan DevFest '26 hero — palette pulled from the event flyer.
    Always dark: this is a brand moment, not a themed surface. */
 .hero {
   --df-navy: #060b1d;
@@ -7,6 +7,7 @@
   --df-violet: #c4a5ff;
   --df-cyan: #7dd3fc;
   --df-gold: #fec405;
+  --df-sunset: #ff8a3d;
   --df-ink: #f8fafc;
   --df-muted: #b6c2d9;
   --df-line: rgba(255, 255, 255, 0.12);
@@ -53,7 +54,7 @@
   );
 }
 
-/* Oversized MIDF ring mark drifting behind the flyers */
+/* Oversized MIDF ring mark drifting behind the flyer */
 .ring {
   position: absolute;
   z-index: 1;
@@ -312,6 +313,30 @@
   color: var(--df-ink);
 }
 
+.perk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px dashed rgba(255, 138, 61, 0.55);
+  border-radius: 0.75rem;
+  background: rgba(255, 138, 61, 0.08);
+  color: var(--df-ink);
+  font-size: 0.9rem;
+}
+
+.perk strong {
+  color: var(--df-sunset);
+}
+
+.perkIcon {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--df-sunset);
+}
+
 .ctaPrimary:focus-visible,
 .ctaSecondary:focus-visible,
 .ctaGhost:focus-visible,
@@ -392,65 +417,113 @@
   line-height: 1;
 }
 
-/* ---------- Flyer fan ---------- */
+/* ---------- Flyer ---------- */
 .flyerStage {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.flyers {
+/* Perspective tilt driven by --tilt-x / --tilt-y from the pointer */
+.flyerFrame {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  width: 100%;
-  max-width: 34rem;
-  list-style: none;
-  padding: 0;
+  width: min(100%, 22rem);
+  perspective: 1200px;
+}
+
+.flyerFrame > .flyerButton {
+  transform: rotateY(var(--tilt-x, 0deg)) rotateX(var(--tilt-y, 0deg))
+    rotate(-2deg);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @media (min-width: 1024px) {
-  .flyers {
-    display: block;
-    height: 32rem;
+  .flyerFrame {
+    width: min(25rem, 88%);
   }
+}
 
-  .flyerItem {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    /* Scale with the column so the fan never spills into the copy */
-    width: min(18.5rem, 56%);
-    transition:
-      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-      z-index 0s 0.2s;
+/* Sunset bloom behind the flyer, matching its skyline glow */
+.flyerGlow {
+  position: absolute;
+  inset: 12% -10% -6%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+      50% 45% at 40% 70%,
+      rgba(255, 138, 61, 0.55),
+      transparent 70%
+    ),
+    radial-gradient(
+      45% 45% at 70% 35%,
+      rgba(10, 132, 255, 0.45),
+      transparent 70%
+    );
+  filter: blur(40px);
+  animation: df-breathe 6s ease-in-out infinite alternate;
+}
+
+@keyframes df-breathe {
+  to {
+    opacity: 0.65;
+    scale: 1.06;
   }
+}
 
-  .flyerItem[data-index='0'] {
-    z-index: 2;
-    transform: translate(-72%, -50%) rotate(-6deg);
-  }
+/* Spinning "Get tickets" stamp pinned to the flyer corner */
+.stamp {
+  position: absolute;
+  z-index: 2;
+  top: -1.75rem;
+  right: -1.75rem;
+  display: grid;
+  width: 7rem;
+  height: 7rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--df-gold);
+  color: var(--df-navy);
+  box-shadow: 0 18px 40px -12px rgba(254, 196, 5, 0.6);
+  transition: scale 0.25s ease;
+}
 
-  .flyerItem[data-index='1'] {
-    z-index: 1;
-    transform: translate(-22%, -46%) rotate(7deg);
-  }
+.stamp:hover {
+  scale: 1.06;
+}
 
-  .flyers:hover .flyerItem[data-index='0'] {
-    transform: translate(-86%, -52%) rotate(-9deg);
-  }
+.stamp:focus-visible {
+  outline: 3px solid var(--df-ink);
+  outline-offset: 3px;
+}
 
-  .flyers:hover .flyerItem[data-index='1'] {
-    transform: translate(-10%, -48%) rotate(10deg);
-  }
+.stampRing {
+  position: absolute;
+  inset: 0;
+  fill: currentColor;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: df-spin 18s linear infinite;
+}
 
-  .flyerItem:hover,
-  .flyerItem:focus-within {
-    z-index: 3;
-    transition:
-      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-      z-index 0s;
+.stampCore {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--df-navy);
+  color: var(--df-gold);
+  rotate: -45deg;
+}
+
+@media (max-width: 639px) {
+  .stamp {
+    top: -1.25rem;
+    right: -0.75rem;
+    width: 5.75rem;
+    height: 5.75rem;
   }
 }
 
@@ -593,15 +666,22 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ring,
-  .liveDot::after {
+  .liveDot::after,
+  .flyerGlow,
+  .stampRing {
     animation: none;
   }
 
   .day,
   .ctaPrimary,
   .ctaSecondary,
-  .flyerItem,
-  .flyerImage {
+  .flyerImage,
+  .stamp {
+    transition: none;
+  }
+
+  .flyerFrame > .flyerButton {
+    transform: rotate(-2deg);
     transition: none;
   }
 }
