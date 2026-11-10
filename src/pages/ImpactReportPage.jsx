@@ -30,7 +30,8 @@ const communityPartners = [
   {
     name: 'NSBE Detroit',
     logo: NSBEDetroit,
-    url: 'https://nsbedetroitprofessionals.org/',
+    // nsbedetroitprofessionals.org has a broken certificate and returns 500
+    url: null,
   },
   {
     name: 'SHPE Detroit',
@@ -45,7 +46,7 @@ const communityPartners = [
   {
     name: 'Women Techmakers',
     logo: WomenTechmakers,
-    url: 'https://www.technovation.org/women-techmakers/',
+    url: 'https://www.womentechmakers.com/',
   },
   { name: 'Out in Tech Detroit', logo: null, url: 'https://outintech.com/' },
   { name: 'DevOps Detroit', logo: DevOpsDetroit, url: null },
@@ -54,12 +55,15 @@ const communityPartners = [
   {
     name: 'Grand Circus',
     logo: GrandCircus,
-    url: 'https://www.grandcircus.co/',
+    // Grand Circus has closed; kept as a founding partner, no link
+    url: null,
+    closed: true,
   },
   {
     name: 'Automation Workz',
     logo: AutomationWorkz,
-    url: 'https://automationworkz.com/',
+    // automationworkz.com fails the HTTPS handshake
+    url: null,
   },
 ]
 
@@ -243,7 +247,10 @@ export default function ImpactReportPage() {
       </section>
 
       {/* Slide 3: The Numbers */}
-      <section className="impact-slide bg-gradient-to-b from-primary/[0.03] to-transparent">
+      <section
+        id="the-numbers"
+        className="impact-slide scroll-mt-20 bg-gradient-to-b from-primary/[0.03] to-transparent"
+      >
         <div className="mx-auto max-w-[1000px]">
           <p className="mb-4 text-center text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
             By The Numbers
@@ -312,8 +319,9 @@ export default function ImpactReportPage() {
               Ecosystem Impact
             </h2>
             <p className="mt-4 text-lg text-gray-500">
-              Grand Circus partnership being a historical highlight of what
-              community-driven career infrastructure can achieve
+              Our partnership with Grand Circus, which has since closed, remains
+              a highlight of what community-driven career infrastructure can
+              achieve
             </p>
           </div>
           <EcosystemImpactGrid />
@@ -458,6 +466,11 @@ export default function ImpactReportPage() {
                     </div>
                   )}
                   <p className="text-sm font-semibold">{org.name}</p>
+                  {org.closed && (
+                    <span className="rounded-full border border-surface px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                      Closed · Thank you
+                    </span>
+                  )}
                 </>
               )
 
