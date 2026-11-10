@@ -51,8 +51,35 @@
 }
 
 .viewport:hover .track,
-.viewport:focus-within .track {
+.viewport:focus-within .track,
+.track[data-paused] {
   animation-play-state: paused;
+}
+
+.controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.pause {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.6rem;
+}
+
+.pause:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+
+.pause:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 @keyframes lineup {

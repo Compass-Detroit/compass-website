@@ -1,12 +1,18 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { FaPause, FaPlay } from 'react-icons/fa6'
 import PropTypes from 'prop-types'
-import { DEVFEST_SPEAKERS, formatTime } from '@/data/2026/devfestProgram'
+import {
+  DEVFEST_DAYS,
+  DEVFEST_SPEAKERS,
+  formatTime,
+} from '@/data/2026/devfestProgram'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
 import { sanityImage } from '@/services/sanity'
 import { TONE_HEX } from './programUtils'
 import styles from './LineupMarquee.module.css'
 
-const DAY = { hackathon: 'Fri', conference: 'Sat' }
+const DAY = Object.fromEntries(DEVFEST_DAYS.map((d) => [d.id, d.short]))
 const LINEUP = DEVFEST_SPEAKERS.filter((p) => p.avatar)
 
 function Card({ speaker, hidden }) {
@@ -44,18 +50,38 @@ Card.propTypes = {
   hidden: PropTypes.bool,
 }
 
-/** Every speaker with their talk, gliding past; pauses on hover or focus. */
+/**
+ * Every speaker with their talk, gliding past. Pauses on hover or focus, and
+ * the button stops it for touch and keyboard users (WCAG 2.2.2).
+ */
 export default function LineupMarquee({ label = 'On stage this weekend' }) {
+  const [paused, setPaused] = useState(false)
   return (
     <section className={styles.strip} aria-label={label}>
       <p className={styles.label}>
         <span>{label}</span>
-        <Link to={DEVFEST_2026.programPath} className={styles.all}>
-          Full lineup →
-        </Link>
+        <span className={styles.controls}>
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            className={styles.pause}
+          >
+            {paused ? (
+              <FaPlay aria-hidden="true" />
+            ) : (
+              <FaPause aria-hidden="true" />
+            )}
+            <span className="sr-only">
+              {paused ? 'Play speaker lineup' : 'Pause speaker lineup'}
+            </span>
+          </button>
+          <Link to={DEVFEST_2026.programPath} className={styles.all}>
+            Full lineup →
+          </Link>
+        </span>
       </p>
       <div className={styles.viewport}>
-        <ul className={styles.track}>
+        <ul className={styles.track} data-paused={paused || undefined}>
           {LINEUP.map((p) => (
             <Card key={p.slug} speaker={p} />
           ))}
