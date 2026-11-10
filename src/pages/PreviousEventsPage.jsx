@@ -392,32 +392,52 @@ export default function PreviousEventsPage() {
                               {event.description}
                             </p>
 
-                            <div className="grid grid-cols-3 gap-2 border-y border-surface py-3 mb-6">
-                              <div className="text-center">
-                                <div className="text-lg font-bold text-theme-primary">
-                                  {event.speakersLabel ?? event.speakers}
+                            {event.stats ? (
+                              <div className="grid grid-cols-3 gap-2 border-y border-surface py-3 mb-6">
+                                {event.stats.map((stat, i) => (
+                                  <div
+                                    key={stat.label}
+                                    className={`text-center ${
+                                      i === 1 ? 'border-x border-surface' : ''
+                                    }`}
+                                  >
+                                    <div className="text-lg font-bold text-theme-primary">
+                                      {stat.value}
+                                    </div>
+                                    <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
+                                      {stat.label}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="grid grid-cols-3 gap-2 border-y border-surface py-3 mb-6">
+                                <div className="text-center">
+                                  <div className="text-lg font-bold text-theme-primary">
+                                    {event.speakersLabel ?? event.speakers}
+                                  </div>
+                                  <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
+                                    Speakers
+                                  </div>
                                 </div>
-                                <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
-                                  Speakers
+                                <div className="text-center border-x border-surface">
+                                  <div className="text-lg font-bold text-theme-primary">
+                                    {event.sessions || event.tracks}
+                                  </div>
+                                  <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
+                                    {event.sessions ? 'Sessions' : 'Tracks'}
+                                  </div>
+                                </div>
+                                <div className="text-center">
+                                  <div className="text-lg font-bold text-theme-primary">
+                                    {event.attendees}
+                                  </div>
+                                  <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
+                                    Attendees
+                                  </div>
                                 </div>
                               </div>
-                              <div className="text-center border-x border-surface">
-                                <div className="text-lg font-bold text-theme-primary">
-                                  {event.sessions || event.tracks}
-                                </div>
-                                <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
-                                  {event.sessions ? 'Sessions' : 'Tracks'}
-                                </div>
-                              </div>
-                              <div className="text-center">
-                                <div className="text-lg font-bold text-theme-primary">
-                                  {event.attendees}
-                                </div>
-                                <div className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">
-                                  Attendees
-                                </div>
-                              </div>
-                            </div>
+                            )}
 
                             <div className="mt-auto">
                               {event.recapAnchor ? (

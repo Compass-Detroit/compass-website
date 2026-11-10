@@ -80,6 +80,17 @@ const allEvents = [
     desc: 'Honoring women leading in technology with sessions on leadership, career growth, and breaking barriers in the industry.',
   },
   {
+    name: 'Hack Michigan',
+    date: 'May 2026',
+    endDate: '2026-05-17',
+    month: 'MAY',
+    location: 'TechTown Detroit, 440 Burroughs St',
+    type: 'Hackathon',
+    stages: ['build', 'connect'],
+    desc: 'Our first Hack Michigan: 48 hours building AI proofs of concept for Michigan industries, powered by IBM & Google. The winning teams demoed on the Main Stage at Michigan Tech Week.',
+    url: 'https://www.hackmichigan.com/projects/',
+  },
+  {
     name: 'Detroit Pride Innovation Summit',
     date: 'June 2026',
     month: 'JUN',

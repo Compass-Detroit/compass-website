@@ -52,6 +52,22 @@ const allEvents = [
   },
   {
     year: 2026,
+    type: 'hackathon',
+    name: 'Hack Michigan 2026',
+    date: 'May 15–17, 2026',
+    location: 'TechTown Detroit',
+    // Not a talks event: show its own facts instead of speakers/sessions
+    stats: [
+      { value: '4', label: 'AI challenges' },
+      { value: '8', label: 'Industry tracks' },
+      { value: '48', label: 'Hours' },
+    ],
+    description:
+      'Our first Hack Michigan: teams built AI proofs of concept for Michigan industries, powered by IBM & Google, and the winners demoed at Michigan Tech Week.',
+    externalUrl: 'https://www.hackmichigan.com/projects/',
+  },
+  {
+    year: 2026,
     type: 'iwd',
     name: 'IWD Innovation Summit 2026',
     date: 'March 2026',
