@@ -2,17 +2,26 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { FaStar, FaRegStar, FaXmark, FaCalendarPlus } from 'react-icons/fa6'
-import { formatTime, DEVFEST_DAY_BY_ID } from '@/data/2026/devfestProgram'
+import {
+  formatTime,
+  DEVFEST_DAY_BY_ID,
+  DEVFEST_SPEAKERS,
+} from '@/data/2026/devfestProgram'
 import { generateSlug } from '@/utils/speakerRegistry'
 import { sanityImage } from '@/services/sanity'
 import { downloadICS, getGoogleCalendarUrl } from '@/utils/generateICS'
 import { calendarEvent, toneOf } from './programUtils'
+
+const SESSIONS_BY_SPEAKER = Object.fromEntries(
+  DEVFEST_SPEAKERS.map((p) => [p.slug, p.sessions])
+)
 
 export default function SessionDialog({
   session,
   saved,
   clashes,
   onToggleSave,
+  onOpenSession,
   onClose,
 }) {
   const ref = useRef(null)
@@ -76,6 +85,7 @@ export default function SessionDialog({
               {DEVFEST_DAY_BY_ID[session.day].label} ·{' '}
               {formatTime(session.time)} – {formatTime(session.timeEnd)} ·{' '}
               {session.duration} min
+              {session.room && ` · ${session.room}`}
             </p>
 
             {clashes.length > 0 && (
@@ -173,6 +183,12 @@ export default function SessionDialog({
                             {p.bio}
                           </p>
                         )}
+                        <AlsoSpeaking
+                          sessions={(SESSIONS_BY_SPEAKER[p.slug] ?? []).filter(
+                            (s) => s.id !== session.id
+                          )}
+                          onOpen={onOpenSession}
+                        />
                       </div>
                     </li>
                   ))}
@@ -191,5 +207,33 @@ SessionDialog.propTypes = {
   saved: PropTypes.bool.isRequired,
   clashes: PropTypes.array.isRequired,
   onToggleSave: PropTypes.func.isRequired,
+  onOpenSession: PropTypes.func,
   onClose: PropTypes.func.isRequired,
+}
+
+/** A speaker's other sessions, so any of their talks leads to the rest. */
+function AlsoSpeaking({ sessions, onOpen }) {
+  if (!sessions.length || !onOpen) return null
+  return (
+    <p className="mt-2 text-sm">
+      <span className="font-semibold text-theme-secondary">Also: </span>
+      {sessions.map((s, i) => (
+        <span key={s.id}>
+          {i > 0 && ', '}
+          <button
+            type="button"
+            onClick={() => onOpen(s.id)}
+            className="text-left font-semibold text-primary hover:underline"
+          >
+            {DEVFEST_DAY_BY_ID[s.day].short} {formatTime(s.time)} · {s.title}
+          </button>
+        </span>
+      ))}
+    </p>
+  )
+}
+
+AlsoSpeaking.propTypes = {
+  sessions: PropTypes.array.isRequired,
+  onOpen: PropTypes.func,
 }
