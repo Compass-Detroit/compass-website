@@ -148,6 +148,17 @@
 .hero-orb-2 {
   animation: hero-orb 15s ease-in-out infinite 2s;
 }
+/* About hero: dashes travel from the COMPASS hub out to each member org */
+@keyframes orbit-pulse {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .orbit-pulse {
+    animation: orbit-pulse 1.6s linear infinite;
+  }
+}
 .hero-orb-3 {
   animation: hero-orb 18s ease-in-out infinite 4s;
 }

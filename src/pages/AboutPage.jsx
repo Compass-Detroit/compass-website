@@ -11,6 +11,7 @@ import SHPELogo from '@/assets/images/organizations/org-shpe-logo.webp'
 import GDGDetroitLogo from '@/assets/images/organizations/org-gdg-detroit.webp'
 import WTMLogo from '@/assets/images/organizations/org-wtm-logo.webp'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
+import CollectiveOrbit from '@/components/about/CollectiveOrbit'
 
 function XIcon() {
   return (
@@ -98,24 +99,28 @@ const coalitionOrgs = [
     logo: null,
     initials: 'MCWT',
     gradient: 'from-violet-600 to-indigo-600',
+    color: '#6d28d9',
   },
   {
     name: 'Out in Tech Detroit',
     logo: null,
     initials: 'OiT',
     gradient: 'from-pink-500 to-rose-500',
+    color: '#e11d48',
   },
   {
     name: 'SWE Detroit',
     logo: null,
     initials: 'SWE',
     gradient: 'from-amber-500 to-orange-500',
+    color: '#d97706',
   },
   {
     name: 'Automation Workz',
     logo: null,
     initials: 'AW',
     gradient: 'from-cyan-500 to-blue-500',
+    color: '#0284c7',
   },
 ]
 
@@ -294,33 +299,9 @@ export default function AboutPage() {
                 technology careers.
               </p>
             </div>
-            {/* Abstract visual — network nodes */}
-            <div
-              className="relative hidden lg:col-span-2 lg:flex lg:items-center lg:justify-center"
-              aria-hidden="true"
-            >
-              <div className="relative size-[280px]">
-                <div className="hero-spin-slow absolute inset-0 rounded-full border border-primary/10" />
-                <div className="hero-spin-reverse absolute inset-4 rounded-full border border-dashed border-primary/15" />
-                <div className="absolute inset-8 rounded-full border border-primary/20" />
-                <div className="absolute left-1/2 top-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-primary/30 bg-primary/[0.08]">
-                  <span className="text-xs font-extrabold text-primary">C</span>
-                </div>
-                {[
-                  'top-2 left-1/2 -translate-x-1/2',
-                  'bottom-2 left-1/2 -translate-x-1/2',
-                  'left-2 top-1/2 -translate-y-1/2',
-                  'right-2 top-1/2 -translate-y-1/2',
-                ].map((pos, i) => (
-                  <div
-                    key={i}
-                    className={`hero-float absolute ${pos}`}
-                    style={{ animationDelay: `${i * 0.4}s` }}
-                  >
-                    <div className="size-3 rounded-full bg-primary shadow-md shadow-primary/30" />
-                  </div>
-                ))}
-              </div>
+            {/* The collective: member orgs orbiting the COMPASS needle */}
+            <div className="lg:col-span-2">
+              <CollectiveOrbit orgs={coalitionOrgs} />
             </div>
           </div>
         </div>
