@@ -48,6 +48,12 @@ const sessions = result.sessions.map((s) => ({
 
 // Only speakers on the published program; drafts and withdrawn talks drop out
 const onProgram = new Set(sessions.flatMap((s) => s.speakers))
+// "Engineer at General Motors" → "Engineer"; the company shows on its own line
+const withoutOrg = (position, org) =>
+  org && position?.toLowerCase().endsWith(` at ${org}`.toLowerCase())
+    ? position.slice(0, -` at ${org}`.length)
+    : position
+
 const speakers = result.speakers
   .filter((p) => onProgram.has(p.slug))
   .map((p) => ({
@@ -56,7 +62,7 @@ const speakers = result.speakers
     avatar: p.avatar ?? null,
     bio: clean(p.bio) || null,
     organization: clean(p.organization) || null,
-    position: clean(p.position) || null,
+    position: withoutOrg(clean(p.position), clean(p.organization)) || null,
     linkedIn: p.linkedIn || null,
     twitter: p.twitter || null,
     isGDE: Boolean(p.isGDE),
