@@ -61,7 +61,7 @@ export default function SessionDialog({
               <button
                 type="button"
                 onClick={() => ref.current?.close?.()}
-                className="rounded-full p-2 text-theme-muted transition-colors hover:bg-white/10 hover:text-theme-primary"
+                className="rounded-full p-2 text-theme-muted transition-colors hover:bg-surface-elevated hover:text-theme-primary"
                 aria-label="Close session details"
               >
                 <FaXmark aria-hidden="true" />

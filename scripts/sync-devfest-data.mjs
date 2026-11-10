@@ -34,7 +34,9 @@ const sessions = result.sessions.map((s) => ({
   abstract: clean(s.abstract) || '',
   description: clean(s.description) || '',
   track: s.track,
-  tags: (s.tags ?? []).filter((t) => t.toLowerCase() !== s.track.toLowerCase()),
+  tags: (s.tags ?? []).filter(
+    (t) => t.toLowerCase() !== (s.track ?? '').toLowerCase()
+  ),
   time: s.time,
   duration: s.duration,
   isPanel: Boolean(s.isPanel),
