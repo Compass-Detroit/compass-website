@@ -30,6 +30,10 @@ const orbitPoint = (angle) => {
 
 const shortestTurn = (from, to) => ((((to - from) % 360) + 540) % 360) - 180
 
+// COMPASS logo palette (gear green, needle orange, wordmark amber), as in
+// AnimatedCompass
+const LOGO = { gear: '#00c605', needle: '#ee7d33', amber: '#ffa706' }
+
 export default function CollectiveOrbit({ orgs }) {
   const reduced = usePrefersReducedMotion()
   const uid = useId().replace(/:/g, '')
@@ -45,6 +49,8 @@ export default function CollectiveOrbit({ orgs }) {
   useEffect(() => {
     const svg = svgRef.current
     if (!svg) return undefined
+
+    let order = ''
 
     const place = (phase) => {
       const placed = orgs.map((_, i) => {
@@ -68,11 +74,19 @@ export default function CollectiveOrbit({ orgs }) {
       })
       // Paint back-to-front so nearer orgs overlap farther ones. Safe with
       // React: the org list is fixed, so it never re-inserts these nodes.
+      // Only re-stack when the order changes, and keep keyboard focus.
       const layer = placed[0]?.node?.parentNode
-      if (layer)
-        placed
-          .sort((a, b) => a.depth - b.depth)
-          .forEach(({ node }) => node && layer.appendChild(node))
+      const sorted = placed
+        .map((entry, i) => ({ ...entry, i }))
+        .sort((a, b) => a.depth - b.depth)
+      const next = sorted.map(({ i }) => i).join()
+      if (!layer || next === order) return
+      order = next
+      const focused = layer.contains(document.activeElement)
+        ? document.activeElement
+        : null
+      sorted.forEach(({ node }) => node && layer.appendChild(node))
+      focused?.focus({ preventScroll: true })
     }
 
     if (reduced) {
@@ -141,6 +155,14 @@ export default function CollectiveOrbit({ orgs }) {
     }
 
     // Only animate while on screen
+    if (typeof IntersectionObserver === 'undefined') {
+      raf = requestAnimationFrame(tick)
+      window.addEventListener('pointermove', onPointer, { passive: true })
+      return () => {
+        cancelAnimationFrame(raf)
+        window.removeEventListener('pointermove', onPointer)
+      }
+    }
     const io = new IntersectionObserver(([entry]) => {
       cancelAnimationFrame(raf)
       if (entry.isIntersecting) {
@@ -168,9 +190,9 @@ export default function CollectiveOrbit({ orgs }) {
       >
         <defs>
           <radialGradient id={`${uid}-glow`}>
-            <stop offset="0%" stopColor="#ffa706" stopOpacity="0.28" />
-            <stop offset="60%" stopColor="#ffa706" stopOpacity="0.06" />
-            <stop offset="100%" stopColor="#ffa706" stopOpacity="0" />
+            <stop offset="0%" stopColor={LOGO.amber} stopOpacity="0.28" />
+            <stop offset="60%" stopColor={LOGO.amber} stopOpacity="0.06" />
+            <stop offset="100%" stopColor={LOGO.amber} stopOpacity="0" />
           </radialGradient>
           <clipPath id={`${uid}-clip`}>
             <circle r={NODE_R - 3} />
@@ -228,7 +250,7 @@ export default function CollectiveOrbit({ orgs }) {
             cy={C}
             r="38"
             className="fill-[var(--surface)]"
-            stroke="#00c605"
+            stroke={LOGO.gear}
             strokeOpacity="0.7"
             strokeWidth="2"
           />
@@ -237,22 +259,22 @@ export default function CollectiveOrbit({ orgs }) {
             cy={C}
             r="31"
             fill="none"
-            stroke="#00c605"
+            stroke={LOGO.gear}
             strokeOpacity="0.35"
             strokeDasharray="2 4"
           />
           <g ref={needleRef}>
             <path
               d={`M${C} ${C - 27} L${C + 7} ${C} L${C - 7} ${C} Z`}
-              fill="#ee7d33"
+              fill={LOGO.needle}
             />
             <path
               d={`M${C} ${C + 27} L${C + 7} ${C} L${C - 7} ${C} Z`}
-              fill="#ffa706"
+              fill={LOGO.amber}
               fillOpacity="0.55"
             />
           </g>
-          <circle cx={C} cy={C} r="4" fill="#ffa706" />
+          <circle cx={C} cy={C} r="4" fill={LOGO.amber} />
         </g>
 
         {/* Orgs */}
@@ -273,7 +295,7 @@ export default function CollectiveOrbit({ orgs }) {
               <circle
                 r={NODE_R}
                 className="fill-[var(--surface-card)]"
-                stroke={active === i ? '#ffa706' : 'currentColor'}
+                stroke={active === i ? LOGO.amber : 'currentColor'}
                 strokeOpacity={active === i ? 1 : 0.18}
                 strokeWidth={active === i ? 2.5 : 1.5}
               />
