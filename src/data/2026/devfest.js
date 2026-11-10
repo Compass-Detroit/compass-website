@@ -1,4 +1,6 @@
 // Michigan DevFest 2026 — single source for dates, venue and links
+import { DEVFEST_PROGRAM_STATS } from './devfestProgram'
+
 const ASSETS = '/assets/devfest26'
 
 export const DEVFEST_2026 = {
@@ -22,32 +24,29 @@ export const DEVFEST_2026 = {
     'Check-in at the Conference Center, 555 E. Lafayette St · doors open 8:00 AM',
   parking: [
     {
-      name: 'Greektown Self-Park Garage',
+      name: 'Greektown parking structure (free)',
       detail:
-        '1211 Crysler Dr. Enter from the I-375 Lafayette ramp; pay by card at the kiosk.',
-    },
-    {
-      name: 'MGM Grand Garage (free)',
-      detail: 'Free parking at MGM Grand Detroit, across town from Greektown.',
+        "1211 Crysler Dr. Enter from the I-375 Lafayette ramp and tell the guard you're there for Michigan DevFest.",
     },
   ],
-  comingSoon: ['Speaker lineup', 'Full schedule', 'Session tracks'],
+  // Full speaker and session lineup lives on this site's program page
+  programPath: '/devfest',
   days: [
     {
       date: 'Fri · Nov 13',
       title: 'AI Hackathon',
-      desc: 'Team up, build with AI and demo what you shipped.',
+      desc: 'Google and IBM workshops, an afternoon of hacking, then demos and prizes.',
     },
     {
       date: 'Sat · Nov 14',
       title: 'Conference',
-      desc: 'Talks, workshops and panels from Michigan builders. Track lineup coming soon.',
+      desc: `${DEVFEST_PROGRAM_STATS.talks} talks and workshops across ${DEVFEST_PROGRAM_STATS.tracks} tracks from Michigan builders.`,
     },
   ],
   stats: [
     { value: '300+', label: 'Attendees' },
-    { value: '30+', label: 'Speakers' },
-    { value: 'TBD', label: 'Tracks' },
+    { value: String(DEVFEST_PROGRAM_STATS.speakers), label: 'Speakers' },
+    { value: String(DEVFEST_PROGRAM_STATS.tracks), label: 'Tracks' },
   ],
   logoWhite: `${ASSETS}/midevfest-logo-white.svg`,
   logoBlack: `${ASSETS}/midevfest-logo-black.svg`,

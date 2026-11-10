@@ -1,25 +1,33 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import DevFestShare from '@/components/events/DevFestShare'
 import { FaShirt } from 'react-icons/fa6'
 import { DEVFEST_2026, devfestCalendarUrl } from '@/data/2026/devfest'
+import LineupMarquee from '@/components/devfest/LineupMarquee'
+import {
+  eventPhase,
+  phaseLabel,
+  useNow,
+} from '@/components/devfest/programUtils'
+import {
+  DEVFEST_PROGRAM_STATS,
+  DEVFEST_TALKS,
+} from '@/data/2026/devfestProgram'
 import styles from './DevFestHero.module.css'
 
 const KICKOFF = new Date(DEVFEST_2026.startsAt).getTime()
 const SHIRT_DEADLINE = new Date(DEVFEST_2026.shirtDeadline).getTime()
 
-const DIRECTIONS_URL = `https://www.google.com/maps/search/?${new URLSearchParams(
-  { api: '1', query: `${DEVFEST_2026.venue}, ${DEVFEST_2026.address}` }
-)}`
-
+// Real talk titles from the program, one per track slot, for the ticker
 const TICKER = [
   'AI Hackathon · Nov 13',
+  ...DEVFEST_TALKS.filter((s) => s.day === 'conference')
+    .filter((_, i) => i % 3 === 0)
+    .map((s) => s.title),
   'Conference · Nov 14',
-  'Tickets on sale',
   'Hollywood Casino · Greektown',
-  '12th annual Michigan DevFest',
-  'Powered by Google + Compass Detroit',
 ]
 
 function useCountdown(target) {
@@ -162,6 +170,7 @@ function resetFlyer(e) {
 export default function DevFestHero() {
   const [openFlyer, setOpenFlyer] = useState(null)
   const { days, stats, flyer } = DEVFEST_2026
+  const phase = eventPhase(useNow())
 
   return (
     <section
@@ -180,7 +189,9 @@ export default function DevFestHero() {
         <div>
           <p className={styles.eyebrow}>
             <span className={styles.liveDot} aria-hidden="true" />
-            Tickets on sale now
+            {phase.phase === 'upcoming'
+              ? 'Tickets on sale now'
+              : phaseLabel(phase)}
           </p>
 
           <p className={styles.kicker}>
@@ -203,9 +214,10 @@ export default function DevFestHero() {
 
           <p className={styles.lede}>
             Michigan&apos;s flagship developer festival returns for year 12.
-            Build with AI on Friday, level up on Saturday, and meet 300+
-            developers, designers and tech leaders in Greektown, downtown
-            Detroit.
+            Build with AI on Friday. On Saturday,{' '}
+            {DEVFEST_PROGRAM_STATS.speakers} speakers take the stage across{' '}
+            {DEVFEST_PROGRAM_STATS.tracks} tracks: agents, Gemini, design,
+            security and leading teams.
           </p>
 
           <div className={styles.ctas}>
@@ -220,21 +232,16 @@ export default function DevFestHero() {
                 <ArrowRightIcon />
               </span>
             </a>
+            <Link to={DEVFEST_2026.programPath} className={styles.ctaSecondary}>
+              See the lineup
+            </Link>
             <a
               href={devfestCalendarUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={styles.ctaSecondary}
-            >
-              Add to calendar
-            </a>
-            <a
-              href={DIRECTIONS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
               className={styles.ctaGhost}
             >
-              Get directions
+              Add to calendar
             </a>
           </div>
 
@@ -332,6 +339,8 @@ export default function DevFestHero() {
           </p>
         </div>
       </div>
+
+      <LineupMarquee />
 
       <div className={styles.ticker} aria-hidden="true">
         <div className={`marquee-left ${styles.tickerTrack}`}>
