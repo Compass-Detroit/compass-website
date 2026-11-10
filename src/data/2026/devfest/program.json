@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-11-10T01:50:28.089Z",
+  "syncedAt": "2026-11-10T14:54:22.316Z",
   "sessions": [
     {
       "id": "hackathon-morning-meditation-yoga-26",
@@ -224,8 +224,12 @@
       "time": "11:30",
       "duration": 35,
       "isPanel": true,
-      "speakers": ["hernando-gonzalez-malabet"],
-      "moderators": []
+      "speakers": [
+        "hernando-gonzalez-malabet",
+        "cindy-cruz-rodriguez",
+        "anthony-bernal"
+      ],
+      "moderators": ["cindy-cruz-rodriguez"]
     },
     {
       "id": "build-with-ai-workshop-google-26",
@@ -554,6 +558,18 @@
       "isWTM": false
     },
     {
+      "slug": "anthony-bernal",
+      "name": "Anthony Bernal",
+      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/c2220dff767d0ae1103449afe2fc4e7d41c46869-1600x1600.jpg",
+      "bio": "Anthony Bernal is an automotive engineer specializing in vehicle development, brake systems, body structure, and lightweighting. He is currently a Brake System Engineer at Ford Motor Company, leading brake system development and integration for the next-generation Ford programs.\n\nPreviously, he spent over seven years at General Motors in, working on programs including the Cadillac GT4, Chevrolet Colorado/GMC Canyon, Chevrolet Tahoe/GMC Yukon/Cadillac Escalade, Cadillac Optiq, and Chevrolet Silverado/GMC Sierra. He holds a master's in Automotive Systems Engineering from the University of Michigan–Dearborn, a bachelor's in Mechanical Engineering from Widener University, and three U.S. patents.\n\nHe is also the founder and editor of Engineering Cheat Sheet, created to help students, enthusiasts, and engineers better understand how real automotive products are designed, engineered, validated, and manufactured.",
+      "organization": "Ford",
+      "position": "Brake Systems Engineer",
+      "linkedIn": "https://www.linkedin.com/in/j-anthony-bernal-10/",
+      "twitter": null,
+      "isGDE": false,
+      "isWTM": false
+    },
+    {
       "slug": "boris-wilfried-nyasse1",
       "name": "Boris-Wilfried Nyasse",
       "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/8ff516c64d53b371e6bc531d7d0540efd9dcbd66-400x400.png",
@@ -597,6 +613,18 @@
       "organization": "PICF, Inc. Ai/IT Consulting Firm",
       "position": "CEO/Founder",
       "linkedIn": "https://www.linkedin.com/in/christine-burkette-9839202b/",
+      "twitter": null,
+      "isGDE": false,
+      "isWTM": false
+    },
+    {
+      "slug": "cindy-cruz-rodriguez",
+      "name": "Cindy Cruz-Rodriguez",
+      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/4a29819a608bc37a1968eff52db95760bb4e9c2a-750x750.webp",
+      "bio": "Hello! My name is Cindy Cruz-Rodriguez and my current role is Supplier Quality Engineer for Interiors Components at the GM Warren Technical Center where I directly engage and ensure compliance for 9 different DUNS Suppliers.",
+      "organization": "General Motors",
+      "position": "Supplier Quality Engineer at General Motors",
+      "linkedIn": null,
       "twitter": null,
       "isGDE": false,
       "isWTM": false
@@ -832,7 +860,7 @@
     {
       "slug": "navjot-singh",
       "name": "Navjot Singh",
-      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/15086e83c169d1027a5c8e86fcb4c79223ad39f3-400x400.jpg",
+      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/d2c45bfddd448674aded64891892331aeca0f0fc-4682x4682.png",
       "bio": "Google Developer Expert for Android, Organizer at GDG-Montreal, and writes articles about Android and Kotlin.\n\nApart from his day-to-day job, He spends his time learning new technologies/frameworks.",
       "organization": "Manulife",
       "position": "Senior Mobile Software Engineer",

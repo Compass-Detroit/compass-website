@@ -11,6 +11,7 @@ import { DEVFEST_2026 } from '@/data/2026/devfest'
 import {
   DEVFEST_PROGRAM_STATS,
   DEVFEST_SPEAKERS,
+  DEVFEST_TRACK_LIST,
 } from '@/data/2026/devfestProgram'
 
 const devfestQr = '/assets/qr/devfest-qr.png'
@@ -68,8 +69,8 @@ export default function EventSpotlightSection() {
                 co-produced by <strong>GDG Detroit</strong> &{' '}
                 <strong>Compass Detroit</strong>. An AI Hackathon on Nov 13,
                 then {DEVFEST_PROGRAM_STATS.talks} talks across{' '}
-                {DEVFEST_PROGRAM_STATS.tracks} tracks on Nov 14: AI agents,
-                Gemini, design, security, leadership and careers.
+                {DEVFEST_PROGRAM_STATS.tracks} tracks on Nov 14:{' '}
+                {DEVFEST_TRACK_LIST}.
               </p>
 
               {/* Highlights & Partners */}

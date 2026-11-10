@@ -6,6 +6,7 @@
  * Everything here is derived from it, so a re-sync updates every view.
  */
 import program from './devfest/program.json'
+import { sanityImage } from '@/services/sanity'
 
 const EVENT_NAME = 'Michigan DevFest 2026'
 
@@ -237,10 +238,14 @@ export const DEVFEST_DAYS = [
   },
 ]
 
-/** Saturday's track names in program order, e.g. for copy that lists them. */
-export const DEVFEST_CONFERENCE_TRACKS = DEVFEST_TRACKS.filter(
-  (t) => t.day === 'conference'
-).map((t) => t.name)
+/** Saturday's track names in program order, as prose for copy:
+ * "Build with AI, AI Foundations, …, Leadership, and Level Up". */
+export const DEVFEST_TRACK_LIST = new Intl.ListFormat('en', {
+  style: 'long',
+  type: 'conjunction',
+}).format(
+  DEVFEST_TRACKS.filter((t) => t.day === 'conference').map((t) => t.name)
+)
 
 /** Day lookup by id ('hackathon' | 'conference'). */
 export const DEVFEST_DAY_BY_ID = Object.fromEntries(
@@ -254,7 +259,8 @@ export const DEVFEST_DAY_BY_ID = Object.fromEntries(
 export const SpeakersData = DEVFEST_SPEAKERS.map((speaker, i) => ({
   id: i + 1,
   name: speaker.name,
-  avatar: speaker.avatar,
+  // Sized for profile pages; Sanity originals can be tens of MB
+  avatar: sanityImage(speaker.avatar, { w: 640, h: 640 }),
   bio: speaker.bio,
   twitter: speaker.twitter,
   linkedIn: speaker.linkedIn,

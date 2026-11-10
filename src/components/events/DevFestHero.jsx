@@ -11,18 +11,12 @@ import {
   useNow,
 } from '@/components/devfest/programUtils'
 import {
-  DEVFEST_CONFERENCE_TRACKS,
   DEVFEST_DAYS,
   DEVFEST_PROGRAM_STATS,
   DEVFEST_TALKS,
+  DEVFEST_TRACK_LIST,
 } from '@/data/2026/devfestProgram'
 import styles from './DevFestHero.module.css'
-
-// "Build with AI, AI Foundations, …, Leadership and Level Up"
-const TRACK_LIST = new Intl.ListFormat('en', {
-  style: 'long',
-  type: 'conjunction',
-}).format(DEVFEST_CONFERENCE_TRACKS)
 
 const KICKOFF = new Date(DEVFEST_2026.startsAt).getTime()
 
@@ -227,7 +221,7 @@ export default function DevFestHero() {
             Michigan&apos;s flagship developer festival returns for year 12.
             Build with AI on Friday. On Saturday,{' '}
             {DEVFEST_PROGRAM_STATS.conferenceSpeakers} speakers take the stage
-            across {DEVFEST_PROGRAM_STATS.tracks} tracks: {TRACK_LIST}.
+            across {DEVFEST_PROGRAM_STATS.tracks} tracks: {DEVFEST_TRACK_LIST}.
           </p>
 
           <div className={styles.ctas}>

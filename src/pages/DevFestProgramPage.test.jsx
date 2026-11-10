@@ -32,7 +32,10 @@ describe('DevFestProgramPage', () => {
   it('shows every speaker as a card and on the globe', () => {
     renderAt()
     expect(
-      screen.getByRole('heading', { level: 1, name: /38 speakers/ })
+      screen.getByRole('heading', {
+        level: 1,
+        name: new RegExp(`${DEVFEST_PROGRAM_STATS.speakers} speakers`),
+      })
     ).toBeInTheDocument()
     const globe = screen.getByRole('list', { name: 'Speakers on the globe' })
     expect(within(globe).getAllByRole('button')).toHaveLength(

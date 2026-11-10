@@ -4,6 +4,7 @@ import {
   DEVFEST_DAYS,
   DEVFEST_PROGRAM_STATS,
   DEVFEST_SPEAKERS,
+  DEVFEST_TRACK_LIST,
 } from '@/data/2026/devfestProgram'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
 import SpeakerGlobe from '../SpeakerGlobe'
@@ -54,8 +55,8 @@ export default function ProgramHero({ phase, onOpen }) {
           <p className="mt-5 max-w-xl text-lg text-white/75">
             Michigan DevFest ’26 lands in Greektown{' '}
             {DEVFEST_2026.shortDateLabel}. Friday you ship something with AI.
-            Saturday you choose from {stats.talks} talks on agents, Gemini,
-            design, security and leading teams.
+            Saturday you choose from {stats.talks} talks and workshops across{' '}
+            {stats.tracks} tracks: {DEVFEST_TRACK_LIST}.
           </p>
 
           <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
