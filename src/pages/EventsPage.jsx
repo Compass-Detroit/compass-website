@@ -118,7 +118,7 @@ const allEvents = [
     stages: ['engage', 'build', 'connect'],
     statusBadge: 'Tickets on Sale',
     url: 'https://www.midevfest.com/',
-    desc: "Michigan's 12th annual flagship developer conference — 300+ attendees and 30+ speakers, tracks to be announced. AI Hackathon Nov 13, Conference Nov 14. Co-produced with GDG Detroit.",
+    desc: `Michigan's 12th annual flagship developer conference — ${DEVFEST_2026.attendees} attendees, ${DEVFEST_PROGRAM_STATS.speakers} speakers and ${DEVFEST_PROGRAM_STATS.tracks} tracks. AI Hackathon Nov 13, Conference Nov 14. Co-produced with GDG Detroit.`,
     hasQr: true,
   },
 ]
@@ -194,7 +194,7 @@ const eventLegacy = [
     linkLabel: 'Speakers & Schedule',
     stats: {
       speakers: String(DEVFEST_PROGRAM_STATS.speakers),
-      attendees: '300+',
+      attendees: DEVFEST_2026.attendees,
       tracks: String(DEVFEST_PROGRAM_STATS.tracks),
     },
   },
@@ -213,7 +213,7 @@ const eventLegacy = [
     edition: '4th Annual',
     color: 'purple',
     desc: 'Empowering women in tech through innovation, leadership, and community.',
-    link: 'https://bit.ly/det-iwd-25-website',
+    link: 'https://iwdsummit.com',
     stats: { speakers: '40+', attendees: '250+', tracks: '8' },
   },
   {
@@ -231,7 +231,7 @@ const eventLegacy = [
     edition: '2nd Annual',
     color: 'rose',
     desc: 'Celebrating LGBTQ+ innovation and inclusive technology leadership.',
-    link: 'https://detroitpridesummit.com',
+    link: 'https://www.detroitpridesummit.com',
     stats: { speakers: '20+', attendees: '150+', tracks: '3' },
   },
   {

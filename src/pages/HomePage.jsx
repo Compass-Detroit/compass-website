@@ -21,7 +21,6 @@ import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
 import styles from './HomePage.module.css'
 import {
   communityPhotos,
-  prideSummitPhotos,
   innovationSummitPhotos,
   careerMentorshipPhotos,
 } from '@/data/galleryPhotos'
@@ -139,6 +138,34 @@ MarqueeRow.propTypes = {
   logos: PropTypes.arrayOf(PropTypes.object).isRequired,
   direction: PropTypes.string,
 }
+
+// This year's summits, each with its own event site
+const SUMMITS = [
+  {
+    name: "International Women's Day Innovation Summit",
+    when: 'March 2026',
+    where: 'Google Detroit',
+    desc: 'Women and allies leading in AI, engineering, design and entrepreneurship.',
+    url: 'https://iwdsummit.com',
+    host: 'iwdsummit.com',
+  },
+  {
+    name: 'Detroit Pride Innovation Summit',
+    when: 'June 2026',
+    where: 'IBM Detroit',
+    desc: 'LGBTQ+ leaders, technologists and allies, with Out in Tech Detroit and GDG Detroit.',
+    url: 'https://www.detroitpridesummit.com',
+    host: 'detroitpridesummit.com',
+  },
+  {
+    name: 'Latin Heritage Month Innovation Summit',
+    when: 'September 19, 2026',
+    where: 'Wayne State',
+    desc: 'Latin innovators and allies, with SHPE Detroit, Techqueria Detroit and the WSU College of Engineering.',
+    url: 'https://www.hhmsummit.com',
+    host: 'hhmsummit.com',
+  },
+]
 
 const allEvents = [
   {
@@ -964,69 +991,53 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Pride Innovation Summit Spotlight */}
+      {/* 2026 Innovation Summits — one link out to each summit's own site */}
       <section className="border-y border-surface">
         <div className="reveal mx-auto max-w-[1200px] px-6 py-20">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-4 py-1.5">
-                <span className="size-2 rounded-full bg-primary" />
-                <span className="text-xs font-semibold text-primary">
-                  June 2026 · IBM Detroit
-                </span>
-              </div>
-              <h2 className="mb-5 text-3xl font-extrabold leading-tight tracking-tight md:text-4xl">
-                Detroit Pride{' '}
-                <span className="bg-gradient-to-r from-primary via-amber-400 to-primary bg-clip-text text-transparent">
-                  Innovation Summit
-                </span>
-              </h2>
-              <p className="mb-4 text-lg leading-relaxed text-gray-400">
-                Break the Pattern in Michigan&apos;s Tech Ecosystem —
-                celebrating LGBTQ+ leaders, technologists, and allies building a
-                more inclusive future in tech.
-              </p>
-              <p className={`mb-8 leading-relaxed ${styles.bodyText}`}>
-                Partnered with Out in Tech Detroit and GDG Detroit, the Pride
-                Innovation Summit brings together the brightest minds for talks,
-                workshops, and networking focused on AI, emerging technology,
-                inclusive leadership, and career development.
-              </p>
-              <div className="mb-8 flex flex-wrap gap-3">
-                {[
-                  'LGBTQ+ Leaders',
-                  'Tech Workshops',
-                  'Career Development',
-                  'Inclusive Leadership',
-                ].map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1 text-xs font-semibold text-primary"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <a
-                href="https://detroitpridesummit.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-3.5 text-[15px] font-semibold text-black transition-all hover:bg-primary-400 hover:shadow-lg hover:shadow-primary/20"
-              >
-                Visit detroitpridesummit.com
-                <span className="inline-block transition-transform group-hover:translate-x-0.5">
-                  <ArrowRightIcon />
-                </span>
-              </a>
-            </div>
-            <div className="overflow-hidden rounded-2xl border border-primary/20 shadow-lg shadow-primary/5">
-              <MiniCarousel
-                photos={prideSummitPhotos}
-                aspectRatio="4/3"
-                interval={4500}
-              />
-            </div>
+          <div className="mb-10 max-w-2xl">
+            <p className="mb-3 text-[13px] font-semibold uppercase tracking-[0.08em] text-primary">
+              2026 Innovation Summits
+            </p>
+            <h2 className="mb-4 text-3xl font-extrabold leading-tight tracking-tight md:text-4xl">
+              Summits that celebrate who builds Michigan&apos;s tech
+            </h2>
+            <p className={`leading-relaxed ${styles.bodyText}`}>
+              Each summit brings talks, workshops and networking to a community
+              that is too often left out of tech. Every one has its own site
+              with the full program and recap.
+            </p>
           </div>
+          <ul className="grid gap-5 md:grid-cols-3">
+            {SUMMITS.map((summit) => (
+              <li key={summit.name}>
+                <a
+                  href={summit.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-full flex-col rounded-2xl border border-surface bg-surface-card p-6 transition-colors hover:border-primary/40"
+                >
+                  <span className="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1 text-xs font-semibold text-primary">
+                    {summit.when} · {summit.where}
+                  </span>
+                  <h3 className="mb-2 text-xl font-bold tracking-tight">
+                    {summit.name}
+                  </h3>
+                  <p
+                    className={`mb-6 flex-1 text-sm leading-relaxed ${styles.bodyText}`}
+                  >
+                    {summit.desc}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                    Visit {summit.host}
+                    <span className="inline-block transition-transform group-hover:translate-x-0.5">
+                      <ArrowRightIcon />
+                    </span>
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

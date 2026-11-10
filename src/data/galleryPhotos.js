@@ -78,21 +78,6 @@ export const careerMentorshipPhotos = [
   },
 ]
 
-export const prideSummitPhotos = [
-  {
-    src: '/assets/gallery/iwd26/iwd26-group-02.jpeg',
-    alt: 'COMPASS community celebration',
-  },
-  {
-    src: '/assets/gallery/iwd26/iwd26-group-03.jpeg',
-    alt: 'Inclusive tech summit speakers',
-  },
-  {
-    src: '/assets/gallery/iwd26/iwd26-group-04.jpeg',
-    alt: 'Tech professionals networking',
-  },
-]
-
 export const devCollaborationPhotos = [
   {
     src: '/assets/gallery/devfest25/Student pictures/IMG_0588.jpg',

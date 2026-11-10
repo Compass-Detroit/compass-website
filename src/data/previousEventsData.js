@@ -3,6 +3,8 @@ import {
   LHM_SESSIONS,
   SpeakersData as LHM_SPEAKERS,
 } from '@/data/2026/lhmSummit'
+import { DEVFEST_2026 } from '@/data/2026/devfest'
+import { DEVFEST_PROGRAM_STATS } from '@/data/2026/devfestProgram'
 
 export const EVENT_TYPES = {
   devfest: { label: 'Michigan DevFest', color: 'blue', icon: 'mic' },
@@ -21,14 +23,13 @@ const allEvents = [
     name: 'Michigan DevFest 2026',
     date: 'November 13–14, 2026',
     endDate: '2026-11-14',
-    location: 'Little Caesars HQ, Detroit',
-    speakers: 30,
-    speakersLabel: '30+',
-    tracks: 'TBD',
-    attendees: '300+',
+    location: `${DEVFEST_2026.venue}, Detroit`,
+    speakers: DEVFEST_PROGRAM_STATS.speakers,
+    speakersLabel: String(DEVFEST_PROGRAM_STATS.speakers),
+    tracks: String(DEVFEST_PROGRAM_STATS.tracks),
+    attendees: DEVFEST_2026.attendees,
     hasSpeakerData: true,
-    description:
-      "Michigan's 12th annual flagship developer conference — 300+ attendees, 30+ speakers, technical training, hands-on AI workshops, and industry tracks.",
+    description: `Michigan's 12th annual flagship developer conference — ${DEVFEST_2026.attendees} attendees, ${DEVFEST_PROGRAM_STATS.speakers} speakers, an AI Hackathon and ${DEVFEST_PROGRAM_STATS.tracks} conference tracks.`,
     externalUrl: 'https://www.midevfest.com/',
     photoCategory: 'DevFest 2026',
   },

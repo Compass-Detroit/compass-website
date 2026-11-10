@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom'
 import {
   devfestPhotos,
   womenInTechPhotos,
-  prideSummitPhotos,
   hackathonPhotos,
   innovationSummitPhotos,
 } from '@/data/galleryPhotos'
 import MiniCarousel from '@/components/ui/MiniCarousel'
+import { DEVFEST_PROGRAM_STATS } from '@/data/2026/devfestProgram'
+import { DEVFEST_2026 } from '@/data/2026/devfest'
 
 const eventSites = [
   {
@@ -14,15 +15,14 @@ const eventSites = [
     url: 'https://midevfest.com',
     accent: 'bg-blue-500/10 text-blue-400',
     tag: '12th Annual',
-    description:
-      "Michigan's premier developer conference: AI Hackathon Nov 13, conference Nov 14, tracks to be announced",
-    date: 'November 13–14, 2026 · 300+ Attendees',
+    description: `Michigan's premier developer conference: AI Hackathon Nov 13, then ${DEVFEST_PROGRAM_STATS.speakers} speakers across ${DEVFEST_PROGRAM_STATS.tracks} tracks on Nov 14`,
+    date: `${DEVFEST_2026.dateLabel} · ${DEVFEST_2026.attendees} Attendees`,
     photos: devfestPhotos,
     live: true,
   },
   {
     name: 'IWD Innovation Summit',
-    url: 'https://bit.ly/det-iwd-25-website',
+    url: 'https://iwdsummit.com',
     accent: 'bg-purple-500/10 text-purple-400',
     tag: '4th Annual',
     description:
@@ -39,7 +39,8 @@ const eventSites = [
     description:
       "Celebrating LGBTQ+ leaders, technologists, and allies in Michigan's tech ecosystem",
     date: 'June 2026 · IBM Detroit',
-    photos: prideSummitPhotos,
+    // No event photos yet: a Pride-colored cover instead of borrowed ones
+    cover: 'from-rose-500/40 via-amber-400/30 to-sky-500/40',
     live: true,
   },
   {
@@ -103,11 +104,21 @@ export default function EventWebsitesGallery() {
             >
               {/* Image container */}
               <div className="relative aspect-video overflow-hidden rounded-t-xl">
-                <MiniCarousel
-                  photos={event.photos}
-                  aspectRatio="16/9"
-                  className="w-full object-cover"
-                />
+                {event.photos ? (
+                  <MiniCarousel
+                    photos={event.photos}
+                    aspectRatio="16/9"
+                    className="w-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className={`flex size-full items-center justify-center bg-gradient-to-br p-6 text-center ${event.cover}`}
+                  >
+                    <span className="text-lg font-extrabold tracking-tight text-theme-primary">
+                      {event.name}
+                    </span>
+                  </div>
+                )}
                 {/* Tag pill */}
                 <span
                   className={`absolute right-2 top-2 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm ${event.accent}`}
