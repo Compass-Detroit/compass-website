@@ -93,8 +93,11 @@
   height: 100%;
   overflow: hidden;
   border-radius: 9999px;
-  border: 3px solid var(--ring, #9ca3af);
-  background: #111;
+  /* Ring split by track colour for speakers with several sessions */
+  border: 3px solid transparent;
+  background:
+    linear-gradient(#111, #111) padding-box,
+    var(--ring-paint, linear-gradient(#9ca3af, #9ca3af)) border-box;
   color: #fff;
   font-weight: 800;
   box-shadow: 0 6px 20px rgb(0 0 0 / 0.45);
@@ -156,6 +159,15 @@
   margin: 0.25rem auto 0;
   font-size: 0.9rem;
   color: rgb(255 255 255 / 0.8);
+}
+
+.captionDay {
+  margin-right: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.55);
 }
 
 .controls {

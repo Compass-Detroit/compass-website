@@ -4,6 +4,7 @@ import { FaPause, FaPlay } from 'react-icons/fa6'
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
 import { sanityImage } from '@/services/sanity'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
+import { DEVFEST_DAY_BY_ID } from '@/data/2026/devfestProgram'
 import { TONE_HEX } from './programUtils'
 import styles from './SpeakerGlobe.module.css'
 import {
@@ -24,8 +25,10 @@ const RESUME = 1600 // ms after a drag, hover or focus before the tour resumes
  * eases to the front in turn, its name and talk in the caption. Faces are
  * real buttons: drag to spin (the tour resumes after), hover or Tab to read
  * who's who, click to open their session. Reduced motion starts paused.
+ * The tour picks up from whoever was last hovered, focused or clicked, and
+ * holds still while `paused` (a session dialog is open over it).
  */
-export default function SpeakerGlobe({ speakers, onSelect }) {
+export default function SpeakerGlobe({ speakers, onSelect, paused = false }) {
   const reduced = usePrefersReducedMotion()
   const points = useMemo(() => fibonacciSphere(speakers.length), [speakers])
   const order = useMemo(() => tourOrder(points), [points])
@@ -41,13 +44,15 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
   const [playing, setPlaying] = useState(!reduced)
   const playingRef = useRef(playing)
   playingRef.current = playing
+  const pausedRef = useRef(paused)
+  pausedRef.current = paused
   // Restarts the render loop after it has gone idle (see below)
   const wakeRef = useRef(() => {})
   const wake = () => wakeRef.current()
 
   // Reduced motion pauses the tour; the visitor can still start it
   useEffect(() => setPlaying(!reduced), [reduced])
-  useEffect(() => wake(), [playing])
+  useEffect(() => wake(), [playing, paused])
 
   // Track the stage size so radius and face size scale with it
   useEffect(() => {
@@ -63,6 +68,14 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
 
   const hold = () => {
     tour.current.holdUntil = performance.now() + RESUME
+  }
+
+  // Continue the tour from this speaker instead of where it left off: they
+  // get a full dwell at the front, then the tour moves on to their neighbour
+  const anchor = (i) => {
+    tour.current.k = order.indexOf(i)
+    tour.current.nextAt = 0
+    setFeatured(i)
   }
 
   // Render loop: writes transforms directly, no React re-render per frame.
@@ -101,6 +114,7 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
       const tr = tour.current
       const touring =
         playingRef.current &&
+        !pausedRef.current &&
         !pointer.current &&
         !hovering.current &&
         !m.target &&
@@ -141,7 +155,10 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
         running = false
         // Paused only for a moment after a drag or hover: come back for it
         const waitingToResume =
-          playingRef.current && !hovering.current && !m.target
+          playingRef.current &&
+          !pausedRef.current &&
+          !hovering.current &&
+          !m.target
         if (waitingToResume && tr.holdUntil > t)
           resumeTimer = setTimeout(start, tr.holdUntil - t + 16)
         return
@@ -233,6 +250,7 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
     const { rx, ry } = facing(points[i])
     m.target = { rx: clampX(rx), ry: nearest(m.ry, ry) }
     setActive(i)
+    anchor(i)
     wake()
   }
 
@@ -244,7 +262,7 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
   }
 
   const shown = speakers[active ?? featured]
-  const talk = shown?.sessions[0]
+  const talks = shown?.sessions ?? []
 
   return (
     <div className={styles.wrap}>
@@ -286,17 +304,28 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
                 faceRefs.current[i] = el
               }}
               className={styles.faceItem}
-              style={{ '--ring': TONE_HEX[p.sessions[0]?.tone] }}
+              style={{
+                '--ring': TONE_HEX[p.sessions[0]?.tone],
+                '--ring-paint': ringPaint(p.sessions),
+              }}
             >
               <button
                 type="button"
                 className={styles.face}
                 data-active={(active ?? featured) === i || undefined}
-                onClick={() => onSelect(p)}
+                onClick={() => {
+                  anchor(i)
+                  onSelect(p)
+                }}
                 onFocus={() => focusFace(i)}
                 onBlur={blurFace}
-                onMouseEnter={() => setActive(i)}
-                aria-label={`${p.name}, ${p.sessions[0]?.title}`}
+                onMouseEnter={() => {
+                  setActive(i)
+                  anchor(i)
+                }}
+                aria-label={`${p.name}: ${p.sessions
+                  .map((s) => s.title)
+                  .join('; ')}`}
               >
                 {p.avatar ? (
                   <img
@@ -320,14 +349,23 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
             <p className={styles.captionName}>
               <span
                 className={styles.captionDot}
-                style={{ background: TONE_HEX[talk?.tone] }}
+                style={{ background: TONE_HEX[talks[0]?.tone] }}
               />
               {shown.name}
               <span className={styles.captionOrg}>
                 {shown.organization && ` · ${shown.organization}`}
               </span>
             </p>
-            <p className={styles.captionTalk}>{talk?.title}</p>
+            {talks.map((s) => (
+              <p key={s.id} className={styles.captionTalk}>
+                {talks.length > 1 && (
+                  <span className={styles.captionDay}>
+                    {DEVFEST_DAY_BY_ID[s.day].short}
+                  </span>
+                )}
+                {s.title}
+              </p>
+            ))}
           </div>
         )}
         <div className={styles.controls}>
@@ -369,4 +407,15 @@ SpeakerGlobe.propTypes = {
     })
   ).isRequired,
   onSelect: PropTypes.func.isRequired,
+  paused: PropTypes.bool,
+}
+
+/** Ring paint: one segment per track colour the speaker presents in. */
+function ringPaint(sessions) {
+  const colors = [...new Set(sessions.map((s) => TONE_HEX[s.tone]))]
+  if (colors.length < 2) return `linear-gradient(${colors[0]}, ${colors[0]})`
+  const step = 100 / colors.length
+  return `conic-gradient(${colors
+    .map((c, i) => `${c} ${i * step}% ${(i + 1) * step}%`)
+    .join(', ')})`
 }

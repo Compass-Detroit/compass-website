@@ -23,7 +23,10 @@ export default function Agenda({ talks, blocks, saved, onOpen, onToggleSave }) {
               {talks
                 .filter((s) => s.time === time)
                 .map((s) => (
-                  <li key={s.id}>
+                  <li
+                    key={s.id}
+                    className={s.plenary ? 'sm:col-span-full' : undefined}
+                  >
                     <SessionCard
                       session={s}
                       saved={saved.has(s.id)}

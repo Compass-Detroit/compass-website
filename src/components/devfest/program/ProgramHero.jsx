@@ -8,7 +8,7 @@ import {
 } from '@/data/2026/devfestProgram'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
 import SpeakerGlobe from '../SpeakerGlobe'
-import { TONE_HEX, phaseLabel } from '../programUtils'
+import { TONE_HEX, nextSessionFor, phaseLabel } from '../programUtils'
 import { scrollToId } from './helpers'
 
 const BRAND_STRIPE = [
@@ -19,7 +19,7 @@ const BRAND_STRIPE = [
 ]
 
 /** Hero: the whole lineup on a globe, with a jump to each day. */
-export default function ProgramHero({ phase, onOpen }) {
+export default function ProgramHero({ phase, now, globePaused, onOpen }) {
   const stats = DEVFEST_PROGRAM_STATS
   return (
     <section
@@ -115,7 +115,8 @@ export default function ProgramHero({ phase, onOpen }) {
         <div className="-order-1 mx-auto w-full max-w-[380px] lg:order-none lg:max-w-none">
           <SpeakerGlobe
             speakers={DEVFEST_SPEAKERS}
-            onSelect={(p) => onOpen(p.sessions[0].id)}
+            paused={globePaused}
+            onSelect={(p) => onOpen(nextSessionFor(p.sessions, now).id)}
           />
         </div>
       </div>
@@ -125,5 +126,7 @@ export default function ProgramHero({ phase, onOpen }) {
 
 ProgramHero.propTypes = {
   phase: PropTypes.object.isRequired,
+  now: PropTypes.number.isRequired,
+  globePaused: PropTypes.bool,
   onOpen: PropTypes.func.isRequired,
 }

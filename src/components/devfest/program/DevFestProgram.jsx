@@ -6,6 +6,7 @@ import {
   DEVFEST_SESSIONS,
   DEVFEST_TOPICS,
   DEVFEST_TRACKS,
+  isTalk,
 } from '@/data/2026/devfestProgram'
 import SessionDialog from '../SessionDialog'
 import useRevealOnScroll from '../useRevealOnScroll'
@@ -22,6 +23,7 @@ import NowNext from './NowNext'
 import ProgramHero from './ProgramHero'
 import ScheduleFilters from './ScheduleFilters'
 import SpeakerShowcase from './SpeakerShowcase'
+import VenueMap from './VenueMap'
 import { matchesQuery, scrollToId } from './helpers'
 import useActiveDay from './useActiveDay'
 
@@ -93,7 +95,7 @@ export default function DevFestProgram() {
     () =>
       DEVFEST_SESSIONS.filter(
         (s) =>
-          s.speakers.length &&
+          isTalk(s) &&
           (!track || s.track === track) &&
           (!topic || topicIds.has(s.id)) &&
           (!mine || saved.has(s.id)) &&
@@ -110,7 +112,12 @@ export default function DevFestProgram() {
 
   return (
     <>
-      <ProgramHero phase={eventPhase(now)} onOpen={open} />
+      <ProgramHero
+        phase={eventPhase(now)}
+        now={now}
+        globePaused={Boolean(openSession)}
+        onOpen={open}
+      />
       <NowNext now={now} onOpen={open} />
       <SpeakerShowcase
         track={track}
@@ -156,7 +163,7 @@ export default function DevFestProgram() {
               : [
                   ...DEVFEST_RUN_OF_SHOW.filter((b) => b.day === d.id),
                   ...DEVFEST_SESSIONS.filter(
-                    (s) => s.day === d.id && !s.speakers.length
+                    (s) => s.day === d.id && !isTalk(s)
                   ),
                 ]
             const emptyMessage =
@@ -184,11 +191,14 @@ export default function DevFestProgram() {
         </div>
       </section>
 
+      <VenueMap />
+
       <SessionDialog
         session={openSession}
         saved={openSession ? saved.has(openSession.id) : false}
         clashes={openSession ? clashesWith(openSession, savedSessions) : []}
         onToggleSave={toggle}
+        onOpenSession={open}
         onClose={() => update({ session: '' })}
       />
     </>

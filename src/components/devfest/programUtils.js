@@ -42,6 +42,11 @@ const DAY_DATE = Object.fromEntries(DEVFEST_DAYS.map((d) => [d.id, d.date]))
 export const sessionDate = (day, time) =>
   new Date(`${DAY_DATE[day]}T${time}:00${DEVFEST_2026.utcOffset}`)
 
+/** A speaker's session that hasn't ended yet, else their first one. */
+export const nextSessionFor = (sessions, now) =>
+  sessions.find((s) => sessionDate(s.day, s.timeEnd).getTime() > now) ??
+  sessions[0]
+
 export const calendarEvent = (session) => ({
   id: `midevfest26-${session.id ?? session.title}`,
   name: `${session.title} · ${DEVFEST_2026.name}`,
@@ -53,7 +58,9 @@ export const calendarEvent = (session) => ({
   ]
     .filter(Boolean)
     .join('\n\n'),
-  location: `${DEVFEST_2026.venue}, ${DEVFEST_2026.address}`,
+  location: [session.room, DEVFEST_2026.venue, DEVFEST_2026.address]
+    .filter(Boolean)
+    .join(', '),
   startTime: sessionDate(session.day, session.time).toISOString(),
   endTime: sessionDate(session.day, session.timeEnd).toISOString(),
 })

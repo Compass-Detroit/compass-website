@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-11-10T14:59:02.917Z",
+  "syncedAt": "2026-11-10T22:57:50.627Z",
   "sessions": [
     {
       "id": "hackathon-morning-meditation-yoga-26",
@@ -12,6 +12,19 @@
       "duration": 30,
       "isPanel": false,
       "speakers": ["william-bowen-26"],
+      "moderators": []
+    },
+    {
+      "id": "ai-hackathon-keynote-26",
+      "title": "AI Hackathon Keynote",
+      "abstract": "",
+      "description": "",
+      "track": "Hackathon",
+      "tags": [],
+      "time": "09:00",
+      "duration": 60,
+      "isPanel": false,
+      "speakers": ["jenna-ritten"],
       "moderators": []
     },
     {
@@ -100,7 +113,7 @@
       "track": "Build with AI",
       "tags": [],
       "time": "10:45",
-      "duration": 80,
+      "duration": 60,
       "isPanel": false,
       "speakers": ["ida-delphine"],
       "moderators": []
@@ -142,19 +155,6 @@
       "duration": 35,
       "isPanel": false,
       "speakers": ["greg-miller-me"],
-      "moderators": []
-    },
-    {
-      "id": "ai-hackathon-keynote-26",
-      "title": "AI Hackathon Keynote",
-      "abstract": "",
-      "description": "",
-      "track": "Hackathon",
-      "tags": [],
-      "time": "11:00",
-      "duration": 60,
-      "isPanel": false,
-      "speakers": ["jenna-ritten"],
       "moderators": []
     },
     {
