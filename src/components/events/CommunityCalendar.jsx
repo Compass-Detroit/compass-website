@@ -38,7 +38,7 @@ const categoryColors = {
 }
 
 const PLACEHOLDER_EVENTS = [
-  // July 2026
+  // May 2026
   {
     name: 'Hack Michigan Kickoff',
     date: '2026-05-15',
@@ -63,6 +63,7 @@ const PLACEHOLDER_EVENTS = [
     category: 'Hackathon',
     desc: 'Code freeze, project submissions, demos and judging for the sponsor AI challenges.',
   },
+  // July 2026
   {
     name: 'Monthly Community Standup',
     date: '2026-07-02',
