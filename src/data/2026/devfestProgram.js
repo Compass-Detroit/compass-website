@@ -3,14 +3,41 @@
  *
  * `devfest/program.json` is a snapshot of the midevfest.com Sanity project
  * (published sessions and their speakers). Refresh with `npm run sync:devfest`.
- * Everything here is derived from it, so a re-sync updates every view.
+ * `devfest/overrides.js` layers on changes Sanity doesn't have yet.
+ * Everything here is derived from both, so a re-sync updates every view.
  */
-import program from './devfest/program.json'
+import snapshot from './devfest/program.json'
+import {
+  ADDED_SESSIONS,
+  ADDED_SPEAKERS,
+  REMOVED_SESSIONS,
+  SESSION_CHANGES,
+  SPEAKER_CHANGES,
+} from './devfest/overrides'
 import { sanityImage } from '@/services/sanity'
 
 const EVENT_NAME = 'Michigan DevFest 2026'
 
-/** Tracks in program order. `tone` keys the colour set in the UI. */
+// The snapshot plus the organizers' newer changes (see devfest/overrides.js)
+const programSessions = [
+  ...snapshot.sessions
+    .filter((s) => !REMOVED_SESSIONS.includes(s.id))
+    .map((s) => ({ ...s, ...SESSION_CHANGES[s.id] })),
+  ...ADDED_SESSIONS,
+]
+const onProgram = new Set(programSessions.flatMap((s) => s.speakers))
+const program = {
+  sessions: programSessions,
+  speakers: [...snapshot.speakers, ...ADDED_SPEAKERS]
+    .filter((p) => onProgram.has(p.slug))
+    .map((p) => ({ ...p, ...SPEAKER_CHANGES[p.slug] }))
+    .sort((a, b) => a.name.localeCompare(b.name)),
+}
+
+/**
+ * Tracks in program order. `tone` keys the colour set in the UI; `room` is
+ * where the track runs on Saturday (see VenueMap for the floor plan).
+ */
 export const DEVFEST_TRACKS = [
   {
     name: 'Hackathon',
@@ -22,30 +49,35 @@ export const DEVFEST_TRACKS = [
     name: 'Build with AI',
     day: 'conference',
     tone: 'blue',
+    room: 'Grand Ballroom',
     blurb: 'Ship with Gemini, Google Cloud and Stitch. Long-form workshops.',
   },
   {
     name: 'AI Foundations',
     day: 'conference',
     tone: 'green',
+    room: 'Salon C',
     blurb: 'How agents work, how to test them and where AI meets people.',
   },
   {
     name: 'Innovation',
     day: 'conference',
     tone: 'red',
+    room: 'Salon D',
     blurb: 'UX, security, Android and the systems around coding agents.',
   },
   {
     name: 'Leadership',
     day: 'conference',
     tone: 'pink',
+    room: 'Salon E',
     blurb: 'Teams, product strategy, communication and responsible AI.',
   },
   {
     name: 'Level Up',
     day: 'conference',
     tone: 'cyan',
+    room: 'Salon F',
     blurb: 'Grow your career, your habits and your side projects.',
   },
 ]
@@ -103,6 +135,11 @@ export const DEVFEST_TOPIC_RULES = [
   },
 ]
 
+/** On stage: named speakers, or a `presenter` label such as the hackathon
+ * winners, who are only known on the day. Everything else is logistics. */
+export const isTalk = (session) =>
+  session.speakers.length > 0 || Boolean(session.presenter)
+
 const SPEAKERS_BY_SLUG = Object.fromEntries(
   program.speakers.map((s) => [s.slug, s])
 )
@@ -138,8 +175,9 @@ export const DEVFEST_SESSIONS = program.sessions
     const track = TRACK_BY_NAME[s.track]
     return {
       ...s,
-      day: track?.day ?? 'conference',
-      tone: track?.tone ?? 'slate',
+      day: s.day ?? track?.day ?? 'conference',
+      tone: s.tone ?? track?.tone ?? 'slate',
+      room: s.room ?? track?.room ?? null,
       timeEnd: hhmm(minutes(s.time) + (s.duration ?? 0)),
       speakers: s.speakers
         .map((slug) => SPEAKERS_BY_SLUG[slug])
@@ -155,33 +193,32 @@ export const DEVFEST_SESSIONS = program.sessions
   )
 
 /** Talks and workshops with someone on stage (no breaks or logistics). */
-export const DEVFEST_TALKS = DEVFEST_SESSIONS.filter((s) => s.speakers.length)
+export const DEVFEST_TALKS = DEVFEST_SESSIONS.filter(isTalk)
 
 /** Conference-day blocks shared by every track, from the midevfest.com run-of-show. */
 export const DEVFEST_RUN_OF_SHOW = [
   { time: '08:00', timeEnd: '09:00', title: 'Check-In & Breakfast' },
   {
-    time: '08:15',
-    timeEnd: '08:45',
-    title: 'Morning Mindfulness & Meditative Yoga',
-  },
-  { time: '08:45', timeEnd: '09:00', title: 'Welcome & Opening Remarks' },
-  {
-    time: '09:00',
-    timeEnd: '09:45',
-    title: 'Keynote',
-    note: 'Keynote speaker to be announced.',
+    time: '08:45',
+    timeEnd: '09:00',
+    title: 'Welcome & Opening Remarks',
+    note: 'Jenna Ritten and Dave Koziol',
   },
   { time: '12:15', timeEnd: '13:00', title: 'Lunch Break & Networking' },
   { time: '16:00', timeEnd: '16:30', title: 'Closing Remarks & Prizes' },
   { time: '16:30', timeEnd: '18:00', title: 'Techie Hour & Networking' },
 ].map((block) => ({ ...block, day: 'conference', shared: true }))
 
-/** Speakers with their sessions, ordered by name. */
+const DAY_ORDER = { hackathon: 0, conference: 1 }
+
+/** Speakers with their sessions (Friday first), ordered by name. */
 export const DEVFEST_SPEAKERS = program.speakers.map((speaker) => ({
   ...speaker,
   sessions: DEVFEST_TALKS.filter((s) =>
     s.speakers.some((p) => p.slug === speaker.slug)
+  ).sort(
+    (a, b) =>
+      DAY_ORDER[a.day] - DAY_ORDER[b.day] || a.time.localeCompare(b.time)
   ),
 }))
 
@@ -197,7 +234,9 @@ export const DEVFEST_PROGRAM_STATS = {
   conferenceSpeakers: DEVFEST_SPEAKERS.filter((s) =>
     s.sessions.some((t) => t.day === 'conference')
   ).length,
-  talks: DEVFEST_TALKS.filter((s) => s.day === 'conference').length,
+  // Track talks; the keynote and morning yoga are counted apart
+  talks: DEVFEST_TALKS.filter((s) => s.day === 'conference' && !s.plenary)
+    .length,
   workshops: DEVFEST_TALKS.filter((s) => s.day === 'hackathon').length,
   tracks: DEVFEST_TRACKS.filter((t) => t.day === 'conference').length,
   organizations: new Set(
@@ -275,7 +314,7 @@ export const SpeakersData = DEVFEST_SPEAKERS.map((speaker, i) => ({
     tags: s.tags,
     track: s.track,
     time: s.time,
-    room: '',
+    room: s.room ?? '',
     sessionDuration: s.duration,
     speakers: s.speakers.map((p) => p.name),
     event: EVENT_NAME,

@@ -17,14 +17,16 @@ describe('DevFest 2026 program', () => {
   })
 
   it('resolves every talk speaker and every speaker to a talk', () => {
-    for (const s of DEVFEST_TALKS) expect(s.speakers.length).toBeGreaterThan(0)
+    for (const s of DEVFEST_TALKS)
+      expect(s.speakers.length || s.presenter).toBeTruthy()
     for (const p of DEVFEST_SPEAKERS)
       expect(p.sessions.length).toBeGreaterThan(0)
   })
 
   it('only uses known tracks and keeps sessions in time order', () => {
     const names = new Set(DEVFEST_TRACKS.map((t) => t.name))
-    for (const s of DEVFEST_SESSIONS) expect(names.has(s.track)).toBe(true)
+    for (const s of DEVFEST_SESSIONS)
+      expect(names.has(s.track) || s.plenary).toBe(true)
     const times = DEVFEST_SESSIONS.map((s) => s.time)
     expect(times).toEqual([...times].sort())
   })
@@ -42,10 +44,34 @@ describe('DevFest 2026 program', () => {
 
   it('feeds the speaker registry with 2026 DevFest sessions', () => {
     expect(SpeakersData).toHaveLength(DEVFEST_SPEAKERS.length)
-    const profile = getSpeakerBySlug('pragya-keshap')
-    expect(profile.sessions.some((s) => s.title.includes('Evaluator'))).toBe(
-      true
+    const profile = getSpeakerBySlug('saeb-ahsan')
+    expect(profile.sessions.some((s) => s.title.includes('Lovable'))).toBe(true)
+  })
+
+  it('applies the organizer overrides on top of the Sanity snapshot', () => {
+    const slugs = DEVFEST_SPEAKERS.map((p) => p.slug)
+    expect(slugs).not.toContain('pragya-keshap')
+    expect(slugs).not.toContain('rupali-sharma')
+    expect(slugs).toContain('ida-byrd-hill')
+    const keynote = DEVFEST_SESSIONS.find(
+      (s) => s.id === 'ai-hackathon-keynote-26'
     )
+    expect(keynote.time).toBe('09:00')
+    const kiruthika = DEVFEST_SESSIONS.find((s) =>
+      s.title.startsWith('Self Refining Agents')
+    )
+    expect([kiruthika.time, kiruthika.timeEnd]).toEqual(['14:30', '15:50'])
+    const winners = DEVFEST_TALKS.find(
+      (s) => s.id === 'michigan-devfest-hackathon-winners-26'
+    )
+    expect([winners.track, winners.time]).toEqual(['Innovation', '15:15'])
+  })
+
+  it('gives every Saturday talk its track room', () => {
+    for (const s of DEVFEST_TALKS.filter(
+      (t) => t.day === 'conference' && !t.plenary
+    ))
+      expect(s.room).toMatch(/^(Grand Ballroom|Salon [C-F])$/)
   })
 
   it('formats 24h times for display', () => {
