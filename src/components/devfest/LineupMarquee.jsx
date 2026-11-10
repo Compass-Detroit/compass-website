@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { FaPause, FaPlay } from 'react-icons/fa6'
 import PropTypes from 'prop-types'
 import {
-  DEVFEST_DAYS,
+  DEVFEST_DAY_BY_ID,
   DEVFEST_SPEAKERS,
   formatTime,
 } from '@/data/2026/devfestProgram'
@@ -12,7 +12,6 @@ import { sanityImage } from '@/services/sanity'
 import { TONE_HEX } from './programUtils'
 import styles from './LineupMarquee.module.css'
 
-const DAY = Object.fromEntries(DEVFEST_DAYS.map((d) => [d.id, d.short]))
 const LINEUP = DEVFEST_SPEAKERS.filter((p) => p.avatar)
 
 function Card({ speaker, hidden }) {
@@ -37,7 +36,8 @@ function Card({ speaker, hidden }) {
           <span className={styles.name}>{speaker.name}</span>
           <span className={styles.talk}>{talk.title}</span>
           <span className={styles.when}>
-            {DAY[talk.day]} {formatTime(talk.time)} · {talk.track}
+            {DEVFEST_DAY_BY_ID[talk.day].short} {formatTime(talk.time)} ·{' '}
+            {talk.track}
           </span>
         </span>
       </Link>

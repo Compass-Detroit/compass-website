@@ -45,7 +45,7 @@ describe('DevFestProgramPage', () => {
     renderAt()
     const bar = screen.getByRole('navigation', { name: 'Jump to day' })
     expect(within(bar).getByText('AI Hackathon')).toBeInTheDocument()
-    expect(within(bar).getByText('DevFest Conference')).toBeInTheDocument()
+    expect(within(bar).getByText('Conference')).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { name: /Friday, Nov 13/ })
     ).toBeInTheDocument()

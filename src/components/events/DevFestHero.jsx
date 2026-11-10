@@ -11,10 +11,18 @@ import {
   useNow,
 } from '@/components/devfest/programUtils'
 import {
+  DEVFEST_CONFERENCE_TRACKS,
+  DEVFEST_DAYS,
   DEVFEST_PROGRAM_STATS,
   DEVFEST_TALKS,
 } from '@/data/2026/devfestProgram'
 import styles from './DevFestHero.module.css'
+
+// "Build with AI, AI Foundations, …, Leadership and Level Up"
+const TRACK_LIST = new Intl.ListFormat('en', {
+  style: 'long',
+  type: 'conjunction',
+}).format(DEVFEST_CONFERENCE_TRACKS)
 
 const KICKOFF = new Date(DEVFEST_2026.startsAt).getTime()
 
@@ -167,7 +175,12 @@ function resetFlyer(e) {
 
 export default function DevFestHero() {
   const [openFlyer, setOpenFlyer] = useState(null)
-  const { days, stats, flyer } = DEVFEST_2026
+  const { flyer } = DEVFEST_2026
+  const stats = [
+    { value: DEVFEST_2026.attendees, label: 'Attendees' },
+    { value: String(DEVFEST_PROGRAM_STATS.speakers), label: 'Speakers' },
+    { value: String(DEVFEST_PROGRAM_STATS.tracks), label: 'Tracks' },
+  ]
   const phase = eventPhase(useNow())
 
   return (
@@ -214,8 +227,7 @@ export default function DevFestHero() {
             Michigan&apos;s flagship developer festival returns for year 12.
             Build with AI on Friday. On Saturday,{' '}
             {DEVFEST_PROGRAM_STATS.conferenceSpeakers} speakers take the stage
-            across {DEVFEST_PROGRAM_STATS.tracks} tracks: agents, Gemini,
-            design, security and leading teams.
+            across {DEVFEST_PROGRAM_STATS.tracks} tracks: {TRACK_LIST}.
           </p>
 
           <div className={styles.ctas}>
@@ -244,13 +256,13 @@ export default function DevFestHero() {
           </div>
 
           <ol className={styles.days}>
-            {days.map((d, i) => (
+            {DEVFEST_DAYS.map((d, i) => (
               <li key={d.title} className={styles.day}>
                 <span className={styles.dayIndex}>0{i + 1}</span>
                 <div>
-                  <p className={styles.dayDate}>{d.date}</p>
+                  <p className={styles.dayDate}>{d.label}</p>
                   <p className={styles.dayTitle}>{d.title}</p>
-                  <p className={styles.dayDesc}>{d.desc}</p>
+                  <p className={styles.dayDesc}>{d.blurb}</p>
                 </div>
               </li>
             ))}

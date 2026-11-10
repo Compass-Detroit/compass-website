@@ -2,13 +2,11 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { FaStar, FaRegStar, FaXmark, FaCalendarPlus } from 'react-icons/fa6'
-import { formatTime, DEVFEST_DAYS } from '@/data/2026/devfestProgram'
+import { formatTime, DEVFEST_DAY_BY_ID } from '@/data/2026/devfestProgram'
 import { generateSlug } from '@/utils/speakerRegistry'
 import { sanityImage } from '@/services/sanity'
 import { downloadICS, getGoogleCalendarUrl } from '@/utils/generateICS'
 import { calendarEvent, toneOf } from './programUtils'
-
-const DAY_LABEL = Object.fromEntries(DEVFEST_DAYS.map((d) => [d.id, d.label]))
 
 export default function SessionDialog({
   session,
@@ -75,8 +73,9 @@ export default function SessionDialog({
               {session.title}
             </h2>
             <p className="mt-2 text-sm font-semibold text-theme-secondary">
-              {DAY_LABEL[session.day]} · {formatTime(session.time)} –{' '}
-              {formatTime(session.timeEnd)} · {session.duration} min
+              {DEVFEST_DAY_BY_ID[session.day].label} ·{' '}
+              {formatTime(session.time)} – {formatTime(session.timeEnd)} ·{' '}
+              {session.duration} min
             </p>
 
             {clashes.length > 0 && (

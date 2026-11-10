@@ -6,7 +6,7 @@ import GreektownBackdrop from '@/components/events/GreektownBackdrop'
 import { Link } from 'react-router-dom'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
 import {
-  DEVFEST_DAYS,
+  DEVFEST_DAY_BY_ID,
   DEVFEST_PROGRAM_STATS,
   DEVFEST_TALKS,
   DEVFEST_TRACKS,
@@ -40,8 +40,6 @@ const MUST_SEE = [
 ]
   .map((t) => DEVFEST_TALKS.find((s) => s.title.startsWith(t)))
   .filter(Boolean)
-
-const DAY_SHORT = Object.fromEntries(DEVFEST_DAYS.map((d) => [d.id, d.short]))
 
 const LINEUP = DEVFEST_TRACKS.map((t) => ({
   ...t,
@@ -374,9 +372,9 @@ export default function DevFestPortal() {
             </h2>
             <p className={styles.lede}>
               Ship something with AI on Friday. Learn from{' '}
-              {DEVFEST_PROGRAM_STATS.conferenceSpeakers} Michigan builders on
-              Saturday. Leave with the people you&apos;ll build with next.
-              Here&apos;s what you&apos;d miss:
+              {DEVFEST_PROGRAM_STATS.conferenceSpeakers} speakers on Saturday.
+              Leave with the people you&apos;ll build with next. Here&apos;s
+              what you&apos;d miss:
             </p>
             <ul className="mt-6 space-y-3">
               {MUST_SEE.map((s) => (
@@ -404,7 +402,7 @@ export default function DevFestPortal() {
                         {s.title}
                       </span>
                       <span className="block truncate text-xs text-white/65">
-                        {DAY_SHORT[s.day]} {formatTime(s.time)} ·{' '}
+                        {DEVFEST_DAY_BY_ID[s.day].short} {formatTime(s.time)} ·{' '}
                         {s.speakers.map((p) => p.name).join(', ')}
                       </span>
                     </span>

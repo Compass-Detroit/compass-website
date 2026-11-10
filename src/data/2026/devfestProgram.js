@@ -9,27 +9,6 @@ import program from './devfest/program.json'
 
 const EVENT_NAME = 'Michigan DevFest 2026'
 
-export const DEVFEST_DAYS = [
-  {
-    id: 'hackathon',
-    date: '2026-11-13',
-    short: 'Fri',
-    label: 'Fri · Nov 13',
-    title: 'AI Hackathon',
-    blurb:
-      'Workshops from Google and IBM, a full afternoon of hacking, then demos, judging and prizes.',
-  },
-  {
-    id: 'conference',
-    date: '2026-11-14',
-    short: 'Sat',
-    label: 'Sat · Nov 14',
-    title: 'DevFest Conference',
-    blurb:
-      'Five tracks of talks and workshops from Michigan builders, then Techie Hour.',
-  },
-]
-
 /** Tracks in program order. `tone` keys the colour set in the UI. */
 export const DEVFEST_TRACKS = [
   {
@@ -224,6 +203,49 @@ export const DEVFEST_PROGRAM_STATS = {
     program.speakers.map((s) => s.organization).filter(Boolean)
   ).size,
 }
+
+/**
+ * The two event days: the only per-day data in the codebase, used by the
+ * home page hero, the /devfest page, the lineup strip and session dialogs.
+ * `tone` keys the day colour (see TONE_HEX in programUtils).
+ */
+export const DEVFEST_DAYS = [
+  {
+    id: 'hackathon',
+    date: '2026-11-13',
+    short: 'Fri',
+    weekday: 'Friday',
+    numeral: '13',
+    label: 'Fri · Nov 13',
+    tone: 'yellow',
+    title: 'AI Hackathon',
+    tagline: 'Workshops, hacking, demos, prizes',
+    blurb:
+      'Workshops from Google and IBM, an afternoon of hacking, then demos, judging and prizes.',
+  },
+  {
+    id: 'conference',
+    date: '2026-11-14',
+    short: 'Sat',
+    weekday: 'Saturday',
+    numeral: '14',
+    label: 'Sat · Nov 14',
+    tone: 'blue',
+    title: 'Conference',
+    tagline: `${DEVFEST_PROGRAM_STATS.talks} talks · ${DEVFEST_PROGRAM_STATS.tracks} tracks`,
+    blurb: `${DEVFEST_PROGRAM_STATS.talks} talks and workshops across ${DEVFEST_PROGRAM_STATS.tracks} tracks, then Techie Hour.`,
+  },
+]
+
+/** Saturday's track names in program order, e.g. for copy that lists them. */
+export const DEVFEST_CONFERENCE_TRACKS = DEVFEST_TRACKS.filter(
+  (t) => t.day === 'conference'
+).map((t) => t.name)
+
+/** Day lookup by id ('hackathon' | 'conference'). */
+export const DEVFEST_DAY_BY_ID = Object.fromEntries(
+  DEVFEST_DAYS.map((d) => [d.id, d])
+)
 
 /**
  * One entry per speaker in the shape the speaker registry and the

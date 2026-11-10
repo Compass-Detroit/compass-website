@@ -1,6 +1,7 @@
-// Michigan DevFest 2026 — single source for dates, venue and links
-import { DEVFEST_PROGRAM_STATS } from './devfestProgram'
-
+// Michigan DevFest 2026 — single source for dates, venue and links. Kept
+// free of the program snapshot so pages that only need these facts (the
+// navbar, event lists) don't pull in every session. Per-day data and lineup
+// stats live in devfestProgram.js.
 const ASSETS = '/assets/devfest26'
 
 const DEVFEST_ATTENDEES = '300+'
@@ -36,23 +37,6 @@ export const DEVFEST_2026 = {
   ],
   // Full speaker and session lineup lives on this site's program page
   programPath: '/devfest',
-  days: [
-    {
-      date: 'Fri · Nov 13',
-      title: 'AI Hackathon',
-      desc: 'Google and IBM workshops, an afternoon of hacking, then demos and prizes.',
-    },
-    {
-      date: 'Sat · Nov 14',
-      title: 'Conference',
-      desc: `${DEVFEST_PROGRAM_STATS.talks} talks and workshops across ${DEVFEST_PROGRAM_STATS.tracks} tracks from Michigan builders.`,
-    },
-  ],
-  stats: [
-    { value: DEVFEST_ATTENDEES, label: 'Attendees' },
-    { value: String(DEVFEST_PROGRAM_STATS.speakers), label: 'Speakers' },
-    { value: String(DEVFEST_PROGRAM_STATS.tracks), label: 'Tracks' },
-  ],
   logoWhite: `${ASSETS}/midevfest-logo-white.svg`,
   logoBlack: `${ASSETS}/midevfest-logo-black.svg`,
   flyer: {
