@@ -1,0 +1,22 @@
+/* Scroll reveal for the DevFest schedule (see useRevealOnScroll.js).
+   Only `data-reveal="pending"` hides content, and only JS sets it. */
+[data-reveal='pending'] {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(0.985);
+}
+
+[data-reveal='shown'] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

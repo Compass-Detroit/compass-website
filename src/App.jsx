@@ -37,6 +37,7 @@ import GalleryManagerPage from '@/pages/GalleryManagerPage'
 import AnalyticsDashboardPage from '@/pages/AnalyticsDashboardPage'
 import BrandKitPage from '@/pages/BrandKitPage'
 import PlatformPage from '@/pages/PlatformPage'
+import DevFestProgramPage from '@/pages/DevFestProgramPage'
 import TelemetryProvider from '@/components/TelemetryProvider'
 import ScrollToTop from '@/components/ScrollToTop'
 import WebVitalsOverlay from '@/components/WebVitalsOverlay'
@@ -63,6 +64,7 @@ function App() {
               <Route path="/community" element={<CommunityPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/events/previous" element={<PreviousEventsPage />} />
+              <Route path="/devfest" element={<DevFestProgramPage />} />
               <Route path="/get-involved" element={<GetInvolvedPage />} />
               <Route path="/sponsor" element={<GetInvolvedPage />} />
               <Route path="/partner" element={<GetInvolvedPage />} />

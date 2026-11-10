@@ -1,0 +1,211 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+
+.stage:active {
+  cursor: grabbing;
+}
+
+.rings {
+  position: absolute;
+  inset: 4%;
+  width: 92%;
+  height: 92%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.rings circle {
+  fill: none;
+}
+
+/* Static guide rings: depth cue only, nothing orbits */
+.orbit {
+  stroke: rgb(255 255 255 / 0.12);
+  stroke-width: 0.5;
+}
+
+.orbitOuter {
+  stroke: rgb(87 202 255 / 0.18);
+  stroke-width: 0.4;
+  stroke-dasharray: 0.6 3.4;
+}
+
+.core {
+  position: absolute;
+  inset: 32%;
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  background: radial-gradient(
+      circle at 50% 45%,
+      rgb(66 133 244 / 0.35),
+      transparent 62%
+    ),
+    radial-gradient(circle at 60% 60%, rgb(52 168 83 / 0.25), transparent 70%);
+  filter: blur(0.2px);
+  pointer-events: none;
+}
+
+.logo {
+  width: 62%;
+  opacity: 0.22;
+}
+
+.faces {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faceItem {
+  position: absolute;
+  top: calc(50% - var(--face) / 2);
+  left: calc(50% - var(--face) / 2);
+  width: var(--face);
+  height: var(--face);
+  will-change: transform, opacity;
+}
+
+.faceItem[data-back='true'] {
+  pointer-events: none;
+}
+
+.face {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 9999px;
+  border: 3px solid var(--ring, #9ca3af);
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.45);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.face:hover,
+.face[data-active] {
+  transform: scale(1.25);
+  box-shadow:
+    0 0 0 4px rgb(255 255 255 / 0.9),
+    0 0 28px var(--ring, #fff);
+}
+
+.face:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.caption {
+  min-height: 7.5rem;
+  margin-top: 0.75rem;
+  text-align: center;
+  color: #fff;
+}
+
+.captionName {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.captionDot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 9999px;
+}
+
+.captionOrg {
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.65);
+}
+
+.captionTalk {
+  max-width: 28rem;
+  margin: 0.25rem auto 0;
+  font-size: 0.9rem;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.tourButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.tourButton:hover {
+  border-color: #fff;
+}
+
+.tourButton:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.progress {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255 255 255 / 0.6);
+}
+
+.hint {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .face {
+    transition: none;
+  }
+}
