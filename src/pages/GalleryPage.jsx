@@ -299,7 +299,7 @@ export default function GalleryPage() {
                 Meet the Photographer
               </Link>
               <a
-                href="https://www.hocxsls.com/"
+                href="https://www.leemediahouse.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-surface px-5 py-2.5 text-sm font-semibold text-gray-400 transition-colors hover:border-primary/40 hover:text-primary"

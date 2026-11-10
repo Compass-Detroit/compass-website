@@ -1,25 +1,33 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import DevFestShare from '@/components/events/DevFestShare'
-import { FaShirt } from 'react-icons/fa6'
 import { DEVFEST_2026, devfestCalendarUrl } from '@/data/2026/devfest'
+import LineupMarquee from '@/components/devfest/LineupMarquee'
+import {
+  eventPhase,
+  phaseLabel,
+  useNow,
+} from '@/components/devfest/programUtils'
+import {
+  DEVFEST_DAYS,
+  DEVFEST_PROGRAM_STATS,
+  DEVFEST_TALKS,
+  DEVFEST_TRACK_LIST,
+} from '@/data/2026/devfestProgram'
 import styles from './DevFestHero.module.css'
 
 const KICKOFF = new Date(DEVFEST_2026.startsAt).getTime()
-const SHIRT_DEADLINE = new Date(DEVFEST_2026.shirtDeadline).getTime()
 
-const DIRECTIONS_URL = `https://www.google.com/maps/search/?${new URLSearchParams(
-  { api: '1', query: `${DEVFEST_2026.venue}, ${DEVFEST_2026.address}` }
-)}`
-
+// Real talk titles from the program, one per track slot, for the ticker
 const TICKER = [
   'AI Hackathon · Nov 13',
+  ...DEVFEST_TALKS.filter((s) => s.day === 'conference')
+    .filter((_, i) => i % 3 === 0)
+    .map((s) => s.title),
   'Conference · Nov 14',
-  'Tickets on sale',
-  'Hollywood Casino · Greektown',
-  '12th annual Michigan DevFest',
-  'Powered by Google + Compass Detroit',
+  DEVFEST_2026.venue,
 ]
 
 function useCountdown(target) {
@@ -161,7 +169,13 @@ function resetFlyer(e) {
 
 export default function DevFestHero() {
   const [openFlyer, setOpenFlyer] = useState(null)
-  const { days, stats, flyer } = DEVFEST_2026
+  const { flyer } = DEVFEST_2026
+  const stats = [
+    { value: DEVFEST_2026.attendees, label: 'Attendees' },
+    { value: String(DEVFEST_PROGRAM_STATS.speakers), label: 'Speakers' },
+    { value: String(DEVFEST_PROGRAM_STATS.tracks), label: 'Tracks' },
+  ]
+  const phase = eventPhase(useNow())
 
   return (
     <section
@@ -180,7 +194,9 @@ export default function DevFestHero() {
         <div>
           <p className={styles.eyebrow}>
             <span className={styles.liveDot} aria-hidden="true" />
-            Tickets on sale now
+            {phase.phase === 'upcoming'
+              ? 'Tickets on sale now'
+              : phaseLabel(phase)}
           </p>
 
           <p className={styles.kicker}>
@@ -203,9 +219,9 @@ export default function DevFestHero() {
 
           <p className={styles.lede}>
             Michigan&apos;s flagship developer festival returns for year 12.
-            Build with AI on Friday, level up on Saturday, and meet 300+
-            developers, designers and tech leaders in Greektown, downtown
-            Detroit.
+            Build with AI on Friday. On Saturday,{' '}
+            {DEVFEST_PROGRAM_STATS.conferenceSpeakers} speakers take the stage
+            across {DEVFEST_PROGRAM_STATS.tracks} tracks: {DEVFEST_TRACK_LIST}.
           </p>
 
           <div className={styles.ctas}>
@@ -220,40 +236,27 @@ export default function DevFestHero() {
                 <ArrowRightIcon />
               </span>
             </a>
+            <Link to={DEVFEST_2026.programPath} className={styles.ctaSecondary}>
+              See the lineup
+            </Link>
             <a
               href={devfestCalendarUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={styles.ctaSecondary}
+              className={styles.ctaGhost}
             >
               Add to calendar
             </a>
-            <a
-              href={DIRECTIONS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.ctaGhost}
-            >
-              Get directions
-            </a>
           </div>
 
-          {Date.now() <= SHIRT_DEADLINE && (
-            <p className={styles.perk}>
-              <FaShirt className={styles.perkIcon} aria-hidden="true" />
-              Register by <strong>{DEVFEST_2026.shirtDeadlineLabel}</strong> to
-              get a free DevFest T-shirt
-            </p>
-          )}
-
           <ol className={styles.days}>
-            {days.map((d, i) => (
+            {DEVFEST_DAYS.map((d, i) => (
               <li key={d.title} className={styles.day}>
                 <span className={styles.dayIndex}>0{i + 1}</span>
                 <div>
-                  <p className={styles.dayDate}>{d.date}</p>
+                  <p className={styles.dayDate}>{d.label}</p>
                   <p className={styles.dayTitle}>{d.title}</p>
-                  <p className={styles.dayDesc}>{d.desc}</p>
+                  <p className={styles.dayDesc}>{d.blurb}</p>
                 </div>
               </li>
             ))}
@@ -332,6 +335,8 @@ export default function DevFestHero() {
           </p>
         </div>
       </div>
+
+      <LineupMarquee />
 
       <div className={styles.ticker} aria-hidden="true">
         <div className={`marquee-left ${styles.tickerTrack}`}>

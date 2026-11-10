@@ -100,7 +100,7 @@ const PhotographerPage = () => {
           </p>
 
           <a
-            href="https://www.hocxsls.com/"
+            href="https://www.leemediahouse.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex mx-auto max-w-[320px] rounded-2xl border border-surface bg-surface-card/80 p-4 backdrop-blur-xl transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 items-center justify-center"
@@ -227,12 +227,12 @@ const PhotographerPage = () => {
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href="https://www.hocxsls.com/"
+              href="https://www.leemediahouse.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-black transition-colors hover:bg-primary-400 hover-lift"
             >
-              Visit HOC x SLS
+              Visit Shawn Lee Studios
               <ExternalLinkIcon />
             </a>
             <Link

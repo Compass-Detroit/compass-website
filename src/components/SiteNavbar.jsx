@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { FaBars, FaChevronDown, FaXmark } from 'react-icons/fa6'
 import { ReactComponent as CompassLogo } from '@/assets/images/compass-logo.svg'
 import SettingsDrawer from '@/components/ui/SettingsDrawer'
+import { DEVFEST_2026 } from '@/data/2026/devfest'
 
 // The logo artwork sits in a 508x116 band of a 512x512 canvas; crop to it so
 // the mark can render at nav height instead of needing a 112px box.
@@ -17,6 +18,28 @@ const primaryLinks = [
   { to: '/community', label: 'Community' },
   { to: '/impact', label: 'Impact' },
 ]
+
+// Event-week spotlight: leads the nav until a week after DevFest wraps
+const FEATURED_UNTIL = new Date(DEVFEST_2026.endsAt)
+FEATURED_UNTIL.setDate(FEATURED_UNTIL.getDate() + 7)
+const featuredLink =
+  Date.now() <= FEATURED_UNTIL.getTime()
+    ? { to: DEVFEST_2026.programPath, label: 'DevFest 2026' }
+    : null
+
+const featuredClass = (active) =>
+  `inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${
+    active
+      ? 'border-devfest-blue bg-devfest-blue/15 text-[var(--text-primary)]'
+      : 'border-devfest-blue/40 text-[var(--text-primary)] hover:border-devfest-blue hover:bg-devfest-blue/10'
+  }`
+
+const FeaturedDot = () => (
+  <span aria-hidden="true" className="relative flex size-2">
+    <span className="absolute inline-flex size-full rounded-full bg-devfest-green opacity-75 motion-safe:animate-ping" />
+    <span className="relative inline-flex size-2 rounded-full bg-devfest-green" />
+  </span>
+)
 
 const moreLinks = [
   { to: '/gallery', label: 'Gallery' },
@@ -42,7 +65,7 @@ const HeartIcon = () => (
 )
 
 const linkClass = (active) =>
-  `rounded-full px-3 py-1.5 text-sm transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${
+  `rounded-full px-2.5 py-1.5 text-sm transition-colors duration-150 xl:px-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary ${
     active
       ? 'bg-[var(--card-hover-bg)] font-semibold text-[var(--text-primary)]'
       : 'text-[var(--text-muted)] hover:bg-[var(--card-hover-bg)] hover:text-[var(--text-primary)]'
@@ -151,6 +174,21 @@ export default function SiteNavbar() {
 
         {/* Desktop links */}
         <ul className="ml-auto hidden items-center gap-0.5 lg:flex">
+          {featuredLink && (
+            <li className="mr-1">
+              <Link
+                to={featuredLink.to}
+                aria-current={
+                  isActive(pathname, featuredLink.to) ? 'page' : undefined
+                }
+                className={featuredClass(isActive(pathname, featuredLink.to))}
+              >
+                <FeaturedDot />
+                {/* Year only where there's room beside the full nav */}
+                DevFest<span className="hidden xl:inline">&nbsp;2026</span>
+              </Link>
+            </li>
+          )}
           {primaryLinks.map((link) => (
             <li key={link.to}>
               <Link
@@ -193,6 +231,22 @@ export default function SiteNavbar() {
           className="border-t border-[var(--border)] bg-[var(--surface)] px-6 pb-5 pt-3 lg:hidden"
         >
           <ul className="grid grid-cols-2 gap-1">
+            {featuredLink && (
+              <li className="col-span-2">
+                <Link
+                  to={featuredLink.to}
+                  aria-current={
+                    isActive(pathname, featuredLink.to) ? 'page' : undefined
+                  }
+                  className={`${featuredClass(
+                    isActive(pathname, featuredLink.to)
+                  )} w-full rounded-xl py-2.5`}
+                >
+                  <FeaturedDot />
+                  {featuredLink.label} · {DEVFEST_2026.shortDateLabel}
+                </Link>
+              </li>
+            )}
             {[...primaryLinks, ...moreLinks].map((link) => (
               <li key={link.to}>
                 <Link

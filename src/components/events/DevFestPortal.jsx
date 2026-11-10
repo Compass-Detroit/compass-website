@@ -1,15 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-  FiMapPin,
-  FiClock,
-  FiTruck,
-  FiMic,
-  FiCalendar,
-  FiLayers,
-} from 'react-icons/fi'
+import { FiMapPin, FiClock, FiTruck } from 'react-icons/fi'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
+import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
 import GreektownBackdrop from '@/components/events/GreektownBackdrop'
+import { Link } from 'react-router-dom'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
+import {
+  DEVFEST_DAY_BY_ID,
+  DEVFEST_PROGRAM_STATS,
+  DEVFEST_TALKS,
+  DEVFEST_TRACKS,
+  formatTime,
+} from '@/data/2026/devfestProgram'
+import { sanityImage } from '@/services/sanity'
+import { TONE_HEX, eventPhase } from '@/components/devfest/programUtils'
 import { partnersData } from '@/data/2026/partners'
 import CompassDetroitLogo from '@/assets/images/sponsors/Compass_Detroit_logo.webp'
 import WomenTechmakersLogo from '@/assets/images/organizations/org-wtm-logo.webp'
@@ -17,13 +21,9 @@ import PropTypes from 'prop-types'
 import styles from './DevFestPortal.module.css'
 
 const SKYLINE = '/assets/devfest26/detroit-sunset.svg'
-const KICKOFF = new Date(DEVFEST_2026.startsAt).getTime()
-const WRAP_UP = new Date(`${DEVFEST_2026.endDate}T23:59:59-05:00`).getTime()
-const DAY_MS = 86_400_000
 // The doorway starts filling with light this many days out
 const RUN_UP_DAYS = 45
 const FINAL_WEEK = 7
-const SHIRT_DEADLINE = new Date(DEVFEST_2026.shirtDeadline).getTime()
 // Stacked slices give the glyphs real depth under CSS 3D
 const DEPTH = Array.from({ length: 14 }, (_, i) => i + 1)
 
@@ -32,7 +32,19 @@ const MAPS_URL = `https://www.google.com/maps/search/?${new URLSearchParams({
   query: `${DEVFEST_2026.venue}, ${DEVFEST_2026.address}`,
 })}`
 
-const COMING_SOON_ICONS = [FiMic, FiCalendar, FiLayers]
+// Three sessions that show the range of the weekend
+const MUST_SEE = [
+  'Build with AI Workshop',
+  'Design to Production with Google Stitch',
+  'When AI Agents Should Stop',
+]
+  .map((t) => DEVFEST_TALKS.find((s) => s.title.startsWith(t)))
+  .filter(Boolean)
+
+const LINEUP = DEVFEST_TRACKS.map((t) => ({
+  ...t,
+  count: DEVFEST_TALKS.filter((s) => s.track === t.name).length,
+}))
 
 const GDG_DETROIT = partnersData.organizations.find(
   (o) => o.name === 'GDG Detroit'
@@ -81,8 +93,7 @@ function useDaysLeft() {
   }, [])
 
   if (!Number.isNaN(preview)) return Math.max(-1, preview)
-  if (now > WRAP_UP) return -1
-  return Math.max(0, Math.ceil((KICKOFF - now) / DAY_MS))
+  return eventPhase(now).days
 }
 
 // 0 = dark doorway at the start of the run-up, 1 = fully lit on event day
@@ -95,60 +106,189 @@ const COUNT_LABELS = {
 }
 const countLabel = (days) => COUNT_LABELS[days] ?? null
 
-// Pointer steers the camera; touch and idle states fall back to a slow sway
-function useTilt() {
-  const ref = useRef(null)
+const REST = { rx: 5, ry: -9 }
 
-  const onPointerMove = (e) => {
-    if (e.pointerType !== 'mouse') return
-    const el = ref.current
-    const r = el.getBoundingClientRect()
-    const x = (e.clientX - r.left) / r.width - 0.5
-    const y = (e.clientY - r.top) / r.height - 0.5
-    el.dataset.active = 'true'
-    el.style.setProperty('--ry', `${x * 22}deg`)
-    el.style.setProperty('--rx', `${8 - y * 10}deg`)
-    el.style.setProperty('--mx', `${(x + 0.5) * 100}%`)
+/**
+ * Camera for the doorway scene. One rAF loop eases toward the pointer (lerp,
+ * frame-rate independent), blended with a slow idle sway computed in JS, so
+ * there's never a hand-off snap. Per frame it writes two transforms: the
+ * world's rotation and a small counter-shift on the dust for parallax. The
+ * stage rect is cached outside the loop; the loop sleeps off screen.
+ * Touch steers too: drag across the scene.
+ */
+function usePortalCamera() {
+  const reduced = usePrefersReducedMotion()
+  const stageRef = useRef(null)
+  const worldRef = useRef(null)
+  const dustRef = useRef(null)
+  const input = useRef({ x: 0, y: 0, active: 0, rect: null })
+
+  useEffect(() => {
+    const stage = stageRef.current
+    const world = worldRef.current
+    if (!stage || !world) return undefined
+    const dust = dustRef.current
+
+    const pose = (rx, ry, px = 0, py = 0) => {
+      world.style.transform = `rotateX(${rx.toFixed(
+        3
+      )}deg) rotateY(${ry.toFixed(3)}deg)`
+      if (dust)
+        dust.style.transform = `translate3d(${(px * -24).toFixed(2)}px, ${(
+          py * -14
+        ).toFixed(2)}px, 0)`
+    }
+
+    if (reduced) {
+      pose(REST.rx, REST.ry)
+      return undefined
+    }
+
+    const cur = { x: 0, y: 0, blend: 0 }
+    const t0 = performance.now()
+    let last = t0
+    let frame = 0
+    let onScreen = true
+
+    const tick = (t) => {
+      const dt = Math.min(64, t - last)
+      last = t
+      const k = 1 - (1 - 0.085) ** (dt / 16.67)
+      const target = input.current
+      cur.x += (target.x - cur.x) * k
+      cur.y += (target.y - cur.y) * k
+      cur.blend += (target.active - cur.blend) * (k * 0.6)
+      const s = (t - t0) / 1000
+      // Idle drift: a slow figure-eight, damped while the pointer steers
+      const idle = 1 - cur.blend * 0.8
+      const ry = REST.ry + Math.sin(s * 0.22) * 11 * idle + cur.x * 26
+      const rx = REST.rx + Math.sin(s * 0.16) * 1.8 * idle - cur.y * 9
+      pose(rx, ry, cur.x, cur.y)
+      frame = requestAnimationFrame(tick)
+    }
+
+    const run = () => {
+      cancelAnimationFrame(frame)
+      last = performance.now()
+      if (onScreen && !document.hidden) frame = requestAnimationFrame(tick)
+    }
+
+    const io =
+      typeof IntersectionObserver !== 'undefined'
+        ? new IntersectionObserver(([entry]) => {
+            onScreen = entry.isIntersecting
+            run()
+          })
+        : null
+    io?.observe(stage)
+    document.addEventListener('visibilitychange', run)
+    // The cached rect goes stale when the page moves; the next move re-reads it
+    const forgetRect = () => {
+      input.current.rect = null
+    }
+    window.addEventListener('scroll', forgetRect, { passive: true })
+    window.addEventListener('resize', forgetRect)
+    run()
+
+    return () => {
+      cancelAnimationFrame(frame)
+      io?.disconnect()
+      document.removeEventListener('visibilitychange', run)
+      window.removeEventListener('scroll', forgetRect)
+      window.removeEventListener('resize', forgetRect)
+    }
+  }, [reduced])
+
+  const steer = (e) => {
+    const state = input.current
+    // Mouse steers on hover; touch and pen steer while pressed
+    if (e.pointerType !== 'mouse' && !e.buttons) return
+    if (!state.rect) state.rect = stageRef.current.getBoundingClientRect()
+    state.active = 1
+    state.x = Math.max(
+      -0.5,
+      Math.min(0.5, (e.clientX - state.rect.left) / state.rect.width - 0.5)
+    )
+    state.y = Math.max(
+      -0.5,
+      Math.min(0.5, (e.clientY - state.rect.top) / state.rect.height - 0.5)
+    )
   }
 
-  const onPointerLeave = () => {
-    const el = ref.current
-    delete el.dataset.active
-    el.style.removeProperty('--ry')
-    el.style.removeProperty('--rx')
-    el.style.removeProperty('--mx')
+  const release = () => {
+    Object.assign(input.current, { x: 0, y: 0, active: 0, rect: null })
   }
 
-  return { ref, onPointerMove, onPointerLeave }
+  const handlers = reduced
+    ? {}
+    : {
+        onPointerMove: steer,
+        onPointerDown: steer,
+        onPointerLeave: release,
+        onPointerUp: (e) => e.pointerType !== 'mouse' && release(),
+        onPointerCancel: release,
+      }
+
+  return { stageRef, worldRef, dustRef, handlers }
 }
 
+// Pre-shaded extrusion slices, as on the flyer: the arch's sides glow warm
+// orange, the "2" is dark navy behind a blue rim. Colour steps, no filters.
+const archShade = (d) => ({
+  '--d': d,
+  background: `linear-gradient(180deg, hsl(28 90% ${
+    60 - d * 2.6
+  }%), hsl(16 62% ${26 - d * 1.1}%))`,
+})
+const twoShade = (d) => ({
+  '--d': d,
+  color: `hsl(226 58% ${30 - d * 1.4}%)`,
+})
+
 function PortalScene({ days }) {
-  const tilt = useTilt()
+  const { stageRef, worldRef, dustRef, handlers } = usePortalCamera()
   const lit = lightFor(days)
   const label = countLabel(days)
 
   return (
     <div
+      ref={stageRef}
       className={styles.stage}
-      {...tilt}
+      {...handlers}
       style={{ '--lit': lit }}
       aria-hidden="true"
     >
-      <div className={styles.world}>
-        {/* Greektown skyline with the venue tower, set back behind the "12" */}
+      <div className={styles.halftone} />
+
+      <div ref={worldRef} className={styles.world}>
+        {/* The venue: Greektown skyline with the Hollywood Casino tower */}
         <GreektownBackdrop
           lit={lit}
           signOn={days <= FINAL_WEEK}
           className={styles.backdrop}
         />
+        <p className={styles.venue}>
+          <strong>{DEVFEST_2026.venue}</strong>
+          <br />
+          {DEVFEST_2026.entrance}
+        </p>
+
         <div className={styles.floor}>
-          <div className={styles.spillWarm} />
-          <div className={styles.spillCool} />
+          <div className={styles.beam} />
+          <div className={styles.sheen} />
+        </div>
+
+        {/* Glossy-floor reflections: flipped copies under each glyph */}
+        <div className={styles.archReflection}>
+          <span style={{ backgroundImage: `url(${SKYLINE})` }} />
+        </div>
+        <div className={styles.twoReflection}>
+          <span style={{ backgroundImage: `url(${SKYLINE})` }}>2</span>
         </div>
 
         <div className={styles.arch}>
           {DEPTH.map((d) => (
-            <span key={d} className={styles.archSlice} style={{ '--d': d }} />
+            <span key={d} className={styles.archSlice} style={archShade(d)} />
           ))}
           <span
             className={styles.archFace}
@@ -156,11 +296,12 @@ function PortalScene({ days }) {
           />
           {/* Darkness above the light line; recedes as kickoff nears */}
           <span className={styles.archShade} />
+          <span className={styles.archGlow} />
         </div>
 
         <div className={styles.two}>
           {DEPTH.map((d) => (
-            <span key={d} className={styles.twoSlice} style={{ '--d': d }}>
+            <span key={d} className={styles.twoSlice} style={twoShade(d)}>
               2
             </span>
           ))}
@@ -171,6 +312,15 @@ function PortalScene({ days }) {
             2
           </span>
         </div>
+
+        <p className={styles.count}>
+          {label ?? (
+            <>
+              <span className={styles.countNumber}>{days}</span>
+              <span className={styles.countUnit}>days to go</span>
+            </>
+          )}
+        </p>
 
         <p className={`${styles.label} ${styles.labelLeft}`}>
           Tech
@@ -186,21 +336,16 @@ function PortalScene({ days }) {
           <br />
           Compass Detroit
         </p>
-        <p className={styles.count}>
-          {label ?? (
-            <>
-              <span className={styles.countNumber}>{days}</span>
-              <span className={styles.countUnit}>days to go</span>
-            </>
-          )}
-        </p>
         <p className={styles.caption}>
           The 12th Annual Michigan
           <br />
           DevFest Conference
         </p>
       </div>
-      <div className={styles.dust} />
+
+      <div className={styles.dustWrap}>
+        <div ref={dustRef} className={styles.dust} />
+      </div>
     </div>
   )
 }
@@ -218,7 +363,7 @@ export default function DevFestPortal() {
       aria-labelledby="devfest-portal-title"
     >
       <div className="relative z-[1] mx-auto max-w-[1200px] px-6 py-16 md:py-24">
-        <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] [&>*]:min-w-0">
           <div className={styles.copy}>
             <p className={styles.eyebrow}>Still on the fence?</p>
             <h2 id="devfest-portal-title" className={styles.title}>
@@ -226,10 +371,45 @@ export default function DevFestPortal() {
               <span className={styles.titleGlow}>dev weekend</span>
             </h2>
             <p className={styles.lede}>
-              Ship something with AI on Friday. Learn from Michigan&apos;s
-              builders on Saturday. Leave with the people you&apos;ll build with
-              next. Twelve years in, this is the room where Detroit tech meets.
+              Ship something with AI on Friday. Learn from{' '}
+              {DEVFEST_PROGRAM_STATS.conferenceSpeakers} speakers on Saturday.
+              Leave with the people you&apos;ll build with next. Here&apos;s
+              what you&apos;d miss:
             </p>
+            <ul className="mt-6 space-y-3">
+              {MUST_SEE.map((s) => (
+                <li key={s.id}>
+                  <Link
+                    to={`${DEVFEST_2026.programPath}?session=${s.id}`}
+                    className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-3 transition-colors hover:border-white/30 hover:bg-white/[0.08]"
+                    style={{ boxShadow: `inset 3px 0 0 ${TONE_HEX[s.tone]}` }}
+                  >
+                    <span className="flex shrink-0 -space-x-3 pl-1">
+                      {s.speakers.slice(0, 3).map((p) => (
+                        <img
+                          key={p.slug}
+                          src={sanityImage(p.avatar, { w: 96, h: 96 })}
+                          alt=""
+                          width="40"
+                          height="40"
+                          loading="lazy"
+                          className="size-10 rounded-full border-2 border-black object-cover"
+                        />
+                      ))}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-bold text-white group-hover:underline">
+                        {s.title}
+                      </span>
+                      <span className="block truncate text-xs text-white/65">
+                        {DEVFEST_DAY_BY_ID[s.day].short} {formatTime(s.time)} ·{' '}
+                        {s.speakers.map((p) => p.name).join(', ')}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <a
                 href={DEVFEST_2026.registerUrl}
@@ -244,8 +424,6 @@ export default function DevFestPortal() {
               </a>
               <span className={styles.ctaNote}>
                 {countLabel(days) ?? `${days} days to go`}
-                {Date.now() <= SHIRT_DEADLINE &&
-                  ` · Free T-shirt if you register by ${DEVFEST_2026.shirtDeadlineLabel}`}
               </span>
             </div>
           </div>
@@ -290,32 +468,29 @@ export default function DevFestPortal() {
             </a>
           </article>
 
-          <article className={styles.card} aria-labelledby="devfest-soon">
-            <p className={styles.cardKicker}>More to announce</p>
-            <h3 id="devfest-soon" className={styles.cardTitle}>
-              The lineup drops soon
+          <article className={styles.card} aria-labelledby="devfest-lineup">
+            <p className={styles.cardKicker}>The lineup is live</p>
+            <h3 id="devfest-lineup" className={styles.cardTitle}>
+              {DEVFEST_PROGRAM_STATS.speakers} speakers, the AI Hackathon and{' '}
+              {DEVFEST_PROGRAM_STATS.tracks} conference tracks
             </h3>
-            <ul className={styles.soonList}>
-              {DEVFEST_2026.comingSoon.map((item, i) => {
-                const Icon = COMING_SOON_ICONS[i % COMING_SOON_ICONS.length]
-                return (
-                  <li key={item} className={styles.soonItem}>
-                    <Icon aria-hidden="true" />
-                    <span>{item}</span>
-                    <span className={styles.soonBadge}>Announcing soon</span>
-                  </li>
-                )
-              })}
+            <ul className={styles.lineupList}>
+              {LINEUP.map(({ name, tone, count }) => (
+                <li key={name} className={styles.lineupItem}>
+                  <span
+                    aria-hidden="true"
+                    className={styles.lineupDot}
+                    style={{ background: TONE_HEX[tone] }}
+                  />
+                  <span>{name}</span>
+                  <span className={styles.lineupBadge}>{count} sessions</span>
+                </li>
+              ))}
             </ul>
-            <a
-              href={DEVFEST_2026.siteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.cardLink}
-            >
-              Follow updates on midevfest.com
+            <Link to={DEVFEST_2026.programPath} className={styles.cardLink}>
+              Explore speakers and sessions
               <ArrowRightIcon size={14} />
-            </a>
+            </Link>
           </article>
         </div>
 

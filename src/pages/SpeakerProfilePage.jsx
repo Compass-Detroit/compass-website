@@ -26,7 +26,11 @@ import colors from 'tailwindcss/colors'
 
 import SiteLayout from '@/layouts/SiteLayout'
 import SpeakerSpotlightCard from '@/components/speakers/SpeakerSpotlightCard'
-import { getSpeakerBySlug, getAllSpeakers } from '@/utils/speakerRegistry'
+import {
+  getSpeakerBySlug,
+  getAllSpeakers,
+  sessionEventLabel,
+} from '@/utils/speakerRegistry'
 
 import GDEIcon from '@/assets/images/icons/gdge.svg'
 import WTMLogo from '@/assets/images/icons/wtm.svg'
@@ -242,28 +246,27 @@ const sessionTracks = (session) =>
   session.tracks?.length ? session.tracks : session.track ? [session.track] : []
 
 // Only name an event when the data does; otherwise the year says enough
-const talkContext = (session) =>
-  session.event ? `${session.event} ${session.year}` : `${session.year}`
+const talkContext = (session) => sessionEventLabel(session) ?? `${session.year}`
 
 /**
  * The speaker's own channels, website first. A LinkedIn URL filed as the
  * speaker's website is shown as LinkedIn, not as a generic "Website".
  */
 function getSpeakerLinks(speaker) {
-  const linkedIn =
-    speaker.linkedIn || (isLinkedInUrl(speaker.url) ? speaker.url : null)
-  const website =
-    speaker.url && !isLinkedInUrl(speaker.url) ? speaker.url : null
+  const sites = speaker.websites ?? [speaker.url].flat().filter(Boolean)
+  const linkedIn = speaker.linkedIn || sites.find(isLinkedInUrl) || null
+  const websites = sites.filter((url) => !isLinkedInUrl(url))
+  const website = websites[0] ?? null
 
   const links = [
-    website && {
-      key: 'website',
-      href: website,
-      text: hostname(website),
-      label: `${speaker.name}'s website, ${hostname(website)}`,
+    ...websites.map((href, i) => ({
+      key: `website-${href}`,
+      href,
+      text: hostname(href),
+      label: `${speaker.name}'s website, ${hostname(href)}`,
       Icon: FaGlobe,
-      primary: true,
-    },
+      primary: i === 0,
+    })),
     linkedIn && {
       key: 'linkedin',
       href: linkedIn,
@@ -774,7 +777,8 @@ export default function SpeakerProfilePage() {
                           className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-white ${
                             primary
                               ? 'border-primary-400 bg-primary text-gray-950 hover:bg-primary-400'
-                              : 'border-white/30 bg-white/10 text-white backdrop-blur-md hover:bg-white hover:text-gray-900'
+                              : // Hero overlay CSS forces white text, so hover brightens the glass instead of inverting
+                                'border-white/30 bg-white/10 text-white backdrop-blur-md hover:border-white/70 hover:bg-white/25'
                           }`}
                         >
                           <Icon className="size-4" aria-hidden="true" />

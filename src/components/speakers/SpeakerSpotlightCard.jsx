@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fa6'
 import GDEIcon from '@/assets/images/icons/gdge.svg'
 import WTMLogo from '@/assets/images/icons/wtm.svg'
+import { sessionEventLabel } from '@/utils/speakerRegistry'
 
 // Accent per track family; the card, chip and hover ring all read --accent
 const TRACK_ACCENTS = [
@@ -208,7 +209,7 @@ export default function SpeakerSpotlightCard({ speaker, to, onSelect }) {
           <figure className="mt-4 rounded-xl border-l-[3px] border-[color:var(--accent)] bg-surface-elevated px-3 py-2.5">
             <figcaption className="text-[10px] font-bold uppercase tracking-wider text-theme-muted">
               {talk.event
-                ? `${talk.event} ${talk.year}`
+                ? sessionEventLabel(talk)
                 : talk.year
                   ? `${talk.year} talk`
                   : 'Talk'}

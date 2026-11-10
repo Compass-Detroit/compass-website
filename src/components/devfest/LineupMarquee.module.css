@@ -1,0 +1,169 @@
+.strip {
+  position: relative;
+  z-index: 2;
+  padding: 1.25rem 0 1.5rem;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto 0.9rem;
+  padding: 0 1.5rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.6);
+}
+
+.all {
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.all:hover {
+  text-decoration: underline;
+}
+
+.viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+.track {
+  display: flex;
+  gap: 0.75rem;
+  width: max-content;
+  margin: 0;
+  padding: 0 0.75rem;
+  list-style: none;
+  animation: lineup 90s linear infinite;
+}
+
+.viewport:hover .track,
+.viewport:focus-within .track,
+.track[data-paused] {
+  animation-play-state: paused;
+}
+
+.controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.pause {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.6rem;
+}
+
+.pause:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+
+.pause:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@keyframes lineup {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 19rem;
+  padding: 0.6rem 0.9rem 0.6rem 0.6rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.04);
+  color: #fff;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.card:hover,
+.card:focus-visible {
+  border-color: var(--ring);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.card:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.photo {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border: 2px solid var(--ring);
+  border-radius: 9999px;
+  object-fit: cover;
+}
+
+.text {
+  display: grid;
+  min-width: 0;
+}
+
+.name {
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.talk,
+.when {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.talk {
+  font-size: 0.8rem;
+  color: rgb(255 255 255 / 0.8);
+}
+
+.when {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgb(255 255 255 / 0.5);
+}
+
+/* No auto-scroll: the strip becomes a swipeable row */
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    overflow-x: auto;
+    mask-image: none;
+    scrollbar-width: none;
+  }
+
+  .track {
+    animation: none;
+  }
+
+  .item[aria-hidden='true'] {
+    display: none;
+  }
+}

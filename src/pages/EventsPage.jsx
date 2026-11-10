@@ -7,6 +7,8 @@ import EventSpotlightSection from '@/components/events/EventSpotlightSection'
 import { communityPhotos } from '@/data/galleryPhotos'
 import MiniCarousel from '@/components/ui/MiniCarousel'
 import CommunityCalendar from '@/components/events/CommunityCalendar'
+import { DEVFEST_2026 } from '@/data/2026/devfest'
+import { DEVFEST_PROGRAM_STATS } from '@/data/2026/devfestProgram'
 
 const typeColors = {
   'Innovation Summit': 'bg-primary/10 text-primary border-primary/20',
@@ -78,6 +80,17 @@ const allEvents = [
     desc: 'Honoring women leading in technology with sessions on leadership, career growth, and breaking barriers in the industry.',
   },
   {
+    name: 'Hack Michigan',
+    date: 'May 2026',
+    endDate: '2026-05-17',
+    month: 'MAY',
+    location: 'TechTown Detroit, 440 Burroughs St',
+    type: 'Hackathon',
+    stages: ['build', 'connect'],
+    desc: 'Our first Hack Michigan: 48 hours building AI proofs of concept for Michigan industries, powered by IBM & Google. The winning teams demoed on the Main Stage at Michigan Tech Week.',
+    url: 'https://www.hackmichigan.com/projects/',
+  },
+  {
     name: 'Detroit Pride Innovation Summit',
     date: 'June 2026',
     month: 'JUN',
@@ -106,15 +119,6 @@ const allEvents = [
     ],
   },
   {
-    name: 'Hack Michigan',
-    date: '2026',
-    month: 'TBD',
-    location: 'Detroit, MI',
-    type: 'Hackathon',
-    stages: ['build', 'connect'],
-    desc: "Michigan's premier community hackathon bringing together developers, designers, and innovators to build solutions for real-world challenges.",
-  },
-  {
     name: 'Michigan DevFest 2026',
     date: 'November 13–14, 2026',
     endDate: '2026-11-14',
@@ -125,7 +129,7 @@ const allEvents = [
     stages: ['engage', 'build', 'connect'],
     statusBadge: 'Tickets on Sale',
     url: 'https://www.midevfest.com/',
-    desc: "Michigan's 12th annual flagship developer conference — 300+ attendees and 30+ speakers, tracks to be announced. AI Hackathon Nov 13, Conference Nov 14. Co-produced with GDG Detroit.",
+    desc: `Michigan's 12th annual flagship developer conference — ${DEVFEST_2026.attendees} attendees, ${DEVFEST_PROGRAM_STATS.speakers} speakers and ${DEVFEST_PROGRAM_STATS.tracks} tracks. AI Hackathon Nov 13, Conference Nov 14. Co-produced with GDG Detroit.`,
     hasQr: true,
   },
 ]
@@ -197,8 +201,13 @@ const eventLegacy = [
     edition: '12th Annual',
     color: 'blue',
     desc: "Michigan's flagship technology conference spanning cloud, AI, mobile, web, and careers.",
-    link: 'https://midevfest.com',
-    stats: { speakers: '100+', attendees: '500+', tracks: '6' },
+    link: DEVFEST_2026.programPath,
+    linkLabel: 'Speakers & Schedule',
+    stats: {
+      speakers: String(DEVFEST_PROGRAM_STATS.speakers),
+      attendees: DEVFEST_2026.attendees,
+      tracks: String(DEVFEST_PROGRAM_STATS.tracks),
+    },
   },
   {
     name: 'BHM Innovation Summit',
@@ -215,7 +224,7 @@ const eventLegacy = [
     edition: '4th Annual',
     color: 'purple',
     desc: 'Empowering women in tech through innovation, leadership, and community.',
-    link: 'https://bit.ly/det-iwd-25-website',
+    link: 'https://iwdsummit.com',
     stats: { speakers: '40+', attendees: '250+', tracks: '8' },
   },
   {
@@ -233,7 +242,7 @@ const eventLegacy = [
     edition: '2nd Annual',
     color: 'rose',
     desc: 'Celebrating LGBTQ+ innovation and inclusive technology leadership.',
-    link: 'https://detroitpridesummit.com',
+    link: 'https://www.detroitpridesummit.com',
     stats: { speakers: '20+', attendees: '150+', tracks: '3' },
   },
   {
@@ -248,11 +257,16 @@ const eventLegacy = [
   {
     name: 'Hack Michigan',
     year: 2026,
-    edition: '3rd Annual',
+    edition: 'Inaugural',
     color: 'emerald',
-    desc: 'Multi-day hackathon building solutions for Michigan communities.',
-    link: '/events',
-    stats: { speakers: '15+', attendees: '200+', tracks: '3' },
+    desc: 'Our first Hack Michigan, May 15–17 at TechTown Detroit: 48 hours building AI proofs of concept for Michigan industries, powered by IBM & Google. Winners demoed at Michigan Tech Week.',
+    link: 'https://www.hackmichigan.com/projects/',
+    stats: { speakers: '4', attendees: '48', tracks: '8' },
+    statLabels: {
+      speakers: 'AI challenges',
+      attendees: 'Hours',
+      tracks: 'Industry tracks',
+    },
   },
 ]
 
@@ -290,6 +304,24 @@ export default function EventsPage() {
             COMPASS event is designed to build confidence, create connections,
             and open career pathways.
           </p>
+          <Link
+            to={DEVFEST_2026.programPath}
+            className="group mt-8 inline-flex max-w-full flex-wrap items-center gap-x-4 gap-y-1 rounded-2xl border border-devfest-blue/40 bg-devfest-blue/10 px-5 py-4 transition-colors hover:border-devfest-blue hover:bg-devfest-blue/15"
+          >
+            <span className="text-xs font-bold uppercase tracking-wider text-devfest-blue-ink dark:text-devfest-ht-blue">
+              {DEVFEST_2026.name} · {DEVFEST_2026.shortDateLabel}
+            </span>
+            <span className="font-bold text-theme-primary">
+              See all {DEVFEST_PROGRAM_STATS.speakers} speakers and build your
+              schedule
+              <span
+                aria-hidden="true"
+                className="ml-1 inline-block transition-transform group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </span>
+          </Link>
         </div>
       </section>
 
@@ -487,7 +519,7 @@ export default function EventsPage() {
                       {ev.stats.speakers}
                     </span>
                     <span className="text-[10px] uppercase text-gray-500">
-                      Speakers
+                      {ev.statLabels?.speakers ?? 'Speakers'}
                     </span>
                   </div>
                   <div className="flex flex-col">
@@ -495,7 +527,7 @@ export default function EventsPage() {
                       {ev.stats.attendees}
                     </span>
                     <span className="text-[10px] uppercase text-gray-500">
-                      Attendees
+                      {ev.statLabels?.attendees ?? 'Attendees'}
                     </span>
                   </div>
                   <div className="flex flex-col">
@@ -503,7 +535,7 @@ export default function EventsPage() {
                       {ev.stats.tracks}
                     </span>
                     <span className="text-[10px] uppercase text-gray-500">
-                      Tracks
+                      {ev.statLabels?.tracks ?? 'Tracks'}
                     </span>
                   </div>
                 </div>
@@ -512,7 +544,7 @@ export default function EventsPage() {
                     to={ev.link}
                     className="inline-flex items-center text-sm font-semibold text-primary transition-colors hover:text-primary-400"
                   >
-                    Visit Website &rarr;
+                    {ev.linkLabel ?? 'Visit Website'} &rarr;
                   </Link>
                 ) : (
                   <a

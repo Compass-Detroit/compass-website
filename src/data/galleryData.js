@@ -7,7 +7,7 @@ export const CATALOG_PHOTOS = [
     category: 'IWD Summit 2026',
     folder: 'iwd26',
     photographer: 'Heart of the City Photography x Shawn Lee Studios',
-    photographerUrl: 'https://www.hocxsls.com/',
+    photographerUrl: 'https://www.leemediahouse.com/',
     featured: true,
   },
   {
@@ -17,7 +17,7 @@ export const CATALOG_PHOTOS = [
     category: 'IWD Summit 2026',
     folder: 'iwd26',
     photographer: 'Heart of the City Photography x Shawn Lee Studios',
-    photographerUrl: 'https://www.hocxsls.com/',
+    photographerUrl: 'https://www.leemediahouse.com/',
     featured: true,
   },
   {
@@ -27,7 +27,7 @@ export const CATALOG_PHOTOS = [
     category: 'IWD Summit 2026',
     folder: 'iwd26',
     photographer: 'Heart of the City Photography x Shawn Lee Studios',
-    photographerUrl: 'https://www.hocxsls.com/',
+    photographerUrl: 'https://www.leemediahouse.com/',
     featured: true,
   },
   {
@@ -37,7 +37,7 @@ export const CATALOG_PHOTOS = [
     category: 'IWD Summit 2026',
     folder: 'iwd26',
     photographer: 'Heart of the City Photography x Shawn Lee Studios',
-    photographerUrl: 'https://www.hocxsls.com/',
+    photographerUrl: 'https://www.leemediahouse.com/',
     featured: true,
   },
   {
@@ -47,7 +47,7 @@ export const CATALOG_PHOTOS = [
     category: 'IWD Summit 2026',
     folder: 'iwd26',
     photographer: 'Heart of the City Photography x Shawn Lee Studios',
-    photographerUrl: 'https://www.hocxsls.com/',
+    photographerUrl: 'https://www.leemediahouse.com/',
     featured: true,
   },
   {

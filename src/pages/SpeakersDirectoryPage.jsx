@@ -12,19 +12,50 @@ import {
 
 const YEARS = [2026, 2025, 2024, 2023]
 
+const SUFFIX = /^(jr|sr|ii|iii|iv|phd|md|mba)\.?$/i
+
+/** "Dr. W Scott Richardson Jr." sorts under R. */
+const lastName = (name) =>
+  name
+    .split(/\s+/)
+    .filter((part) => !SUFFIX.test(part.replace(/,$/, '')))
+    .at(-1) ?? name
+
+const byLastName = (a, b) =>
+  lastName(a.name).localeCompare(lastName(b.name), 'en', {
+    sensitivity: 'base',
+  }) || a.name.localeCompare(b.name)
+
+const latestYear = (s) => Math.max(...s.yearsActive)
+
 const SORTS = {
   recent: {
-    label: 'Most recent',
-    compare: (a, b) =>
-      Math.max(...b.yearsActive) - Math.max(...a.yearsActive) ||
-      a.name.localeCompare(b.name),
+    label: 'By year',
+    compare: (a, b) => latestYear(b) - latestYear(a) || byLastName(a, b),
+    // Each speaker sits under the latest year they spoke
+    group: (s) => String(latestYear(s)),
+  },
+  name: {
+    label: 'Last name A–Z',
+    compare: byLastName,
+    group: (s) => lastName(s.name).charAt(0).toUpperCase(),
   },
   talks: {
     label: 'Most talks',
     compare: (a, b) =>
-      b.sessions.length - a.sessions.length || a.name.localeCompare(b.name),
+      b.sessions.length - a.sessions.length || byLastName(a, b),
   },
-  name: { label: 'Name A–Z', compare: (a, b) => a.name.localeCompare(b.name) },
+}
+
+const groupSpeakers = (speakers, group) => {
+  if (!group) return [{ key: 'all', speakers }]
+  const groups = []
+  for (const speaker of speakers) {
+    const key = group(speaker)
+    if (groups.at(-1)?.key !== key) groups.push({ key, speakers: [] })
+    groups.at(-1).speakers.push(speaker)
+  }
+  return groups
 }
 
 const chipClass = (active) =>
@@ -86,6 +117,10 @@ export default function SpeakersDirectoryPage() {
       )
       .sort(SORTS[sort].compare)
   }, [allSpeakers, query, years, tracks, category, sort])
+  const groups = useMemo(
+    () => groupSpeakers(speakers, SORTS[sort].group),
+    [speakers, sort]
+  )
 
   return (
     <SiteLayout>
@@ -233,16 +268,40 @@ export default function SpeakersDirectoryPage() {
           </div>
 
           {speakers.length ? (
-            <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {speakers.map((speaker) => (
-                <li key={speaker.slug}>
-                  <SpeakerSpotlightCard
-                    speaker={speaker}
-                    to={`/speakers/${speaker.slug}`}
-                  />
-                </li>
+            <div className="space-y-14">
+              {groups.map(({ key, speakers: members }) => (
+                <section
+                  key={key}
+                  aria-labelledby={key === 'all' ? undefined : `group-${key}`}
+                >
+                  {key !== 'all' && (
+                    <div className="mb-6 flex items-end gap-4 border-b border-surface pb-3">
+                      <h2
+                        id={`group-${key}`}
+                        className="text-4xl font-extrabold tabular-nums tracking-tight text-theme-primary md:text-5xl"
+                      >
+                        {key}
+                      </h2>
+                      <p className="pb-1.5 text-sm text-theme-muted">
+                        {members.length}{' '}
+                        {members.length === 1 ? 'speaker' : 'speakers'}
+                        {sort === 'recent' && ' · A–Z by last name'}
+                      </p>
+                    </div>
+                  )}
+                  <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {members.map((speaker) => (
+                      <li key={speaker.slug}>
+                        <SpeakerSpotlightCard
+                          speaker={speaker}
+                          to={`/speakers/${speaker.slug}`}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               ))}
-            </ul>
+            </div>
           ) : (
             <div className="rounded-3xl border border-dashed border-surface bg-surface-card p-12 text-center">
               <h2 className="text-xl font-semibold text-theme-primary">

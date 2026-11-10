@@ -34,6 +34,10 @@ const normalizeTitle = (title = '') =>
     .replace(/[^a-z0-9]+/g, ' ')
     .trim()
 
+/** "Michigan DevFest 2026", not "Michigan DevFest 2026 2026". */
+export const sessionEventLabel = ({ event, year }) =>
+  !event || event.includes(String(year)) ? event : `${event} ${year}`
+
 export function generateSlug(name) {
   if (!name) return ''
   // Normalize name by removing titles (Dr., Mr., Ms., etc.), credentials and middle initials
@@ -86,7 +90,9 @@ function buildRegistry() {
           twitter: speaker.twitter || null,
           linkedIn: speaker.linkedIn || null,
           github: speaker.github || null,
-          url: speaker.url || null,
+          url: null,
+          // Every personal site; `url` is the first (some speakers have two)
+          websites: [],
           mastodon: speaker.mastodon || null,
           isGDE: speaker.isGDE || false,
           isWTM: speaker.isWTM || false,
@@ -128,7 +134,10 @@ function buildRegistry() {
       if (speaker.twitter) profile.twitter = speaker.twitter
       if (speaker.linkedIn) profile.linkedIn = speaker.linkedIn
       if (speaker.github) profile.github = speaker.github
-      if (speaker.url) profile.url = speaker.url
+      for (const site of [speaker.url].flat().filter(Boolean)) {
+        if (!profile.websites.includes(site)) profile.websites.push(site)
+      }
+      profile.url = profile.websites[0] ?? null
       if (speaker.mastodon) profile.mastodon = speaker.mastodon
       if (speaker.isGDE) profile.isGDE = speaker.isGDE
       if (speaker.isWTM) profile.isWTM = speaker.isWTM

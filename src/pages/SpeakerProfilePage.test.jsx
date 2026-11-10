@@ -35,7 +35,8 @@ vi.mock('react-router-dom', async () => {
 vi.mock('@/layouts/SiteLayout', () => ({
   default: ({ children }) => <div data-testid="site-layout">{children}</div>,
 }))
-vi.mock('@/utils/speakerRegistry', () => ({
+vi.mock('@/utils/speakerRegistry', async (importOriginal) => ({
+  sessionEventLabel: (await importOriginal()).sessionEventLabel,
   getSpeakerBySlug: () => mocks.speaker,
   getAllSpeakers: () => [],
   getTotalSpeakerCount: () => 1,
@@ -119,5 +120,36 @@ describe('SpeakerProfilePage', () => {
     mocks.speaker = { ...baseSpeaker }
     renderWithRouter(<SpeakerProfilePage />)
     expect(screen.queryByText(/Book Test/)).not.toBeInTheDocument()
+  })
+
+  it('lists each of several websites by hostname', () => {
+    mocks.speaker = {
+      ...baseSpeaker,
+      url: 'https://one.example.com',
+      websites: ['https://one.example.com', 'https://www.two.example.org'],
+    }
+    renderWithRouter(<SpeakerProfilePage />)
+    expect(screen.getByText('one.example.com').closest('a')).toHaveAttribute(
+      'href',
+      'https://one.example.com'
+    )
+    expect(screen.getByText('two.example.org')).toBeInTheDocument()
+  })
+
+  it('does not repeat a year the event name already has', () => {
+    mocks.speaker = {
+      ...baseSpeaker,
+      sessions: [
+        {
+          year: 2026,
+          title: 'DevFest Talk',
+          event: 'Michigan DevFest 2026',
+          tags: [],
+        },
+      ],
+    }
+    renderWithRouter(<SpeakerProfilePage />)
+    expect(screen.getByText('Michigan DevFest 2026')).toBeInTheDocument()
+    expect(screen.queryByText(/2026 2026/)).not.toBeInTheDocument()
   })
 })

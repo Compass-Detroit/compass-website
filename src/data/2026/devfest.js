@@ -1,54 +1,42 @@
-// Michigan DevFest 2026 — single source for dates, venue and links
+// Michigan DevFest 2026 — single source for dates, venue and links. Kept
+// free of the program snapshot so pages that only need these facts (the
+// navbar, event lists) don't pull in every session. Per-day data and lineup
+// stats live in devfestProgram.js.
 const ASSETS = '/assets/devfest26'
+
+const DEVFEST_ATTENDEES = '300+'
 
 export const DEVFEST_2026 = {
   name: 'Michigan DevFest 2026',
   edition: '12th annual',
+  attendees: DEVFEST_ATTENDEES,
   dateLabel: 'November 13–14, 2026',
   shortDateLabel: 'Nov 13–14',
-  // Kickoff for the countdown; Detroit is on EST (UTC-5) in November
-  startsAt: '2026-11-13T00:00:00-05:00',
+  // Detroit is on EST (UTC-5) in November. Doors open at 8 AM on the
+  // Friday; Techie Hour wraps at 6 PM on the Saturday.
+  utcOffset: '-05:00',
+  startsAt: '2026-11-13T08:00:00-05:00',
+  endsAt: '2026-11-14T18:00:00-05:00',
   endDate: '2026-11-14',
   venue: 'Hollywood Casino at Greektown',
   address: '1200 Saint Antoine St, Detroit, MI 48226',
   registerUrl:
     'https://gdg.community.dev/events/details/google-gdg-detroit-presents-michigan-devfest-ai-hackathon-2026/',
   siteUrl: 'https://www.midevfest.com/',
-  // Registrations through this date (inclusive) get a DevFest T-shirt
-  shirtDeadline: '2026-10-30T23:59:59-04:00',
-  shirtDeadlineLabel: 'October 30',
   // Check-in is at the conference center entrance, not the hotel address
+  // Check-in is at the conference center entrance, not the hotel address
+  entrance: 'Conference Center, 555 E. Lafayette St',
   checkIn:
     'Check-in at the Conference Center, 555 E. Lafayette St · doors open 8:00 AM',
   parking: [
     {
-      name: 'Greektown Self-Park Garage',
+      name: 'Greektown parking structure (free)',
       detail:
-        '1211 Crysler Dr. Enter from the I-375 Lafayette ramp; pay by card at the kiosk.',
-    },
-    {
-      name: 'MGM Grand Garage (free)',
-      detail: 'Free parking at MGM Grand Detroit, across town from Greektown.',
+        "1211 Crysler Dr. Enter from the I-375 Lafayette ramp and tell the guard you're there for Michigan DevFest.",
     },
   ],
-  comingSoon: ['Speaker lineup', 'Full schedule', 'Session tracks'],
-  days: [
-    {
-      date: 'Fri · Nov 13',
-      title: 'AI Hackathon',
-      desc: 'Team up, build with AI and demo what you shipped.',
-    },
-    {
-      date: 'Sat · Nov 14',
-      title: 'Conference',
-      desc: 'Talks, workshops and panels from Michigan builders. Track lineup coming soon.',
-    },
-  ],
-  stats: [
-    { value: '300+', label: 'Attendees' },
-    { value: '30+', label: 'Speakers' },
-    { value: 'TBD', label: 'Tracks' },
-  ],
+  // Full speaker and session lineup lives on this site's program page
+  programPath: '/devfest',
   logoWhite: `${ASSETS}/midevfest-logo-white.svg`,
   logoBlack: `${ASSETS}/midevfest-logo-black.svg`,
   flyer: {

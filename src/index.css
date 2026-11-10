@@ -104,23 +104,6 @@
 }
 
 /* Hero animations */
-@keyframes hero-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
-}
-@keyframes hero-spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 @keyframes hero-orb {
   0%,
   100% {
@@ -133,20 +116,22 @@
     transform: translate(-15px, 10px) scale(0.95);
   }
 }
-.hero-float {
-  animation: hero-float 4s ease-in-out infinite;
-}
-.hero-spin-slow {
-  animation: hero-spin-slow 60s linear infinite;
-}
-.hero-spin-reverse {
-  animation: hero-spin-slow 45s linear infinite reverse;
-}
 .hero-orb-1 {
   animation: hero-orb 12s ease-in-out infinite;
 }
 .hero-orb-2 {
   animation: hero-orb 15s ease-in-out infinite 2s;
+}
+/* About hero: dashes travel from the COMPASS hub out to each member org */
+@keyframes orbit-pulse {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .orbit-pulse {
+    animation: orbit-pulse 1.6s linear infinite;
+  }
 }
 .hero-orb-3 {
   animation: hero-orb 18s ease-in-out infinite 4s;
@@ -178,9 +163,6 @@
 @media (prefers-reduced-motion: reduce) {
   .marquee-left,
   .marquee-right,
-  .hero-float,
-  .hero-spin-slow,
-  .hero-spin-reverse,
   .hero-orb-1,
   .hero-orb-2,
   .hero-orb-3 {

@@ -16,6 +16,12 @@ export const SANITY_PROJECTS = {
     dataset: 'production',
     studio: 'https://github.com/Compass-Detroit/mishpe26/tree/main/studio',
   },
+  devfest2026: {
+    label: 'Michigan DevFest 2026',
+    projectId: '5qtiaw9u',
+    dataset: 'production',
+    studio: 'https://www.midevfest.com/',
+  },
 }
 
 export const sanityUpstream = ({ projectId, dataset }) =>

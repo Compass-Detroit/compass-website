@@ -9,6 +9,20 @@ vi.mock('@/layouts/SiteLayout', () => ({
 vi.mock('@/utils/speakerRegistry', () => ({
   getAllSpeakers: () => [
     {
+      slug: 'zed-adams',
+      name: 'Zed Adams',
+      sessions: [{ year: 2026, title: 'Later Talk', tracks: [] }],
+      categories: [],
+      yearsActive: [2026],
+    },
+    {
+      slug: 'amy-young',
+      name: 'Amy Young',
+      sessions: [{ year: 2026, title: 'Other Talk', tracks: [] }],
+      categories: [],
+      yearsActive: [2024, 2026],
+    },
+    {
       slug: 'test-speaker',
       name: 'Test Speaker',
       avatar: '/test.jpg',
@@ -38,6 +52,18 @@ describe('SpeakersDirectoryPage', () => {
   it('shows speaker name', () => {
     renderWithRouter(<SpeakersDirectoryPage />)
     expect(screen.getByText('Test Speaker')).toBeInTheDocument()
+  })
+
+  it('groups speakers under their latest year, A–Z by last name', () => {
+    renderWithRouter(<SpeakersDirectoryPage />)
+    const headings = screen
+      .getAllByRole('heading', { level: 2 })
+      .map((h) => h.textContent)
+    expect(headings.slice(0, 2)).toEqual(['2026', '2025'])
+    const names = screen
+      .getAllByText(/^(Zed Adams|Amy Young)$/)
+      .map((el) => el.textContent)
+    expect(names).toEqual(['Zed Adams', 'Amy Young'])
   })
 
   it('finds a speaker by talk title', async () => {

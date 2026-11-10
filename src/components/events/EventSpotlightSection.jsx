@@ -8,6 +8,11 @@ import {
 } from '@/data/2026/lhmSummit'
 import { sanityImage } from '@/services/sanity'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
+import {
+  DEVFEST_PROGRAM_STATS,
+  DEVFEST_SPEAKERS,
+  DEVFEST_TRACK_LIST,
+} from '@/data/2026/devfestProgram'
 
 const devfestQr = '/assets/qr/devfest-qr.png'
 
@@ -62,9 +67,10 @@ export default function EventSpotlightSection() {
               <p className="text-sm leading-relaxed text-gray-300 mb-6">
                 Michigan&apos;s 12th annual flagship developer conference —
                 co-produced by <strong>GDG Detroit</strong> &{' '}
-                <strong>Compass Detroit</strong>. Featuring 30+ speakers, an AI
-                Hackathon on Nov 13 and a full conference on Nov 14. Tracks to
-                be announced.
+                <strong>Compass Detroit</strong>. An AI Hackathon on Nov 13,
+                then {DEVFEST_PROGRAM_STATS.talks} talks across{' '}
+                {DEVFEST_PROGRAM_STATS.tracks} tracks on Nov 14:{' '}
+                {DEVFEST_TRACK_LIST}.
               </p>
 
               {/* Highlights & Partners */}
@@ -94,21 +100,56 @@ export default function EventSpotlightSection() {
                 </div>
               </div>
 
+              <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+                <ul className="flex -space-x-3" aria-label="DevFest speakers">
+                  {DEVFEST_SPEAKERS.filter((p) => p.avatar)
+                    .slice(0, 8)
+                    .map((speaker) => (
+                      <li key={speaker.slug}>
+                        <img
+                          src={sanityImage(speaker.avatar, { w: 96, h: 96 })}
+                          alt={speaker.name}
+                          title={speaker.name}
+                          width="40"
+                          height="40"
+                          loading="lazy"
+                          className="size-10 rounded-full border-2 border-black object-cover transition-transform duration-200 hover:z-10 hover:-translate-y-1"
+                        />
+                      </li>
+                    ))}
+                  <li className="flex size-10 items-center justify-center rounded-full border-2 border-black bg-blue-500/20 text-xs font-bold text-blue-200">
+                    +{DEVFEST_SPEAKERS.length - 8}
+                  </li>
+                </ul>
+                <Link
+                  to={DEVFEST_2026.programPath}
+                  className="text-sm font-bold text-blue-300 hover:text-blue-200 hover:underline"
+                >
+                  Explore the lineup →
+                </Link>
+              </div>
+
               <div className="grid grid-cols-3 gap-3 text-center border-t border-surface pt-4 mb-6">
                 <div>
-                  <div className="text-xl font-black text-[#FFD700]">300+</div>
+                  <div className="text-xl font-black text-[#FFD700]">
+                    {DEVFEST_2026.attendees}
+                  </div>
                   <div className="text-[10px] uppercase font-bold text-gray-500">
                     Attendees
                   </div>
                 </div>
                 <div className="border-x border-surface">
-                  <div className="text-xl font-black text-[#FFD700]">30+</div>
+                  <div className="text-xl font-black text-[#FFD700]">
+                    {DEVFEST_PROGRAM_STATS.speakers}
+                  </div>
                   <div className="text-[10px] uppercase font-bold text-gray-500">
                     Speakers
                   </div>
                 </div>
                 <div>
-                  <div className="text-xl font-black text-[#FFD700]">TBD</div>
+                  <div className="text-xl font-black text-[#FFD700]">
+                    {DEVFEST_PROGRAM_STATS.tracks}
+                  </div>
                   <div className="text-[10px] uppercase font-bold text-gray-500">
                     Tracks
                   </div>
