@@ -40,6 +40,30 @@ const categoryColors = {
 const PLACEHOLDER_EVENTS = [
   // July 2026
   {
+    name: 'Hack Michigan Kickoff',
+    date: '2026-05-15',
+    time: '2:00 PM - 11:59 PM',
+    location: 'TechTown Detroit',
+    category: 'Hackathon',
+    desc: 'The first Hack Michigan kicks off: check-in, Design for AI workshop, happy hour, and hacking begins at 8 PM.',
+  },
+  {
+    name: 'Hack Michigan Day 2',
+    date: '2026-05-16',
+    time: '8:00 AM - 11:59 PM',
+    location: 'TechTown Detroit',
+    category: 'Hackathon',
+    desc: 'Build day: How to Win a Hackathon, Build with AI workshops, office hours and movie night.',
+  },
+  {
+    name: 'Hack Michigan Demos & Awards',
+    date: '2026-05-17',
+    time: '8:00 AM - 3:00 PM',
+    location: 'TechTown Detroit',
+    category: 'Hackathon',
+    desc: 'Code freeze, project submissions, demos and judging for the sponsor AI challenges.',
+  },
+  {
     name: 'Monthly Community Standup',
     date: '2026-07-02',
     time: '6:00 PM - 7:00 PM',
@@ -191,22 +215,6 @@ const PLACEHOLDER_EVENTS = [
     location: 'Grand Circus',
     category: 'Networking',
     desc: 'Monthly networking lunch — August edition.',
-  },
-  {
-    name: 'Hack Michigan Kickoff',
-    date: '2026-08-22',
-    time: '10:00 AM - 6:00 PM',
-    location: 'Wayne State University',
-    category: 'Hackathon',
-    desc: 'Official kickoff for Hack Michigan — team formation, challenges revealed, and hacking begins.',
-  },
-  {
-    name: 'Hack Michigan Day 2',
-    date: '2026-08-23',
-    time: '9:00 AM - 9:00 PM',
-    location: 'Wayne State University',
-    category: 'Hackathon',
-    desc: 'Day 2 — building, mentoring, and demos.',
   },
   {
     name: 'Detroit Pride Planning Committee',

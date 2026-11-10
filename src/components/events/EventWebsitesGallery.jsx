@@ -66,14 +66,14 @@ const eventSites = [
   },
   {
     name: 'Hack Michigan',
-    url: '/events',
+    url: 'https://www.hackmichigan.com/',
     accent: 'bg-emerald-500/10 text-emerald-400',
-    tag: '3rd Annual',
+    tag: 'Inaugural · 2026',
     description:
-      'Team-based hackathon with industry mentorship and portfolio building',
-    date: 'Date TBD · Detroit, MI',
+      'Our first Hack Michigan: 48 hours of AI proofs of concept for Michigan industries, powered by IBM & Google',
+    date: 'May 15–17, 2026 · TechTown Detroit',
     photos: hackathonPhotos,
-    live: false,
+    live: true,
   },
 ]
 
