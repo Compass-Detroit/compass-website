@@ -27,6 +27,7 @@ export default function SessionCard({
               <span className="font-bold text-theme-secondary">
                 {session.track}
               </span>
+              {session.room && ` · ${session.room}`}
             </>
           )}
         </p>
@@ -44,7 +45,7 @@ export default function SessionCard({
       <div className="mt-auto flex items-center gap-2.5 pt-3">
         <Faces people={session.speakers} />
         <p className="min-w-0 truncate text-sm text-theme-secondary">
-          {session.speakers.map((p) => p.name).join(', ')}
+          {session.speakers.map((p) => p.name).join(', ') || session.presenter}
         </p>
       </div>
     </article>

@@ -12,6 +12,9 @@ export default function SharedBlock({ block, className = '' }) {
         {formatTime(block.time)} – {formatTime(block.timeEnd)}
       </span>
       {block.note && <span className="text-theme-muted">{block.note}</span>}
+      {block.room && (
+        <span className="font-semibold text-theme-secondary">{block.room}</span>
+      )}
     </div>
   )
 }

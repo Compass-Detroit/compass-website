@@ -37,6 +37,11 @@ export default function TrackGrid({
           data-reveal-item
         >
           <p className="text-sm font-extrabold">{t.name}</p>
+          {t.room && (
+            <p className="text-xs font-semibold text-theme-secondary">
+              {t.room}
+            </p>
+          )}
           <p className="mt-0.5 line-clamp-2 text-xs text-theme-muted">
             {t.blurb}
           </p>
@@ -65,7 +70,10 @@ export default function TrackGrid({
         <div
           key={s.id}
           style={{
-            gridColumn: tracks.findIndex((t) => t.name === s.track) + 2,
+            // Plenary sessions (keynote, yoga) run across every track
+            gridColumn: s.plenary
+              ? '2 / -1'
+              : tracks.findIndex((t) => t.name === s.track) + 2,
             gridRow: `${row(s.time)} / span ${span(s)}`,
           }}
           data-reveal-item
