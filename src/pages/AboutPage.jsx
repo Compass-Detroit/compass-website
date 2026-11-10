@@ -383,7 +383,7 @@ export default function AboutPage() {
                 JR
               </div>
               <div>
-                <p className="text-sm font-bold">Justin Ritten</p>
+                <p className="text-sm font-bold">Jenna Ritten</p>
                 <p className="text-xs text-gray-500">
                   Founder &amp; Executive Director, COMPASS Detroit
                 </p>
