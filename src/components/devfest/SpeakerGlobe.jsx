@@ -41,9 +41,13 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
   const [playing, setPlaying] = useState(!reduced)
   const playingRef = useRef(playing)
   playingRef.current = playing
+  // Restarts the render loop after it has gone idle (see below)
+  const wakeRef = useRef(() => {})
+  const wake = () => wakeRef.current()
 
   // Reduced motion pauses the tour; the visitor can still start it
   useEffect(() => setPlaying(!reduced), [reduced])
+  useEffect(() => wake(), [playing])
 
   // Track the stage size so radius and face size scale with it
   useEffect(() => {
@@ -61,9 +65,14 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
     tour.current.holdUntil = performance.now() + RESUME
   }
 
-  // Render loop: writes transforms directly, no React re-render per frame
+  // Render loop: writes transforms directly, no React re-render per frame.
+  // It stops once the globe is still (paused, hovered, reduced motion, or a
+  // drag has coasted to rest) and wakes on input or when the tour resumes,
+  // so an idle globe costs nothing.
   useEffect(() => {
     let frame = 0
+    let running = false
+    let resumeTimer = 0
     let visible = true
     let last = performance.now()
 
@@ -97,6 +106,7 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
         !m.target &&
         t >= tr.holdUntil
 
+      const before = m.rx + m.ry
       if (m.target) {
         // Ease toward a keyboard-focused face
         m.rx += (m.target.rx - m.rx) * ease(0.12)
@@ -120,13 +130,35 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
         m.rx = clampX(m.rx + m.vx)
       }
       paint()
+
+      const still =
+        !touring &&
+        !pointer.current &&
+        Math.abs(m.vx) < 1e-5 &&
+        Math.abs(m.vy) < 1e-5 &&
+        Math.abs(m.rx + m.ry - before) < 1e-6
+      if (still) {
+        running = false
+        // Paused only for a moment after a drag or hover: come back for it
+        const waitingToResume =
+          playingRef.current && !hovering.current && !m.target
+        if (waitingToResume && tr.holdUntil > t)
+          resumeTimer = setTimeout(start, tr.holdUntil - t + 16)
+        return
+      }
       if (visible && !document.hidden) frame = requestAnimationFrame(tick)
+      else running = false
     }
 
     const start = () => {
       cancelAnimationFrame(frame)
+      clearTimeout(resumeTimer)
       last = performance.now()
-      if (visible && !document.hidden) frame = requestAnimationFrame(tick)
+      running = visible && !document.hidden
+      if (running) frame = requestAnimationFrame(tick)
+    }
+    wakeRef.current = () => {
+      if (!running) start()
     }
 
     const io =
@@ -143,6 +175,8 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
 
     return () => {
       cancelAnimationFrame(frame)
+      clearTimeout(resumeTimer)
+      wakeRef.current = () => {}
       io?.disconnect()
       document.removeEventListener('visibilitychange', start)
     }
@@ -151,6 +185,7 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
   const onPointerDown = (e) => {
     pointer.current = { x: e.clientX, y: e.clientY, moved: 0 }
     motion.current.target = null
+    wake()
   }
 
   const onPointerMove = (e) => {
@@ -164,6 +199,7 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
     const m = motion.current
     m.vy = dx * DRAG
     m.vx = -dy * DRAG
+    wake()
     m.ry += m.vy
     m.rx = clampX(m.rx + m.vx)
     if (p.moved > 6 && !stageRef.current.hasPointerCapture?.(e.pointerId))
@@ -174,6 +210,7 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
     const dragged = (pointer.current?.moved ?? 0) > 6
     pointer.current = null
     stageRef.current.releasePointerCapture?.(e.pointerId)
+    wake()
     if (dragged) {
       // Resume the tour at the next speaker once the coast settles
       hold()
@@ -196,12 +233,14 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
     const { rx, ry } = facing(points[i])
     m.target = { rx: clampX(rx), ry: nearest(m.ry, ry) }
     setActive(i)
+    wake()
   }
 
   const blurFace = () => {
     motion.current.target = null
     setActive(null)
     hold()
+    wake()
   }
 
   const shown = speakers[active ?? featured]
@@ -223,6 +262,7 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
           hovering.current = false
           setActive(null)
           hold()
+          wake()
         }}
         style={{ '--face': `${face}px` }}
       >
@@ -294,7 +334,6 @@ export default function SpeakerGlobe({ speakers, onSelect }) {
           <button
             type="button"
             className={styles.tourButton}
-            aria-pressed={playing}
             onClick={() => {
               setPlaying((on) => !on)
               tour.current.holdUntil = 0

@@ -81,10 +81,11 @@ describe('SpeakerGlobe', () => {
       removeEventListener: vi.fn(),
     }))
     render(<SpeakerGlobe speakers={DEVFEST_SPEAKERS} onSelect={() => {}} />)
-    expect(screen.getByRole('button', { name: 'Play tour' })).toHaveAttribute(
-      'aria-pressed',
-      'false'
-    )
+    // The label carries the state: "Play tour" means the tour is paused
+    expect(
+      screen.getByRole('button', { name: 'Play tour' })
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Pause tour' })).toBeNull()
   })
 })
 
