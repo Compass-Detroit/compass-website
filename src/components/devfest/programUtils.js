@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { DEVFEST_DAYS } from '@/data/2026/devfestProgram'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
+import { DEVFEST_PALETTE } from '@/constants/devfestPalette'
 
 /** Track colours from the DevFest 2026 brand palette, light and dark. */
 export const TONES = {
@@ -38,17 +39,17 @@ export const toneOf = (tone) => TONES[tone] ?? TONES.slate
 
 const DAY_DATE = Object.fromEntries(DEVFEST_DAYS.map((d) => [d.id, d.date]))
 
-// Detroit is on EST (UTC-5) for both event days
 export const sessionDate = (day, time) =>
-  new Date(`${DAY_DATE[day]}T${time}:00-05:00`)
+  new Date(`${DAY_DATE[day]}T${time}:00${DEVFEST_2026.utcOffset}`)
 
 export const calendarEvent = (session) => ({
   id: `midevfest26-${session.id ?? session.title}`,
-  name: `${session.title} · Michigan DevFest 2026`,
+  name: `${session.title} · ${DEVFEST_2026.name}`,
   desc: [
     session.speakers?.map((p) => p.name).join(', '),
     session.abstract,
-    `${window.location.origin}/devfest?session=${session.id}`,
+    typeof window !== 'undefined' &&
+      `${window.location.origin}${DEVFEST_2026.programPath}?session=${session.id}`,
   ]
     .filter(Boolean)
     .join('\n\n'),
@@ -105,7 +106,9 @@ export function useNow(override) {
     return () => clearInterval(id)
   }, [override])
   if (override) {
-    const preview = new Date(`${override}:00-05:00`).getTime()
+    const preview = new Date(
+      `${override}:00${DEVFEST_2026.utcOffset}`
+    ).getTime()
     if (!Number.isNaN(preview)) return preview
   }
   return now
@@ -128,18 +131,25 @@ export const clashesWith = (session, savedSessions) =>
 
 /** Solid track colours for rings, glows and SVG strokes. */
 export const TONE_HEX = {
-  yellow: '#f9ab00',
-  blue: '#4285f4',
-  green: '#34a853',
-  red: '#ea4335',
-  pink: '#ff7daf',
-  cyan: '#57caff',
+  yellow: DEVFEST_PALETTE.yellow,
+  blue: DEVFEST_PALETTE.blue,
+  green: DEVFEST_PALETTE.green,
+  red: DEVFEST_PALETTE.red,
+  pink: DEVFEST_PALETTE['ht-red'],
+  cyan: DEVFEST_PALETTE['ht-blue'],
   slate: '#9ca3af',
 }
 
-const KICKOFF = sessionDate('hackathon', '08:00').getTime()
-const WRAP_UP = sessionDate('conference', '18:00').getTime()
+const KICKOFF = new Date(DEVFEST_2026.startsAt).getTime()
+const WRAP_UP = new Date(DEVFEST_2026.endsAt).getTime()
 const DAY = 86_400_000
+const OFFSET_MS =
+  (DEVFEST_2026.utcOffset.startsWith('-') ? -1 : 1) *
+  (Number(DEVFEST_2026.utcOffset.slice(1, 3)) * 60 +
+    Number(DEVFEST_2026.utcOffset.slice(4, 6))) *
+  60_000
+// Calendar day number in Detroit, so "tomorrow" means the next date there
+const detroitDay = (ts) => Math.floor((ts + OFFSET_MS) / DAY)
 
 /**
  * Where we are relative to the event: `upcoming` (more than a week out),
@@ -149,7 +159,7 @@ const DAY = 86_400_000
 export function eventPhase(now) {
   if (now > WRAP_UP) return { phase: 'over', days: -1 }
   if (now >= KICKOFF) return { phase: 'live', days: 0 }
-  const days = Math.ceil((KICKOFF - now) / DAY)
+  const days = detroitDay(KICKOFF) - detroitDay(now)
   return { phase: days <= 7 ? 'week' : 'upcoming', days }
 }
 
@@ -158,6 +168,10 @@ export const phaseLabel = ({ phase, days }) =>
     over: 'That’s a wrap. Thank you, Detroit!',
     live: 'Happening now in Greektown',
     week:
-      days === 1 ? 'Event week · Tomorrow' : `Event week · ${days} days to go`,
+      days === 0
+        ? 'Doors open at 8 AM'
+        : days === 1
+          ? 'Event week · Tomorrow'
+          : `Event week · ${days} days to go`,
     upcoming: `${days} days to go`,
   })[phase]

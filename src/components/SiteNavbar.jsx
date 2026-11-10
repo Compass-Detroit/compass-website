@@ -20,7 +20,7 @@ const primaryLinks = [
 ]
 
 // Event-week spotlight: leads the nav until a week after DevFest wraps
-const FEATURED_UNTIL = new Date(`${DEVFEST_2026.endDate}T23:59:59-05:00`)
+const FEATURED_UNTIL = new Date(DEVFEST_2026.endsAt)
 FEATURED_UNTIL.setDate(FEATURED_UNTIL.getDate() + 7)
 const featuredLink =
   Date.now() <= FEATURED_UNTIL.getTime()

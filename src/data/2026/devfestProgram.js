@@ -9,12 +9,11 @@ import program from './devfest/program.json'
 
 const EVENT_NAME = 'Michigan DevFest 2026'
 
-export const DEVFEST_PROGRAM_SYNCED_AT = program.syncedAt
-
 export const DEVFEST_DAYS = [
   {
     id: 'hackathon',
     date: '2026-11-13',
+    short: 'Fri',
     label: 'Fri · Nov 13',
     title: 'AI Hackathon',
     blurb:
@@ -23,6 +22,7 @@ export const DEVFEST_DAYS = [
   {
     id: 'conference',
     date: '2026-11-14',
+    short: 'Sat',
     label: 'Sat · Nov 14',
     title: 'DevFest Conference',
     blurb:
@@ -213,6 +213,10 @@ export const DEVFEST_TOPICS = DEVFEST_TOPIC_RULES.map(({ id, label }) => ({
 
 export const DEVFEST_PROGRAM_STATS = {
   speakers: DEVFEST_SPEAKERS.length,
+  // Saturday only; some speakers lead just the Friday hackathon workshops
+  conferenceSpeakers: DEVFEST_SPEAKERS.filter((s) =>
+    s.sessions.some((t) => t.day === 'conference')
+  ).length,
   talks: DEVFEST_TALKS.filter((s) => s.day === 'conference').length,
   workshops: DEVFEST_TALKS.filter((s) => s.day === 'hackathon').length,
   tracks: DEVFEST_TRACKS.filter((t) => t.day === 'conference').length,

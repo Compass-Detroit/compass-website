@@ -130,7 +130,9 @@ export default function EventSpotlightSection() {
 
               <div className="grid grid-cols-3 gap-3 text-center border-t border-surface pt-4 mb-6">
                 <div>
-                  <div className="text-xl font-black text-[#FFD700]">300+</div>
+                  <div className="text-xl font-black text-[#FFD700]">
+                    {DEVFEST_2026.attendees}
+                  </div>
                   <div className="text-[10px] uppercase font-bold text-gray-500">
                     Attendees
                   </div>

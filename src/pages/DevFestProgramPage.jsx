@@ -541,7 +541,7 @@ export default function DevFestProgramPage() {
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 [background:radial-gradient(55%_50%_at_75%_45%,rgb(66_133_244/0.24),transparent_70%),radial-gradient(40%_40%_at_8%_95%,rgb(52_168_83/0.16),transparent_70%),radial-gradient(30%_35%_at_98%_98%,rgb(234_67_53/0.14),transparent_70%)]"
+          className="pointer-events-none absolute inset-0 [background:radial-gradient(55%_50%_at_75%_45%,theme(colors.devfest.blue/24%),transparent_70%),radial-gradient(40%_40%_at_8%_95%,theme(colors.devfest.green/16%),transparent_70%),radial-gradient(30%_35%_at_98%_98%,theme(colors.devfest.red/14%),transparent_70%)]"
         />
         <div aria-hidden="true" className="absolute inset-x-0 top-0 flex h-1.5">
           {[

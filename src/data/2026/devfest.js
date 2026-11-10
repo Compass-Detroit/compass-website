@@ -3,23 +3,28 @@ import { DEVFEST_PROGRAM_STATS } from './devfestProgram'
 
 const ASSETS = '/assets/devfest26'
 
+const DEVFEST_ATTENDEES = '300+'
+
 export const DEVFEST_2026 = {
   name: 'Michigan DevFest 2026',
   edition: '12th annual',
+  attendees: DEVFEST_ATTENDEES,
   dateLabel: 'November 13–14, 2026',
   shortDateLabel: 'Nov 13–14',
-  // Kickoff for the countdown; Detroit is on EST (UTC-5) in November
-  startsAt: '2026-11-13T00:00:00-05:00',
+  // Detroit is on EST (UTC-5) in November. Doors open at 8 AM on the
+  // Friday; Techie Hour wraps at 6 PM on the Saturday.
+  utcOffset: '-05:00',
+  startsAt: '2026-11-13T08:00:00-05:00',
+  endsAt: '2026-11-14T18:00:00-05:00',
   endDate: '2026-11-14',
   venue: 'Hollywood Casino at Greektown',
   address: '1200 Saint Antoine St, Detroit, MI 48226',
   registerUrl:
     'https://gdg.community.dev/events/details/google-gdg-detroit-presents-michigan-devfest-ai-hackathon-2026/',
   siteUrl: 'https://www.midevfest.com/',
-  // Registrations through this date (inclusive) get a DevFest T-shirt
-  shirtDeadline: '2026-10-30T23:59:59-04:00',
-  shirtDeadlineLabel: 'October 30',
   // Check-in is at the conference center entrance, not the hotel address
+  // Check-in is at the conference center entrance, not the hotel address
+  entrance: 'Conference Center, 555 E. Lafayette St',
   checkIn:
     'Check-in at the Conference Center, 555 E. Lafayette St · doors open 8:00 AM',
   parking: [
@@ -44,7 +49,7 @@ export const DEVFEST_2026 = {
     },
   ],
   stats: [
-    { value: '300+', label: 'Attendees' },
+    { value: DEVFEST_ATTENDEES, label: 'Attendees' },
     { value: String(DEVFEST_PROGRAM_STATS.speakers), label: 'Speakers' },
     { value: String(DEVFEST_PROGRAM_STATS.tracks), label: 'Tracks' },
   ],

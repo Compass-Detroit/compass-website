@@ -1,25 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-  FiMapPin,
-  FiClock,
-  FiTruck,
-  FiMic,
-  FiCalendar,
-  FiLayers,
-} from 'react-icons/fi'
+import { FiMapPin, FiClock, FiTruck } from 'react-icons/fi'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import usePrefersReducedMotion from '@/hooks/usePrefersReducedMotion'
 import GreektownBackdrop from '@/components/events/GreektownBackdrop'
 import { Link } from 'react-router-dom'
 import { DEVFEST_2026 } from '@/data/2026/devfest'
 import {
+  DEVFEST_DAYS,
   DEVFEST_PROGRAM_STATS,
   DEVFEST_TALKS,
   DEVFEST_TRACKS,
   formatTime,
 } from '@/data/2026/devfestProgram'
 import { sanityImage } from '@/services/sanity'
-import { TONE_HEX } from '@/components/devfest/programUtils'
+import { TONE_HEX, eventPhase } from '@/components/devfest/programUtils'
 import { partnersData } from '@/data/2026/partners'
 import CompassDetroitLogo from '@/assets/images/sponsors/Compass_Detroit_logo.webp'
 import WomenTechmakersLogo from '@/assets/images/organizations/org-wtm-logo.webp'
@@ -27,13 +21,9 @@ import PropTypes from 'prop-types'
 import styles from './DevFestPortal.module.css'
 
 const SKYLINE = '/assets/devfest26/detroit-sunset.svg'
-const KICKOFF = new Date(DEVFEST_2026.startsAt).getTime()
-const WRAP_UP = new Date(`${DEVFEST_2026.endDate}T23:59:59-05:00`).getTime()
-const DAY_MS = 86_400_000
 // The doorway starts filling with light this many days out
 const RUN_UP_DAYS = 45
 const FINAL_WEEK = 7
-const SHIRT_DEADLINE = new Date(DEVFEST_2026.shirtDeadline).getTime()
 // Stacked slices give the glyphs real depth under CSS 3D
 const DEPTH = Array.from({ length: 14 }, (_, i) => i + 1)
 
@@ -41,8 +31,6 @@ const MAPS_URL = `https://www.google.com/maps/search/?${new URLSearchParams({
   api: '1',
   query: `${DEVFEST_2026.venue}, ${DEVFEST_2026.address}`,
 })}`
-
-const TRACK_ICONS = [FiMic, FiLayers, FiCalendar]
 
 // Three sessions that show the range of the weekend
 const MUST_SEE = [
@@ -53,9 +41,10 @@ const MUST_SEE = [
   .map((t) => DEVFEST_TALKS.find((s) => s.title.startsWith(t)))
   .filter(Boolean)
 
-const LINEUP = DEVFEST_TRACKS.map((t, i) => ({
+const DAY_SHORT = Object.fromEntries(DEVFEST_DAYS.map((d) => [d.id, d.short]))
+
+const LINEUP = DEVFEST_TRACKS.map((t) => ({
   ...t,
-  Icon: TRACK_ICONS[i % TRACK_ICONS.length],
   count: DEVFEST_TALKS.filter((s) => s.track === t.name).length,
 }))
 
@@ -106,8 +95,7 @@ function useDaysLeft() {
   }, [])
 
   if (!Number.isNaN(preview)) return Math.max(-1, preview)
-  if (now > WRAP_UP) return -1
-  return Math.max(0, Math.ceil((KICKOFF - now) / DAY_MS))
+  return eventPhase(now).days
 }
 
 // 0 = dark doorway at the start of the run-up, 1 = fully lit on event day
@@ -282,9 +270,9 @@ function PortalScene({ days }) {
           className={styles.backdrop}
         />
         <p className={styles.venue}>
-          <strong>Hollywood Casino Hotel</strong>
+          <strong>{DEVFEST_2026.venue}</strong>
           <br />
-          Greektown · 555 E. Lafayette St
+          {DEVFEST_2026.entrance}
         </p>
 
         <div className={styles.floor}>
@@ -386,9 +374,9 @@ export default function DevFestPortal() {
             </h2>
             <p className={styles.lede}>
               Ship something with AI on Friday. Learn from{' '}
-              {DEVFEST_PROGRAM_STATS.speakers} Michigan builders on Saturday.
-              Leave with the people you&apos;ll build with next. Here&apos;s
-              what you&apos;d miss:
+              {DEVFEST_PROGRAM_STATS.conferenceSpeakers} Michigan builders on
+              Saturday. Leave with the people you&apos;ll build with next.
+              Here&apos;s what you&apos;d miss:
             </p>
             <ul className="mt-6 space-y-3">
               {MUST_SEE.map((s) => (
@@ -416,8 +404,7 @@ export default function DevFestPortal() {
                         {s.title}
                       </span>
                       <span className="block truncate text-xs text-white/65">
-                        {s.day === 'hackathon' ? 'Fri' : 'Sat'}{' '}
-                        {formatTime(s.time)} ·{' '}
+                        {DAY_SHORT[s.day]} {formatTime(s.time)} ·{' '}
                         {s.speakers.map((p) => p.name).join(', ')}
                       </span>
                     </span>
@@ -439,8 +426,6 @@ export default function DevFestPortal() {
               </a>
               <span className={styles.ctaNote}>
                 {countLabel(days) ?? `${days} days to go`}
-                {Date.now() <= SHIRT_DEADLINE &&
-                  ` · Free T-shirt if you register by ${DEVFEST_2026.shirtDeadlineLabel}`}
               </span>
             </div>
           </div>
@@ -485,18 +470,22 @@ export default function DevFestPortal() {
             </a>
           </article>
 
-          <article className={styles.card} aria-labelledby="devfest-soon">
+          <article className={styles.card} aria-labelledby="devfest-lineup">
             <p className={styles.cardKicker}>The lineup is live</p>
-            <h3 id="devfest-soon" className={styles.cardTitle}>
-              {DEVFEST_PROGRAM_STATS.speakers} speakers across{' '}
-              {DEVFEST_TRACKS.length} tracks
+            <h3 id="devfest-lineup" className={styles.cardTitle}>
+              {DEVFEST_PROGRAM_STATS.speakers} speakers, the AI Hackathon and{' '}
+              {DEVFEST_PROGRAM_STATS.tracks} conference tracks
             </h3>
-            <ul className={styles.soonList}>
-              {LINEUP.map(({ name, Icon, count }) => (
-                <li key={name} className={styles.soonItem}>
-                  <Icon aria-hidden="true" />
+            <ul className={styles.lineupList}>
+              {LINEUP.map(({ name, tone, count }) => (
+                <li key={name} className={styles.lineupItem}>
+                  <span
+                    aria-hidden="true"
+                    className={styles.lineupDot}
+                    style={{ background: TONE_HEX[tone] }}
+                  />
                   <span>{name}</span>
-                  <span className={styles.soonBadge}>{count} sessions</span>
+                  <span className={styles.lineupBadge}>{count} sessions</span>
                 </li>
               ))}
             </ul>

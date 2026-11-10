@@ -313,30 +313,6 @@
   color: var(--df-ink);
 }
 
-.perk {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-top: 1.25rem;
-  padding: 0.5rem 0.9rem;
-  border: 1px dashed rgba(255, 138, 61, 0.55);
-  border-radius: 0.75rem;
-  background: rgba(255, 138, 61, 0.08);
-  color: var(--df-ink);
-  font-size: 0.9rem;
-}
-
-.perk strong {
-  color: var(--df-sunset);
-}
-
-.perkIcon {
-  flex: none;
-  width: 1.1rem;
-  height: 1.1rem;
-  color: var(--df-sunset);
-}
-
 .ctaPrimary:focus-visible,
 .ctaSecondary:focus-visible,
 .ctaGhost:focus-visible,

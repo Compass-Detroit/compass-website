@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import ArrowRightIcon from '@/components/ui/ArrowRightIcon'
 import DevFestShare from '@/components/events/DevFestShare'
-import { FaShirt } from 'react-icons/fa6'
 import { DEVFEST_2026, devfestCalendarUrl } from '@/data/2026/devfest'
 import LineupMarquee from '@/components/devfest/LineupMarquee'
 import {
@@ -18,7 +17,6 @@ import {
 import styles from './DevFestHero.module.css'
 
 const KICKOFF = new Date(DEVFEST_2026.startsAt).getTime()
-const SHIRT_DEADLINE = new Date(DEVFEST_2026.shirtDeadline).getTime()
 
 // Real talk titles from the program, one per track slot, for the ticker
 const TICKER = [
@@ -27,7 +25,7 @@ const TICKER = [
     .filter((_, i) => i % 3 === 0)
     .map((s) => s.title),
   'Conference · Nov 14',
-  'Hollywood Casino · Greektown',
+  DEVFEST_2026.venue,
 ]
 
 function useCountdown(target) {
@@ -215,9 +213,9 @@ export default function DevFestHero() {
           <p className={styles.lede}>
             Michigan&apos;s flagship developer festival returns for year 12.
             Build with AI on Friday. On Saturday,{' '}
-            {DEVFEST_PROGRAM_STATS.speakers} speakers take the stage across{' '}
-            {DEVFEST_PROGRAM_STATS.tracks} tracks: agents, Gemini, design,
-            security and leading teams.
+            {DEVFEST_PROGRAM_STATS.conferenceSpeakers} speakers take the stage
+            across {DEVFEST_PROGRAM_STATS.tracks} tracks: agents, Gemini,
+            design, security and leading teams.
           </p>
 
           <div className={styles.ctas}>
@@ -244,14 +242,6 @@ export default function DevFestHero() {
               Add to calendar
             </a>
           </div>
-
-          {Date.now() <= SHIRT_DEADLINE && (
-            <p className={styles.perk}>
-              <FaShirt className={styles.perkIcon} aria-hidden="true" />
-              Register by <strong>{DEVFEST_2026.shirtDeadlineLabel}</strong> to
-              get a free DevFest T-shirt
-            </p>
-          )}
 
           <ol className={styles.days}>
             {days.map((d, i) => (
