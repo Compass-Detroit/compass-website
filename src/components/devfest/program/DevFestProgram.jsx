@@ -119,6 +119,7 @@ export default function DevFestProgram() {
         onOpen={open}
       />
       <NowNext now={now} onOpen={open} />
+      <VenueMap />
       <SpeakerShowcase
         track={track}
         onTrackChange={(t) => update({ track: t })}
@@ -190,8 +191,6 @@ export default function DevFestProgram() {
           })}
         </div>
       </section>
-
-      <VenueMap />
 
       <SessionDialog
         session={openSession}
