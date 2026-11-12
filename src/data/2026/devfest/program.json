@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-11-10T22:57:50.627Z",
+  "syncedAt": "2026-11-12T00:03:55.921Z",
   "sessions": [
     {
       "id": "hackathon-morning-meditation-yoga-26",
@@ -57,13 +57,13 @@
       "id": "design-for-ai-workshop-26",
       "title": "Design for AI Workshop",
       "abstract": "",
-      "description": "",
+      "description": "Great experiences are rarely accidental; they are the result of thoughtful design, bold thinking, and continuous innovation. This presentation explores how organizations can move beyond conventional approaches to reimagine products, services, and interactions. By challenging assumptions and embracing new possibilities, we will explore how experience innovation can create meaningful differentiation, elevate everyday interactions, and shape the future of how people engage with brands.",
       "track": "Hackathon",
       "tags": [],
       "time": "10:00",
       "duration": 60,
       "isPanel": true,
-      "speakers": ["hoda-solati", "shima-solati"],
+      "speakers": ["hoda-solati", "shima-solati", "roland-frohman-iii"],
       "moderators": []
     },
     {
@@ -93,6 +93,19 @@
       "moderators": []
     },
     {
+      "id": "why-human-behavior-is-the-missing-ingredient-in-ai-roi",
+      "title": "Why Human Behavior is the Missing Ingredient in AI ROI",
+      "abstract": "",
+      "description": "Organizations are racing to adopt artificial intelligence, investing millions in tools, platforms, and automation. So why are so many organizations struggling to turn AI investments into measurable business results?\n\nThe answer may not be found in the technology. It may be found in the culture.\n\nOutdated management practices, employee resistance, information silos, ineffective workflows, and leadership blind spots can undermine even the most sophisticated AI strategy.\n\nIn this provocative, business-focused keynote, Ida Byrd-Hill challenges executives and decision-makers to rethink the relationship between organizational culture, human behavior, and AI profitability. Drawing on her work in behavioral intelligence, workforce development, and technology transformation, Byrd-Hill introduces the Five Bs of AI ROI.\n\nAttendees will discover why human capabilities are essential to successful AI transformation.\n\nYou'll learn how to:\n1. Identify cultural and behavioral barriers that prevent organizations from realizing AI's business value.\n2. Apply the Five Bs of AI ROI to evaluate organizational readiness and technology investments.\n3. Recognize how human intelligence and leadership influence AI adoption, innovation, and execution.\n4. Connect workforce capabilities and redesigned business processes to measurable business outcomes.\n\nWho should attend: CEOs, CIOs, CTOs, CHROs, founders, executives, technology decision-makers, engineering leaders, and business transformation professionals.\n\nThe takeaway: Your competitors can buy the same AI tools. Your competitive advantage comes from how effectively your people use them.\n\nStop buying or building AI and hoping for ROI.",
+      "track": "Build with AI",
+      "tags": [],
+      "time": "10:00",
+      "duration": 35,
+      "isPanel": false,
+      "speakers": ["ida-byrd-hill-26"],
+      "moderators": []
+    },
+    {
       "id": "ai-with-heart-building-technology-that-solves-human-problems-without-losing-humanity",
       "title": "AI With Heart: Building Technology That Solves Human Problems Without Losing Humanity",
       "abstract": "In the race to build faster, smarter, and more automated technology, many founders are asking the same question: How do we innovate without losing our humanity?",
@@ -113,7 +126,7 @@
       "track": "Build with AI",
       "tags": [],
       "time": "10:45",
-      "duration": 60,
+      "duration": 80,
       "isPanel": false,
       "speakers": ["ida-delphine"],
       "moderators": []
@@ -166,18 +179,13 @@
       "tags": [],
       "time": "11:00",
       "duration": 60,
-      "isPanel": true,
-      "speakers": [
-        "vahi-guner",
-        "brandon-brown",
-        "jason-fleming",
-        "michael-mati"
-      ],
+      "isPanel": false,
+      "speakers": [],
       "moderators": []
     },
     {
       "id": "don-t-just-learn-about-ai-build-something-with-it",
-      "title": "Don't Just Learn About AI. Build Something With It!",
+      "title": "Beyond the Chatbot: Building Immersive AI Learning Environments for the Next Generation",
       "abstract": "Artificial intelligence is rapidly changing how we teach, learn, and build, but the next frontier goes beyond putting a chatbot in front of a student.",
       "description": "What if you could turn your imagination into a cinematic superhero comic book using AI, right from your phone?\n\nAt Michigan DevFest 2026, we're moving beyond talking about artificial intelligence and putting it directly into your hands! Join award-winning speaker and AI & technology executive Christine Burkette for a fast-paced, interactive experience where YOU become the creator.\n\nUsing AI tools like ChatGPT or Claude, you'll discover your personal superpowers, design your own superhero character, develop an action-packed storyline, and bring your adventure to life as a cinematic comic book, all during the session. No coding, design experience, or technical background required. Just bring your phone, your imagination, and a willingness to create! But the experience doesn't stop with superheroes.\n\nChristine will demonstrate how these same AI skills can be applied to real-world challenges, including creating engaging educational tools and personalized comic-book stories that help students with learning disabilities build confidence and strengthen their reading skills. You'll see an example of an AI-created superhero comic book designed to support students with dyslexia.\n\nYou'll leave with more than inspiration. You'll have a creation of your own, a repeatable AI workflow, and new ideas for putting artificial intelligence to work in education, business, and everyday life.\n\nWhether you're a developer, educator, student, entrepreneur, or simply AI-curious, this session is designed to show you what's possible when creativity meets technology.\n\nDon't just watch the future of AI unfold. Come build something with it!",
       "track": "AI Foundations",
@@ -203,7 +211,7 @@
     },
     {
       "id": "humanos-build-systems-that-multiply-your-productivity-across-life-business-strategy",
-      "title": "HumanOS: Build Systems That Multiply Your Productivity Across Life, Business & Strategy",
+      "title": "HumanOS: Build Systems That Multiply Your Productivity Across Life, Business & Service",
       "abstract": "AI is moving fast, but access to it does not automatically create opportunity. Knowing how to use these tools intentionally does.",
       "description": "AI is moving fast, but access to it does not automatically create opportunity. Knowing how to use these tools intentionally does.\n\nIn this interactive session, Kelli Nicole shares how she began using AI as her HumanOS after a traumatic brain injury changed the way she processed information, organized ideas, and worked. What started as a personal adaptation evolved into a practical system for entrepreneurship, workforce development, automation, communication, and problem-solving.\n\nParticipants will learn how to move beyond basic prompting and begin building an AI-supported system that helps them capture knowledge, organize information, identify problems worth solving, and turn ideas into action. The session also explores how these skills can help people traditionally excluded from emerging technology build confidence, career readiness, and economic opportunity.\n\nAttendees will leave with a simple framework they can immediately use to begin building their own HumanOS, without needing a technical background.",
       "track": "Level Up",
@@ -216,7 +224,7 @@
     },
     {
       "id": "leading-through-resilience-hispanic-latinos-engineers-shaping-the-future-of-steam",
-      "title": "Leading Through Resilience: Hispanic/Latinos Engineers Shaping the Future of Steam",
+      "title": "Leading Through Resilience: Hispanic/Latinos Engineers Shaping the Future of STEAM",
       "abstract": "A conversation, moderated by SHPE Detroit, on resilience, identity, mentorship, and technical leadership among Hispanic and Latino engineers.",
       "description": "Moderated by SHPE Detroit.\n\nAt the heart of this conversation is a shared commitment to recognizing the value of diverse technical talent, strengthening pathways into STEM, and inspiring the next generation of engineers to lead with confidence, purpose, and resilience.\n\nKey discussion themes:\n\n- Technical Skills & Impact: How engineering expertise, problem-solving, and continuous learning create value across STEM fields and industries\n- Resilience & Career Growth: Navigating obstacles, career transitions, setbacks, and turning points while continuing to move forward\n- Identity & Leadership: How cultural identity and lived experience influence innovation, teamwork, decision-making, and professional growth\n- Representation & Visibility: The importance of seeing Hispanic and Latino engineers represented across technical fields, and how we widen that path\n- Community, Mentorship & Support: The role of mentors, professional organizations, employee resource groups, family, and community in career achievement\n- Shaping the Future of STEM: Preparing emerging talent, expanding opportunity, and using technical leadership to drive meaningful change in organizations and communities",
       "track": "Leadership",
@@ -227,13 +235,14 @@
       "speakers": [
         "hernando-gonzalez-malabet",
         "cindy-cruz-rodriguez",
-        "anthony-bernal"
+        "anthony-bernal",
+        "jordan-mazaira"
       ],
       "moderators": ["cindy-cruz-rodriguez"]
     },
     {
-      "id": "build-with-ai-workshop-google-26",
-      "title": "Build with AI Workshop by Google",
+      "id": "build-with-ai-workshop-google-lovable",
+      "title": "Build with AI Workshop by Google & Lovable",
       "abstract": "",
       "description": "",
       "track": "Hackathon",
@@ -241,7 +250,7 @@
       "time": "12:00",
       "duration": 60,
       "isPanel": false,
-      "speakers": [],
+      "speakers": ["justin-beaudry"],
       "moderators": []
     },
     {
@@ -312,14 +321,27 @@
     {
       "id": "spring-boot-gemini-demo",
       "title": "Spring Boot Gemini Demo",
-      "abstract": "Demonstrate hands-on using GenAI, Gemini-2.5-pro in a full-stack Java project using Spring AI and deploy to App Engine",
-      "description": "Demonstrate hands-on using GenAI, Gemini-2.5-pro in a full-stack Java project using Spring AI and deploy to App Engine",
+      "abstract": "",
+      "description": "Join my 'Build with AI' session where we’ll walk through building a full-stack Java application using Spring AI and Spring Data. You can walk away with a fully functional application that uses Gemini, deployed right in your personal GCP account!",
       "track": "Build with AI",
       "tags": [],
       "time": "13:00",
-      "duration": 35,
+      "duration": 80,
       "isPanel": false,
       "speakers": ["jayashree-ravi"],
+      "moderators": []
+    },
+    {
+      "id": "beyond-expectations-innovating-the-user-experience",
+      "title": "Beyond Expectations: Innovating the User Experience",
+      "abstract": "",
+      "description": "Fireside Chat on UX Design in the Age of AI",
+      "track": "Leadership",
+      "tags": [],
+      "time": "13:45",
+      "duration": 35,
+      "isPanel": true,
+      "speakers": ["hoda-solati", "shima-solati", "roland-frohman-iii-26"],
       "moderators": []
     },
     {
@@ -333,32 +355,6 @@
       "duration": 35,
       "isPanel": false,
       "speakers": ["mattalynn-darden"],
-      "moderators": []
-    },
-    {
-      "id": "self-refining-agents-that-earn-their-own-upgrades-on-google-cloud",
-      "title": "Self Refining Agents That Earn Their Own Upgrades On Google Cloud",
-      "abstract": "What would it take for an AI agent to deserve its next version, instead of just generating one itself?",
-      "description": "What would it take for an AI agent to deserve its next version, instead of just generating one itself? That question is the whole build. As it talks to customers, it takes notes on how to get better and writes them into its own skill files, and for the deterministic tasks behind every reply, the way it classifies, clusters, and recommends, it proves itself against ground-truth labeled data. Leave a thumbs up or a thumbs down and it replays the conversation, learns from it, and drafts a sharper version of itself. But here the testing happens in a way you would not expect. Before any version ships, a friend agent steps in and plays the customer, pushing it with real questions in real time, and only when it proves better than the version it came from does a human give the final yes. This is a self refining, self looping agent running on open-source models auto-scaled on Google Cloud, earning every upgrade by proving it is genuinely better, not just a prompt we talked into looking good.",
-      "track": "Build with AI",
-      "tags": [],
-      "time": "13:45",
-      "duration": 80,
-      "isPanel": false,
-      "speakers": ["kiruthika"],
-      "moderators": []
-    },
-    {
-      "id": "strategist-systems-builder-customer-whisperer-the-product-leader-in-the-ai-era",
-      "title": "Strategist, Systems Builder, Customer Whisperer: The Product Leader in the AI Era",
-      "abstract": "The product leader's job doesn't get harder because of scale; it gets harder because the job changes.",
-      "description": "The product leader's job doesn't get harder because of scale; it gets harder because the job changes. And now AI has quietly rewritten the job description and forgotten to tell anyone.\n\nWhen anyone can generate a 20-page strategy doc or boilerplate code in five minutes, raw knowledge stops being the moat. The tool commoditized knowing; it didn't commoditize judgment.\n\nIn this talk, Rupali outlines why the modern tech and product leader must operate as three distinct archetypes simultaneously: a strategist who knows where to point autonomous tools, a systems builder who designs how organizational workflows move and decide, and a customer whisperer who spends the time AI gives back getting closer to the human users the dashboards cannot see. Drawing on real-world operating models from k-ID, where management tools are interconnected, 40% of the cross-functional team has built custom agents, and delivery cycles have collapsed, this session provides practical frameworks for tech and product teams to integrate agentic workflows effectively.\n\nKey takeaways:\n\n- How developers and product leaders can transition from routine task execution to high-leverage decision architecture\n- Concrete frameworks for building custom agents and automating operational pipelines\n- Retaining human-centered design, empathy, and platform trust in high-velocity AI environments",
-      "track": "Leadership",
-      "tags": [],
-      "time": "13:45",
-      "duration": 35,
-      "isPanel": false,
-      "speakers": ["rupali-sharma"],
       "moderators": []
     },
     {
@@ -430,7 +426,7 @@
       "id": "open-data-is-not-agent-ready-yet",
       "title": "Open Data Is Not Agent-Ready (Yet)",
       "abstract": "Public data was built for people who read the footnotes. AI agents skip them.",
-      "description": "Public data was built for people who read the footnotes. AI agents skip them. In Wayne County, 60 of 627 census tracts return -666666666 as their median household income in the latest ACS 5-year release, a code meaning the estimate could not be computed. Ask an agent for the county’s lowest-income neighborhoods, and those codes rank first, with no error raised.\n\nThis talk walks through six ways public data trips up RAG, tool-calling, MCP, and text-to-SQL pipelines: codebooks, error and suppression codes, release years, geography mismatches, margins of error, and licensing. Drawing on recent benchmarks, a 2026 GSA pilot of MCP servers for federal data, and lessons from building civic data tools on Michigan and federal sources, we cover fixes that hold up in practice: typed tools, checking data before calculating, doing the math in code, and letting the agent say “no data fits.”\n\nAttendees leave with a pipeline pattern and a 10-point checklist for any dataset they publish or depend on.",
+      "description": "Public data was built for people who read the footnotes. AI agents skip them. In Wayne County, 60 of 627 census tracts return -666666666 as their median household income in the latest ACS 5-year release, a code meaning the estimate could not be computed. Ask an agent for the county’s lowest-income neighborhoods, and those codes rank first, with no error raised.\n\nThis talk walks through six ways public data trips up RAG, tool-calling, MCP, and text-to-SQL pipelines: codebooks, error and suppression codes, release years, geography mismatches, margins of error, and licensing. Drawing on recent benchmarks, a 2026 GSA pilot of MCP servers for federal data, and lessons from building civic data tools on Michigan and federal sources, we cover fixes that hold up in practice: typed tools, checking data before calculating, doing the math in code, and letting the agent say “no data fits.”\n\nAttendees leave with a pipeline pattern and a 10-point checklist for any dataset they publish or depend on. In the 45-minute breakout, we also fix the bug live and score real datasets together.",
       "track": "Innovation",
       "tags": [],
       "time": "14:30",
@@ -450,6 +446,19 @@
       "duration": 35,
       "isPanel": false,
       "speakers": ["adkham-zokhirov"],
+      "moderators": []
+    },
+    {
+      "id": "self-refining-agents-that-earn-their-own-upgrades-on-google-cloud",
+      "title": "Self Refining Agents That Earn Their Own Upgrades On Google Cloud",
+      "abstract": "What would it take for an AI agent to deserve its next version, instead of just generating one itself?",
+      "description": "What would it take for an AI agent to deserve its next version, instead of just generating one itself? That question is the whole build. As it talks to customers, it takes notes on how to get better and writes them into its own skill files, and for the deterministic tasks behind every reply, the way it classifies, clusters, and recommends, it proves itself against ground-truth labeled data. Leave a thumbs up or a thumbs down and it replays the conversation, learns from it, and drafts a sharper version of itself. But here the testing happens in a way you would not expect. Before any version ships, a friend agent steps in and plays the customer, pushing it with real questions in real time, and only when it proves better than the version it came from does a human give the final yes. This is a self refining, self looping agent running on open-source models auto-scaled on Google Cloud, earning every upgrade by proving it is genuinely better, not just a prompt we talked into looking good.",
+      "track": "Build with AI",
+      "tags": [],
+      "time": "14:30",
+      "duration": 80,
+      "isPanel": false,
+      "speakers": ["kiruthika"],
       "moderators": []
     },
     {
@@ -489,19 +498,6 @@
       "duration": 35,
       "isPanel": false,
       "speakers": ["boris-wilfried-nyasse1"],
-      "moderators": []
-    },
-    {
-      "id": "who-evaluates-the-evaluator-building-reliable-llm-as-a-judge-evaluations-with-gemini",
-      "title": "Who Evaluates the Evaluator? Building Reliable LLM-as-a-Judge Evaluations with Gemini",
-      "abstract": "LLM-as-a-Judge is quickly becoming a popular way to evaluate generative AI applications and AI agents.",
-      "description": "LLM-as-a-Judge is quickly becoming a popular way to evaluate generative AI applications and AI agents. Instead of relying solely on human reviewers, we can ask another LLM to assess qualities such as correctness, relevance, groundedness, and overall response quality. But this introduces an important question: Who evaluates the evaluator?\n\nIn this session, we’ll explore how to build reliable LLM-as-a-Judge evaluations using Gemini. We’ll look at what makes a good evaluation rubric, how human-labeled examples can be used to calibrate an AI judge, and how factors such as prompt design, bias, inconsistency, and model choice can influence evaluation results.\n\nThrough practical examples, we’ll compare human and LLM judgments, investigate cases where the judge gets it wrong, and explore techniques for measuring and improving judge reliability.\n\nAttendees will leave with a practical framework for designing LLM-based evaluations they can use with greater confidence when testing and improving their own generative AI and agentic applications.",
-      "track": "Build with AI",
-      "tags": [],
-      "time": "15:15",
-      "duration": 35,
-      "isPanel": false,
-      "speakers": ["pragya-keshap"],
       "moderators": []
     },
     {
@@ -579,18 +575,6 @@
       "linkedIn": "https://www.linkedin.com/in/bwnyasse/",
       "twitter": null,
       "isGDE": true,
-      "isWTM": false
-    },
-    {
-      "slug": "brandon-brown",
-      "name": "Brandon Brown",
-      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/05f67097b06b1a1135356dc655b7dcf8fc112074-800x800.jpg",
-      "bio": "Brandon Brown is an AI engineer at IBM who helps organizations navigate their AI adoption journey. He bridges the gap between cutting-edge AI technology and practical business applications, enabling companies to achieve measurable ROI through intelligent automation and data-driven solutions.",
-      "organization": "IBM Client Engineering",
-      "position": "AI Engineer",
-      "linkedIn": null,
-      "twitter": null,
-      "isGDE": false,
       "isWTM": false
     },
     {
@@ -702,6 +686,18 @@
       "isWTM": false
     },
     {
+      "slug": "ida-byrd-hill-26",
+      "name": "Ida Byrd-Hill",
+      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/f969370920522d6e95d402d22d051ddddb856407-1010x829.png",
+      "bio": "Ida Byrd-Hill leads Automation Workz, a Human + AI integration firm, as CEO. She created SenseiiWyze™, a predictive behavioral analytics engine, to identify employee technology capability, predict technostress risk, and uncover employee resistance to power AI ROI and profitability.\n\nAutomation Workz contributed to a 45% revenue increase over 3 years for Dr. Bronner’s Magic Soap by identifying performance barriers, leading an enterprise Culture Audit, coordinating cross-functional teams, developing leaders, and supporting AI adoption.\nFor 4 years, Automation Workz served Michigan Works agencies providing AI, cybersecurity, data analytics, IoT and network engineering certification training achieving a 284.4%  ROI on training investment with a 631.4% increase in learner completions and 115.5% increase in learner salary. Created the 1st AI/ Data Analytics workforce development (WIOA)  training program in US. Ida has trained 17,000+ front-liners in business and technology. \n\nPreviously, Byrd-Hill grew a wealth management firm from 0 to $620 million Assets Under Management, serving 2200 high net worth individuals and 10 corporate clients. She expanded an idea incubator nonprofit, an executive search firm and technology proficiency as a public education advocate. She even piloted a virtual alternative high school. \nIda Byrd-Hill is a graduate of the University of Michigan - Ann Arbor with a BA in Economics and Strayer University with an MBA focused on Strategy/People Management.\n\nShe is the author of Culture Re-Wired: Unleash Your Inner AI CEO and TEDx Speaker. She was selected by the CEO Magazine as a 2025 Top Tech Innovator alongside Sam Altman, CEO, OpenAI; Tim Cook, CEO, Apple; and Mark Zuckerberg, CEO, Meta. Appointed to Holon IQ/ BCG AI & Digital Skills Leadership Council. Former Detroit Regional Chamber of Commerce board of director.",
+      "organization": "Automation Workz",
+      "position": "Founder",
+      "linkedIn": null,
+      "twitter": null,
+      "isGDE": false,
+      "isWTM": false
+    },
+    {
       "slug": "ida-delphine",
       "name": "Ida Delphine",
       "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/5173085f2560c92dbf0fb06e43e90cf3028a5533-400x400.jpg",
@@ -721,18 +717,6 @@
       "organization": "Truvio",
       "position": "Enterprise Customer Success Manager",
       "linkedIn": "https://www.linkedin.com/in/jamar-jones24",
-      "twitter": null,
-      "isGDE": false,
-      "isWTM": false
-    },
-    {
-      "slug": "jason-fleming",
-      "name": "Jason Fleming",
-      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/7b2c8959872e0c902f5d279b9e9c43504046bcc4-1109x1003.jpg",
-      "bio": "As an IBM Client Engineering Solution Architect, Jason Fleming leads the design and delivery of agile, hybrid cloud solutions—leveraging deep domain expertise, strategic innovation, and collaborative client engagement to drive impactful Proofs of Value across industries.",
-      "organization": "IBM Client Engineering",
-      "position": "Solution Architect",
-      "linkedIn": null,
       "twitter": null,
       "isGDE": false,
       "isWTM": false
@@ -769,6 +753,18 @@
       "organization": "Mixpanel",
       "position": "Senior Product Designer",
       "linkedIn": "https://www.linkedin.com/in/jon-yablonski-b4269115/",
+      "twitter": null,
+      "isGDE": false,
+      "isWTM": false
+    },
+    {
+      "slug": "jordan-mazaira",
+      "name": "Jordan Mazaira",
+      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/cb98f27f9febba5a0d380079db601e6837653620-800x800.png",
+      "bio": "I'm an Engineering Supervisor at Ford Motor Company, where I lead team efforts on electrified powertrain controls. My academic foundation includes a Mechanical Engineering degree from Georgia Tech and a Master’s in Automotive Systems from UM-Dearborn. Throughout my time at Dearborn and SHPE Detroit Professional Chapter, my passion has been making engineering accessible through interactive, hands-on STEM events for local students.",
+      "organization": "TBA",
+      "position": "TBA",
+      "linkedIn": "https://www.linkedin.com/in/jordan-mazaira-94058a161/ ",
       "twitter": null,
       "isGDE": false,
       "isWTM": false
@@ -811,7 +807,7 @@
     },
     {
       "slug": "kiruthika",
-      "name": "Kiruthika",
+      "name": "Kiruthika Subramani",
       "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/6297e45e03b50f14a30c1406939eacdaec332279-400x400.jpg",
       "bio": "I am Kiruthika Subramani, a Data Scientist at Bell, Canada. Did my Master's at MILA, the Quebec AI Institute. I have written two books on AI, delivered over 230 talks across the globe, and published more than 100 blogs. My recognitions include being a Google Developer Expert in AI, an IBM Champion for Data and AI, and a Women Techmakers Ambassador. My experience includes serving as the former Head of AI at Musitechnic Formation and interning at Amazon. I am a nine-time certified cloud practitioner (4x GCP, 5x AWS) and was honoured to be named the Women in AI Scholarship Award Winner for 2025.",
       "organization": "Bell Canada",
@@ -829,18 +825,6 @@
       "organization": "Mattie D UC LLC",
       "position": "Founder & Certified Cybersecurity",
       "linkedIn": "https://linkedin.com/in/mattalynn-darden",
-      "twitter": null,
-      "isGDE": false,
-      "isWTM": false
-    },
-    {
-      "slug": "michael-mati",
-      "name": "Michael Mati",
-      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/5d522a9488a163eb0a255bd10b22be8f83e75ebc-982x999.jpg",
-      "bio": "Hi everyone! My name is Michael Mati, and I am an Automation Customer Success Engineer at IBM. Even though I live in Michigan, I was born in New York and have lived in Texas most of my life until last year. I graduated from the University of Texas at Dallas with a B.S. in Computer Information Systems and Technology. In my free time, I love playing basketball, going to the gym, and watching movies!",
-      "organization": "IBM",
-      "position": "Automation Customer Success Engineer",
-      "linkedIn": "https://www.linkedin.com/in/michael-mati/",
       "twitter": null,
       "isGDE": false,
       "isWTM": false
@@ -870,18 +854,6 @@
       "isWTM": false
     },
     {
-      "slug": "pragya-keshap",
-      "name": "Pragya Keshap",
-      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/f5c799e4451b9ff9e8e96bc335ea8a83d49165f0-628x720.png",
-      "bio": "Pragya Keshap is a Technical Architect and Google Developer Expert (GDE) in Google Cloud with over 17 years of experience designing and building large-scale enterprise systems. Her current work focuses on Generative AI, agentic architectures, Google Cloud, Vertex AI, Gemini, ADK, and Model Context Protocol (MCP).\n\nPragya is an active technical speaker and has presented at developer conferences and community events including Google DevFest, Google I/O Extended, Women in Tech Global Conference, CloudAustin, Kubernetes Austin, ACM Austin, and BrightTALK. Her recent talks have focused on building AI agents, multi-agent orchestration with Google ADK, and taking AI applications from chatbots to production-ready agentic systems.\n\nShe is passionate about turning emerging AI technologies into practical, production-ready solutions and sharing real-world learnings with the developer community. Pragya is also a Docker Captain and regularly speaks on Generative AI, AI agents, cloud architecture, and cloud-native technologies.",
-      "organization": "Charles Schwab",
-      "position": "Technical Architect",
-      "linkedIn": "https://linkedin.com/in/pragyakeshap",
-      "twitter": null,
-      "isGDE": false,
-      "isWTM": false
-    },
-    {
       "slug": "queentesa-fuggett",
       "name": "QueenTesa Fuggett",
       "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/79a240a691b4398afe726a8b3b8986943db12c4a-400x400.jpg",
@@ -906,13 +878,13 @@
       "isWTM": false
     },
     {
-      "slug": "rupali-sharma",
-      "name": "Rupali Sharma",
-      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/39df200304014094aa94580b6d1d72c941b3141c-400x400.jpg",
-      "bio": "Rupali Sharma is a product and platform leader with over 15 years of experience shaping large-scale digital ecosystems, platform infrastructure, and trust & safety systems. Across leadership roles at Electronic Arts, Take-Two Interactive, and currently as Principal Product Lead at k-ID, she has led product strategy across titles and ecosystems including Apex Legends, FIFA, Civilization VI, XCOM 2, and Kerbal Space Program—impacting tens of millions of players globally. At k-ID, Rupali directs product and customer success for global child-safety and privacy compliance infrastructure. She also mentors aspiring leaders through Girls Who Code and ADPList, and founded the Bay Area Product Leaders community.",
-      "organization": "k-ID",
-      "position": "Principal Product Lead",
-      "linkedIn": "https://www.linkedin.com/in/rupali-sharma-171a757",
+      "slug": "roland-frohman-iii-26",
+      "name": "Roland Frohman III",
+      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/ce48cf488328f977582c6476341d2a951c0a6b17-800x800.webp",
+      "bio": "Roland Frohman III is a product and UX designer with more than nine years of experience building connected experiences where physical products, digital interfaces, and AI meet. His work centers on how design shapes the way people understand and trust AI, from conversational and voice interfaces to AI-driven product ecosystems. As Design Lead for BISSELL Connect & IoT, he led the design of the company's connected product ecosystem, including AI chat and voice experiences. Through his studio, RHFIII Designs, he helps teams turn emerging technology (AR/VR/XR, voice, and conversational AI) into experiences people actually want to use.\n\nRoland is an MFA Instructor at the College for Creative Studies, where he teaches graduate automotive and XR design studios. He holds an MFA in User Experience Design from CCS and a BA in Japanese & Asian Studies from the University of Michigan.",
+      "organization": "RHFIII Designs, LLC",
+      "position": "Founder & Principal Designer",
+      "linkedIn": "https://www.linkedin.com/in/rhfrohman3",
       "twitter": null,
       "isGDE": false,
       "isWTM": false
@@ -973,18 +945,6 @@
       "organization": "Clixie AI",
       "position": "CEO",
       "linkedIn": "https://www.linkedin.com/in/tim-moore-7b00332/",
-      "twitter": null,
-      "isGDE": false,
-      "isWTM": false
-    },
-    {
-      "slug": "vahi-guner",
-      "name": "Vahi Guner",
-      "avatar": "https://cdn.sanity.io/images/5qtiaw9u/production/b3fcfcf44203287d9c563d4258f1846af49d0d76-250x252.png",
-      "bio": "Vahi Guner is an AI Engineer at IBM with a background in Electrical Engineering. He has hands-on experience working with both traditional machine learning models and modern generative AI technologies.",
-      "organization": "IBM Client Engineering",
-      "position": "AI Engineer",
-      "linkedIn": null,
       "twitter": null,
       "isGDE": false,
       "isWTM": false
