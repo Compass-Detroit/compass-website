@@ -25,8 +25,8 @@ const SALONS = [
     x: [52, 152],
     size: '1,910 sq ft',
     dims: '46′3″ × 46′',
-    use: ['Level Up'],
-    tone: 'cyan',
+    use: ['AI Foundations'],
+    tone: 'green',
   },
   {
     name: 'Salon E',
@@ -41,23 +41,23 @@ const SALONS = [
     x: [220, 290],
     size: '541 sq ft',
     dims: '18′4″ × 29′6″',
-    use: ['Innovation'],
-    tone: 'red',
+    use: ['Career, Mentorship', '& Resumes'],
+    tone: 'slate',
   },
   {
     name: 'Salon C',
     x: [290, 358],
     size: '533 sq ft',
     dims: '18′4″ × 29′6″',
-    use: ['AI Foundations'],
-    tone: 'green',
+    use: ['Speakers'],
+    tone: 'slate',
   },
   {
     name: 'Salon B',
     x: [358, 428],
     size: '539 sq ft',
     dims: '18′1″ × 30′3″',
-    use: ['Career mentorship', '& resume reviews'],
+    use: ['Volunteers'],
     tone: 'slate',
   },
   {
@@ -65,37 +65,48 @@ const SALONS = [
     x: [428, 497],
     size: '504 sq ft',
     dims: '17′7″ × 28′8″',
-    use: ['Volunteers'],
+    use: ['Compass Team'],
     tone: 'slate',
   },
 ]
 
-const GRAND_BALLROOM = {
-  name: 'Grand Ballroom',
-  size: '3,752 sq ft',
-  dims: '40′8″ × 92′3″',
-  use: ['Keynote & Build with AI'],
-  tone: 'blue',
-}
+// The Grand Ballroom (3,752 sq ft, 40′8″ × 92′3″) splits into three track
+// rooms; the opening keynote is announced there before the split.
+const BALLROOMS = [
+  {
+    name: 'Ballroom C',
+    letter: 'C',
+    x: [220, 284],
+    use: ['Innovation'],
+    tone: 'red',
+  },
+  {
+    name: 'Ballroom B',
+    letter: 'B',
+    x: [284, 364],
+    use: ['Build with AI'],
+    tone: 'blue',
+  },
+  {
+    name: 'Ballroom A',
+    letter: 'A',
+    x: [364, 430],
+    use: ['Level Up'],
+    tone: 'cyan',
+  },
+]
 const BOARDROOM = {
   name: 'Executive Boardroom',
-  use: ['Speakers'],
+  use: [],
   tone: 'slate',
 }
-const ROOMS = [GRAND_BALLROOM, ...SALONS, BOARDROOM]
-
-// Ballroom sections, for the dividers and letters only
-const BALLROOM = [
-  { name: 'C', x: [220, 284] },
-  { name: 'B', x: [284, 364] },
-  { name: 'A', x: [364, 430] },
-]
+const ROOMS = [...BALLROOMS, ...SALONS, BOARDROOM]
 
 /** "Salon F · Level Up · 1,910 sq ft (46′3″ × 46′)" */
 const details = (room) =>
   [
     room.name,
-    room.use.join(' '),
+    room.use.join(' ') || null,
     room.size && `${room.size}${room.dims ? ` (${room.dims})` : ''}`,
   ]
     .filter(Boolean)
@@ -150,71 +161,62 @@ export default function VenueMap() {
                   {DEVFEST_2026.venue} conference center floor plan
                 </title>
                 <desc id="venue-map-desc">
-                  The Grand Ballroom (keynote and Build with AI) sits above the
-                  hallway. Across the hallway, from left to right: Salon F
-                  (Level Up), Salon E (Leadership), Salon D (Innovation), Salon
-                  C (AI Foundations), Salon B (career mentorship and resume
-                  reviews), Salon A (volunteers) and the Executive Boardroom
-                  (speakers), with the elevators beside the boardroom. Restrooms
+                  The Grand Ballroom sits above the hallway, split from left to
+                  right into Ballroom C (Innovation), Ballroom B (Build with AI)
+                  and Ballroom A (Level Up). Across the hallway, from left to
+                  right: Salon F (AI Foundations), Salon E (Leadership), Salon D
+                  (career, mentorship and resumes), Salon C (speakers), Salon B
+                  (volunteers), Salon A (Compass team) and the Executive
+                  Boardroom, with the elevators beside the boardroom. Restrooms
                   are to the left of the ballroom.
                 </desc>
 
-                {/* Grand Ballroom */}
-                <g {...roomProps(GRAND_BALLROOM)}>
-                  <rect
-                    x="220"
-                    y="210"
-                    width="210"
-                    height="118"
-                    rx="3"
-                    fill={TONE_HEX[GRAND_BALLROOM.tone]}
-                    fillOpacity={fillOpacity(GRAND_BALLROOM)}
-                    stroke={TONE_HEX[GRAND_BALLROOM.tone]}
-                    strokeWidth="1.5"
-                  />
-                  {BALLROOM.slice(1).map((s) => (
-                    <line
-                      key={s.name}
-                      x1={s.x[0]}
-                      x2={s.x[0]}
-                      y1="212"
-                      y2="326"
-                      stroke={TONE_HEX[GRAND_BALLROOM.tone]}
-                      strokeDasharray="3 3"
-                    />
-                  ))}
-                  {BALLROOM.map((s) => (
-                    <text
-                      key={s.name}
-                      x={(s.x[0] + s.x[1]) / 2}
-                      y="254"
-                      textAnchor="middle"
-                      fontSize="28"
-                      className={label}
-                    >
-                      {s.name}
-                    </text>
-                  ))}
-                  <text
-                    x="325"
-                    y="292"
-                    textAnchor="middle"
-                    fontSize="10"
-                    letterSpacing="1.5"
-                    className={label}
-                  >
-                    GRAND BALLROOM
-                  </text>
-                  <text
-                    x="325"
-                    y="310"
-                    textAnchor="middle"
-                    fontSize="9"
-                    className={useLabel}
-                  >
-                    {GRAND_BALLROOM.use[0]}
-                  </text>
-                </g>
+                {/* Grand Ballroom: three track rooms */}
+                {BALLROOMS.map((b) => {
+                  const cx = (b.x[0] + b.x[1]) / 2
+                  return (
+                    <g key={b.name} {...roomProps(b)}>
+                      <rect
+                        x={b.x[0]}
+                        y="210"
+                        width={b.x[1] - b.x[0]}
+                        height="118"
+                        fill={TONE_HEX[b.tone]}
+                        fillOpacity={fillOpacity(b)}
+                        stroke={TONE_HEX[b.tone]}
+                        strokeWidth="1.5"
+                      />
+                      <text
+                        x={cx}
+                        y="254"
+                        textAnchor="middle"
+                        fontSize="28"
+                        className={label}
+                      >
+                        {b.letter}
+                      </text>
+                      <text
+                        x={cx}
+                        y="276"
+                        textAnchor="middle"
+                        fontSize="8.5"
+                        className={useLabel}
+                      >
+                        {b.use[0]}
+                      </text>
+                    </g>
+                  )
+                })}
+                <text
+                  x="325"
+                  y="314"
+                  textAnchor="middle"
+                  fontSize="8"
+                  letterSpacing="1.5"
+                  className={`${label} pointer-events-none`}
+                >
+                  GRAND BALLROOM
+                </text>
 
                 {/* Restrooms */}
                 <rect
@@ -356,15 +358,6 @@ export default function VenueMap() {
                       Boardroom
                     </tspan>
                   </text>
-                  <text
-                    x="527"
-                    y="428"
-                    textAnchor="middle"
-                    fontSize="7.5"
-                    className={useLabel}
-                  >
-                    {BOARDROOM.use[0]}
-                  </text>
                 </g>
               </svg>
             </div>
@@ -377,7 +370,7 @@ export default function VenueMap() {
                   {details(active)}
                 </span>
               ) : (
-                'Not to scale. Hover or tap a room for its size.'
+                'Not to scale. Hover or tap a room for details.'
               )}
             </figcaption>
           </figure>
@@ -410,8 +403,7 @@ export default function VenueMap() {
                         <span className="font-semibold text-theme-primary">
                           {room.name}
                         </span>
-                        {' · '}
-                        {room.use.join(' ')}
+                        {room.use.length > 0 && ` · ${room.use.join(' ')}`}
                       </span>
                     </li>
                   ))}

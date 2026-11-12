@@ -44,7 +44,7 @@ describe('DevFest 2026 program', () => {
 
   it('feeds the speaker registry with 2026 DevFest sessions', () => {
     expect(SpeakersData).toHaveLength(DEVFEST_SPEAKERS.length)
-    const profile = getSpeakerBySlug('saeb-ahsan')
+    const profile = getSpeakerBySlug('justin-beaudry')
     expect(profile.sessions.some((s) => s.title.includes('Lovable'))).toBe(true)
   })
 
@@ -52,11 +52,17 @@ describe('DevFest 2026 program', () => {
     const slugs = DEVFEST_SPEAKERS.map((p) => p.slug)
     expect(slugs).not.toContain('pragya-keshap')
     expect(slugs).not.toContain('rupali-sharma')
-    expect(slugs).toContain('ida-byrd-hill')
+    expect(slugs).not.toContain('hernando-gonzalez-malabet')
     const keynote = DEVFEST_SESSIONS.find(
       (s) => s.id === 'ai-hackathon-keynote-26'
     )
     expect(keynote.time).toBe('09:00')
+    const ibm = DEVFEST_SESSIONS.find(
+      (s) => s.id === 'build-with-ai-workshop-ibm-26'
+    )
+    expect(ibm.speakers.map((p) => p.slug)).toEqual(['michael-mati'])
+    const shpe = DEVFEST_SESSIONS.find((s) => s.title.includes('Resilience'))
+    expect(shpe.speakers.map((p) => p.slug)).toContain('jordan-mazaira')
     const kiruthika = DEVFEST_SESSIONS.find((s) =>
       s.title.startsWith('Self Refining Agents')
     )
@@ -71,7 +77,7 @@ describe('DevFest 2026 program', () => {
     for (const s of DEVFEST_TALKS.filter(
       (t) => t.day === 'conference' && !t.plenary
     ))
-      expect(s.room).toMatch(/^(Grand Ballroom|Salon [C-F])$/)
+      expect(s.room).toMatch(/^(Ballroom [A-C]|Salon [EF])$/)
   })
 
   it('formats 24h times for display', () => {
